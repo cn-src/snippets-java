@@ -1,5 +1,5 @@
 module.exports = {
-    base: '/snippets-box/',
+    base: '/snippets-java/',
     themeConfig: {
         displayAllHeaders: true,
         sidebar: [

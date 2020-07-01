@@ -22,7 +22,7 @@
 ```xml
 <dependency>
     <groupId>com.github.cn-src</groupId>
-    <artifactId>snippets-box</artifactId>
+    <artifactId>snippets-java</artifactId>
     <version>Tag</version>
 </dependency>
 ```
