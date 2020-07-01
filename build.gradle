@@ -3,6 +3,8 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 plugins {
     id 'groovy'
     id 'java'
+    id 'java-library'
+    id 'jacoco'
     id 'org.springframework.boot' version '2.3.1.RELEASE' apply false
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 }
@@ -12,20 +14,20 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 dependencies {
-    compileOnly 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    compileOnly 'org.springframework.boot:spring-boot-starter-jooq'
-    compileOnly 'org.springframework.boot:spring-boot-starter-validation'
+    api 'org.springframework.boot:spring-boot-starter-web'
+    api 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    api 'org.springframework.boot:spring-boot-starter-jooq'
+    api 'org.springframework.boot:spring-boot-starter-validation'
 
-    compileOnly 'org.simpleflatmapper:sfm-jooq:8.2.3'
-    compileOnly 'org.eclipse.collections:eclipse-collections:10.2.0'
-    compileOnly 'com.esotericsoftware:kryo:5.0.0-RC6'
-    compileOnly 'io.github.classgraph:classgraph:4.8.87'
-    compileOnly 'org.springdoc:springdoc-openapi-webmvc-core:1.4.2'
-    compileOnly 'org.jooq:jooq-codegen:3.13.2'
+    api 'org.simpleflatmapper:sfm-jooq:8.2.3'
+    api 'org.eclipse.collections:eclipse-collections:10.2.0'
+    api 'com.esotericsoftware:kryo:5.0.0-RC6'
+    api 'io.github.classgraph:classgraph:4.8.87'
+    api 'org.springdoc:springdoc-openapi-webmvc-core:1.4.2'
+    api 'org.jooq:jooq-codegen:3.13.2'
 
-    compileOnly 'org.postgresql:postgresql'
-    compileOnly 'org.projectlombok:lombok'
+    api 'org.postgresql:postgresql'
+    api 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
@@ -53,4 +55,11 @@ repositories {
 
 test {
     useJUnitPlatform()
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
 }
