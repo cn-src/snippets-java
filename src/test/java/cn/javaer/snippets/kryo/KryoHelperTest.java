@@ -1,6 +1,6 @@
 package cn.javaer.snippets.kryo;
 
-import cn.javaer.snippets.spring.boot.autoconfigure.eclipse.collections.pojo.City;
+import cn.javaer.snippets.spring.autoconfigure.eclipse.collections.pojo.City;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
