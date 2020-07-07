@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/cn-src/snippets-java/branch/master/graph/badge.svg)](https://codecov.io/gh/cn-src/snippets-java)
 [![](https://jitpack.io/v/cn-src/snippets-java.svg)](https://jitpack.io/#cn-src/snippets-java)
 
-# Snippets Box
-> 一些零散的代码片段，集成 jar 后可直接使用
+# Snippets Java
+> 一些零散的Java代码片段，集成 jar 后可直接使用
 
 [文档](https://cn-src.gitee.io/snippets-java/)
