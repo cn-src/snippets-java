@@ -31,7 +31,7 @@ dependencies {
     optionalApi 'org.eclipse.collections:eclipse-collections:10.2.0'
     optionalApi 'com.esotericsoftware:kryo:5.0.0-RC6'
     optionalApi 'io.github.classgraph:classgraph:4.8.87'
-    optionalApi 'org.springdoc:springdoc-openapi-webmvc-core:1.4.2'
+    optionalApi 'org.springdoc:springdoc-openapi-webmvc-core:1.4.3'
     optionalApi 'org.jooq:jooq-codegen:3.13.2'
 
     optionalApi 'org.postgresql:postgresql'
