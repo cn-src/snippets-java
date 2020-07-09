@@ -14,7 +14,7 @@ import java.util.Collections;
 /**
  * @author cn-src
  */
-public abstract class Sql {
+public class Sql {
 
     private Sql() {}
 
@@ -38,6 +38,11 @@ public abstract class Sql {
 
     @Support(SQLDialect.POSTGRES)
     public static Field<Boolean> stContains(Field<Geometry> geomA, Field<Geometry> geomB) {
-        return DSL.function("st_contains", Boolean.TYPE, geomA, geomB);
+        return DSL.function("ST_Contains", Boolean.TYPE, geomA, geomB);
+    }
+
+    @Support(SQLDialect.POSTGRES)
+    public static Field<String> stAsGeoJson(Field<Geometry> geom) {
+        return DSL.function("ST_AsGeoJSON", String.class);
     }
 }
