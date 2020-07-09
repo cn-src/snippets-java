@@ -1,8 +1,11 @@
 package cn.javaer.snippets.jooq;
 
+import cn.javaer.snippets.type.Geometry;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.JSONB;
+import org.jooq.SQLDialect;
+import org.jooq.Support;
 import org.jooq.impl.DSL;
 import org.jooq.tools.json.JSONValue;
 
@@ -20,14 +23,21 @@ public abstract class Sql {
                 DSL.val(arrayValue, arrayField.getDataType()));
     }
 
+    @Deprecated
     public static Condition jsonbContains(final Field<JSONB> jsonField, final String jsonKey, final Object jsonValue) {
         final String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
                 DSL.val(json, jsonField.getDataType()));
     }
 
+    @Deprecated
     public static Condition jsonbContains(final Field<JSONB> jsonField, final JSONB jsonb) {
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
                 DSL.val(jsonb, jsonField.getDataType()));
+    }
+
+    @Support(SQLDialect.POSTGRES)
+    public static Field<Boolean> stContains(Field<Geometry> geomA, Field<Geometry> geomB) {
+        return DSL.function("st_contains", Boolean.TYPE, geomA, geomB);
     }
 }
