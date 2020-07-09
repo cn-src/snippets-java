@@ -14,9 +14,9 @@ import java.util.Collections;
 /**
  * @author cn-src
  */
-public class Sql {
+public class SQL {
 
-    private Sql() {}
+    private SQL() {}
 
     public static Condition arrayContained(final Field<String[]> arrayField, final String[] arrayValue) {
         return DSL.condition("{0} <@ {1}", arrayField,
@@ -42,7 +42,7 @@ public class Sql {
     }
 
     @Support(SQLDialect.POSTGRES)
-    public static Field<String> stAsGeoJson(Field<Geometry> geom) {
+    public static Field<String> stAsGeoJSON(Field<Geometry> geom) {
         return DSL.function("ST_AsGeoJSON", String.class);
     }
 }
