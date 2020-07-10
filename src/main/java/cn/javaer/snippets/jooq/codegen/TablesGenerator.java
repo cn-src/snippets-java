@@ -23,4 +23,14 @@ public class TablesGenerator extends SnippetsGenerator {
     public boolean generateRecords() {
         return false;
     }
+
+    @Override
+    public boolean generateSequences() {
+        return false;
+    }
+
+    @Override
+    public boolean generateIndexes() {
+        return false;
+    }
 }
