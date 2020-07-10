@@ -19,26 +19,26 @@ class JsonbFieldTest {
 
     @Test
     void contains() {
-        final Condition condition = new JsonbField<>("ca", SQLDataType.JSONB, DSL.table("demo"))
-                .containsJson(JSONB.valueOf("{}"));
+        Condition condition = new JsonbField<>("ca", SQLDataType.JSONB, DSL.table("demo"))
+                .containsJsonb(JSONB.valueOf("{}"));
 
-        final DSLContext dsl = DSL.using(SQLDialect.POSTGRES);
-        final SelectConditionStep<Record> step = dsl.selectFrom(DSL.table("demo"))
+        DSLContext dsl = DSL.using(SQLDialect.POSTGRES);
+        SelectConditionStep<Record> step = dsl.selectFrom(DSL.table("demo"))
                 .where(condition);
-        final String renderInlined = dsl.renderInlined(step);
+        String renderInlined = dsl.renderInlined(step);
         assertThat(renderInlined)
                 .isEqualTo("select * from demo where (demo.\"ca\"::jsonb @> cast('{}' as jsonb)::jsonb)");
     }
 
     @Test
     void containsKv() {
-        final Condition condition = new JsonbField<>("ca", SQLDataType.JSONB, DSL.table("demo"))
-                .containsJson("key", "value");
+        Condition condition = new JsonbField<>("ca", SQLDataType.JSONB, DSL.table("demo"))
+                .containsJsonb("key", "value");
 
-        final DSLContext dsl = DSL.using(SQLDialect.POSTGRES);
-        final SelectConditionStep<Record> step = dsl.selectFrom(DSL.table("demo"))
+        DSLContext dsl = DSL.using(SQLDialect.POSTGRES);
+        SelectConditionStep<Record> step = dsl.selectFrom(DSL.table("demo"))
                 .where(condition);
-        final String renderInlined = dsl.renderInlined(step);
+        String renderInlined = dsl.renderInlined(step);
         assertThat(renderInlined)
                 .isEqualTo("select * from demo where (demo.\"ca\"::jsonb @> cast('{\"key\":\"value\"}' as jsonb)::jsonb)");
     }

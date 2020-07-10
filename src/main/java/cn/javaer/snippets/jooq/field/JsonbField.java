@@ -4,6 +4,7 @@ import org.jooq.Condition;
 import org.jooq.Context;
 import org.jooq.DataType;
 import org.jooq.Field;
+import org.jooq.JSONB;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.Support;
@@ -39,13 +40,16 @@ public class JsonbField<R extends Record, T> extends CustomField<T> implements T
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Support(SQLDialect.POSTGRES)
-    public Condition containsJson(T object) {
+    public Condition containsJsonb(T object) {
         if (object instanceof Field) {
-            return this.containsJson((Field) object);
+            return this.containsJsonb((Field) object);
         }
         String val;
         if (object instanceof String) {
             val = (String) object;
+        }
+        else if (object instanceof JSONB) {
+            val = ((JSONB) object).data();
         }
         else {
             val = object == null ? null : JSONValue.toJSONString(object);
@@ -55,13 +59,13 @@ public class JsonbField<R extends Record, T> extends CustomField<T> implements T
     }
 
     @Support(SQLDialect.POSTGRES)
-    public Condition containsJson(Field<T> json) {
+    public Condition containsJsonb(Field<T> json) {
         return DSL.condition("{0}::jsonb @> {1}::jsonb", this,
                 json);
     }
 
     @Support(SQLDialect.POSTGRES)
-    public Condition containsJson(String jsonKey, Object jsonValue) {
+    public Condition containsJsonb(String jsonKey, Object jsonValue) {
         String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
         return DSL.condition("{0}::jsonb @> {1}::jsonb", this,
                 DSL.val(json, this.getDataType()));
