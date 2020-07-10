@@ -1,7 +1,6 @@
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
-    id 'groovy'
     id 'java-library'
     id 'jacoco'
     id 'maven-publish'
@@ -43,6 +42,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'com.h2database:h2'
     testImplementation 'org.testcontainers:postgresql:1.14.3'
+    testImplementation 'org.testcontainers:junit-jupiter:1.14.3'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
