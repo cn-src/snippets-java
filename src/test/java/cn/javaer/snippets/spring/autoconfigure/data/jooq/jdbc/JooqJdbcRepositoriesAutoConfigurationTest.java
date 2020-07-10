@@ -1,7 +1,7 @@
 package cn.javaer.snippets.spring.autoconfigure.data.jooq.jdbc;
 
 import cn.javaer.snippets.TestAutoConfigurationPackage;
-import cn.javaer.snippets.TestPostgreSQL;
+import cn.javaer.snippets.TestContainer;
 import cn.javaer.snippets.empty.EmptyDataPackage;
 import cn.javaer.snippets.spring.data.jooq.jdbc.config.EnableJooqJdbcRepositories;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -17,15 +17,21 @@ import org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.sql.DataSource;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author cn-src
  */
+@Testcontainers
 class JooqJdbcRepositoriesAutoConfigurationTest {
+
+    @Container
+    private final static PostgreSQLContainer<?> container = new PostgreSQLContainer<>("mdillon/postgis:10-alpine")
+            .withDatabaseName(JooqJdbcRepositoriesAutoConfigurationTest.class.getSimpleName());
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(JooqJdbcRepositoriesAutoConfiguration.class,
                     JooqAutoConfiguration.class,
@@ -38,18 +44,18 @@ class JooqJdbcRepositoriesAutoConfigurationTest {
         this.contextRunner
                 .withUserConfiguration(EnableRepositoriesConfiguration.class)
                 .run(context -> {
-                    final JdbcTemplate jdbcTemplate = context.getBean(JdbcTemplate.class);
+                    JdbcTemplate jdbcTemplate = context.getBean(JdbcTemplate.class);
                     //language=PostgreSQL
                     jdbcTemplate.execute("CREATE TABLE demo1 (id bigserial NOT NULL" +
                             " CONSTRAINT demo1_pkey" +
                             " PRIMARY KEY, jsonb1 jsonb,jsonb2 jsonb)");
-                    final DemoRepository repository = context.getBean(DemoRepository.class);
+                    DemoRepository repository = context.getBean(DemoRepository.class);
                     //language=JSON
-                    final JSONB jsonb1 = JSONB.valueOf("{\"k1\":1}");
-                    final ObjectNode jsonb2 = new ObjectNode(new JsonNodeFactory(true));
+                    JSONB jsonb1 = JSONB.valueOf("{\"k1\":1}");
+                    ObjectNode jsonb2 = new ObjectNode(new JsonNodeFactory(true));
                     jsonb2.put("k2", "v2");
                     repository.save(new Demo1(jsonb1, jsonb2));
-                    final Iterable<Demo1> demos = repository.findAll();
+                    Iterable<Demo1> demos = repository.findAll();
                     Assertions.assertThat(demos).hasSize(1);
                 });
     }
@@ -59,7 +65,7 @@ class JooqJdbcRepositoriesAutoConfigurationTest {
     static class EnableRepositoriesConfiguration {
         @Bean
         DataSource dataSource() {
-            return TestPostgreSQL.createDataSource();
+            return TestContainer.createDataSource(container);
         }
     }
 }

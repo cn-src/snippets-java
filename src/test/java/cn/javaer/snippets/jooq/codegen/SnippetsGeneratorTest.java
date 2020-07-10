@@ -33,12 +33,16 @@ class SnippetsGeneratorTest {
         DataSource dataSource = TestContainer.createDataSource(dataSourceInfo);
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         // language=PostgreSQL
-        jdbcTemplate.execute("CREATE TABLE demo" +
-                "(" +
-                "id bigserial NOT NULL" +
+        jdbcTemplate.execute("CREATE TABLE demo\n" +
+                "(\n" +
+                "    " +
+                "id     bigserial NOT NULL\n" +
+                "       " +
                 " CONSTRAINT demo_pkey" +
-                " PRIMARY KEY," +
-                "jsonb1 jsonb" +
+                " PRIMARY KEY,\n" +
+                "    geom   geometry(Polygon, 4326),\n" +
+                "    " +
+                "jsonb1 jsonb\n" +
                 ");");
         Configuration configuration = new Configuration()
                 .withJdbc(new Jdbc()
