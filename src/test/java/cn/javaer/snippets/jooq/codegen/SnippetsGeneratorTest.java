@@ -1,7 +1,7 @@
 package cn.javaer.snippets.jooq.codegen;
 
 import cn.javaer.snippets.DataSourceInfo;
-import cn.javaer.snippets.TestPostgreSQL;
+import cn.javaer.snippets.TestContainer;
 import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.Configuration;
 import org.jooq.meta.jaxb.Database;
@@ -12,19 +12,26 @@ import org.jooq.meta.jaxb.Target;
 import org.jooq.meta.postgres.PostgresDatabase;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.sql.DataSource;
 
 /**
  * @author cn-src
  */
+@Testcontainers
 class SnippetsGeneratorTest {
+    @Container
+    private final PostgreSQLContainer<?> container = new PostgreSQLContainer<>("mdillon/postgis:10-alpine")
+            .withDatabaseName(SnippetsGeneratorTest.class.getSimpleName());
 
     @Test
     void generateTable() throws Exception {
-        final DataSourceInfo dataSourceInfo = TestPostgreSQL.createDataSourceInfo();
-        final DataSource dataSource = TestPostgreSQL.createDataSource(dataSourceInfo);
-        final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        DataSourceInfo dataSourceInfo = TestContainer.createDataSourceInfo(this.container);
+        DataSource dataSource = TestContainer.createDataSource(dataSourceInfo);
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         // language=PostgreSQL
         jdbcTemplate.execute("CREATE TABLE demo" +
                 "(" +
@@ -33,7 +40,7 @@ class SnippetsGeneratorTest {
                 " PRIMARY KEY," +
                 "jsonb1 jsonb" +
                 ");");
-        final Configuration configuration = new Configuration()
+        Configuration configuration = new Configuration()
                 .withJdbc(new Jdbc()
                         .withDriver("org.postgresql.Driver")
                         .withUrl(dataSourceInfo.getJdbcUrl())
