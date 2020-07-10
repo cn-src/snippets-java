@@ -5,5 +5,18 @@ package cn.javaer.snippets.type;
  *
  * @author cn-src
  */
-public interface Geometry {
+public final class Geometry {
+    private final String data;
+
+    private Geometry(String data) {
+        this.data = data;
+    }
+
+    public final String data() {
+        return this.data;
+    }
+
+    public static Geometry valueOf(String data) {
+        return new Geometry(data);
+    }
 }

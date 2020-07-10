@@ -2,11 +2,14 @@ package cn.javaer.snippets.jooq;
 
 import cn.javaer.snippets.type.Geometry;
 import org.jooq.Condition;
+import org.jooq.Converter;
+import org.jooq.DataType;
 import org.jooq.Field;
 import org.jooq.JSONB;
 import org.jooq.SQLDialect;
 import org.jooq.Support;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.tools.json.JSONValue;
 
 import java.util.Collections;
@@ -15,23 +18,26 @@ import java.util.Collections;
  * @author cn-src
  */
 public class SQL {
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static DataType<Geometry> GEOMETRY_TYPE = SQLDataType.OTHER.asConvertedDataType((Converter) PostGISGeometryConverter.INSTANCE);
 
-    private SQL() {}
+    private SQL() {
+    }
 
-    public static Condition arrayContained(final Field<String[]> arrayField, final String[] arrayValue) {
+    public static Condition arrayContained(Field<String[]> arrayField, String[] arrayValue) {
         return DSL.condition("{0} <@ {1}", arrayField,
                 DSL.val(arrayValue, arrayField.getDataType()));
     }
 
     @Deprecated
-    public static Condition jsonbContains(final Field<JSONB> jsonField, final String jsonKey, final Object jsonValue) {
-        final String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
+    public static Condition jsonbContains(Field<JSONB> jsonField, String jsonKey, Object jsonValue) {
+        String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
                 DSL.val(json, jsonField.getDataType()));
     }
 
     @Deprecated
-    public static Condition jsonbContains(final Field<JSONB> jsonField, final JSONB jsonb) {
+    public static Condition jsonbContains(Field<JSONB> jsonField, JSONB jsonb) {
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
                 DSL.val(jsonb, jsonField.getDataType()));
     }
@@ -43,6 +49,6 @@ public class SQL {
 
     @Support(SQLDialect.POSTGRES)
     public static Field<String> stAsGeoJSON(Field<Geometry> geom) {
-        return DSL.function("ST_AsGeoJSON", String.class);
+        return DSL.function("ST_AsGeoJSON", String.class, geom);
     }
 }

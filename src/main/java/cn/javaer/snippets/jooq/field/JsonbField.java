@@ -22,14 +22,14 @@ public class JsonbField<R extends Record, T> extends CustomField<T> implements T
     private static final long serialVersionUID = -2128410511798819756L;
     private final Table<R> table;
 
-    public JsonbField(final String name, final DataType<T> type, final Table<R> table) {
+    public JsonbField(String name, DataType<T> type, Table<R> table) {
         super(name, type);
 
         this.table = table;
     }
 
     @Override
-    public void accept(final Context ctx) {
+    public void accept(Context ctx) {
         if (ctx.qualify()) {
             ctx.visit(this.table);
             ctx.sql('.');
@@ -37,25 +37,32 @@ public class JsonbField<R extends Record, T> extends CustomField<T> implements T
         ctx.visit(this.getUnqualifiedName());
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Support(SQLDialect.POSTGRES)
-    public Condition containsJson(final T jsonObj) {
-        if (jsonObj instanceof Field) {
-            return this.containsJson((Field) jsonObj);
+    public Condition containsJson(T object) {
+        if (object instanceof Field) {
+            return this.containsJson((Field) object);
+        }
+        String val;
+        if (object instanceof String) {
+            val = (String) object;
+        }
+        else {
+            val = object == null ? null : JSONValue.toJSONString(object);
         }
         return DSL.condition("{0}::jsonb @> {1}::jsonb", this,
-                DSL.val(jsonObj, this.getDataType()));
+                DSL.val(val, this.getDataType()));
     }
 
     @Support(SQLDialect.POSTGRES)
-    public Condition containsJson(final Field<T> jsonField) {
+    public Condition containsJson(Field<T> json) {
         return DSL.condition("{0}::jsonb @> {1}::jsonb", this,
-                jsonField);
+                json);
     }
 
     @Support(SQLDialect.POSTGRES)
-    public Condition containsJson(final String jsonKey, final Object jsonValue) {
-        final String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
+    public Condition containsJson(String jsonKey, Object jsonValue) {
+        String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
         return DSL.condition("{0}::jsonb @> {1}::jsonb", this,
                 DSL.val(json, this.getDataType()));
     }
