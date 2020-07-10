@@ -40,9 +40,11 @@ class SnippetsGeneratorTest {
                 "       " +
                 " CONSTRAINT demo_pkey" +
                 " PRIMARY KEY,\n" +
-                "    geom   geometry(Polygon, 4326),\n" +
+                "    geom1   geometry(Polygon, 4326),\n" +
+                "    geom2   geometry(Polygon, 4326),\n" +
                 "    " +
-                "jsonb1 jsonb\n" +
+                "jsonb1 jsonb,\n" +
+                "    jsonb2 jsonb\n" +
                 ");");
         Configuration configuration = new Configuration()
                 .withJdbc(new Jdbc()
