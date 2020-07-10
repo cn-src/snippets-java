@@ -17,13 +17,6 @@ public class SnippetsGenerator extends JavaGenerator {
     final Pattern jsonbPattern = Pattern.compile("public final TableField<Record, JSONB>(.*)createField\\(DSL.name\\((.*)\\), org.jooq.impl.SQLDataType.JSONB, this, (.*)\\);");
     final Pattern geometryPattern = Pattern.compile("/\\*\\*\\s+\\* @deprecated .+\\s+\\*/\\s+@java\\.lang\\.Deprecated\\s*public final TableField<Record, Object> (\\w+) = createField\\(DSL.name\\((.+)\\), org.jooq.impl.DefaultDataType.getDefaultDataType\\(.+geometry.+\\), this, (.+)\\);", Pattern.MULTILINE);
 
-    public SnippetsGenerator() {
-        this.setGenerateRoutines(false);
-        this.setGenerateUDTs(false);
-        this.setGenerateTableValuedFunctions(false);
-        this.setGenerateRecords(false);
-    }
-
     @Override
     protected void generateTable(SchemaDefinition schema, TableDefinition table) {
 
