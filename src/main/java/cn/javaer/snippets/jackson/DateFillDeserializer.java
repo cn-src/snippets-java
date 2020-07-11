@@ -2,11 +2,9 @@ package cn.javaer.snippets.jackson;
 
 import cn.javaer.snippets.spring.format.DateFillFormat;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 
 import java.io.IOException;
@@ -37,7 +35,7 @@ public class DateFillDeserializer extends JsonDeserializer<LocalDateTime> implem
     }
 
     @Override
-    public LocalDateTime deserialize(final JsonParser parser, final DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public LocalDateTime deserialize(final JsonParser parser, final DeserializationContext context) throws IOException {
         final LocalDate date = LocalDate.parse(parser.getText(), this.formatter);
         switch (this.dateFillFormat.fillTime()) {
             case MIN:
@@ -50,7 +48,7 @@ public class DateFillDeserializer extends JsonDeserializer<LocalDateTime> implem
     }
 
     @Override
-    public JsonDeserializer<?> createContextual(final DeserializationContext ctxt, final BeanProperty property) throws JsonMappingException {
+    public JsonDeserializer<?> createContextual(final DeserializationContext context, final BeanProperty property) {
         final AnnotatedElement annotated = property.getMember().getAnnotated();
         DateFillFormat dateFillFormat = annotated.getAnnotation(DateFillFormat.class);
         if (null == dateFillFormat) {
