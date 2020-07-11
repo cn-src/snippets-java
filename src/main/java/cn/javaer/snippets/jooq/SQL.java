@@ -27,17 +27,20 @@ public class SQL {
     /**
      * 被包含，操作符: <@
      */
+    @Support(SQLDialect.POSTGRES)
     public static <T> Condition containedBy(final Field<T> field, final T value) {
         return DSL.condition("{0} <@ {1}", field,
                 DSL.val(value, field.getDataType()));
     }
 
+    @Support(SQLDialect.POSTGRES)
     public static Condition containsJsonb(final Field<JSONB> jsonField, final String jsonKey, final Object jsonValue) {
         final String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
                 DSL.val(json, jsonField.getDataType()));
     }
 
+    @Support(SQLDialect.POSTGRES)
     public static Condition containsJsonb(final Field<JSONB> jsonField, final JSONB jsonb) {
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
                 DSL.val(jsonb, jsonField.getDataType()));
