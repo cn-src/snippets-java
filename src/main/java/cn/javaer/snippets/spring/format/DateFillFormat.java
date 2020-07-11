@@ -50,6 +50,9 @@ public @interface DateFillFormat {
      */
     int months() default 0;
 
+    /**
+     * 填充时间的方式
+     */
     FillTime fillTime();
 
     enum FillTime {
