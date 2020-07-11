@@ -22,12 +22,12 @@ class SnippetsJacksonIntrospectorTest {
         objectMapper.setAnnotationIntrospector(jacksonIntrospector);
         //language=JSON
         final Demo demo = objectMapper.readValue("{\"dateTime\": \"2020-05-05\"}", Demo.class);
-        assertThat(demo.dateTime).isEqualTo(LocalDate.parse("2020-05-05").atTime(LocalTime.MIN));
+        assertThat(demo.dateTime).isEqualTo(LocalDate.parse("2020-04-05").atTime(LocalTime.MIN));
     }
 
     @Data
     static class Demo {
-        @DateFillFormat(fillTime = DateFillFormat.FillTime.MIN)
+        @DateFillFormat(fillTime = DateFillFormat.FillTime.MIN, months = -1)
         LocalDateTime dateTime;
     }
 }
