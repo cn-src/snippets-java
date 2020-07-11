@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.lang.reflect.AnnotatedElement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -37,14 +36,7 @@ public class DateFillDeserializer extends JsonDeserializer<LocalDateTime> implem
     @Override
     public LocalDateTime deserialize(final JsonParser parser, final DeserializationContext context) throws IOException {
         final LocalDate date = LocalDate.parse(parser.getText(), this.formatter);
-        switch (this.dateFillFormat.fillTime()) {
-            case MIN:
-                return date.atTime(LocalTime.MIN);
-            case MAX:
-                return date.atTime(LocalTime.MAX);
-            default:
-                throw new IllegalStateException();
-        }
+        return DateFillFormat.Conversion.conversion(date, this.dateFillFormat);
     }
 
     @Override
