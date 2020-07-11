@@ -47,6 +47,7 @@ import java.util.function.BiFunction;
  *
  * @author cn-src
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ConditionCreator {
     private static final ConcurrentHashMap<Class<?>, List<ClassInfo>> CACHE = new ConcurrentHashMap<>();
     private static final Map<Class<? extends Annotation>, BiFunction<Field, Object, Condition>> CONDITION_FUN_MAP = new HashMap<>(5);
