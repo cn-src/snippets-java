@@ -4,6 +4,7 @@ services:
 jdk:
   - openjdk8
   - openjdk11
+  - openjdk14
 script:
   - ./gradlew check
   - ./gradlew jacocoTestReport
