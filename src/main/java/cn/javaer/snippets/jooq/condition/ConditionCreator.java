@@ -151,7 +151,7 @@ public class ConditionCreator {
                     }
                     else if (ann instanceof ConditionContains) {
                         if (JSONB.class.equals(info.readMethod.getReturnType())) {
-                            conditions.add(SQL.jsonbContains(column, (JSONB) value));
+                            conditions.add(SQL.containsJsonb(column, (JSONB) value));
                         }
                         else {
                             conditions.add(column.contains(value));
@@ -159,7 +159,7 @@ public class ConditionCreator {
                     }
                     else if (ann instanceof ConditionContained
                             && String[].class.equals(info.readMethod.getReturnType())) {
-                        conditions.add(SQL.arrayContained(column, (String[]) value));
+                        conditions.add(SQL.containedBy(column, (String[]) value));
                     }
                     else if (ann instanceof ConditionBetweenMin) {
                         final ConditionBetweenMin betweenMin = (ConditionBetweenMin) ann;

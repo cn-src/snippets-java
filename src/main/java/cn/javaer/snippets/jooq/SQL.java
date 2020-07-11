@@ -24,31 +24,32 @@ public class SQL {
     private SQL() {
     }
 
-    public static Condition arrayContained(Field<String[]> arrayField, String[] arrayValue) {
-        return DSL.condition("{0} <@ {1}", arrayField,
-                DSL.val(arrayValue, arrayField.getDataType()));
+    /**
+     * 被包含，操作符: <@
+     */
+    public static <T> Condition containedBy(final Field<T> field, final T value) {
+        return DSL.condition("{0} <@ {1}", field,
+                DSL.val(value, field.getDataType()));
     }
 
-    @Deprecated
-    public static Condition jsonbContains(Field<JSONB> jsonField, String jsonKey, Object jsonValue) {
-        String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
+    public static Condition containsJsonb(final Field<JSONB> jsonField, final String jsonKey, final Object jsonValue) {
+        final String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
                 DSL.val(json, jsonField.getDataType()));
     }
 
-    @Deprecated
-    public static Condition jsonbContains(Field<JSONB> jsonField, JSONB jsonb) {
+    public static Condition containsJsonb(final Field<JSONB> jsonField, final JSONB jsonb) {
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
                 DSL.val(jsonb, jsonField.getDataType()));
     }
 
     @Support(SQLDialect.POSTGRES)
-    public static Field<Boolean> stContains(Field<Geometry> geomA, Field<Geometry> geomB) {
+    public static Field<Boolean> stContains(final Field<Geometry> geomA, final Field<Geometry> geomB) {
         return DSL.function("ST_Contains", Boolean.TYPE, geomA, geomB);
     }
 
     @Support(SQLDialect.POSTGRES)
-    public static Field<String> stAsGeoJSON(Field<Geometry> geom) {
+    public static Field<String> stAsGeoJSON(final Field<Geometry> geom) {
         return DSL.function("ST_AsGeoJSON", String.class, geom);
     }
 }

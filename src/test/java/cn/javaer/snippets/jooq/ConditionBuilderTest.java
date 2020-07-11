@@ -27,8 +27,8 @@ class ConditionBuilderTest {
                 .append(objectField::contains, "object")
                 .append(arrayField::contains, new String[]{"str1", "str2"})
                 .dateTime(dateTimeField::betweenSymmetric, LocalDate.now(), LocalDate.now())
-                .append(SQL::arrayContained, arrayField, new String[]{"value"})
-                .append(SQL::jsonbContains, jsonbField, "key", "value")
+                .append(SQL::containedBy, arrayField, new String[]{"value"})
+                .append(SQL::containsJsonb, jsonbField, "key", "value")
                 .build();
 
         final String sql = DSL.using(SQLDialect.POSTGRES)
