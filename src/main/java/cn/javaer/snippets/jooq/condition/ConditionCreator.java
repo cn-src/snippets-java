@@ -52,15 +52,10 @@ public class ConditionCreator {
     private static final Map<Class<? extends Annotation>, BiFunction<Field, Object, Condition>> CONDITION_FUN_MAP = new HashMap<>(5);
 
     static {
-        //noinspection unchecked
         CONDITION_FUN_MAP.put(ConditionEqual.class, Field::eq);
-        //noinspection unchecked
         CONDITION_FUN_MAP.put(ConditionLessThan.class, Field::lessThan);
-        //noinspection unchecked
         CONDITION_FUN_MAP.put(ConditionLessOrEqual.class, Field::lessOrEqual);
-        //noinspection unchecked
         CONDITION_FUN_MAP.put(ConditionGreaterThan.class, Field::greaterThan);
-        //noinspection unchecked
         CONDITION_FUN_MAP.put(ConditionGreaterOrEqual.class, Field::greaterOrEqual);
     }
 
@@ -126,7 +121,6 @@ public class ConditionCreator {
         return condition;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     private static Condition create(final Object query, final boolean ignoreUnannotated) {
         if (query == null) {
             return null;
@@ -238,7 +232,7 @@ public class ConditionCreator {
                         continue;
                     }
                     if (null != conditionAnnotation) {
-                        throw new IllegalStateException("Condition annotation has multi");
+                        throw new IllegalStateException("Condition annotation has multiple");
                     }
                     conditionAnnotation = fieldAnnotation;
                 }
@@ -281,10 +275,8 @@ public class ConditionCreator {
         @Nullable
         private Annotation annotation;
         private Method readMethod;
-        @SuppressWarnings("rawtypes")
         private Field column;
 
-        @SuppressWarnings("rawtypes")
         private BiFunction<Field, Object, Condition> conditionFun;
     }
 }
