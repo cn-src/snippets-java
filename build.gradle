@@ -66,6 +66,7 @@ repositories {
 
 test {
     useJUnitPlatform()
+    jvmArgs("-Dorg.jooq.no-logo=true")
 }
 
 jacocoTestReport {
