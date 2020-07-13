@@ -185,6 +185,9 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
 
         int size = 0;
         for (final RelationalPersistentProperty persistentProperty : this.persistentEntity) {
+            if (persistentProperty.isTransient()) {
+                continue;
+            }
             final String columnName = persistentProperty.getColumnName().getReference();
             columnJoiner.add(columnName);
             valuesJoiner.add("?");
