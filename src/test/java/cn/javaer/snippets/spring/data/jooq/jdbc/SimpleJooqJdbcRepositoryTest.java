@@ -2,9 +2,10 @@ package cn.javaer.snippets.spring.data.jooq.jdbc;
 
 import cn.javaer.snippets.TestAutoConfigurationPackage;
 import cn.javaer.snippets.empty.EmptyDataPackage;
+import cn.javaer.snippets.jooq.condition.ConditionCreator;
+import cn.javaer.snippets.spring.autoconfigure.data.jooq.jdbc.JooqJdbcRepositoriesAutoConfiguration;
 import cn.javaer.snippets.spring.data.jooq.jdbc.config.EnableJooqJdbcRepositories;
 import cn.javaer.snippets.spring.data.jooq.jdbc.pojo.User;
-import cn.javaer.snippets.spring.autoconfigure.data.jooq.jdbc.JooqJdbcRepositoriesAutoConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -12,8 +13,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 import org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -54,7 +53,7 @@ class SimpleJooqJdbcRepositoryTest {
                     final Page<User> page = userRepository.findAll(PageRequest.of(0, 1));
                     assertThat(page).hasSize(1);
 
-                    final Optional<User> one = userRepository.findOne(Example.of(new User("name1", "man"), ExampleMatcher.matchingAll()));
+                    final Optional<User> one = userRepository.findOne(ConditionCreator.create(new User("name1", "man")));
                     assertThat(one).isNotEmpty();
 
                     final Iterable<User> sortUsers = userRepository.findAll(Sort.by(Sort.Direction.DESC, "name"));
