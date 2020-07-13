@@ -345,7 +345,7 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
 
     @Override
     public boolean exists(final Condition condition) {
-        final Query query = this.dsl.selectOne().from(this.table).limit(1).getQuery();
+        final Query query = this.dsl.selectOne().from(this.table).where(condition).limit(1).getQuery();
         final Integer one = this.jdbcOperations.queryForObject(query.getSQL(), query.getBindValues().toArray(), Integer.class);
         return one != null;
     }
