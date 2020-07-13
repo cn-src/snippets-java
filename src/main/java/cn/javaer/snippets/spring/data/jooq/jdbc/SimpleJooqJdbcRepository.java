@@ -56,7 +56,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     private final DSLContext dsl;
     private final Table<Record> table;
 
-    private final Optional<?> auditor;
+    private final Object auditor;
 
     public SimpleJooqJdbcRepository(final DSLContext dsl,
                                     final RelationalMappingContext context,
@@ -65,7 +65,6 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
                                     final NamedParameterJdbcOperations jdbcOperations,
                                     final JdbcConverter jdbcConverter,
                                     final AuditorAware<?> auditorAware) {
-//        super(dsl, persistentEntity, context, auditorAware);
         this.entityOperations = entityOperations;
         this.jdbcConverter = jdbcConverter;
         this.jdbcOperations = jdbcOperations.getJdbcOperations();
@@ -74,7 +73,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         this.persistentEntity = persistentEntity;
         this.dsl = dsl;
         this.table = DSL.table(this.persistentEntity.getTableName().getReference());
-        this.auditor = auditorAware.getCurrentAuditor();
+        this.auditor = auditorAware.getCurrentAuditor().orElse(null);
     }
 
     /**
@@ -303,14 +302,14 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
     @Override
     public Optional<T> findByIdAndCreator(final ID id) {
-        Assert.isTrue(this.auditor.isPresent(), () -> AUDITOR_MUST_BE_NOT_NULL);
+        Assert.notNull(this.auditor, () -> AUDITOR_MUST_BE_NOT_NULL);
 
         final String createByColumn = Objects.requireNonNull(this.persistentEntity.getPersistentProperty(CreatedBy.class))
                 .getColumnName().getReference();
 
         final Query query = this.dsl.selectFrom(this.table)
                 .where(DSL.field(this.persistentEntity.getIdColumn().getReference()).eq(id))
-                .and(DSL.field(createByColumn).eq(this.auditor.get()));
+                .and(DSL.field(createByColumn).eq(this.auditor));
 
         try {
             //noinspection ConstantConditions
@@ -324,12 +323,12 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
     @Override
     public Iterable<T> findAllByCreator() {
-        Assert.isTrue(this.auditor.isPresent(), () -> AUDITOR_MUST_BE_NOT_NULL);
+        Assert.notNull(this.auditor, () -> AUDITOR_MUST_BE_NOT_NULL);
 
         final String createByColumn = Objects.requireNonNull(this.persistentEntity.getPersistentProperty(CreatedBy.class))
                 .getColumnName().getReference();
         final Query query = this.dsl.selectFrom(this.table)
-                .where(DSL.field(createByColumn).eq(this.auditor.get()));
+                .where(DSL.field(createByColumn).eq(this.auditor));
 
         return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
                 this.repositoryEntityRowMapper);
@@ -341,12 +340,12 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         if (count == 0) {
             return new PageImpl<>(Collections.emptyList());
         }
-        Assert.isTrue(this.auditor.isPresent(), () -> AUDITOR_MUST_BE_NOT_NULL);
+        Assert.notNull(this.auditor, () -> AUDITOR_MUST_BE_NOT_NULL);
 
         final String createByColumn = Objects.requireNonNull(this.persistentEntity.getPersistentProperty(CreatedBy.class))
                 .getColumnName().getReference();
         final Query query = StepUtils.pageableStep(this.dsl.selectFrom(this.table)
-                .where(DSL.field(createByColumn).eq(this.auditor.get())), pageable);
+                .where(DSL.field(createByColumn).eq(this.auditor)), pageable);
 
         final List<T> list = this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
                 this.repositoryEntityRowMapper);
@@ -357,9 +356,9 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     @Transactional
     @Override
     public T updateByIdAndCreator(final T instance) {
-        Assert.isTrue(this.auditor.isPresent(), () -> AUDITOR_MUST_BE_NOT_NULL);
+        Assert.notNull(this.auditor, () -> AUDITOR_MUST_BE_NOT_NULL);
         final UpdateConditionStep<?> updateStep = StepUtils.updateByIdAndCreatorStep(this.dsl, this.table,
-                this.persistentEntity, this.auditor.get(), instance);
+                this.persistentEntity, this.auditor, instance);
         this.jdbcOperations.update(updateStep.getSQL(), updateStep.getBindValues());
         return instance;
     }
@@ -367,14 +366,14 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     @Transactional
     @Override
     public void deleteByIdAndCreator(final ID id) {
-        Assert.isTrue(this.auditor.isPresent(), () -> AUDITOR_MUST_BE_NOT_NULL);
+        Assert.notNull(this.auditor, () -> AUDITOR_MUST_BE_NOT_NULL);
 
         final String createByColumn = Objects.requireNonNull(this.persistentEntity.getPersistentProperty(CreatedBy.class))
                 .getColumnName().getReference();
 
         final Query query = this.dsl.deleteFrom(this.table)
                 .where(DSL.field(this.persistentEntity.getIdColumn().getReference()).eq(id))
-                .and(DSL.field(createByColumn).eq(this.auditor.get()));
+                .and(DSL.field(createByColumn).eq(this.auditor));
         this.jdbcOperations.update(query.getSQL(), query.getBindValues());
     }
 }
