@@ -1,17 +1,16 @@
 package cn.javaer.snippets.spring.data.jooq.jdbc;
 
-import cn.javaer.snippets.spring.data.jooq.AbstractJooqRepository;
+import cn.javaer.snippets.spring.data.jooq.StepUtils;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
-import org.jooq.DeleteConditionStep;
 import org.jooq.Query;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.UpdateConditionStep;
 import org.jooq.impl.DSL;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +31,7 @@ import org.springframework.util.Assert;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -42,7 +42,9 @@ import java.util.stream.Collectors;
  * @author cn-src
  */
 @Transactional(readOnly = true)
-public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, ID> implements JooqJdbcRepository<T, ID> {
+public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID> {
+
+    private static final String AUDITOR_MUST_BE_NOT_NULL = "Auditor must be not null";
 
     private final JdbcAggregateOperations entityOperations;
     private final JdbcOperations jdbcOperations;
@@ -50,7 +52,11 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
     private final Class<T> repositoryEntityClass;
     private final EntityRowMapper<T> repositoryEntityRowMapper;
     private final RelationalPersistentEntity<T> persistentEntity;
+
+    private final DSLContext dsl;
     private final Table<Record> table;
+
+    private final Optional<?> auditor;
 
     public SimpleJooqJdbcRepository(final DSLContext dsl,
                                     final RelationalMappingContext context,
@@ -59,14 +65,16 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
                                     final NamedParameterJdbcOperations jdbcOperations,
                                     final JdbcConverter jdbcConverter,
                                     final AuditorAware<?> auditorAware) {
-        super(dsl, persistentEntity, context, auditorAware);
+//        super(dsl, persistentEntity, context, auditorAware);
         this.entityOperations = entityOperations;
         this.jdbcConverter = jdbcConverter;
         this.jdbcOperations = jdbcOperations.getJdbcOperations();
         this.repositoryEntityClass = persistentEntity.getType();
         this.repositoryEntityRowMapper = new EntityRowMapper<>(persistentEntity, jdbcConverter);
         this.persistentEntity = persistentEntity;
+        this.dsl = dsl;
         this.table = DSL.table(this.persistentEntity.getTableName().getReference());
+        this.auditor = auditorAware.getCurrentAuditor();
     }
 
     /**
@@ -236,78 +244,9 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
         return this.entityOperations.findAll(this.repositoryEntityClass, pageable);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <S extends T> Optional<S> findOne(final Example<S> example) {
-        final Query query = this.findWithExampleStep(example);
-        try {
-            //noinspection ConstantConditions
-            return Optional.of(this.jdbcOperations.queryForObject(query.getSQL(), query.getBindValues().toArray(),
-                    this.getEntityRowMapper(example.getProbeType())));
-        }
-        catch (final EmptyResultDataAccessException emptyResultDataAccessException) {
-            return Optional.empty();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <S extends T> Iterable<S> findAll(final Example<S> example) {
-        final Query query = this.findWithExampleStep(example);
-        return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
-                this.getEntityRowMapper(example.getProbeType()));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <S extends T> Iterable<S> findAll(final Example<S> example, final Sort sort) {
-        final Query query = this.findWithExampleAndSortStep(example, sort);
-        return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
-                this.getEntityRowMapper(example.getProbeType()));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <S extends T> Page<S> findAll(final Example<S> example, final Pageable pageable) {
-        final long count = this.count(example);
-        if (count == 0) {
-            return new PageImpl<>(Collections.emptyList());
-        }
-        final Query query = this.findWithExampleAndPageableStep(example, pageable);
-        final List<S> entityList = this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
-                this.getEntityRowMapper(example.getProbeType()));
-        return new PageImpl<>(entityList, pageable, count);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <S extends T> long count(final Example<S> example) {
-        final Query query = this.countWithExampleStep(example);
-        //noinspection ConstantConditions
-        return this.jdbcOperations.queryForObject(query.getSQL(), query.getBindValues().toArray(), Long.class);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <S extends T> boolean exists(final Example<S> example) {
-        return this.count(example) > 0;
-    }
-
     @Override
     public Optional<T> findOne(final Condition condition) {
-        final Query query = this.findWithConditionStep(condition);
+        final Query query = this.dsl.selectFrom(this.table).where(condition).getQuery();
         try {
             //noinspection ConstantConditions
             return Optional.of(this.jdbcOperations.queryForObject(query.getSQL(), query.getBindValues().toArray(),
@@ -320,7 +259,7 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
 
     @Override
     public List<T> findAll(final Condition condition) {
-        final Query query = this.findWithConditionStep(condition);
+        final Query query = this.dsl.selectFrom(this.table).where(condition).getQuery();
 
         return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
                 this.repositoryEntityRowMapper);
@@ -332,7 +271,8 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
         if (count == 0) {
             return new PageImpl<>(Collections.emptyList());
         }
-        final Query query = this.findWithConditionAndPageableStep(condition, pageable);
+        final Query query = StepUtils.pageableStep(this.dsl.selectFrom(this.table).where(condition), pageable);
+
         final List<T> list = this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
                 this.repositoryEntityRowMapper);
         return new PageImpl<>(list, pageable, count);
@@ -363,7 +303,14 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
 
     @Override
     public Optional<T> findByIdAndCreator(final ID id) {
-        final Query query = this.findByIdAndCreatorStep(id);
+        Assert.isTrue(this.auditor.isPresent(), () -> AUDITOR_MUST_BE_NOT_NULL);
+
+        final String createByColumn = Objects.requireNonNull(this.persistentEntity.getPersistentProperty(CreatedBy.class))
+                .getColumnName().getReference();
+
+        final Query query = this.dsl.selectFrom(this.table)
+                .where(DSL.field(this.persistentEntity.getIdColumn().getReference()).eq(id))
+                .and(DSL.field(createByColumn).eq(this.auditor.get()));
 
         try {
             //noinspection ConstantConditions
@@ -377,8 +324,12 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
 
     @Override
     public Iterable<T> findAllByCreator() {
+        Assert.isTrue(this.auditor.isPresent(), () -> AUDITOR_MUST_BE_NOT_NULL);
 
-        final Query query = this.findAllByCreatorStep();
+        final String createByColumn = Objects.requireNonNull(this.persistentEntity.getPersistentProperty(CreatedBy.class))
+                .getColumnName().getReference();
+        final Query query = this.dsl.selectFrom(this.table)
+                .where(DSL.field(createByColumn).eq(this.auditor.get()));
 
         return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
                 this.repositoryEntityRowMapper);
@@ -390,7 +341,12 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
         if (count == 0) {
             return new PageImpl<>(Collections.emptyList());
         }
-        final Query query = this.findAllByCreatorStep(pageable);
+        Assert.isTrue(this.auditor.isPresent(), () -> AUDITOR_MUST_BE_NOT_NULL);
+
+        final String createByColumn = Objects.requireNonNull(this.persistentEntity.getPersistentProperty(CreatedBy.class))
+                .getColumnName().getReference();
+        final Query query = StepUtils.pageableStep(this.dsl.selectFrom(this.table)
+                .where(DSL.field(createByColumn).eq(this.auditor.get())), pageable);
 
         final List<T> list = this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
                 this.repositoryEntityRowMapper);
@@ -401,7 +357,9 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
     @Transactional
     @Override
     public T updateByIdAndCreator(final T instance) {
-        final UpdateConditionStep<Record> updateStep = this.updateByIdAndCreatorStep(instance);
+        Assert.isTrue(this.auditor.isPresent(), () -> AUDITOR_MUST_BE_NOT_NULL);
+        final UpdateConditionStep<?> updateStep = StepUtils.updateByIdAndCreatorStep(this.dsl, this.table,
+                this.persistentEntity, this.auditor.get(), instance);
         this.jdbcOperations.update(updateStep.getSQL(), updateStep.getBindValues());
         return instance;
     }
@@ -409,11 +367,14 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
     @Transactional
     @Override
     public void deleteByIdAndCreator(final ID id) {
-        final DeleteConditionStep<Record> deleteStep = this.deleteByIdAndCreatorStep(id);
-        this.jdbcOperations.update(deleteStep.getSQL(), deleteStep.getBindValues());
-    }
+        Assert.isTrue(this.auditor.isPresent(), () -> AUDITOR_MUST_BE_NOT_NULL);
 
-    protected <E> EntityRowMapper<E> getEntityRowMapper(final Class<E> domainType) {
-        return new EntityRowMapper<>(this.getRequiredPersistentEntity(domainType), this.jdbcConverter);
+        final String createByColumn = Objects.requireNonNull(this.persistentEntity.getPersistentProperty(CreatedBy.class))
+                .getColumnName().getReference();
+
+        final Query query = this.dsl.deleteFrom(this.table)
+                .where(DSL.field(this.persistentEntity.getIdColumn().getReference()).eq(id))
+                .and(DSL.field(createByColumn).eq(this.auditor.get()));
+        this.jdbcOperations.update(query.getSQL(), query.getBindValues());
     }
 }
