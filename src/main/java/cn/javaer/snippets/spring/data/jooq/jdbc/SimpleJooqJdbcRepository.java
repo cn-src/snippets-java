@@ -49,8 +49,8 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     private final JdbcAggregateOperations entityOperations;
     private final JdbcOperations jdbcOperations;
     private final JdbcConverter jdbcConverter;
-    private final Class<T> repositoryEntityClass;
-    private final EntityRowMapper<T> repositoryEntityRowMapper;
+    private final Class<T> entityClass;
+    private final EntityRowMapper<T> entityRowMapper;
     private final RelationalPersistentEntity<T> persistentEntity;
 
     private final DSLContext dsl;
@@ -68,8 +68,8 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         this.entityOperations = entityOperations;
         this.jdbcConverter = jdbcConverter;
         this.jdbcOperations = jdbcOperations.getJdbcOperations();
-        this.repositoryEntityClass = persistentEntity.getType();
-        this.repositoryEntityRowMapper = new EntityRowMapper<>(persistentEntity, jdbcConverter);
+        this.entityClass = persistentEntity.getType();
+        this.entityRowMapper = new EntityRowMapper<>(persistentEntity, jdbcConverter);
         this.persistentEntity = persistentEntity;
         this.dsl = dsl;
         this.table = DSL.table(this.persistentEntity.getTableName().getReference());
@@ -102,7 +102,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
      */
     @Override
     public Optional<T> findById(final ID id) {
-        return Optional.ofNullable(this.entityOperations.findById(id, this.repositoryEntityClass));
+        return Optional.ofNullable(this.entityOperations.findById(id, this.entityClass));
     }
 
     /**
@@ -110,7 +110,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
      */
     @Override
     public boolean existsById(final ID id) {
-        return this.entityOperations.existsById(id, this.repositoryEntityClass);
+        return this.entityOperations.existsById(id, this.entityClass);
     }
 
     /**
@@ -118,7 +118,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
      */
     @Override
     public Iterable<T> findAll() {
-        return this.entityOperations.findAll(this.repositoryEntityClass);
+        return this.entityOperations.findAll(this.entityClass);
     }
 
     /**
@@ -126,7 +126,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
      */
     @Override
     public Iterable<T> findAllById(final Iterable<ID> ids) {
-        return this.entityOperations.findAllById(ids, this.repositoryEntityClass);
+        return this.entityOperations.findAllById(ids, this.entityClass);
     }
 
     /**
@@ -134,7 +134,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
      */
     @Override
     public long count() {
-        return this.entityOperations.count(this.repositoryEntityClass);
+        return this.entityOperations.count(this.entityClass);
     }
 
     /**
@@ -143,7 +143,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     @Transactional
     @Override
     public void deleteById(final ID id) {
-        this.entityOperations.deleteById(id, this.repositoryEntityClass);
+        this.entityOperations.deleteById(id, this.entityClass);
     }
 
     /**
@@ -152,7 +152,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     @Transactional
     @Override
     public void delete(final T instance) {
-        this.entityOperations.delete(instance, this.repositoryEntityClass);
+        this.entityOperations.delete(instance, this.entityClass);
     }
 
     /**
@@ -171,7 +171,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     @Transactional
     @Override
     public void deleteAll() {
-        this.entityOperations.deleteAll(this.repositoryEntityClass);
+        this.entityOperations.deleteAll(this.entityClass);
     }
 
     @Transactional
@@ -232,7 +232,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
      */
     @Override
     public Iterable<T> findAll(final Sort sort) {
-        return this.entityOperations.findAll(this.repositoryEntityClass, sort);
+        return this.entityOperations.findAll(this.entityClass, sort);
     }
 
     /**
@@ -240,7 +240,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
      */
     @Override
     public Page<T> findAll(final Pageable pageable) {
-        return this.entityOperations.findAll(this.repositoryEntityClass, pageable);
+        return this.entityOperations.findAll(this.entityClass, pageable);
     }
 
     @Override
@@ -249,7 +249,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         try {
             //noinspection ConstantConditions
             return Optional.of(this.jdbcOperations.queryForObject(query.getSQL(), query.getBindValues().toArray(),
-                    this.repositoryEntityRowMapper));
+                    this.entityRowMapper));
         }
         catch (final EmptyResultDataAccessException emptyResultDataAccessException) {
             return Optional.empty();
@@ -261,7 +261,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         final Query query = this.dsl.selectFrom(this.table).where(condition).getQuery();
 
         return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
-                this.repositoryEntityRowMapper);
+                this.entityRowMapper);
     }
 
     @Override
@@ -273,7 +273,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         final Query query = StepUtils.pageableStep(this.dsl.selectFrom(this.table).where(condition), pageable);
 
         final List<T> list = this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
-                this.repositoryEntityRowMapper);
+                this.entityRowMapper);
         return new PageImpl<>(list, pageable, count);
     }
 
@@ -314,7 +314,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         try {
             //noinspection ConstantConditions
             return Optional.of(this.jdbcOperations.queryForObject(query.getSQL(), query.getBindValues().toArray(),
-                    this.repositoryEntityRowMapper));
+                    this.entityRowMapper));
         }
         catch (final EmptyResultDataAccessException emptyResultDataAccessException) {
             return Optional.empty();
@@ -331,7 +331,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
                 .where(DSL.field(createByColumn).eq(this.auditor));
 
         return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
-                this.repositoryEntityRowMapper);
+                this.entityRowMapper);
     }
 
     @Override
@@ -348,7 +348,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
                 .where(DSL.field(createByColumn).eq(this.auditor)), pageable);
 
         final List<T> list = this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
-                this.repositoryEntityRowMapper);
+                this.entityRowMapper);
 
         return new PageImpl<>(list, pageable, count);
     }
