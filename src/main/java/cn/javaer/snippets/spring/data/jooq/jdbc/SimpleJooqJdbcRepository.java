@@ -203,6 +203,9 @@ public class SimpleJooqJdbcRepository<T, ID> extends AbstractJooqRepository<T, I
             final PersistentPropertyAccessor<S> propertyAccessor = this.persistentEntity.getPropertyAccessor(entity);
             final List<Object> values = new ArrayList<>(size);
             for (final RelationalPersistentProperty property : this.persistentEntity) {
+                if (property.isTransient()) {
+                    continue;
+                }
                 final Object value = propertyAccessor.getProperty(property);
                 values.add(value);
             }
