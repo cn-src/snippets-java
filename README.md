@@ -7,4 +7,16 @@
 # Snippets Java
 > 一些零散的Java代码片段，集成 jar 后可直接使用
 
+* jOOQ Condition 动态创建支持
+* jOOQ Geometry 几何类型支持
+* jOOQ 额外函数支持
+* Spring Data JDBC & jOOQ 扩展支持
+* Spring Data & Eclipse Collections 扩展支持
+* Kryo & Eclipse Collections 序列化支持
+* 自定义 Spring 事务注解支持
+* 请求/响应 详细日志支持
+* 日期填充时间的转换支持
+* Tree UI 数据结构支持
+* 其它
+
 [文档](https://cn-src.gitee.io/snippets-java/)
