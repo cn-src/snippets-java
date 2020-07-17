@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * 树节点.
@@ -42,5 +43,14 @@ public class TreeNode {
     @JsonAnyGetter
     public Map<String, Object> getDynamic() {
         return this.dynamic;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", TreeNode.class.getSimpleName() + "[", "]")
+                .add("title=" + this.title)
+                .add("@children.size=" + (this.children == null ? 0 : this.children.size()))
+                .add("dynamic=" + this.dynamic)
+                .toString();
     }
 }
