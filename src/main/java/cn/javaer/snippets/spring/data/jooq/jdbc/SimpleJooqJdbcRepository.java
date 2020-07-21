@@ -1,5 +1,6 @@
 package cn.javaer.snippets.spring.data.jooq.jdbc;
 
+import cn.javaer.snippets.spring.data.jooq.QueryStep;
 import cn.javaer.snippets.spring.data.jooq.StepUtils;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
@@ -293,6 +294,13 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         final Query query = this.dsl.selectOne().from(this.table).where(condition).limit(1).getQuery();
         final Integer one = this.jdbcOperations.queryForObject(query.getSQL(), query.getBindValues().toArray(), Integer.class);
         return one != null;
+    }
+
+    @Override
+    public List<T> findAll(final QueryStep queryStep) {
+        final Query query = queryStep.apply(this.dsl);
+        return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
+                this.entityRowMapper);
     }
 
     @Override

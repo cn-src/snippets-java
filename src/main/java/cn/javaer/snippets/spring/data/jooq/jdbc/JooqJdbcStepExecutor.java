@@ -1,5 +1,6 @@
 package cn.javaer.snippets.spring.data.jooq.jdbc;
 
+import cn.javaer.snippets.spring.data.jooq.QueryStep;
 import org.jooq.Condition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,4 +58,13 @@ public interface JooqJdbcStepExecutor<T> {
      * @return 存在返回 true
      */
     boolean exists(Condition condition);
+
+    /**
+     * 查询多个实体
+     *
+     * @param queryStep jOOQ 查询
+     *
+     * @return 实体 List
+     */
+    List<T> findAll(QueryStep queryStep);
 }
