@@ -1,6 +1,6 @@
-package cn.javaer.snippets.jooq;
+package cn.javaer.snippets.jooq.condition;
 
-import cn.javaer.snippets.jooq.condition.ConditionBuilder;
+import cn.javaer.snippets.jooq.SQL;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.JSONB;

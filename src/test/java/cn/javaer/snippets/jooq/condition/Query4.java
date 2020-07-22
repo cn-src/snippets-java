@@ -1,4 +1,4 @@
-package cn.javaer.snippets.jooq;
+package cn.javaer.snippets.jooq.condition;
 
 import cn.javaer.snippets.jooq.condition.annotation.ConditionBetweenMax;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionBetweenMin;

@@ -1,6 +1,5 @@
-package cn.javaer.snippets.jooq;
+package cn.javaer.snippets.jooq.condition;
 
-import cn.javaer.snippets.jooq.condition.ConditionCreator;
 import cn.javaer.snippets.model.TreeNode;
 import org.jooq.Condition;
 import org.jooq.DSLContext;

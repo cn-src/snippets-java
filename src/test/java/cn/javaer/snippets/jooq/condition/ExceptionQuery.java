@@ -1,4 +1,4 @@
-package cn.javaer.snippets.jooq;
+package cn.javaer.snippets.jooq.condition;
 
 import cn.javaer.snippets.jooq.condition.annotation.ConditionContains;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionEqual;
