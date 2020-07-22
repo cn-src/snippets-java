@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 @Documented
 @Inherited
 @Component
-@Transactional(rollbackFor = Throwable.class)
+@Transactional(readOnly = true, rollbackFor = Throwable.class)
 public @interface TxReadOnlyService {
 
     @AliasFor(attribute = "value", annotation = Component.class)
@@ -45,9 +45,6 @@ public @interface TxReadOnlyService {
 
     @AliasFor(annotation = Transactional.class)
     int timeout() default TransactionDefinition.TIMEOUT_DEFAULT;
-
-    @AliasFor(annotation = Transactional.class)
-    boolean readOnly() default true;
 
     @AliasFor(annotation = Transactional.class)
     Class<? extends Throwable>[] noRollbackFor() default {};
