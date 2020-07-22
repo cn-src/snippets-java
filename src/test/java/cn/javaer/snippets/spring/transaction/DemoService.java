@@ -31,7 +31,7 @@ public class DemoService {
                 .isEqualTo(TransactionDefinition.ISOLATION_SERIALIZABLE);
     }
 
-    @TxReadOnly(isolation = Isolation.READ_COMMITTED)
+    @TxRead(isolation = Isolation.READ_COMMITTED)
     public void demo2() {
         this.jdbcTemplate.execute("SELECT 'x'");
         assertThat(TransactionSynchronizationManager.isActualTransactionActive())

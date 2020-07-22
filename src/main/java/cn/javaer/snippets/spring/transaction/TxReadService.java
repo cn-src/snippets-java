@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
 @Inherited
 @Component
 @Transactional(readOnly = true, rollbackFor = Throwable.class)
-public @interface TxReadOnlyService {
+public @interface TxReadService {
 
     @AliasFor(attribute = "value", annotation = Component.class)
     String value() default "";

@@ -10,11 +10,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author cn-src
  */
-@TxReadOnlyService(isolation = Isolation.SERIALIZABLE)
+@TxReadService(isolation = Isolation.SERIALIZABLE)
 public class DemoReadService {
     private final JdbcTemplate jdbcTemplate;
 
-    public DemoReadService(JdbcTemplate jdbcTemplate) {
+    public DemoReadService(final JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -31,7 +31,7 @@ public class DemoReadService {
                 .isEqualTo(TransactionDefinition.ISOLATION_SERIALIZABLE);
     }
 
-    @TxReadOnly(isolation = Isolation.READ_COMMITTED)
+    @TxRead(isolation = Isolation.READ_COMMITTED)
     public void demo2() {
         this.jdbcTemplate.execute("SELECT 'x'");
         assertThat(TransactionSynchronizationManager.isActualTransactionActive())

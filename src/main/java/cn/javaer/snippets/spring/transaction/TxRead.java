@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
 @Inherited
 @Documented
 @Transactional(readOnly = true, rollbackFor = Throwable.class)
-public @interface TxReadOnly {
+public @interface TxRead {
 
     @AliasFor(attribute = "transactionManager", annotation = Transactional.class)
     String value() default "";
