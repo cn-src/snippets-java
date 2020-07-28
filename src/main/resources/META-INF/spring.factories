@@ -5,4 +5,5 @@ cn.javaer.snippets.spring.autoconfigure.eclipse.collections.EclipseCollectionsAu
 cn.javaer.snippets.spring.autoconfigure.data.jooq.jdbc.JooqJdbcRepositoriesAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.jooq.JooqDSLContextAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.jackson.SnippetsJacksonAutoConfiguration,\
+cn.javaer.snippets.spring.autoconfigure.jackson.JooqJacksonAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.springdoc.SpringdocAutoConfiguration
