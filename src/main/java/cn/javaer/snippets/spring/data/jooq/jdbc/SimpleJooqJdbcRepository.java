@@ -4,6 +4,7 @@ import cn.javaer.snippets.spring.data.jooq.QueryStep;
 import cn.javaer.snippets.spring.data.jooq.StepUtils;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.Query;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -56,7 +57,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
     private final DSLContext dsl;
     private final Table<Record> table;
-
+    private final Field<?>[] fieldsFromEntity;
     private final Object auditor;
 
     public SimpleJooqJdbcRepository(final DSLContext dsl,
@@ -74,6 +75,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         this.persistentEntity = persistentEntity;
         this.dsl = dsl;
         this.table = DSL.table(this.persistentEntity.getTableName().getReference());
+        this.fieldsFromEntity = StepUtils.getFields(persistentEntity);
         this.auditor = auditorAware.getCurrentAuditor().orElse(null);
     }
 
@@ -246,7 +248,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
     @Override
     public Optional<T> findOne(final Condition condition) {
-        final Query query = this.dsl.selectFrom(this.table).where(condition).getQuery();
+        final Query query = this.dsl.select(this.fieldsFromEntity).from(this.table).where(condition).getQuery();
         try {
             //noinspection ConstantConditions
             return Optional.of(this.jdbcOperations.queryForObject(query.getSQL(), query.getBindValues().toArray(),
@@ -259,7 +261,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
     @Override
     public List<T> findAll(final Condition condition) {
-        final Query query = this.dsl.selectFrom(this.table).where(condition).getQuery();
+        final Query query = this.dsl.select(this.fieldsFromEntity).from(this.table).where(condition).getQuery();
 
         return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
                 this.entityRowMapper);
@@ -271,7 +273,8 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         if (count == 0) {
             return new PageImpl<>(Collections.emptyList());
         }
-        final Query query = StepUtils.pageableStep(this.dsl.selectFrom(this.table).where(condition), pageable);
+        final Query query = StepUtils.pageableStep(this.dsl.select(this.fieldsFromEntity)
+                .from(this.table).where(condition), pageable);
 
         final List<T> list = this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
                 this.entityRowMapper);
@@ -315,7 +318,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         final String createByColumn = Objects.requireNonNull(this.persistentEntity.getPersistentProperty(CreatedBy.class))
                 .getColumnName().getReference();
 
-        final Query query = this.dsl.selectFrom(this.table)
+        final Query query = this.dsl.select(this.fieldsFromEntity).from(this.table)
                 .where(DSL.field(this.persistentEntity.getIdColumn().getReference()).eq(id))
                 .and(DSL.field(createByColumn).eq(this.auditor));
 
@@ -335,7 +338,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
         final String createByColumn = Objects.requireNonNull(this.persistentEntity.getPersistentProperty(CreatedBy.class))
                 .getColumnName().getReference();
-        final Query query = this.dsl.selectFrom(this.table)
+        final Query query = this.dsl.select(this.fieldsFromEntity).from(this.table)
                 .where(DSL.field(createByColumn).eq(this.auditor));
 
         return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
@@ -352,7 +355,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
         final String createByColumn = Objects.requireNonNull(this.persistentEntity.getPersistentProperty(CreatedBy.class))
                 .getColumnName().getReference();
-        final Query query = StepUtils.pageableStep(this.dsl.selectFrom(this.table)
+        final Query query = StepUtils.pageableStep(this.dsl.select(this.fieldsFromEntity).from(this.table)
                 .where(DSL.field(createByColumn).eq(this.auditor)), pageable);
 
         final List<T> list = this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),

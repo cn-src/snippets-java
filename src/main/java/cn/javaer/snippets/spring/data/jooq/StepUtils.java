@@ -2,6 +2,7 @@ package cn.javaer.snippets.spring.data.jooq;
 
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.SelectLimitPercentAfterOffsetStep;
 import org.jooq.SelectOrderByStep;
@@ -23,6 +24,8 @@ import org.springframework.data.relational.core.mapping.RelationalPersistentEnti
 import org.springframework.data.relational.core.mapping.RelationalPersistentProperty;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -30,6 +33,16 @@ import java.util.Objects;
  */
 public class StepUtils {
     private StepUtils() {
+    }
+
+    public static Field<?>[] getFields(final RelationalPersistentEntity<?> persistentEntity) {
+        final List<Field<?>> fields = new ArrayList<>();
+        for (final RelationalPersistentProperty property : persistentEntity) {
+            if (!property.isTransient()) {
+                fields.add(DSL.field(property.getColumnName().getReference()));
+            }
+        }
+        return fields.toArray(new Field[0]);
     }
 
     public static SelectSeekStepN<?> sortStep(final SelectOrderByStep<?> step, final Sort sort) {
