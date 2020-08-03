@@ -31,6 +31,15 @@ class JooqJsonbSerializerTest {
         JSONAssert.assertEquals("{\"str\":\"val\",\"jsonb\":{\"demo\":123}}", value, false);
     }
 
+    @Test
+    void serializeNull() throws Exception {
+        final Demo demo = new Demo();
+        demo.setStr("val");
+        demo.setJsonb(JSONB.valueOf(null));
+        final String value = this.mapper.writeValueAsString(demo);
+        JSONAssert.assertEquals("{\"str\":\"val\",\"jsonb\":null}", value, false);
+    }
+
     @Data
     static class Demo {
         String str;
