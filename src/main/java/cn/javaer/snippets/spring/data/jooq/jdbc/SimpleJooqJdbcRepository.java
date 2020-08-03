@@ -190,7 +190,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         Assert.notNull(entities, "Entities must not be null!");
 
         final StringBuilder sqlBuilder = new StringBuilder("INSERT INTO ");
-        sqlBuilder.append(this.persistentEntity.getTableName());
+        sqlBuilder.append(this.persistentEntity.getTableName().getReference());
         final StringJoiner columnJoiner = new StringJoiner(",", "(", ")");
         final StringJoiner valuesJoiner = new StringJoiner(",", "(", ")");
 
