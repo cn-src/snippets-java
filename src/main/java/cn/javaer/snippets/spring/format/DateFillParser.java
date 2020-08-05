@@ -25,7 +25,7 @@ public final class DateFillParser implements Parser<LocalDateTime> {
             return DateFillFormat.Conversion.conversion(date, this.annotation);
         }
         final LocalDateTime dateTime = LocalDateTime.parse(text,
-                DateTimeFormatter.ofPattern(this.annotation.dataPattern(), locale));
+                DateTimeFormatter.ofPattern(this.annotation.dataTimePattern(), locale));
         return DateFillFormat.Conversion.conversion(dateTime, this.annotation);
     }
 }
