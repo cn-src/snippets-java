@@ -22,18 +22,16 @@ import java.time.LocalTime;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
 public @interface DateFillFormat {
-
-    String style() default "SS";
+    
+    /**
+     * 日期的格式
+     */
+    String dataPattern() default "yyyy-MM-dd";
 
     /**
-     * 输入/反序列化的格式
+     * 日期时间的格式
      */
-    String pattern() default "yyyy-MM-dd";
-
-    /**
-     * 输出/序列化的格式
-     */
-    String printPattern() default "yyyy-MM-dd HH:mm:ss";
+    String dataTimePattern() default "yyyy-MM-dd HH:mm:ss";
 
     /**
      * 在已有的日期上偏移天数
@@ -75,9 +73,9 @@ public @interface DateFillFormat {
     interface Conversion {
 
         /**
-         * 转换日期
+         * 计算日期
          */
-        static LocalDateTime conversion(final LocalDate localDate, final DateFillFormat format) {
+        static LocalDate computeDate(final LocalDate localDate, final DateFillFormat format) {
             LocalDate date = localDate;
             final int days = format.days();
             if (days < 0) {
@@ -100,6 +98,17 @@ public @interface DateFillFormat {
             else if (weeks > 0) {
                 date = date.plusWeeks(weeks);
             }
+
+            return date;
+        }
+
+        /**
+         * 日期转换日期时间
+         */
+        static LocalDateTime conversion(final LocalDate localDate,
+                                        final DateFillFormat format) {
+            final LocalDate date = Conversion.computeDate(localDate, format);
+
             switch (format.fillTime()) {
                 case MIN:
                     return date.atTime(LocalTime.MIN);
@@ -108,6 +117,15 @@ public @interface DateFillFormat {
                 default:
                     throw new IllegalStateException();
             }
+        }
+
+        /**
+         * 日期时间转换日期时间
+         */
+        static LocalDateTime conversion(final LocalDateTime localDateTime,
+                                        final DateFillFormat format) {
+            final LocalDate date = Conversion.computeDate(localDateTime.toLocalDate(), format);
+            return date.atTime(localDateTime.toLocalTime());
         }
     }
 }
