@@ -32,6 +32,7 @@ dependencies {
     optionalApi 'io.github.classgraph:classgraph:4.8.87'
     optionalApi 'org.springdoc:springdoc-openapi-webmvc-core:1.4.3'
     optionalApi 'org.jooq:jooq-codegen:3.13.3'
+    optionalApi 'p6spy:p6spy:3.9.1'
 
     optionalApi 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'
