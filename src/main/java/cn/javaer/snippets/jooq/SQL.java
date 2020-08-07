@@ -19,7 +19,8 @@ import java.util.Collections;
  */
 public class SQL {
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static DataType<Geometry> GEOMETRY_TYPE = SQLDataType.OTHER.asConvertedDataType((Converter) PostGISGeometryConverter.INSTANCE);
+    public static DataType<Geometry> GEOMETRY_TYPE =
+            SQLDataType.OTHER.asConvertedDataType((Converter) PostGISGeometryConverter.INSTANCE);
 
     private SQL() {
     }
@@ -34,7 +35,8 @@ public class SQL {
     }
 
     @Support(SQLDialect.POSTGRES)
-    public static Condition containsJsonb(final Field<JSONB> jsonField, final String jsonKey, final Object jsonValue) {
+    public static Condition containsJsonb(final Field<JSONB> jsonField, final String jsonKey,
+                                          final Object jsonValue) {
         final String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
                 DSL.val(json, jsonField.getDataType()));
@@ -46,8 +48,34 @@ public class SQL {
                 DSL.val(jsonb, jsonField.getDataType()));
     }
 
+    /**
+     * 自定义聚合函数: first, 取每组中第一个元素.
+     * <p>
+     * <code>
+     * CREATE OR REPLACE FUNCTION public.first_agg (anyelement, anyelement)
+     * RETURNS anyelement
+     * LANGUAGE sql IMMUTABLE STRICT AS
+     * 'SELECT $1;'
+     *
+     * CREATE AGGREGATE public.first(anyelement) (
+     * SFUNC = public.first_agg,
+     * STYPE = anyelement
+     * );
+     * </code>
+     *
+     * @param field field
+     * @param <T> field type
+     *
+     * @return field
+     */
     @Support(SQLDialect.POSTGRES)
-    public static Field<Boolean> stContains(final Field<Geometry> geomA, final Field<Geometry> geomB) {
+    public static <T> Field<T> first(final Field<T> field) {
+        return DSL.function("first", field.getDataType(), field);
+    }
+
+    @Support(SQLDialect.POSTGRES)
+    public static Field<Boolean> stContains(final Field<Geometry> geomA,
+                                            final Field<Geometry> geomB) {
         return DSL.function("ST_Contains", Boolean.TYPE, geomA, geomB);
     }
 
