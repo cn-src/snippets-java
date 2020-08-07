@@ -1,7 +1,6 @@
 package cn.javaer.snippets.spring.exception;
 
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -31,10 +30,10 @@ public class GlobalExceptionAdvice {
     private final ErrorProperties errorProperties;
     private final MessageSourceAccessor messageSourceAccessor;
 
-    public GlobalExceptionAdvice(final ServerProperties serverProperties,
+    public GlobalExceptionAdvice(final ErrorProperties errorProperties,
                                  final Map<String, ErrorStatus> errorMapping,
                                  final ResourceBundleMessageSource messageSource) {
-        this.errorProperties = serverProperties.getError();
+        this.errorProperties = errorProperties;
         this.messageSourceAccessor = new MessageSourceAccessor(messageSource);
 
         this.errorMapping.put("org.springframework.web.bind.MethodArgumentNotValidException",
