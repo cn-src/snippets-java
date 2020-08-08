@@ -45,7 +45,8 @@ class SpringDocAutoConfigurationTest {
                             MultipleOpenApiSupportConfiguration.class,
                             SpringDocWebMvcConfiguration.class, MockMvcAutoConfiguration.class,
                             WebMvcAutoConfiguration.class, DispatcherServletAutoConfiguration.class,
-                            HttpMessageConvertersAutoConfiguration.class));
+                            HttpMessageConvertersAutoConfiguration.class))
+            .withPropertyValues("server.error.include-message=always");
 
     @Test
     void generateDoc() {
