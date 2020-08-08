@@ -38,8 +38,8 @@ public class ExceptionAutoConfiguration implements InitializingBean {
     }
 
     @Bean
-    ErrorInfoController errorInfoController() {
-        return new ErrorInfoController();
+    ErrorInfoController errorInfoController(final ErrorInfoExtractor errorInfoExtractor) {
+        return new ErrorInfoController(errorInfoExtractor);
     }
 
     @Bean
