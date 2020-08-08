@@ -6,6 +6,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,6 +16,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(ObjectMapper.class)
 @AutoConfigureAfter(JacksonAutoConfiguration.class)
+@ConditionalOnProperty(prefix = "snippets.jackson", name = "enabled", havingValue = "true",
+        matchIfMissing = true)
 public class SnippetsJacksonAutoConfiguration implements InitializingBean {
     private final ObjectMapper objectMapper;
 
