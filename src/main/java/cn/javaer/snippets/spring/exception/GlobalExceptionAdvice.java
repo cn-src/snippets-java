@@ -6,6 +6,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,7 +44,9 @@ public class GlobalExceptionAdvice {
         this.errorMapping.put("javax.validation.ConstraintViolationException",
                 new ErrorStatus(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name()));
 
-        this.errorMapping.putAll(errorMapping);
+        if (!CollectionUtils.isEmpty(errorMapping)) {
+            this.errorMapping.putAll(errorMapping);
+        }
     }
 
     @ResponseBody
