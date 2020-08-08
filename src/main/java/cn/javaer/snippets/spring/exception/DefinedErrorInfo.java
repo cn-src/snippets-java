@@ -26,8 +26,12 @@ public class DefinedErrorInfo {
     }
 
     public DefinedErrorInfo(final HttpStatus httpStatus) {
+        this(httpStatus, "");
+    }
+
+    public DefinedErrorInfo(final HttpStatus httpStatus, final String message) {
         this.error = httpStatus.name();
         this.status = httpStatus.value();
-        this.message = "";
+        this.message = message;
     }
 }

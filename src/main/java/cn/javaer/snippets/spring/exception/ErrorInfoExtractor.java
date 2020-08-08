@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -56,7 +57,21 @@ public class ErrorInfoExtractor implements ApplicationContextAware {
     public void init() {
         this.initErrors();
         this.initErrorMapping();
-
+        for (final String error : this.errors) {
+            Arrays.stream(HttpStatus.values())
+                    .filter(it -> it.name().equals(error))
+                    .findFirst()
+                    .ifPresent(it -> {
+                        if (this.isIncludeMessage) {
+                            final String message = this.messageSourceAccessor.getMessage(
+                                    error, "No message available");
+                            this.errorInfos.put(error, new DefinedErrorInfo(it, message));
+                        }
+                        else {
+                            this.errorInfos.put(error, new DefinedErrorInfo(it));
+                        }
+                    });
+        }
         final Collection<Object> controllers =
                 this.applicationContext.getBeansWithAnnotation(Controller.class).values();
 
