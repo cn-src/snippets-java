@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.charset.StandardCharsets;
@@ -47,8 +48,14 @@ class ExceptionAutoConfigurationTest {
     @RestController
     static class Demo {
         @GetMapping("demo")
-        void callError() throws MissingServletRequestParameterException {
+        void callError() throws MissingServletRequestParameterException, MyException {
             throw new MissingServletRequestParameterException("key", "value");
         }
+    }
+
+    @ResponseStatus(reason = "BAD_REQUEST")
+    static class MyException extends RuntimeException {
+
+        private static final long serialVersionUID = 176179922741709936L;
     }
 }

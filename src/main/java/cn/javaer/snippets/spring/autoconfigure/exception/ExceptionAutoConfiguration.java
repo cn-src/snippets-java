@@ -1,8 +1,12 @@
 package cn.javaer.snippets.spring.autoconfigure.exception;
 
+import cn.javaer.snippets.spring.exception.DefinedErrorInfo;
+import cn.javaer.snippets.spring.exception.ErrorInfoController;
+import cn.javaer.snippets.spring.exception.ErrorInfoExtractor;
 import cn.javaer.snippets.spring.exception.GlobalExceptionAdvice;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
@@ -24,13 +28,18 @@ import java.util.Map;
 public class ExceptionAutoConfiguration implements InitializingBean {
     private final ExceptionMappingProperties exceptionMappingProperties;
     private final ServerProperties serverProperties;
-    private Map<String, GlobalExceptionAdvice.ErrorStatus> useMapping;
+    private Map<String, DefinedErrorInfo> useMapping;
 
     public ExceptionAutoConfiguration(
             final ExceptionMappingProperties exceptionMappingProperties,
             final ServerProperties serverProperties) {
         this.exceptionMappingProperties = exceptionMappingProperties;
         this.serverProperties = serverProperties;
+    }
+
+    @Bean
+    ErrorInfoController errorInfoController() {
+        return new ErrorInfoController();
     }
 
     @Bean
@@ -42,9 +51,14 @@ public class ExceptionAutoConfiguration implements InitializingBean {
     }
 
     @Bean
-    GlobalExceptionAdvice globalExceptionAdvice(final ResourceBundleMessageSource messageSource) {
-        return new GlobalExceptionAdvice(this.serverProperties.getError(), this.useMapping,
-                messageSource);
+    ErrorInfoExtractor errorInfoExtractor(final ResourceBundleMessageSource messageSource) {
+        return new ErrorInfoExtractor(this.useMapping, messageSource,
+                this.serverProperties.getError().getIncludeMessage() == ErrorProperties.IncludeAttribute.ALWAYS);
+    }
+
+    @Bean
+    GlobalExceptionAdvice globalExceptionAdvice(final ErrorInfoExtractor errorInfoExtractor) {
+        return new GlobalExceptionAdvice(this.serverProperties.getError(), errorInfoExtractor);
     }
 
     @Override
@@ -58,9 +72,10 @@ public class ExceptionAutoConfiguration implements InitializingBean {
                 if (value != null) {
                     final int i = value.indexOf(',');
                     if (i > 0) {
-                        final GlobalExceptionAdvice.ErrorStatus errorStatus =
-                                new GlobalExceptionAdvice.ErrorStatus(Integer.parseInt(value.substring(0,
-                                        i)), value.substring(i + 1));
+                        final DefinedErrorInfo errorStatus =
+                                new DefinedErrorInfo(value.substring(i + 1),
+                                        Integer.parseInt(value.substring(0,
+                                                i)));
                         this.useMapping.put(entry.getKey(), errorStatus);
                     }
                     else {

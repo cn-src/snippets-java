@@ -9,8 +9,7 @@ import java.time.LocalDateTime;
  * @author cn-src
  */
 @Data
-public class ErrorInfo {
-
+public class RuntimeErrorInfo {
     private Integer status;
     @NotNull
     private String error;
@@ -20,4 +19,10 @@ public class ErrorInfo {
     private String trace;
     private String traceMessage;
     private LocalDateTime timestamp;
+
+    public RuntimeErrorInfo(final DefinedErrorInfo definedErrorInfo) {
+        this.error = definedErrorInfo.getError();
+        this.status = definedErrorInfo.getStatus();
+        this.message = definedErrorInfo.getMessage();
+    }
 }
