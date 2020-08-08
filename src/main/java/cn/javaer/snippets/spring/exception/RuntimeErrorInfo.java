@@ -20,6 +20,9 @@ public class RuntimeErrorInfo {
     private String traceMessage;
     private LocalDateTime timestamp;
 
+    public RuntimeErrorInfo() {
+    }
+
     public RuntimeErrorInfo(final DefinedErrorInfo definedErrorInfo) {
         this.error = definedErrorInfo.getError();
         this.status = definedErrorInfo.getStatus();

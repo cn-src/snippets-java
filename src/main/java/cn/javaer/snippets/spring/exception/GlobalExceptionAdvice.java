@@ -44,6 +44,7 @@ public class GlobalExceptionAdvice {
         else {
             runtimeErrorInfo = this.createNoDefined();
         }
+        this.fillInfo(runtimeErrorInfo, request, e);
         return ResponseEntity.status(runtimeErrorInfo.getStatus()).body(runtimeErrorInfo);
     }
 

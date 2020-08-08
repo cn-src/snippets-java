@@ -106,10 +106,12 @@ public class ErrorInfoExtractor implements ApplicationContextAware {
     void initErrors() {
         final Method getResourceBundle =
                 Objects.requireNonNull(ReflectionUtils.findMethod(this.messageSource.getClass(),
-                        "getResourceBundle"));
+                        "getResourceBundle", String.class, Locale.class));
+        getResourceBundle.setAccessible(true);
         final Method getDefaultLocale =
                 Objects.requireNonNull(ReflectionUtils.findMethod(this.messageSourceAccessor.getClass(),
                         "getDefaultLocale"));
+        getDefaultLocale.setAccessible(true);
         final Locale locale = (Locale) ReflectionUtils.invokeMethod(getDefaultLocale,
                 this.messageSourceAccessor);
 
