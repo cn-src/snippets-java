@@ -14,7 +14,7 @@
 * Spring Data & Eclipse Collections 扩展支持
 * Kryo & Eclipse Collections 序列化支持
 * 自定义 Spring 事务注解支持
-* 完善的异常处理机制，消息国际化，OpenApi文档异常响应自动生成
+* 完善的异常处理机制，消息国际化，OpenApi异常响应文档自动生成
 * 请求/响应 详细日志支持
 * 日期填充时间的转换支持
 * Tree UI 数据结构支持
