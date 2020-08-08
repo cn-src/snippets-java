@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -78,7 +77,7 @@ public class GlobalExceptionAdvice {
         final ResponseStatus responseStatus = AnnotationUtils.findAnnotation(e.getClass(),
                 ResponseStatus.class);
 
-        Integer status;
+        Integer status = null;
         String error = null;
         HttpStatus httpStatus = null;
         if (this.errorMapping.containsKey(clazz)) {
@@ -97,16 +96,16 @@ public class GlobalExceptionAdvice {
                 error = httpStatus.name();
             }
         }
-        else {
-            status = (Integer) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-            try {
-                httpStatus = HttpStatus.valueOf(status);
-                error = httpStatus.name();
-            }
-            catch (final Exception ignore) {
-
-            }
-        }
+//        else {
+//            status = (Integer) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+//            try {
+//                httpStatus = HttpStatus.valueOf(status);
+//                error = httpStatus.name();
+//            }
+//            catch (final Exception ignore) {
+//
+//            }
+//        }
 
         status = status == null ? 999 : status;
         error = error == null ? "None" : error;
@@ -126,7 +125,7 @@ public class GlobalExceptionAdvice {
         return errorInfo;
     }
 
-    static class ErrorStatus {
+    public static class ErrorStatus {
         int code;
         String error;
 
