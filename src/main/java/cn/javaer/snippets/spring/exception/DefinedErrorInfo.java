@@ -13,6 +13,12 @@ public class DefinedErrorInfo {
     Integer status;
     @With String message;
 
+    public DefinedErrorInfo(final String error, final Integer status, final String message) {
+        this.error = error;
+        this.status = status;
+        this.message = message;
+    }
+
     public DefinedErrorInfo(final String error, final Integer status) {
         this.error = error;
         this.status = status;
