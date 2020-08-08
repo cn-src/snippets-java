@@ -2,6 +2,7 @@ package cn.javaer.snippets.spring.autoconfigure.exception;
 
 import cn.javaer.snippets.spring.exception.GlobalExceptionAdvice;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
@@ -18,6 +19,8 @@ import java.util.Map;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({ExceptionMappingProperties.class, ServerProperties.class})
+@ConditionalOnProperty(prefix = "snippets.exception", name = "enabled", havingValue = "true",
+        matchIfMissing = true)
 public class ExceptionAutoConfiguration implements InitializingBean {
     private final ExceptionMappingProperties exceptionMappingProperties;
     private final ServerProperties serverProperties;
