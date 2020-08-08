@@ -66,9 +66,8 @@ public class ErrorInfoExtractor implements ApplicationContextAware {
             if (null != extracted) {
                 final String error = extracted.getError();
                 if (this.errors.contains(error)) {
-                    final boolean statusDiff =
-                            !this.errorInfos.get(error).getStatus().equals(extracted.getStatus());
-                    if (this.errorInfos.containsKey(error) && statusDiff) {
+                    if (this.errorInfos.containsKey(error) &&
+                            !this.errorInfos.get(error).getStatus().equals(extracted.getStatus())) {
                         final String msg = String.format("Error:'%s', Has multiple status: '%d' " +
                                         "and '%d'",
                                 error, this.errorInfos.get(error).getStatus(),

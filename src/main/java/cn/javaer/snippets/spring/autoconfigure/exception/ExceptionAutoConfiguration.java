@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.util.CollectionUtils;
 
@@ -38,6 +39,7 @@ public class ExceptionAutoConfiguration implements InitializingBean {
     }
 
     @Bean
+    @Lazy
     ErrorInfoController errorInfoController(final ErrorInfoExtractor errorInfoExtractor) {
         return new ErrorInfoController(errorInfoExtractor);
     }
