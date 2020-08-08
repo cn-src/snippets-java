@@ -1,5 +1,6 @@
 package cn.javaer.snippets.spring.autoconfigure.springdoc;
 
+import cn.javaer.snippets.spring.autoconfigure.exception.ExceptionAutoConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springdoc.core.Constants;
 import org.springdoc.core.SpringDocConfigProperties;
@@ -17,10 +18,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 import static org.hamcrest.Matchers.is;
@@ -31,12 +34,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author cn-src
  */
-class SpringdocAutoConfigurationTest {
+class SpringDocAutoConfigurationTest {
 
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
             .withConfiguration(
                     AutoConfigurations.of(
-                            SpringdocAutoConfiguration.class,
+                            SpringDocAutoConfiguration.class,
+                            ExceptionAutoConfiguration.class,
                             SpringDocConfigProperties.class, SpringDocConfiguration.class,
                             MultipleOpenApiSupportConfiguration.class,
                             SpringDocWebMvcConfiguration.class, MockMvcAutoConfiguration.class,
@@ -49,9 +53,14 @@ class SpringdocAutoConfigurationTest {
                 .run(context -> {
                     final MockMvc mockMvc = context.getBean(MockMvc.class);
 
-                    final MvcResult mvcResult = mockMvc.perform(get(Constants.DEFAULT_API_DOCS_URL)).andExpect(status().isOk())
-                            .andExpect(jsonPath("$.components.schemas.Pageable.properties._page.description", is("分页-页码"))).andReturn();
-//                    System.out.println(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8));
+                    final MvcResult mvcResult =
+                            mockMvc.perform(get(Constants.DEFAULT_API_DOCS_URL)).andExpect(status().isOk())
+                                    .andExpect(jsonPath("$.components.schemas.Pageable.properties" +
+                                            "._page" +
+                                            ".description", is("分页-页码"))).andReturn();
+                    final String content = mvcResult.getResponse().getContentAsString
+                            (StandardCharsets.UTF_8);
+                    System.out.println(content);
                 });
     }
 
@@ -60,7 +69,7 @@ class SpringdocAutoConfigurationTest {
     static class DemoController {
 
         @GetMapping("test")
-        public Page<String> get(final Pageable pageable) {
+        public Page<String> get(final Pageable pageable) throws MissingServletRequestParameterException {
             return new PageImpl<>(Collections.singletonList("page data"), pageable, 1);
         }
     }

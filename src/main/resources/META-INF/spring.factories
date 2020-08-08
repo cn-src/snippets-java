@@ -7,4 +7,4 @@ cn.javaer.snippets.spring.autoconfigure.jooq.JooqDSLContextAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.jackson.SnippetsJacksonAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.jackson.JooqJacksonAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.exception.ExceptionAutoConfiguration,\
-cn.javaer.snippets.spring.autoconfigure.springdoc.SpringdocAutoConfiguration
+cn.javaer.snippets.spring.autoconfigure.springdoc.SpringDocAutoConfiguration

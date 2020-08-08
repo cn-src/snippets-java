@@ -161,7 +161,7 @@ public class ErrorInfoExtractor implements ApplicationContextAware {
     }
 
     @Nullable
-    DefinedErrorInfo extract(final Class<? extends Throwable> clazz) {
+    public DefinedErrorInfo extract(final Class<? extends Throwable> clazz) {
 
         if (this.internalErrorMapping.containsKey(clazz.getName())) {
             return this.internalErrorMapping.get(clazz.getName());
