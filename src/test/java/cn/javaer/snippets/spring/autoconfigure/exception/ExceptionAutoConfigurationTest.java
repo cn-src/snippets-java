@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoC
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcAutoConfiguration;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +42,12 @@ class ExceptionAutoConfigurationTest {
                             .andExpect(status().isBadRequest())
                             .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
 
+                    final Object errorInfos = mockMvc.perform(get("/error_infos"))
+                            .andExpect(status().isOk())
+                            .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+
                     System.out.println(result);
+                    System.out.println(errorInfos);
                 });
     }
 
@@ -53,7 +59,7 @@ class ExceptionAutoConfigurationTest {
         }
     }
 
-    @ResponseStatus(reason = "BAD_REQUEST")
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "MY_BAD_REQUEST")
     static class MyException extends RuntimeException {
 
         private static final long serialVersionUID = 176179922741709936L;
