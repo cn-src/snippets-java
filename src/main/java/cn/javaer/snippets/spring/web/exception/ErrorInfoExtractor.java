@@ -1,20 +1,35 @@
-package cn.javaer.snippets.spring.exception;
+package cn.javaer.snippets.spring.web.exception;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.ConversionNotSupportedException;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
@@ -104,14 +119,54 @@ public class ErrorInfoExtractor implements ApplicationContextAware {
     }
 
     void initErrorMapping() {
-        this.internalErrorMapping.put("org.springframework.web.bind" +
-                        ".MethodArgumentNotValidException",
+        this.internalErrorMapping.put(HttpRequestMethodNotSupportedException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.METHOD_NOT_ALLOWED));
+
+        this.internalErrorMapping.put(HttpMediaTypeNotSupportedException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.UNSUPPORTED_MEDIA_TYPE));
+
+        this.internalErrorMapping.put(HttpMediaTypeNotAcceptableException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.NOT_ACCEPTABLE));
+
+        this.internalErrorMapping.put(MissingPathVariableException.class.getName(),
                 new DefinedErrorInfo(HttpStatus.BAD_REQUEST));
-        this.internalErrorMapping.put("org.springframework.web.bind" +
-                        ".MissingServletRequestParameterException",
+
+        this.internalErrorMapping.put(MissingServletRequestParameterException.class.getName(),
                 new DefinedErrorInfo(HttpStatus.BAD_REQUEST));
+
+        this.internalErrorMapping.put(ServletRequestBindingException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.BAD_REQUEST));
+
+        this.internalErrorMapping.put(ConversionNotSupportedException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.INTERNAL_SERVER_ERROR));
+
+        this.internalErrorMapping.put(TypeMismatchException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.BAD_REQUEST));
+
+        this.internalErrorMapping.put(HttpMessageNotReadableException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.BAD_REQUEST));
+
+        this.internalErrorMapping.put(HttpMessageNotWritableException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.INTERNAL_SERVER_ERROR));
+
+        this.internalErrorMapping.put(MethodArgumentNotValidException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.BAD_REQUEST));
+
+        this.internalErrorMapping.put(MissingServletRequestPartException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.BAD_REQUEST));
+
+        this.internalErrorMapping.put(BindException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.BAD_REQUEST));
+
+        this.internalErrorMapping.put(NoHandlerFoundException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.NOT_FOUND));
+
+        this.internalErrorMapping.put(AsyncRequestTimeoutException.class.getName(),
+                new DefinedErrorInfo(HttpStatus.SERVICE_UNAVAILABLE));
+
         this.internalErrorMapping.put("javax.validation.ConstraintViolationException",
                 new DefinedErrorInfo(HttpStatus.BAD_REQUEST));
+
         if (!CollectionUtils.isEmpty(this.errorMapping)) {
             this.internalErrorMapping.putAll(this.errorMapping);
         }

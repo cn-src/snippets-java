@@ -1,7 +1,7 @@
 package cn.javaer.snippets.spring.autoconfigure.springdoc;
 
-import cn.javaer.snippets.spring.exception.DefinedErrorInfo;
-import cn.javaer.snippets.spring.exception.ErrorInfoExtractor;
+import cn.javaer.snippets.spring.web.exception.DefinedErrorInfo;
+import cn.javaer.snippets.spring.web.exception.ErrorInfoExtractor;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.responses.ApiResponse;

@@ -1,7 +1,7 @@
 package cn.javaer.snippets.spring.autoconfigure.springdoc;
 
 import cn.javaer.snippets.spring.autoconfigure.exception.ExceptionAutoConfiguration;
-import cn.javaer.snippets.spring.exception.ErrorInfoExtractor;
+import cn.javaer.snippets.spring.web.exception.ErrorInfoExtractor;
 import cn.javaer.snippets.springdoc.PageDoc;
 import cn.javaer.snippets.springdoc.PageableDoc;
 import org.springdoc.core.GenericResponseBuilder;

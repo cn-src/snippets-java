@@ -1,9 +1,9 @@
 package cn.javaer.snippets.spring.autoconfigure.exception;
 
-import cn.javaer.snippets.spring.exception.DefinedErrorInfo;
-import cn.javaer.snippets.spring.exception.ErrorInfoController;
-import cn.javaer.snippets.spring.exception.ErrorInfoExtractor;
-import cn.javaer.snippets.spring.exception.GlobalExceptionAdvice;
+import cn.javaer.snippets.spring.web.exception.DefinedErrorInfo;
+import cn.javaer.snippets.spring.web.exception.ErrorInfoController;
+import cn.javaer.snippets.spring.web.exception.ErrorInfoExtractor;
+import cn.javaer.snippets.spring.web.exception.GlobalExceptionAdvice;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;

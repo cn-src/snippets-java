@@ -1,4 +1,4 @@
-package cn.javaer.snippets.spring.exception;
+package cn.javaer.snippets.spring.web.exception;
 
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.http.HttpStatus;

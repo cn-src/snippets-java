@@ -1,4 +1,4 @@
-package cn.javaer.snippets.spring.exception;
+package cn.javaer.snippets.spring.web.exception;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
