@@ -12,6 +12,7 @@ import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.tools.json.JSONValue;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 /**
@@ -46,6 +47,12 @@ public class SQL {
     public static Condition containsJsonb(final Field<JSONB> jsonField, final JSONB jsonb) {
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
                 DSL.val(jsonb, jsonField.getDataType()));
+    }
+
+    @Support(SQLDialect.POSTGRES)
+    public static Field<String> toChar(final Field<LocalDateTime> timestamp,
+                                       final String pattern) {
+        return DSL.function("to_char", String.class, timestamp, DSL.inline(pattern));
     }
 
     /**
