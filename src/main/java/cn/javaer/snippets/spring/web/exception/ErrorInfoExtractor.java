@@ -63,7 +63,7 @@ public class ErrorInfoExtractor implements ApplicationContextAware {
             final boolean isIncludeMessage) {
 
         this.messageSource = messageSource;
-        this.messageSourceAccessor = new MessageSourceAccessor(messageSource);
+        this.messageSourceAccessor = new MessageSourceAccessor(messageSource, Locale.CHINESE);
         this.isIncludeMessage = isIncludeMessage;
         this.errorMapping = errorMapping;
     }
