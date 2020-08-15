@@ -111,7 +111,11 @@ public abstract class Tree {
         while (null != current) {
             if (stack.size() <= setters.length && !CollectionUtils.isEmpty(current.getChildren())) {
                 current = current.getChildren().get(0);
-                stack.push(current);
+                final TreeNode clone = new TreeNode();
+                clone.setTitle(current.getTitle());
+                clone.setChildren(current.getChildren());
+                clone.setDynamic(clone.getDynamic());
+                stack.push(clone);
             }
             else {
                 final int size = stack.size() - 1;
