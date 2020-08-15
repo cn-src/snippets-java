@@ -1,5 +1,6 @@
 package cn.javaer.snippets.kryo;
 
+import cn.javaer.snippets.kryo.serializers.JSONBSerializer;
 import cn.javaer.snippets.kryo.serializers.eclipse.collections.ImmutableListSerializer;
 import cn.javaer.snippets.kryo.serializers.eclipse.collections.MutableListSerializer;
 import com.esotericsoftware.kryo.Kryo;
@@ -8,6 +9,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.util.Pool;
 import com.esotericsoftware.kryo.util.Util;
+import org.jooq.JSONB;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -53,6 +55,9 @@ public class KryoHelper {
                 if (Util.isClassAvailable("org.eclipse.collections.api.list.MutableList")) {
                     MutableListSerializer.registerSerializers(kryo);
                 }
+            }
+            if (Util.isClassAvailable("org.jooq.JSONB")) {
+                kryo.register(JSONB.class, new JSONBSerializer());
             }
             KryoHelper.this.configurer.accept(kryo);
             return kryo;
