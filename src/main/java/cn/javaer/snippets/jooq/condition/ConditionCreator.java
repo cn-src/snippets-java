@@ -49,7 +49,8 @@ import java.util.function.BiFunction;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ConditionCreator {
-    private static final ConcurrentHashMap<Class<?>, List<ClassInfo>> CACHE = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Class<?>, List<ClassInfo>> CACHE =
+            new ConcurrentHashMap<>();
     private static final Map<Class<? extends Annotation>, BiFunction<Field, Object, Condition>> CONDITION_FUN_MAP = new HashMap<>(5);
 
     static {
@@ -83,7 +84,11 @@ public class ConditionCreator {
         while (null != current) {
             if (stack.size() <= fields.length && !CollectionUtils.isEmpty(current.getChildren())) {
                 current = current.getChildren().get(0);
-                stack.push(current);
+                final TreeNode clone = new TreeNode();
+                clone.setTitle(current.getTitle());
+                clone.setChildren(current.getChildren());
+                clone.setDynamic(clone.getDynamic());
+                stack.push(clone);
             }
             else {
                 final Condition eq = fields[stack.size() - 2].eq(current.getTitle());
@@ -129,7 +134,8 @@ public class ConditionCreator {
 
         final List<Condition> conditions = new ArrayList<>();
         final Class<?> clazz = query.getClass();
-        final List<ClassInfo> classInfos = CACHE.computeIfAbsent(clazz, ConditionCreator::createClassCache);
+        final List<ClassInfo> classInfos = CACHE.computeIfAbsent(clazz,
+                ConditionCreator::createClassCache);
         final Map<String, BetweenValue> betweenValueMap = new HashMap<>();
         try {
             for (final ClassInfo info : classInfos) {
@@ -163,7 +169,8 @@ public class ConditionCreator {
                     }
                     else if (ann instanceof ConditionBetweenMin) {
                         final ConditionBetweenMin betweenMin = (ConditionBetweenMin) ann;
-                        final String betweenColumn = betweenMin.value().isEmpty() ? betweenMin.column() : betweenMin.value();
+                        final String betweenColumn = betweenMin.value().isEmpty() ?
+                                betweenMin.column() : betweenMin.value();
                         Assert.hasText(betweenColumn, () -> "Column must be not empty");
                         BetweenValue betweenValue = betweenValueMap.get(betweenColumn);
                         if (null == betweenValue) {
@@ -179,7 +186,8 @@ public class ConditionCreator {
                     }
                     else if (ann instanceof ConditionBetweenMax) {
                         final ConditionBetweenMax betweenMax = (ConditionBetweenMax) ann;
-                        final String betweenColumn = betweenMax.value().isEmpty() ? betweenMax.column() : betweenMax.value();
+                        final String betweenColumn = betweenMax.value().isEmpty() ?
+                                betweenMax.column() : betweenMax.value();
                         Assert.hasText(betweenColumn, () -> "Column must be not empty");
                         BetweenValue betweenValue = betweenValueMap.get(betweenColumn);
                         if (null == betweenValue) {
@@ -202,7 +210,8 @@ public class ConditionCreator {
 
         for (final Map.Entry<String, BetweenValue> entry : betweenValueMap.entrySet()) {
             final BetweenValue value = entry.getValue();
-            conditions.add(DSL.field(underline(entry.getKey())).between(value.getMin(), value.getMax()));
+            conditions.add(DSL.field(underline(entry.getKey())).between(value.getMin(),
+                    value.getMax()));
         }
 
         if (conditions.isEmpty()) {
@@ -229,7 +238,8 @@ public class ConditionCreator {
             Annotation conditionAnnotation = null;
             if (fieldAnnotations != null) {
                 for (final Annotation fieldAnnotation : fieldAnnotations) {
-                    if (!AnnotatedElementUtils.isAnnotated(fieldAnnotation.annotationType(), cn.javaer.snippets.jooq.condition.annotation.Condition.class)) {
+                    if (!AnnotatedElementUtils.isAnnotated(fieldAnnotation.annotationType(),
+                            cn.javaer.snippets.jooq.condition.annotation.Condition.class)) {
                         continue;
                     }
                     if (null != conditionAnnotation) {
