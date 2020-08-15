@@ -111,11 +111,7 @@ public abstract class Tree {
         while (null != current) {
             if (stack.size() <= setters.length && !CollectionUtils.isEmpty(current.getChildren())) {
                 current = current.getChildren().get(0);
-                final TreeNode clone = new TreeNode();
-                clone.setTitle(current.getTitle());
-                clone.setChildren(current.getChildren());
-                clone.setDynamic(clone.getDynamic());
-                stack.push(clone);
+                stack.push(cloneTreeNode(current));
             }
             else {
                 final int size = stack.size() - 1;
@@ -147,5 +143,15 @@ public abstract class Tree {
             }
         }
         return result;
+    }
+
+    public static TreeNode cloneTreeNode(final TreeNode treeNode) {
+        final TreeNode clone = new TreeNode();
+        clone.setTitle(treeNode.getTitle());
+        clone.setDynamic(clone.getDynamic());
+        if (null != treeNode.getChildren() && !treeNode.getChildren().isEmpty()) {
+            clone.setChildren(new ArrayList<>(treeNode.getChildren()));
+        }
+        return clone;
     }
 }

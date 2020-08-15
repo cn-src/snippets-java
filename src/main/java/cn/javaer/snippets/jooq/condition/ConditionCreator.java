@@ -11,6 +11,7 @@ import cn.javaer.snippets.jooq.condition.annotation.ConditionGreaterThan;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionIgnore;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionLessOrEqual;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionLessThan;
+import cn.javaer.snippets.model.Tree;
 import cn.javaer.snippets.model.TreeNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -84,11 +85,7 @@ public class ConditionCreator {
         while (null != current) {
             if (stack.size() <= fields.length && !CollectionUtils.isEmpty(current.getChildren())) {
                 current = current.getChildren().get(0);
-                final TreeNode clone = new TreeNode();
-                clone.setTitle(current.getTitle());
-                clone.setChildren(current.getChildren());
-                clone.setDynamic(clone.getDynamic());
-                stack.push(clone);
+                stack.push(Tree.cloneTreeNode(current));
             }
             else {
                 final Condition eq = fields[stack.size() - 2].eq(current.getTitle());
