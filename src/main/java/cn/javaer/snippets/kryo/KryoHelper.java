@@ -46,11 +46,13 @@ public class KryoHelper {
         @Override
         protected Kryo create() {
             final Kryo kryo = new Kryo();
-            if (Util.isClassAvailable("org.eclipse.collections.api.list.ImmutableList")) {
-                ImmutableListSerializer.registerSerializers(kryo);
-            }
-            if (Util.isClassAvailable("org.eclipse.collections.api.list.MutableList")) {
-                MutableListSerializer.registerSerializers(kryo);
+            if (Util.isClassAvailable("io.github.classgraph.ClassGraph")) {
+                if (Util.isClassAvailable("org.eclipse.collections.api.list.ImmutableList")) {
+                    ImmutableListSerializer.registerSerializers(kryo);
+                }
+                if (Util.isClassAvailable("org.eclipse.collections.api.list.MutableList")) {
+                    MutableListSerializer.registerSerializers(kryo);
+                }
             }
             KryoHelper.this.configurer.accept(kryo);
             return kryo;
@@ -61,7 +63,8 @@ public class KryoHelper {
         return this.read(bytes, (kryo, input) -> kryo.readObject(input, clazz));
     }
 
-    public <T> T readObject(final byte[] bytes, final Class<T> clazz, final Serializer<?> serializer) {
+    public <T> T readObject(final byte[] bytes, final Class<T> clazz,
+                            final Serializer<?> serializer) {
         return this.read(bytes, (kryo, input) -> kryo.readObject(input, clazz, serializer));
     }
 
@@ -69,7 +72,8 @@ public class KryoHelper {
         return this.read(bytes, (kryo, input) -> kryo.readObjectOrNull(input, clazz));
     }
 
-    public <T> T readObjectOrNull(final byte[] bytes, final Class<T> clazz, final Serializer<?> serializer) {
+    public <T> T readObjectOrNull(final byte[] bytes, final Class<T> clazz,
+                                  final Serializer<?> serializer) {
         return this.read(bytes, (kryo, input) -> kryo.readObjectOrNull(input, clazz, serializer));
     }
 
