@@ -24,8 +24,8 @@ public abstract class Tree {
 
     @SafeVarargs
     public static <E> List<TreeNode> of(final List<E> models,
-                                        final Function<E, String>... fns) {
-        return of(models, TreeNodeHandler.EMPTY, fns);
+                                        final Function<E, String>... getters) {
+        return of(models, TreeNodeHandler.EMPTY, getters);
     }
 
     /**
@@ -33,7 +33,7 @@ public abstract class Tree {
      *
      * @param models 二维表结构的实体数据
      * @param handler 额外的附加处理，
-     * @param fns 实体的哪些字段 getter 用于转换成树
+     * @param getters 实体的哪些字段 getter 用于转换成树
      * @param <E> 实体类型
      *
      * @return 根节点的所有子节点
@@ -41,8 +41,8 @@ public abstract class Tree {
     @SafeVarargs
     public static <E> List<TreeNode> of(final List<E> models,
                                         final TreeNodeHandler handler,
-                                        final Function<E, String>... fns) {
-        Objects.requireNonNull(fns);
+                                        final Function<E, String>... getters) {
+        Objects.requireNonNull(getters);
 
         if (models == null || models.isEmpty()) {
             return Collections.emptyList();
@@ -53,7 +53,7 @@ public abstract class Tree {
 
         for (final E row : models) {
             int depth = 1;
-            for (final Function<E, String> fn : fns) {
+            for (final Function<E, String> fn : getters) {
                 final String cell = fn.apply(row);
 
                 if (current.getChildren() == null) {
@@ -84,15 +84,16 @@ public abstract class Tree {
      *
      * @param treeNodes Tree 节点数据
      * @param createFn 实体类创建函数
-     * @param fns 实体类 setter 函数
+     * @param setters 实体类 setter 函数
      * @param <E> 实体类型
      *
      * @return 实体列表
      */
     @SafeVarargs
-    public static <E> List<E> toModel(final List<TreeNode> treeNodes, final Supplier<E> createFn, final BiConsumer<E, String>... fns) {
+    public static <E> List<E> toModel(final List<TreeNode> treeNodes, final Supplier<E> createFn,
+                                      final BiConsumer<E, String>... setters) {
         Objects.requireNonNull(createFn);
-        Objects.requireNonNull(fns);
+        Objects.requireNonNull(setters);
 
         if (treeNodes == null || treeNodes.isEmpty()) {
             return Collections.emptyList();
@@ -108,7 +109,7 @@ public abstract class Tree {
         // 从根节点，遍历到叶子节点，为数据库一条记录，同时移除此叶子节点
         // 当前迭代的节点往根节点方向，以及同级的下级节点移动
         while (null != current) {
-            if (stack.size() <= fns.length && !CollectionUtils.isEmpty(current.getChildren())) {
+            if (stack.size() <= setters.length && !CollectionUtils.isEmpty(current.getChildren())) {
                 current = current.getChildren().get(0);
                 stack.push(current);
             }
@@ -116,7 +117,7 @@ public abstract class Tree {
                 final int size = stack.size() - 1;
                 final E e = createFn.get();
                 for (int i = 0; i < size; i++) {
-                    fns[i].accept(e, stack.get(size - 1 - i).getTitle());
+                    setters[i].accept(e, stack.get(size - 1 - i).getTitle());
                 }
                 result.add(e);
                 stack.pop();
