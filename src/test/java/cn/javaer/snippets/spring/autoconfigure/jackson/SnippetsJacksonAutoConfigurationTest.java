@@ -39,7 +39,7 @@ class SnippetsJacksonAutoConfigurationTest {
             final String value = objectMapper.writeValueAsString(demo);
             assertThat(demo.dateTime).isEqualTo(LocalDate.parse("2020-05-05").atTime(LocalTime.MAX));
             //language=JSON
-            JSONAssert.assertEquals("{\"dateTime\":\"2020-05-05 23:59:59.999999999\"," +
+            JSONAssert.assertEquals("{\"dateTime\":\"2020-05-05 23:59:59\"," +
                     "\"str\":\"val\"," +
                     "\"jsonb\":{\"demo\":123}," +
                     "\"localDateTime\":\"2020-01-01 00:00\"," +
