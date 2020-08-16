@@ -71,8 +71,6 @@ public class SnippetsJacksonAutoConfiguration implements InitializingBean {
                 new LocalDateSerializer(dateFormatter));
         this.jsonComponentModule.addSerializer(LocalTime.class,
                 new LocalTimeSerializer(timeFormatter));
-
-        this.objectMapper.registerModule(this.jsonComponentModule);
     }
 
     @Bean
