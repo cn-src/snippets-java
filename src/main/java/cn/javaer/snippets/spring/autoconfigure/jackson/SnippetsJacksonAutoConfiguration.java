@@ -1,5 +1,6 @@
 package cn.javaer.snippets.spring.autoconfigure.jackson;
 
+import cn.javaer.snippets.jackson.JooqJsonbSerializer;
 import cn.javaer.snippets.jackson.Json;
 import cn.javaer.snippets.jackson.SnippetsJacksonIntrospector;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import org.jooq.JSONB;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -70,5 +72,14 @@ public class SnippetsJacksonAutoConfiguration {
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public Json json(final ObjectMapper objectMapper) {
         return new Json(objectMapper);
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    @ConditionalOnClass({JSONB.class})
+    public static class JooqJacksonAutoConfiguration {
+        @Bean
+        public Jackson2ObjectMapperBuilderCustomizer snippetsJacksonCustomizer() {
+            return it -> it.serializerByType(JSONB.class, JooqJsonbSerializer.INSTANCE);
+        }
     }
 }
