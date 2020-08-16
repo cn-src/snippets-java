@@ -42,7 +42,7 @@ class SnippetsJacksonAutoConfigurationTest {
             JSONAssert.assertEquals("{\"dateTime\":\"2020-05-05 23:59:59\"," +
                     "\"str\":\"val\"," +
                     "\"jsonb\":{\"demo\":123}," +
-                    "\"localDateTime\":\"2020-01-01 00:00\"," +
+                    "\"localDateTime\":\"2020-01-01 00:00:00\"," +
                     " \"" +
                     "localDate\":\"2020-01-01\"," +
                     "\"localTime\":\"00:00:00\"}", value, true);
