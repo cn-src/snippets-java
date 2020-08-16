@@ -78,7 +78,7 @@ public class SnippetsJacksonAutoConfiguration {
     @ConditionalOnClass({JSONB.class})
     public static class JooqJacksonAutoConfiguration {
         @Bean
-        public Jackson2ObjectMapperBuilderCustomizer snippetsJacksonCustomizer() {
+        public Jackson2ObjectMapperBuilderCustomizer snippetsJooqJacksonCustomizer() {
             return it -> it.serializerByType(JSONB.class, JooqJsonbSerializer.INSTANCE);
         }
     }
