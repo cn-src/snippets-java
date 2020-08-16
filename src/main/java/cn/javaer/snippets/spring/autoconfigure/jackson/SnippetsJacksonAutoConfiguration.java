@@ -3,7 +3,6 @@ package cn.javaer.snippets.spring.autoconfigure.jackson;
 import cn.javaer.snippets.jackson.Json;
 import cn.javaer.snippets.jackson.SnippetsJacksonIntrospector;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
@@ -16,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.jackson.JsonComponentModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,27 +28,28 @@ import java.time.format.DateTimeFormatter;
  * @author cn-src
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnBean(ObjectMapper.class)
+@ConditionalOnBean({ObjectMapper.class, JsonComponentModule.class})
 @AutoConfigureAfter(JacksonAutoConfiguration.class)
 @ConditionalOnProperty(prefix = "snippets.jackson", name = "enabled", havingValue = "true",
         matchIfMissing = true)
 @EnableConfigurationProperties(SnippetsJacksonProperties.class)
 public class SnippetsJacksonAutoConfiguration implements InitializingBean {
     private final ObjectMapper objectMapper;
+    private final JsonComponentModule jsonComponentModule;
     private final SnippetsJacksonProperties snippetsJacksonProperties;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public SnippetsJacksonAutoConfiguration(final ObjectMapper objectMapper,
+                                            final JsonComponentModule jsonComponentModule,
                                             final SnippetsJacksonProperties snippetsJacksonProperties) {
         this.objectMapper = objectMapper;
+        this.jsonComponentModule = jsonComponentModule;
         this.snippetsJacksonProperties = snippetsJacksonProperties;
     }
 
     @Override
     public void afterPropertiesSet() {
         this.objectMapper.setAnnotationIntrospector(SnippetsJacksonIntrospector.INSTANCE);
-
-        final SimpleModule module = new SimpleModule();
 
         final DateTimeFormatter dateTimeFormatter =
                 DateTimeFormatter.ofPattern(this.snippetsJacksonProperties.getFormat().getDateTime());
@@ -57,26 +58,26 @@ public class SnippetsJacksonAutoConfiguration implements InitializingBean {
         final DateTimeFormatter timeFormatter =
                 DateTimeFormatter.ofPattern(this.snippetsJacksonProperties.getFormat().getTime());
 
-        module.addDeserializer(LocalDateTime.class,
+        this.jsonComponentModule.addDeserializer(LocalDateTime.class,
                 new LocalDateTimeDeserializer(dateTimeFormatter));
-        module.addDeserializer(LocalDate.class,
+        this.jsonComponentModule.addDeserializer(LocalDate.class,
                 new LocalDateDeserializer(dateFormatter));
-        module.addDeserializer(LocalTime.class,
+        this.jsonComponentModule.addDeserializer(LocalTime.class,
                 new LocalTimeDeserializer(timeFormatter));
 
-        module.addSerializer(LocalDateTime.class,
+        this.jsonComponentModule.addSerializer(LocalDateTime.class,
                 new LocalDateTimeSerializer(dateTimeFormatter));
-        module.addSerializer(LocalDate.class,
+        this.jsonComponentModule.addSerializer(LocalDate.class,
                 new LocalDateSerializer(dateFormatter));
-        module.addSerializer(LocalTime.class,
+        this.jsonComponentModule.addSerializer(LocalTime.class,
                 new LocalTimeSerializer(timeFormatter));
 
-        this.objectMapper.registerModule(module);
+        this.objectMapper.registerModule(this.jsonComponentModule);
     }
 
     @Bean
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    Json json(final ObjectMapper objectMapper) {
+    public Json json(final ObjectMapper objectMapper) {
         return new Json(objectMapper);
     }
 }
