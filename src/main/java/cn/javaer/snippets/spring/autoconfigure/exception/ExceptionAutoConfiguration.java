@@ -18,6 +18,8 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * @author cn-src
@@ -48,7 +50,13 @@ public class ExceptionAutoConfiguration implements InitializingBean {
     ResourceBundleMessageSource errorsMessageSource() {
         final ResourceBundleMessageSource source = new ResourceBundleMessageSource();
         source.setDefaultEncoding("UTF-8");
-        source.setBasenames("errors-messages", "default-errors-messages");
+        try {
+            ResourceBundle.getBundle("errors-messages");
+            source.setBasenames("errors-messages", "default-errors-messages");
+        }
+        catch (final MissingResourceException ignore) {
+            source.setBasenames("default-errors-messages");
+        }
         return source;
     }
 
