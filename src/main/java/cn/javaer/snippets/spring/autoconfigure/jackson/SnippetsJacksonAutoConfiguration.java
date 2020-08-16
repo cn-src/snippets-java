@@ -12,12 +12,14 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jackson.JsonComponentModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -74,6 +76,8 @@ public class SnippetsJacksonAutoConfiguration implements InitializingBean {
     }
 
     @Bean
+    @Primary
+    @ConditionalOnMissingBean(Json.class)
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public Json json(final ObjectMapper objectMapper) {
         return new Json(objectMapper);
