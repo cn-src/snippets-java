@@ -19,7 +19,8 @@ import java.time.LocalTime;
 class JooqJacksonAutoConfigurationTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(
-                    JooqJacksonAutoConfiguration.class, JacksonAutoConfiguration.class));
+                    JooqJacksonAutoConfiguration.class,
+                    SnippetsJacksonAutoConfiguration.class, JacksonAutoConfiguration.class));
 
     @Test
     void auto() throws Exception {
