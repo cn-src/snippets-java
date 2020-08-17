@@ -3,9 +3,9 @@ package cn.javaer.snippets.model;
 /**
  * @author cn-src
  */
-public interface TreeNodeHandler {
+public interface TreeNodeHandler<T> {
 
-    TreeNodeHandler EMPTY = (treeNode, depth, index) -> { };
+    @SuppressWarnings("rawtypes") TreeNodeHandler EMPTY = (treeNode, t, depth, index) -> { };
 
-    void apply(TreeNode treeNode, int depth, int index);
+    void apply(TreeNode treeNode, T t, int depth, int index);
 }

@@ -25,6 +25,7 @@ public abstract class Tree {
     @SafeVarargs
     public static <E> List<TreeNode> of(final List<E> models,
                                         final Function<E, String>... getters) {
+        //noinspection unchecked
         return of(models, TreeNodeHandler.EMPTY, getters);
     }
 
@@ -40,7 +41,7 @@ public abstract class Tree {
      */
     @SafeVarargs
     public static <E> List<TreeNode> of(final List<E> models,
-                                        final TreeNodeHandler handler,
+                                        final TreeNodeHandler<E> handler,
                                         final Function<E, String>... getters) {
         Objects.requireNonNull(getters);
 
@@ -68,7 +69,7 @@ public abstract class Tree {
                 }
                 else {
                     final TreeNode treeNode = new TreeNode(cell);
-                    handler.apply(treeNode, depth, current.getChildren().size());
+                    handler.apply(treeNode, row, depth, current.getChildren().size());
                     current.getChildren().add(treeNode);
                     current = treeNode;
                 }
