@@ -30,6 +30,23 @@ public class TreeNode {
         this.title = title;
     }
 
+    public TreeNode(final String title, final List<TreeNode> children) {
+        this.title = title;
+        this.children = children;
+    }
+
+    public TreeNode(final String title, final Map<String, Object> dynamic) {
+        this.title = title;
+        this.dynamic = dynamic;
+    }
+
+    public TreeNode(final String title, final List<TreeNode> children,
+                    final Map<String, Object> dynamic) {
+        this.title = title;
+        this.children = children;
+        this.dynamic = dynamic;
+    }
+
     public final void addChildren(final TreeNode... child) {
         if (child == null || child.length == 0) {
             return;
