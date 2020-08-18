@@ -30,7 +30,15 @@ class TreeTest {
                 Areas::getArea1, Areas::getArea2, Areas::getArea3);
 
         assertThat(treeNodes).hasSize(2);
-        JSONAssert.assertEquals("[{\"title\": \"河北省\", \"children\": [{\"title\": \"石家庄市\", \"children\": [{\"title\": \"长安区\", \"children\": null}, {\"title\": \"新华区\", \"children\": null}]}, {\"title\": \"唐山市\", \"children\": [{\"title\": \"开平区\", \"children\": null}]}]}, {\"title\": \"山东省\", \"children\": [{\"title\": \"太原市\", \"children\": [{\"title\": \"小店区\", \"children\": null}]}]}]\n", this.objectMapper.writeValueAsString(treeNodes), false);
+        JSONAssert.assertEquals("[{\"title\": \"河北省\", \"children\": [{\"title\": \"石家庄市\", " +
+                        "\"children\": [{\"title\": \"长安区\", \"children\": null}, {\"title\": " +
+                        "\"新华区\", " +
+                        "\"children\": null}]}, {\"title\": \"唐山市\", \"children\": [{\"title\": " +
+                        "\"开平区\", " +
+                        "\"children\": null}]}]}, {\"title\": \"山东省\", \"children\": [{\"title\":" +
+                        " " +
+                        "\"太原市\", \"children\": [{\"title\": \"小店区\", \"children\": null}]}]}]\n",
+                this.objectMapper.writeValueAsString(treeNodes), false);
     }
 
     @Test
@@ -42,7 +50,7 @@ class TreeTest {
 
         final List<TreeNode> treeNodes = Tree.of(
                 Arrays.asList(areas1, areas2, areas3, areas4),
-                (treeNode, depth, index) -> {
+                (treeNode, entity, depth, index) -> {
                     if (treeNode.getDynamic() == null) {
                         treeNode.setDynamic(new HashMap<>());
                     }
