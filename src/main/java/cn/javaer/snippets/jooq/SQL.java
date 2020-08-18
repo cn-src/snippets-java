@@ -50,6 +50,12 @@ public class SQL {
     }
 
     @Support(SQLDialect.POSTGRES)
+    public static Field<JSONB> jsonbObjectAgg(final Field<?> keyField,
+                                              final Field<?> valueField) {
+        return DSL.function("jsonb_object_agg", JSONB.class, keyField, valueField);
+    }
+
+    @Support(SQLDialect.POSTGRES)
     public static Field<String> toChar(final Field<LocalDateTime> timestamp,
                                        final String pattern) {
         return DSL.function("to_char", String.class, timestamp, DSL.inline(pattern));
