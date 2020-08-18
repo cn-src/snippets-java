@@ -15,6 +15,7 @@ import org.jooq.impl.SQLDataType;
 import org.jooq.tools.json.JSONValue;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -58,9 +59,20 @@ public class SQL {
     }
 
     @Support(SQLDialect.POSTGRES)
+    public static JsonbField<Record, JSONB> jsonbObjectAgg(final Field<?>[] keyFields,
+                                                           final char keySeparator,
+                                                           final Field<?> valueField) {
+
+        final Field<?> field =
+                Arrays.stream(keyFields).reduce((f1, f2) -> f1.concat(DSL.inline(keySeparator),
+                        f2)).orElse(null);
+        return new JsonbField<>("jsonb_object_agg", SQLDataType.JSONB, field, valueField);
+    }
+
+    @Support(SQLDialect.POSTGRES)
     public static Field<String> toChar(final Field<LocalDateTime> timestamp,
                                        final String pattern) {
-        return DSL.function("to_char", String.class, timestamp, DSL.inline(pattern));
+        return DSL.function("to_char", SQLDataType.LONGVARCHAR, timestamp, DSL.inline(pattern));
     }
 
     /**
@@ -91,11 +103,11 @@ public class SQL {
     @Support(SQLDialect.POSTGRES)
     public static Field<Boolean> stContains(final Field<Geometry> geomA,
                                             final Field<Geometry> geomB) {
-        return DSL.function("ST_Contains", Boolean.TYPE, geomA, geomB);
+        return DSL.function("ST_Contains", SQLDataType.BOOLEAN, geomA, geomB);
     }
 
     @Support(SQLDialect.POSTGRES)
     public static Field<String> stAsGeoJSON(final Field<Geometry> geom) {
-        return DSL.function("ST_AsGeoJSON", String.class, geom);
+        return DSL.function("ST_AsGeoJSON", SQLDataType.LONGVARCHAR, geom);
     }
 }
