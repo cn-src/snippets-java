@@ -36,6 +36,7 @@ dependencies {
 
     optionalApi 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
