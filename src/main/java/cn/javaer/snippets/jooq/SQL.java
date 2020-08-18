@@ -1,11 +1,13 @@
 package cn.javaer.snippets.jooq;
 
+import cn.javaer.snippets.jooq.field.JsonbField;
 import cn.javaer.snippets.type.Geometry;
 import org.jooq.Condition;
 import org.jooq.Converter;
 import org.jooq.DataType;
 import org.jooq.Field;
 import org.jooq.JSONB;
+import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.Support;
 import org.jooq.impl.DSL;
@@ -50,9 +52,9 @@ public class SQL {
     }
 
     @Support(SQLDialect.POSTGRES)
-    public static Field<JSONB> jsonbObjectAgg(final Field<?> keyField,
-                                              final Field<?> valueField) {
-        return DSL.function("jsonb_object_agg", JSONB.class, keyField, valueField);
+    public static JsonbField<Record, JSONB> jsonbObjectAgg(final Field<?> keyField,
+                                                           final Field<?> valueField) {
+        return new JsonbField<>("jsonb_object_agg", SQLDataType.JSONB, keyField, valueField);
     }
 
     @Support(SQLDialect.POSTGRES)
