@@ -42,4 +42,14 @@ class SQLTest {
         assertThat(this.dsl.renderInlined(jsonbField))
                 .isEqualTo("jsonb_object_agg(f1,f2)");
     }
+
+    @Test
+    void jsonbObjectAgg2() {
+        final JsonbField<Record, JSONB> jsonbField = SQL.jsonbObjectAgg(new Field[]{DSL.field("f1"
+                , String.class), DSL.field(
+                "f2", String.class)}, '-', DSL.field(
+                "v1", String.class));
+        assertThat(this.dsl.renderInlined(jsonbField))
+                .isEqualTo("jsonb_object_agg((f1 || '-' || f2),v1)");
+    }
 }
