@@ -22,24 +22,42 @@ import java.util.Collections;
 public class JsonbField<R extends Record, T> extends CustomField<T> implements TableField<R, T> {
     private static final long serialVersionUID = -2128410511798819756L;
     private final Table<R> table;
+    private final Field<?>[] arguments;
 
-    public JsonbField(final String name, final DataType<T> type) {
-        this(name, type, null);
+    public JsonbField(final String name, final DataType<T> type, final Field<?>... argument) {
+        super(name, type);
+        this.arguments = argument;
+        this.table = null;
     }
 
     public JsonbField(final String name, final DataType<T> type, final Table<R> table) {
         super(name, type);
-
+        this.arguments = null;
         this.table = table;
     }
 
     @Override
     public void accept(final Context ctx) {
-        if (ctx.qualify() && null != this.table) {
-            ctx.visit(this.table);
-            ctx.sql('.');
+        if (null != this.arguments) {
+            ctx.sql(this.getName());
+            ctx.sql('(');
+            int i = 1;
+            for (final Field<?> arg : this.arguments) {
+                ctx.visit(arg);
+                if (i != this.arguments.length) {
+                    ctx.sql(',');
+                }
+                i++;
+            }
+            ctx.sql(')');
         }
-        ctx.visit(this.getUnqualifiedName());
+        else {
+            if (ctx.qualify()) {
+                ctx.visit(this.table);
+                ctx.sql('.');
+            }
+            ctx.visit(this.getUnqualifiedName());
+        }
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
