@@ -14,14 +14,14 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "snippets.task")
 public class SnippetsTaskExecutionProperties {
     @NestedConfigurationProperty
-    private Map<String, TaskProperties> executions = new LinkedHashMap<>();
+    private Map<String, TaskProperties> executors = new LinkedHashMap<>();
 
     public Map<String, TaskProperties> getExecutions() {
-        return this.executions;
+        return this.executors;
     }
 
     public void setExecutors(final Map<String, TaskProperties> executions) {
-        this.executions = executions;
+        this.executors = executions;
     }
 
     static class TaskProperties extends TaskExecutionProperties {

@@ -15,8 +15,8 @@ class SnippetsTaskExecutionAutoConfigurationTest {
             .withConfiguration(AutoConfigurations.of(
                     SnippetsTaskExecutionAutoConfiguration.class))
             .withPropertyValues(
-                    "snippets.task.executions.demoExecutor1.threadNamePrefix=demo1-",
-                    "snippets.task.executions.demoExecutor2.threadNamePrefix=demo2-"
+                    "snippets.task.executors.demoExecutor1.threadNamePrefix=demo1-",
+                    "snippets.task.executors.demoExecutor2.threadNamePrefix=demo2-"
             );
 
     @Test
