@@ -196,7 +196,6 @@ public class ErrorInfoExtractor implements ApplicationContextAware {
         }
     }
 
-    @SuppressWarnings("unchecked")
     Set<Class<? extends Throwable>> findThrowables(final Collection<Object> controllers) {
         final Set<Class<? extends Throwable>> throwables = new HashSet<>();
         for (final Object ctr : controllers) {
@@ -206,7 +205,9 @@ public class ErrorInfoExtractor implements ApplicationContextAware {
                     final Class<?>[] exceptionTypes = method.getExceptionTypes();
                     if (exceptionTypes != null && exceptionTypes.length > 0) {
                         for (final Class<?> type : exceptionTypes) {
-                            throwables.add((Class<? extends Throwable>) type);
+                            @SuppressWarnings("unchecked")
+                            final Class<? extends Throwable> t = (Class<? extends Throwable>) type;
+                            throwables.add(t);
                         }
                     }
                 }
