@@ -72,7 +72,7 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         }
     }
 
-    protected void beforeRequest(final HttpServletRequest request) throws IOException {
+    protected void beforeRequest(final HttpServletRequest request) {
         // path
         final StringBuilder msg = new StringBuilder();
         msg.append("Request\n");
@@ -111,12 +111,14 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
     }
 
     protected void afterResponse(final HttpServletResponse response) throws IOException {
-        final ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
+        final ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response,
+                ContentCachingResponseWrapper.class);
         if (null != wrapper) {
             final byte[] data = wrapper.getContentAsByteArray();
             if (data.length > 0) {
                 wrapper.copyBodyToResponse();
-                this.logger.debug("Response\n" + this.jsonFormat(new String(data, StandardCharsets.UTF_8)));
+                this.logger.debug("Response\n" + this.jsonFormat(new String(data,
+                        StandardCharsets.UTF_8)));
             }
         }
     }

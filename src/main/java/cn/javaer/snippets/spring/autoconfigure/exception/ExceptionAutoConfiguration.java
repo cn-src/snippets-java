@@ -72,7 +72,7 @@ public class ExceptionAutoConfiguration implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         final Map<String, String> mapping = this.exceptionMappingProperties.getMapping();
 
         if (!CollectionUtils.isEmpty(mapping)) {
