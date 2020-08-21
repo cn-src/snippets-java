@@ -82,8 +82,8 @@ public class KryoHelper {
         return this.read(bytes, (kryo, input) -> kryo.readObjectOrNull(input, clazz, serializer));
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T readClassAndObject(final byte[] bytes) {
-        //noinspection unchecked
         return this.read(bytes, (kryo, input) -> (T) kryo.readClassAndObject(input));
     }
 
