@@ -55,7 +55,9 @@ public class ConditionBuilder {
         return this;
     }
 
-    public ConditionBuilder append(final List<TreeNode> treeNodes, final Field<String>... fields) {
+    @SafeVarargs
+    public final ConditionBuilder append(final List<TreeNode> treeNodes,
+                                         final Field<String>... fields) {
         return this.append(ConditionCreator.create(treeNodes, fields));
     }
 
