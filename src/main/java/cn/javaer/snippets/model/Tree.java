@@ -17,15 +17,12 @@ import java.util.function.Supplier;
  *
  * @author cn-src
  */
-public abstract class Tree {
-
-    private Tree() {
-    }
+public interface Tree {
 
     @SuppressWarnings("unchecked")
     @SafeVarargs
-    public static <E> List<TreeNode> of(final List<E> models,
-                                        final Function<E, String>... getters) {
+    static <E> List<TreeNode> of(final List<E> models,
+                                 final Function<E, String>... getters) {
         return of(models, TreeNodeHandler.EMPTY, getters);
     }
 
@@ -40,9 +37,9 @@ public abstract class Tree {
      * @return 根节点的所有子节点
      */
     @SafeVarargs
-    public static <E> List<TreeNode> of(final List<E> models,
-                                        final TreeNodeHandler<E> handler,
-                                        final Function<E, String>... getters) {
+    static <E> List<TreeNode> of(final List<E> models,
+                                 final TreeNodeHandler<E> handler,
+                                 final Function<E, String>... getters) {
         Objects.requireNonNull(getters);
 
         if (models == null || models.isEmpty()) {
@@ -91,8 +88,8 @@ public abstract class Tree {
      * @return 实体列表
      */
     @SafeVarargs
-    public static <E> List<E> toModel(final List<TreeNode> treeNodes, final Supplier<E> createFn,
-                                      final BiConsumer<E, String>... setters) {
+    static <E> List<E> toModel(final List<TreeNode> treeNodes, final Supplier<E> createFn,
+                               final BiConsumer<E, String>... setters) {
         Objects.requireNonNull(createFn);
         Objects.requireNonNull(setters);
 
@@ -146,7 +143,7 @@ public abstract class Tree {
         return result;
     }
 
-    public static TreeNode cloneTreeNode(final TreeNode treeNode) {
+    static TreeNode cloneTreeNode(final TreeNode treeNode) {
         final TreeNode clone = new TreeNode();
         clone.setTitle(treeNode.getTitle());
         clone.setDynamic(clone.getDynamic());

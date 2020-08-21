@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jdbc.core.convert.JdbcCustomConversions;
 import org.springframework.data.jdbc.repository.config.AbstractJdbcConfiguration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.lang.NonNull;
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
@@ -24,10 +25,13 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean({NamedParameterJdbcOperations.class, PlatformTransactionManager.class})
-@ConditionalOnClass({DSLContext.class, NamedParameterJdbcOperations.class, AbstractJdbcConfiguration.class})
-@ConditionalOnProperty(prefix = "snippets.jooq.jdbc.repositories", name = "enabled", havingValue = "true",
+@ConditionalOnClass({DSLContext.class, NamedParameterJdbcOperations.class,
+        AbstractJdbcConfiguration.class})
+@ConditionalOnProperty(prefix = "snippets.jooq.jdbc.repositories", name = "enabled", havingValue
+        = "true",
         matchIfMissing = true)
-@AutoConfigureAfter({JdbcTemplateAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class})
+@AutoConfigureAfter({JdbcTemplateAutoConfiguration.class,
+        DataSourceTransactionManagerAutoConfiguration.class})
 public class JooqJdbcRepositoriesAutoConfiguration {
     static {
         System.getProperties().setProperty("org.jooq.no-logo", "true");
@@ -43,6 +47,7 @@ public class JooqJdbcRepositoriesAutoConfiguration {
     @Configuration
     @ConditionalOnMissingBean({AbstractJdbcConfiguration.class})
     static class SpringBootJooqJdbcConfiguration extends AbstractJdbcConfiguration {
+        @NonNull
         @Override
         public JdbcCustomConversions jdbcCustomConversions() {
             return new JdbcCustomConversions(JsonbConverters.getConvertersToRegister());

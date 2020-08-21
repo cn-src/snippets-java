@@ -14,6 +14,7 @@ import org.eclipse.collections.api.set.MutableSet;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
 import org.springframework.core.convert.converter.GenericConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.Collection;
@@ -45,7 +46,8 @@ class EclipseCollectionsConverters {
              * @see org.springframework.core.convert.converter.ConditionalConverter#matches(org.springframework.core.convert.TypeDescriptor, org.springframework.core.convert.TypeDescriptor)
              */
             @Override
-            public boolean matches(final TypeDescriptor sourceType, final TypeDescriptor targetType) {
+            public boolean matches(@NonNull final TypeDescriptor sourceType,
+                                   @NonNull final TypeDescriptor targetType) {
 
                 // Prevent collections to be mapped to maps
                 if (sourceType.isCollection() && MapIterable.class.isAssignableFrom(targetType.getType())) {
@@ -63,7 +65,9 @@ class EclipseCollectionsConverters {
              */
             @Nullable
             @Override
-            public Object convert(@Nullable final Object source, final TypeDescriptor sourceDescriptor, final TypeDescriptor targetDescriptor) {
+            public Object convert(@Nullable final Object source,
+                                  @NonNull final TypeDescriptor sourceDescriptor,
+                                  @NonNull final TypeDescriptor targetDescriptor) {
 
                 final Class<?> targetType = targetDescriptor.getType();
 

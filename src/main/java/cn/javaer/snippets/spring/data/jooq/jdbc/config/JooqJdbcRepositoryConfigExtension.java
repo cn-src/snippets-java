@@ -5,6 +5,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport;
 import org.springframework.data.repository.config.RepositoryConfigurationSource;
+import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
@@ -17,23 +18,27 @@ import java.util.Locale;
  */
 public class JooqJdbcRepositoryConfigExtension extends RepositoryConfigurationExtensionSupport {
 
+    @NonNull
     @Override
     public String getModuleName() {
         return "JOOQ_JDBC";
     }
 
+    @NonNull
     @Override
     public String getRepositoryFactoryBeanClassName() {
         return JooqJdbcRepositoryFactoryBean.class.getName();
     }
 
+    @NonNull
     @Override
     protected String getModulePrefix() {
         return this.getModuleName().toLowerCase(Locale.US);
     }
 
     @Override
-    public void postProcess(final BeanDefinitionBuilder builder, final RepositoryConfigurationSource source) {
+    public void postProcess(@NonNull final BeanDefinitionBuilder builder,
+                            final RepositoryConfigurationSource source) {
 
         source.getAttribute("jdbcOperationsRef")
                 .filter(StringUtils::hasText)
@@ -51,6 +56,7 @@ public class JooqJdbcRepositoryConfigExtension extends RepositoryConfigurationEx
     /**
      * In strict mode only domain types having a {@link Table} annotation get a repository.
      */
+    @NonNull
     @Override
     protected Collection<Class<? extends Annotation>> getIdentifyingAnnotations() {
         return Collections.singleton(Table.class);

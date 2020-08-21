@@ -1,6 +1,7 @@
 package cn.javaer.snippets.spring.format;
 
 import org.springframework.format.Parser;
+import org.springframework.lang.NonNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public final class DateFillParser implements Parser<LocalDateTime> {
     }
 
     @Override
-    public LocalDateTime parse(final String text, final Locale locale) {
+    public LocalDateTime parse(final String text, @NonNull final Locale locale) {
         if (this.annotation.dataPattern().length() == text.length()) {
             final LocalDate date = LocalDate.parse(text,
                     DateTimeFormatter.ofPattern(this.annotation.dataPattern(), locale));

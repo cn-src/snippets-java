@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @author cn-src
  */
-public abstract class JsonbConverters {
+public class JsonbConverters {
     private static final List<Converter<?, ?>> CONVERTERS = new ArrayList<>();
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
