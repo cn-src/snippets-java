@@ -1,6 +1,8 @@
 package cn.javaer.snippets.jooq.condition;
 
+import cn.javaer.snippets.model.TreeNode;
 import org.jooq.Condition;
+import org.jooq.Field;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -51,6 +53,10 @@ public class ConditionBuilder {
     public ConditionBuilder append(final Supplier<Condition> supplier) {
         this.conditions.add(supplier.get());
         return this;
+    }
+
+    public ConditionBuilder append(final List<TreeNode> treeNodes, final Field<String>... fields) {
+        return this.append(ConditionCreator.create(treeNodes, fields));
     }
 
     public <T> ConditionBuilder append(final Function<T, Condition> fun, final T value) {
