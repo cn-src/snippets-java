@@ -7,4 +7,5 @@ cn.javaer.snippets.spring.autoconfigure.jooq.JooqDSLContextAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.jackson.SnippetsJacksonAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.exception.ExceptionAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.springdoc.SpringDocAutoConfiguration,\
+cn.javaer.snippets.spring.autoconfigure.data.domain.PageableAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.task.SnippetsTaskExecutionAutoConfiguration
