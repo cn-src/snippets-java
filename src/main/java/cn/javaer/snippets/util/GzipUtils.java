@@ -24,7 +24,7 @@ public interface GzipUtils {
      * @return byte[]
      */
     @Nullable
-    static byte[] zip(@Nullable final String str) {
+    static byte[] zip(final String str) {
         return zip(str, StandardCharsets.UTF_8);
     }
 
@@ -37,7 +37,7 @@ public interface GzipUtils {
      * @return byte[]
      */
     @Nullable
-    static byte[] zip(@Nullable final String str, final Charset encoding) {
+    static byte[] zip(final String str, final Charset encoding) {
         if (str == null || str.length() == 0) {
             return null;
         }
@@ -62,7 +62,7 @@ public interface GzipUtils {
      * @return data
      */
     @Nullable
-    static byte[] unzip(@Nullable final byte[] bytes) {
+    static byte[] unzip(final byte[] bytes) {
         if (bytes == null || bytes.length == 0) {
             return null;
         }
@@ -91,7 +91,7 @@ public interface GzipUtils {
      * @return data
      */
     @Nullable
-    static String unzipToString(@Nullable final byte[] bytes) {
+    static String unzipToString(final byte[] bytes) {
         if (bytes == null || bytes.length == 0) {
             return null;
         }
