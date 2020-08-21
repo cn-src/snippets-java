@@ -1,0 +1,91 @@
+package cn.javaer.snippets.util;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
+/**
+ * @author cn-src
+ */
+public interface GzipUtils {
+
+    /**
+     * gzip 压缩, UFT-8 编码.
+     *
+     * @param str string
+     *
+     * @return byte[]
+     */
+    static byte[] zip(final String str) {
+        return zip(str, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * GZIP 压缩.
+     *
+     * @param str string
+     * @param encoding 编码
+     *
+     * @return byte[]
+     */
+    static byte[] zip(final String str, final Charset encoding) {
+        if (str == null || str.length() == 0) {
+            return null;
+        }
+        try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
+             final GZIPOutputStream gzip = new GZIPOutputStream(out)) {
+
+            gzip.write(str.getBytes(encoding));
+            gzip.finish();
+            // toByteArray 前需刷新缓存
+            return out.toByteArray();
+        }
+        catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * GZIP 解压缩.
+     *
+     * @param bytes data
+     *
+     * @return data
+     */
+    static byte[] unzip(final byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return null;
+        }
+        try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
+             final ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+             final GZIPInputStream unGzip = new GZIPInputStream(in)) {
+
+            final byte[] buffer = new byte[1024 * 4];
+            int n;
+            while ((n = unGzip.read(buffer)) >= 0) {
+                out.write(buffer, 0, n);
+            }
+            out.flush();
+            return out.toByteArray();
+        }
+        catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * GZIP 解压缩.
+     *
+     * @param bytes data
+     *
+     * @return data
+     */
+    static String unzipToString(final byte[] bytes) {
+        return new String(unzip(bytes), StandardCharsets.UTF_8);
+    }
+}
