@@ -48,11 +48,14 @@ public class JooqJdbcRepositoryFactory extends RepositoryFactorySupport {
     private final DSLContext dslContext;
     private final AuditorAware<?> auditorAware;
 
-    Constructor<? extends QueryLookupStrategy> constructor;
+    private final Constructor<? extends QueryLookupStrategy> constructor;
 
-    public JooqJdbcRepositoryFactory(final DataAccessStrategy dataAccessStrategy, final RelationalMappingContext context,
-                                     final JdbcConverter converter, final Dialect dialect, final ApplicationEventPublisher publisher,
-                                     final NamedParameterJdbcOperations operations, final DSLContext dslContext,
+    public JooqJdbcRepositoryFactory(final DataAccessStrategy dataAccessStrategy,
+                                     final RelationalMappingContext context,
+                                     final JdbcConverter converter, final Dialect dialect,
+                                     final ApplicationEventPublisher publisher,
+                                     final NamedParameterJdbcOperations operations,
+                                     final DSLContext dslContext,
                                      final AuditorAware<?> auditorAware) {
         Assert.notNull(dataAccessStrategy, "DataAccessStrategy must not be null!");
         Assert.notNull(context, "RelationalMappingContext must not be null!");
@@ -72,8 +75,10 @@ public class JooqJdbcRepositoryFactory extends RepositoryFactorySupport {
         this.dslContext = dslContext;
         this.auditorAware = auditorAware;
         try {
-            //noinspection unchecked
-            this.constructor = (Constructor<? extends QueryLookupStrategy>) Class.forName("org.springframework.data.jdbc.repository.support.JdbcQueryLookupStrategy")
+            @SuppressWarnings("unchecked")
+            final Constructor<? extends QueryLookupStrategy> constructor = (Constructor<?
+                    extends QueryLookupStrategy>) Class.forName("org" +
+                    ".springframework.data.jdbc.repository.support.JdbcQueryLookupStrategy")
                     .getDeclaredConstructor(ApplicationEventPublisher.class,
                             EntityCallbacks.class,
                             RelationalMappingContext.class,
@@ -81,6 +86,7 @@ public class JooqJdbcRepositoryFactory extends RepositoryFactorySupport {
                             Dialect.class,
                             QueryMappingConfiguration.class,
                             NamedParameterJdbcOperations.class);
+            this.constructor = constructor;
             this.constructor.setAccessible(true);
         }
         catch (final NoSuchMethodException | ClassNotFoundException e) {
@@ -99,7 +105,8 @@ public class JooqJdbcRepositoryFactory extends RepositoryFactorySupport {
     @Override
     public <T, ID> EntityInformation<T, ID> getEntityInformation(final Class<T> aClass) {
 
-        final RelationalPersistentEntity<?> entity = this.context.getRequiredPersistentEntity(aClass);
+        final RelationalPersistentEntity<?> entity =
+                this.context.getRequiredPersistentEntity(aClass);
 
         return (EntityInformation<T, ID>) new PersistentEntityInformation<>(entity);
     }
@@ -107,7 +114,8 @@ public class JooqJdbcRepositoryFactory extends RepositoryFactorySupport {
     @Override
     protected Object getTargetRepository(final RepositoryInformation repositoryInformation) {
 
-        final JdbcAggregateTemplate template = new JdbcAggregateTemplate(this.publisher, this.context, this.converter, this.accessStrategy);
+        final JdbcAggregateTemplate template = new JdbcAggregateTemplate(this.publisher,
+                this.context, this.converter, this.accessStrategy);
 
         final SimpleJooqJdbcRepository<?, Object> repository = new SimpleJooqJdbcRepository<>(
                 this.dslContext, this.context,
@@ -131,7 +139,8 @@ public class JooqJdbcRepositoryFactory extends RepositoryFactorySupport {
     protected Optional<QueryLookupStrategy> getQueryLookupStrategy(@Nullable final QueryLookupStrategy.Key key,
                                                                    final QueryMethodEvaluationContextProvider evaluationContextProvider) {
         try {
-            return Optional.of(this.constructor.newInstance(this.publisher, this.entityCallbacks, this.context, this.converter, this.dialect,
+            return Optional.of(this.constructor.newInstance(this.publisher, this.entityCallbacks,
+                    this.context, this.converter, this.dialect,
                     this.queryMappingConfiguration, this.operations));
         }
         catch (final InstantiationException | IllegalAccessException | InvocationTargetException e) {
