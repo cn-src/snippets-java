@@ -1,11 +1,11 @@
 package cn.javaer.snippets.spring.data.jooq.jdbc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import cn.javaer.snippets.jackson.Json;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jooq.JSONB;
 import org.postgresql.util.PGobject;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.dao.TypeMismatchDataAccessException;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.lang.NonNull;
@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class JsonbConverters {
     private static final List<Converter<?, ?>> CONVERTERS = new ArrayList<>();
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     static {
         JsonbConverters.CONVERTERS.add(ToJsonbConverter.INSTANCE);
@@ -79,12 +78,7 @@ public class JsonbConverters {
 
         @Override
         public JsonNode convert(final PGobject source) {
-            try {
-                return objectMapper.readTree(source.getValue());
-            }
-            catch (final JsonProcessingException e) {
-                throw new IllegalStateException(e);
-            }
+            return Json.INSTANCE.read(source.getValue());
         }
     }
 
@@ -99,14 +93,14 @@ public class JsonbConverters {
         @Override
         public PGobject convert(@NonNull final JsonNode source) {
             try {
-                final String json = objectMapper.writeValueAsString(source);
+                final String json = Json.INSTANCE.write(source);
                 final PGobject obj = new PGobject();
                 obj.setType("jsonb");
                 obj.setValue(json);
                 return obj;
             }
-            catch (final JsonProcessingException | SQLException e) {
-                throw new IllegalStateException(e);
+            catch (final SQLException e) {
+                throw new TypeMismatchDataAccessException("Not json format", e);
             }
         }
     }
