@@ -51,7 +51,7 @@ class ExceptionResponseBuilder extends GenericResponseBuilder {
         final Class<?>[] exceptionTypes = handlerMethod.getMethod().getExceptionTypes();
         final Map<String, DefinedErrorInfo> errorInfos = this.errorInfoExtractor.getErrorInfos();
         for (final Class<?> exceptionType : exceptionTypes) {
-            //noinspection unchecked
+            @SuppressWarnings("unchecked")
             final DefinedErrorInfo errorInfo = this.errorInfoExtractor.extract((Class<?
                     extends Throwable>) exceptionType);
             if (errorInfo != null) {
