@@ -22,6 +22,7 @@ import org.jooq.JSONB;
 import org.jooq.impl.DSL;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -74,7 +75,8 @@ public class ConditionCreator {
 
     @Nullable
     @SafeVarargs
-    public static Condition create(final List<TreeNode> treeNodes, final Field<String>... fields) {
+    public static Condition create(final List<TreeNode> treeNodes,
+                                   @NonNull final Field<String>... fields) {
         Objects.requireNonNull(fields);
         if (CollectionUtils.isEmpty(treeNodes)) {
             return null;

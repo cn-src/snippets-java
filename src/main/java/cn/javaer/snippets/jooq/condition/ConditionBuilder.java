@@ -3,6 +3,7 @@ package cn.javaer.snippets.jooq.condition;
 import cn.javaer.snippets.model.TreeNode;
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -57,7 +58,7 @@ public class ConditionBuilder {
 
     @SafeVarargs
     public final ConditionBuilder append(final List<TreeNode> treeNodes,
-                                         final Field<String>... fields) {
+                                         @NonNull final Field<String>... fields) {
         return this.append(ConditionCreator.create(treeNodes, fields));
     }
 
@@ -71,8 +72,8 @@ public class ConditionBuilder {
         return this;
     }
 
-    public <T1, T2> ConditionBuilder append(final BiFunction<T1, T2, Condition> fun, final T1 t1,
-                                            final T2 t2) {
+    public <T1, T2> ConditionBuilder append(final BiFunction<T1, T2, Condition> fun,
+                                            final T1 t1, final T2 t2) {
         final T1 obj1 = this.filter(t1);
         final T2 obj2 = this.filter(t2);
         if (ObjectUtils.isEmpty(obj1) || ObjectUtils.isEmpty(obj2)) {
@@ -82,7 +83,8 @@ public class ConditionBuilder {
         return this;
     }
 
-    public ConditionBuilder dateTime(final BiFunction<LocalDateTime, LocalDateTime, Condition> fun, final LocalDate start, final LocalDate end) {
+    public ConditionBuilder dateTime(final BiFunction<LocalDateTime, LocalDateTime, Condition> fun,
+                                     final LocalDate start, final LocalDate end) {
         if (null == start && null == end) {
             return this;
         }
@@ -92,8 +94,8 @@ public class ConditionBuilder {
         return this;
     }
 
-    public <T1, T2, T3> ConditionBuilder append(final Function3<T1, T2, T3> fun, final T1 t1,
-                                                final T2 t2, final T3 t3) {
+    public <T1, T2, T3> ConditionBuilder append(final Function3<T1, T2, T3> fun,
+                                                final T1 t1, final T2 t2, final T3 t3) {
         final T1 obj1 = this.filter(t1);
         final T2 obj2 = this.filter(t2);
         final T3 obj3 = this.filter(t3);
