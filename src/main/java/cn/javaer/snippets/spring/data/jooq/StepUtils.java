@@ -46,8 +46,9 @@ public class StepUtils {
     }
 
     public static SelectSeekStepN<?> sortStep(final SelectOrderByStep<?> step, final Sort sort) {
-        //noinspection rawtypes
-        final SortField[] fields = sort.map(it -> it.isAscending() ? DSL.field(it.getProperty()).asc()
+        @SuppressWarnings("rawtypes")
+        final SortField[] fields = sort.map(it -> it.isAscending() ?
+                DSL.field(it.getProperty()).asc()
                 : DSL.field(it.getProperty()).desc()).toList().toArray(new SortField[0]);
         return step.orderBy(fields);
     }
@@ -71,7 +72,8 @@ public class StepUtils {
         UpdateSetMoreStep<Record> updateStepMore = null;
         Condition idCondition = null;
         Condition createdByCondition = null;
-        final PersistentPropertyAccessor<?> propertyAccessor = persistentEntity.getPropertyAccessor(instance);
+        final PersistentPropertyAccessor<?> propertyAccessor =
+                persistentEntity.getPropertyAccessor(instance);
 
         for (final RelationalPersistentProperty property : persistentEntity) {
             if (property.isTransient() || property.isAnnotationPresent(CreatedDate.class)) {
@@ -94,7 +96,8 @@ public class StepUtils {
                 updateStepMore = updateStep.set(DSL.field(columnName), LocalDateTime.now());
                 continue;
             }
-            updateStepMore = updateStep.set(DSL.field(columnName), propertyAccessor.getProperty(property));
+            updateStepMore = updateStep.set(DSL.field(columnName),
+                    propertyAccessor.getProperty(property));
         }
         return Objects.requireNonNull(updateStepMore).where(Objects.requireNonNull(idCondition).and(Objects.requireNonNull(createdByCondition)));
     }

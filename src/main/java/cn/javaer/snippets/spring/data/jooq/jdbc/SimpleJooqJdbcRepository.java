@@ -248,12 +248,12 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         return this.entityOperations.findAll(this.entityClass, pageable);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public Optional<T> findOne(final Condition condition) {
         final Query query =
                 this.dsl.select(this.fieldsFromEntity).from(this.table).where(condition).getQuery();
         try {
-            //noinspection ConstantConditions
             return Optional.of(this.jdbcOperations.queryForObject(query.getSQL(),
                     query.getBindValues().toArray(),
                     this.entityRowMapper));
