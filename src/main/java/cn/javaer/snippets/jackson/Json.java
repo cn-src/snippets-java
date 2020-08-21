@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author cn-src
  */
 public class Json {
+    public static final Json INSTANCE = new Json(new ObjectMapper());
     private final ObjectMapper objectMapper;
 
     public Json(final ObjectMapper objectMapper) {
