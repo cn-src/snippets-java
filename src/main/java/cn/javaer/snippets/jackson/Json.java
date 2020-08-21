@@ -1,6 +1,7 @@
 package cn.javaer.snippets.jackson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -62,6 +63,15 @@ public class Json {
     public <T> T read(final String json, final Class<T> clazz) {
         try {
             return this.objectMapper.readValue(json, clazz);
+        }
+        catch (final JsonProcessingException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public <T> T read(final String json, final TypeReference<T> valueTypeRef) {
+        try {
+            return this.objectMapper.readValue(json, valueTypeRef);
         }
         catch (final JsonProcessingException e) {
             throw new IllegalStateException(e);
