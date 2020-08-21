@@ -287,6 +287,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         return new PageImpl<>(list, pageable, count);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public long count(final Condition condition) {
 
@@ -294,7 +295,6 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
                 .from(this.table)
                 .where(condition)
                 .getQuery();
-        //noinspection ConstantConditions
         return this.jdbcOperations.queryForObject(query.getSQL(), query.getBindValues().toArray()
                 , Long.class);
     }
@@ -320,6 +320,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         return this.dsl;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public Optional<T> findByIdAndCreator(final ID id) {
         Assert.notNull(this.auditor, () -> AUDITOR_MUST_BE_NOT_NULL);
@@ -333,7 +334,6 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
                 .and(DSL.field(createByColumn).eq(this.auditor));
 
         try {
-            //noinspection ConstantConditions
             return Optional.of(this.jdbcOperations.queryForObject(query.getSQL(),
                     query.getBindValues().toArray(),
                     this.entityRowMapper));

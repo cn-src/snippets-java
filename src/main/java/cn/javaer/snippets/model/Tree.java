@@ -22,10 +22,10 @@ public abstract class Tree {
     private Tree() {
     }
 
+    @SuppressWarnings("unchecked")
     @SafeVarargs
     public static <E> List<TreeNode> of(final List<E> models,
                                         final Function<E, String>... getters) {
-        //noinspection unchecked
         return of(models, TreeNodeHandler.EMPTY, getters);
     }
 
