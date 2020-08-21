@@ -62,14 +62,17 @@ public class ConditionCreator {
         CONDITION_FUN_MAP.put(ConditionGreaterOrEqual.class, Field::greaterOrEqual);
     }
 
+    @Nullable
     public static Condition create(final Object query) {
         return ConditionCreator.create(query, false);
     }
 
+    @Nullable
     public static Condition createWithIgnoreUnannotated(final Object query) {
         return ConditionCreator.create(query, true);
     }
 
+    @Nullable
     @SafeVarargs
     public static Condition create(final List<TreeNode> treeNodes, final Field<String>... fields) {
         Objects.requireNonNull(fields);
