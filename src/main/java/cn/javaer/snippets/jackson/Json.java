@@ -2,6 +2,7 @@ package cn.javaer.snippets.jackson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import org.jooq.JSONB;
 
+import java.io.UncheckedIOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -56,7 +58,7 @@ public class Json {
             return this.objectMapper.writeValueAsString(obj);
         }
         catch (final JsonProcessingException e) {
-            throw new IllegalStateException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -65,7 +67,7 @@ public class Json {
             return this.objectMapper.readValue(json, clazz);
         }
         catch (final JsonProcessingException e) {
-            throw new IllegalStateException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -74,7 +76,16 @@ public class Json {
             return this.objectMapper.readValue(json, valueTypeRef);
         }
         catch (final JsonProcessingException e) {
-            throw new IllegalStateException(e);
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public JsonNode read(final String json) {
+        try {
+            return this.objectMapper.readTree(json);
+        }
+        catch (final JsonProcessingException e) {
+            throw new UncheckedIOException(e);
         }
     }
 }
