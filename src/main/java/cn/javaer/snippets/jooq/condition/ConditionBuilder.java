@@ -8,7 +8,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,21 +27,6 @@ import java.util.function.Supplier;
 public class ConditionBuilder {
 
     private final List<Condition> conditions = new ArrayList<>();
-
-    @FunctionalInterface
-    public interface Function3<T1, T2, T3>
-            extends Serializable {
-        /**
-         * The three parameters Function.
-         *
-         * @param t1 t1
-         * @param t2 t2
-         * @param t3 t3
-         *
-         * @return Condition
-         */
-        Condition apply(T1 t1, T2 t2, T3 t3);
-    }
 
     public ConditionBuilder append(final Condition condition) {
         if (null != condition) {
@@ -83,14 +67,23 @@ public class ConditionBuilder {
         return this;
     }
 
-    public ConditionBuilder dateTime(final BiFunction<LocalDateTime, LocalDateTime, Condition> fun,
+    public ConditionBuilder dateTime(final DataTimeBiFunction fun,
                                      final LocalDate start, final LocalDate end) {
-        if (null == start && null == end) {
+        if (null == start || null == end) {
             return this;
         }
         final LocalDateTime startTime = Objects.requireNonNull(start).atTime(LocalTime.MIN);
         final LocalDateTime endTime = Objects.requireNonNull(end).atTime(LocalTime.MAX);
         this.conditions.add(fun.apply(startTime, endTime));
+        return this;
+    }
+
+    public ConditionBuilder dateTime(final DataTimeBiFunction fun,
+                                     final LocalDateTime start, final LocalDateTime end) {
+        if (null == start || null == end) {
+            return this;
+        }
+        this.conditions.add(fun.apply(start, end));
         return this;
     }
 
@@ -113,13 +106,13 @@ public class ConditionBuilder {
         }
         if (t instanceof String[]) {
             return (T) Arrays.stream((String[]) t)
-                    .filter(StringUtils::hasLength)
-                    .toArray(String[]::new);
+                .filter(StringUtils::hasLength)
+                .toArray(String[]::new);
         }
         if (t instanceof Object[]) {
             return (T) Arrays.stream((Object[]) t)
-                    .filter(Objects::nonNull)
-                    .toArray();
+                .filter(Objects::nonNull)
+                .toArray();
         }
         return t;
     }
@@ -134,5 +127,24 @@ public class ConditionBuilder {
             condition = condition.and(this.conditions.get(i));
         }
         return condition;
+    }
+
+    @FunctionalInterface
+    public interface Function3<T1, T2, T3> {
+        /**
+         * The three parameters Function.
+         *
+         * @param t1 t1
+         * @param t2 t2
+         * @param t3 t3
+         *
+         * @return Condition
+         */
+        Condition apply(T1 t1, T2 t2, T3 t3);
+    }
+
+    @FunctionalInterface
+    public interface DataTimeBiFunction {
+        Condition apply(LocalDateTime t1, LocalDateTime t2);
     }
 }

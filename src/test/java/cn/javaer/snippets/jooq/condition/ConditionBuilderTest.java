@@ -24,18 +24,18 @@ class ConditionBuilderTest {
         final Field<LocalDateTime> dateTimeField = DSL.field("dateTime", LocalDateTime.class);
 
         final Condition condition = new ConditionBuilder()
-                .append(objectField::contains, "object")
-                .append(arrayField::contains, new String[]{"str1", "str2"})
-                .dateTime(dateTimeField::betweenSymmetric, LocalDate.now(), LocalDate.now())
-                .append(SQL::containedBy, arrayField, new String[]{"value"})
-                .append(SQL::containsJsonb, jsonbField, "key", "value")
-                .build();
+            .append(objectField::contains, "object")
+            .append(arrayField::contains, new String[]{"str1", "str2"})
+            .dateTime(dateTimeField::betweenSymmetric, LocalDate.now(), LocalDate.now())
+            .append(SQL::containedBy, arrayField, new String[]{"value"})
+            .append(SQL::containsJsonb, jsonbField, "key", "value")
+            .build();
 
         final String sql = DSL.using(SQLDialect.POSTGRES)
-                .select(objectField, arrayField, jsonbField)
-                .from(DSL.table("demo_table"))
-                .where(condition)
-                .getSQL();
+            .select(objectField, arrayField, jsonbField)
+            .from(DSL.table("demo_table"))
+            .where(condition)
+            .getSQL();
         System.out.println(sql);
     }
 }
