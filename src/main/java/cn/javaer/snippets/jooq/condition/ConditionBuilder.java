@@ -35,6 +35,13 @@ public class ConditionBuilder {
         return this;
     }
 
+    public ConditionBuilder appendNotNull(final Field<?>... fields) {
+        if (null != fields) {
+            Arrays.stream(fields).forEach(field -> this.conditions.add(field.isNotNull()));
+        }
+        return this;
+    }
+
     public ConditionBuilder append(final Supplier<Condition> supplier) {
         this.conditions.add(supplier.get());
         return this;
