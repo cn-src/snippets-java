@@ -27,9 +27,25 @@ public interface ResponseUtils {
         Assert.hasLength(body, () -> "Body must be not empty");
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .header(HttpHeaders.CONTENT_ENCODING, "gzip")
-                .body(GzipUtils.zip(body));
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .header(HttpHeaders.CONTENT_ENCODING, "gzip")
+            .body(GzipUtils.zip(body));
+    }
+
+    /**
+     * GZIP 响应.
+     *
+     * @param body body
+     *
+     * @return bytes
+     */
+    static ResponseEntity<byte[]> gzip(final byte[] body) {
+        Assert.isTrue(body != null && body.length > 0, () -> "Body must be not empty");
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .header(HttpHeaders.CONTENT_ENCODING, "gzip")
+            .body(body);
     }
 
     /**
@@ -57,12 +73,12 @@ public interface ResponseUtils {
         Assert.notNull(filename, () -> "Filename must be not null");
 
         final String file = new String(filename.getBytes(StandardCharsets.UTF_8),
-                StandardCharsets.ISO_8859_1);
+            StandardCharsets.ISO_8859_1);
 
         return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"" + file + "\"")
-                .body(resource);
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file + "\"")
+            .body(resource);
     }
 }
