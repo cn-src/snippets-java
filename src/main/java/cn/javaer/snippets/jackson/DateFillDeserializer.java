@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 
 import java.io.IOException;
-import java.lang.reflect.AnnotatedElement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,21 +35,21 @@ public class DateFillDeserializer extends JsonDeserializer<LocalDateTime> implem
         Objects.requireNonNull(this.dateFillFormat);
         if (this.dateFillFormat.dataPattern().length() == parser.getText().length()) {
             final LocalDate date = LocalDate.parse(parser.getText(),
-                    DateTimeFormatter.ofPattern(this.dateFillFormat.dataPattern()));
+                DateTimeFormatter.ofPattern(this.dateFillFormat.dataPattern()));
             return DateFillFormat.Conversion.conversion(date, this.dateFillFormat);
         }
         final LocalDateTime dateTime = LocalDateTime.parse(parser.getText(),
-                DateTimeFormatter.ofPattern(this.dateFillFormat.dataTimePattern()));
+            DateTimeFormatter.ofPattern(this.dateFillFormat.dataTimePattern()));
         return DateFillFormat.Conversion.conversion(dateTime, this.dateFillFormat);
     }
 
     @Override
     public JsonDeserializer<?> createContextual(final DeserializationContext context,
                                                 final BeanProperty property) {
-        final AnnotatedElement annotated = property.getMember().getAnnotated();
-        DateFillFormat dateFillFormat = annotated.getAnnotation(DateFillFormat.class);
+        final DateFillFormat dateFillFormat =
+            property.getMember().getAnnotation(DateFillFormat.class);
         if (null == dateFillFormat) {
-            dateFillFormat = property.getAnnotation(DateFillFormat.class);
+            return null;
         }
         return new DateFillDeserializer(dateFillFormat);
     }
