@@ -1,15 +1,18 @@
 package cn.javaer.snippets.jackson;
 
 import cn.javaer.snippets.spring.format.DateFillFormat;
+import cn.javaer.snippets.spring.format.DateMaxTime;
+import cn.javaer.snippets.spring.format.DateMinTime;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
-import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.core.annotation.MergedAnnotation;
+import org.springframework.core.annotation.MergedAnnotationSelectors;
+import org.springframework.core.annotation.MergedAnnotations;
 
 import java.io.IOException;
-import java.lang.reflect.AnnotatedElement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,15 +51,17 @@ public class DateFillDeserializer extends JsonDeserializer<LocalDateTime> implem
     @Override
     public JsonDeserializer<?> createContextual(final DeserializationContext context,
                                                 final BeanProperty property) {
-        final AnnotatedElement element = property.getMember().getAnnotated();
-        if (element == null) {
+        final DateFillFormat dateFillFormat = property.getAnnotation(DateFillFormat.class);
+        final DateMinTime dateMinTime = property.getAnnotation(DateMinTime.class);
+        final DateMaxTime dateMaxTime = property.getAnnotation(DateMaxTime.class);
+
+        final DateFillFormat format =
+            MergedAnnotations.from(dateMinTime, dateMaxTime, dateFillFormat)
+                .get(DateFillFormat.class, null, MergedAnnotationSelectors.firstDirectlyDeclared())
+                .synthesize(MergedAnnotation::isPresent).orElse(null);
+        if (null == format) {
             return null;
         }
-        final DateFillFormat dateFillFormat =
-            AnnotatedElementUtils.findMergedAnnotation(element, DateFillFormat.class);
-        if (null == dateFillFormat) {
-            return null;
-        }
-        return new DateFillDeserializer(dateFillFormat);
+        return new DateFillDeserializer(format);
     }
 }
