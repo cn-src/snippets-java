@@ -46,7 +46,7 @@ public interface Tree {
             return Collections.emptyList();
         }
 
-        final TreeNode root = new TreeNode();
+        final TreeNode root = TreeNode.of("");
         TreeNode current = root;
 
         for (final E row : models) {
@@ -54,18 +54,14 @@ public interface Tree {
             for (final Function<E, String> fn : getters) {
                 final String cell = fn.apply(row);
 
-                if (current.getChildren() == null) {
-                    current.setChildren(new ArrayList<>());
-                }
-
                 final Optional<TreeNode> first = current.getChildren().stream()
-                        .filter(it -> Objects.equals(cell, it.getTitle()))
-                        .findFirst();
+                    .filter(it -> Objects.equals(cell, it.getTitle()))
+                    .findFirst();
                 if (first.isPresent()) {
                     current = first.get();
                 }
                 else {
-                    final TreeNode treeNode = new TreeNode(cell);
+                    final TreeNode treeNode = TreeNode.of(cell);
                     handler.apply(treeNode, row, depth, current.getChildren().size());
                     current.getChildren().add(treeNode);
                     current = treeNode;
@@ -98,8 +94,7 @@ public interface Tree {
         }
 
         final List<E> result = new ArrayList<>();
-        TreeNode current = new TreeNode();
-        current.setChildren(new ArrayList<>(treeNodes));
+        TreeNode current = TreeNode.of("", treeNodes);
         final LinkedList<TreeNode> stack = new LinkedList<>();
         stack.push(current);
 
@@ -109,7 +104,7 @@ public interface Tree {
         while (null != current) {
             if (stack.size() <= setters.length && !CollectionUtils.isEmpty(current.getChildren())) {
                 current = current.getChildren().get(0);
-                stack.push(cloneTreeNode(current));
+                stack.push(current.clone());
             }
             else {
                 final int size = stack.size() - 1;
@@ -141,15 +136,5 @@ public interface Tree {
             }
         }
         return result;
-    }
-
-    static TreeNode cloneTreeNode(final TreeNode treeNode) {
-        final TreeNode clone = new TreeNode();
-        clone.setTitle(treeNode.getTitle());
-        clone.setDynamic(clone.getDynamic());
-        if (null != treeNode.getChildren() && !treeNode.getChildren().isEmpty()) {
-            clone.setChildren(new ArrayList<>(treeNode.getChildren()));
-        }
-        return clone;
     }
 }

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,18 +26,18 @@ class TreeTest {
         final Areas areas4 = new Areas("山东省", "太原市", "小店区");
 
         final List<TreeNode> treeNodes = Tree.of(Arrays.asList(areas1, areas2, areas3, areas4),
-                Areas::getArea1, Areas::getArea2, Areas::getArea3);
+            Areas::getArea1, Areas::getArea2, Areas::getArea3);
 
         assertThat(treeNodes).hasSize(2);
         JSONAssert.assertEquals("[{\"title\": \"河北省\", \"children\": [{\"title\": \"石家庄市\", " +
-                        "\"children\": [{\"title\": \"长安区\", \"children\": null}, {\"title\": " +
-                        "\"新华区\", " +
-                        "\"children\": null}]}, {\"title\": \"唐山市\", \"children\": [{\"title\": " +
-                        "\"开平区\", " +
-                        "\"children\": null}]}]}, {\"title\": \"山东省\", \"children\": [{\"title\":" +
-                        " " +
-                        "\"太原市\", \"children\": [{\"title\": \"小店区\", \"children\": null}]}]}]\n",
-                this.objectMapper.writeValueAsString(treeNodes), false);
+                "\"children\": [{\"title\": \"长安区\", \"children\": null}, {\"title\": " +
+                "\"新华区\", " +
+                "\"children\": null}]}, {\"title\": \"唐山市\", \"children\": [{\"title\": " +
+                "\"开平区\", " +
+                "\"children\": null}]}]}, {\"title\": \"山东省\", \"children\": [{\"title\":" +
+                " " +
+                "\"太原市\", \"children\": [{\"title\": \"小店区\", \"children\": null}]}]}]\n",
+            this.objectMapper.writeValueAsString(treeNodes), false);
     }
 
     @Test
@@ -49,32 +48,29 @@ class TreeTest {
         final Areas areas4 = new Areas("山东省", "太原市", "小店区");
 
         final List<TreeNode> treeNodes = Tree.of(
-                Arrays.asList(areas1, areas2, areas3, areas4),
-                (treeNode, entity, depth, index) -> {
-                    if (treeNode.getDynamic() == null) {
-                        treeNode.setDynamic(new HashMap<>());
-                    }
-                    treeNode.getDynamic().put("depth", depth);
-                    treeNode.getDynamic().put("index", index);
-                },
-                Areas::getArea1, Areas::getArea2, Areas::getArea3);
+            Arrays.asList(areas1, areas2, areas3, areas4),
+            (treeNode, entity, depth, index) -> {
+                treeNode.getDynamic().put("depth", depth);
+                treeNode.getDynamic().put("index", index);
+            },
+            Areas::getArea1, Areas::getArea2, Areas::getArea3);
         System.out.println(this.objectMapper.writeValueAsString(treeNodes));
         assertThat(treeNodes).hasSize(2);
     }
 
     @Test
     void toModel() {
-        final TreeNode tn1 = new TreeNode("河北省");
-        final TreeNode tn11 = new TreeNode("石家庄市");
-        final TreeNode tn2 = new TreeNode("山东省");
+        final TreeNode tn1 = TreeNode.of("河北省");
+        final TreeNode tn11 = TreeNode.of("石家庄市");
+        final TreeNode tn2 = TreeNode.of("山东省");
         tn1.addChildren(tn11);
         final List<Areas> areas = Tree.toModel(Arrays.asList(tn1, tn2),
-                Areas::new, Areas::setArea1, Areas::setArea2, Areas::setArea3);
+            Areas::new, Areas::setArea1, Areas::setArea2, Areas::setArea3);
         assertThat(areas).hasSize(2)
-                .extracting(Areas::getArea1, Areas::getArea2, Areas::getArea3)
-                .contains(
-                        tuple("河北省", "石家庄市", null),
-                        tuple("山东省", null, null)
-                );
+            .extracting(Areas::getArea1, Areas::getArea2, Areas::getArea3)
+            .contains(
+                tuple("河北省", "石家庄市", null),
+                tuple("山东省", null, null)
+            );
     }
 }
