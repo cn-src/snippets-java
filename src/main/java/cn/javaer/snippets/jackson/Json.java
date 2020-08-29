@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jackson;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -23,11 +24,12 @@ import java.time.format.DateTimeFormatter;
  * @author cn-src
  */
 public class Json {
-    public static final Json INSTANCE;
+    public static final Json DEFAULT;
+    public static final Json NON_EMPTY;
 
     static {
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.setAnnotationIntrospector(SnippetsJacksonIntrospector.INSTANCE);
+        final ObjectMapper defaultX = new ObjectMapper();
+        defaultX.setAnnotationIntrospector(SnippetsJacksonIntrospector.INSTANCE);
         final SimpleModule module = new SimpleModule();
 
         final DateTimeFormatter dataTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -43,8 +45,14 @@ public class Json {
         module.addDeserializer(LocalDate.class, new LocalDateDeserializer(dataFormat));
         module.addDeserializer(LocalTime.class, new LocalTimeDeserializer(timeFormat));
 
-        mapper.registerModule(module);
-        INSTANCE = new Json(mapper);
+        defaultX.registerModule(module);
+        DEFAULT = new Json(defaultX);
+
+        final ObjectMapper nonEmpty = new ObjectMapper();
+        nonEmpty.setAnnotationIntrospector(SnippetsJacksonIntrospector.INSTANCE);
+        nonEmpty.registerModule(module);
+        nonEmpty.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        NON_EMPTY = new Json(nonEmpty);
     }
 
     private final ObjectMapper objectMapper;

@@ -63,7 +63,7 @@ class TreeTest {
                 "  ]\n" +
                 "}\n" +
                 "]\n",
-            Json.INSTANCE.write(treeNodes), false);
+            Json.DEFAULT.write(treeNodes), false);
     }
 
     @Test

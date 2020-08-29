@@ -25,14 +25,14 @@ class TreeNodeTest {
     @Test
     void json() {
         //language=JSON
-        final TreeNode node1 = Json.INSTANCE.read("{\"title\": \"t1\"}", TreeNode.class);
+        final TreeNode node1 = Json.DEFAULT.read("{\"title\": \"t1\"}", TreeNode.class);
         assertThat(node1).extracting(TreeNode::getTitle).isEqualTo("t1");
     }
 
     @Test
     void json2() {
         //language=JSON
-        final TreeNode node2 = Json.INSTANCE.read("{\"title\": \"t1\",\"children\":[{\"title\": " +
+        final TreeNode node2 = Json.DEFAULT.read("{\"title\": \"t1\",\"children\":[{\"title\": " +
             "\"t2\"}]}", TreeNode.class);
         assertThat(node2).extracting(TreeNode::getTitle).isEqualTo("t1");
         assertThat(node2.getChildren()).hasSize(1).extracting(TreeNode::getTitle).contains("t2");
@@ -41,7 +41,7 @@ class TreeNodeTest {
     @Test
     void json3() {
         //language=JSON
-        final TreeNode node3 = Json.INSTANCE.read("{\"title\": \"t1\",\"children\":[{\"title\": " +
+        final TreeNode node3 = Json.DEFAULT.read("{\"title\": \"t1\",\"children\":[{\"title\": " +
             "\"t2\"}],\"m1\": 1}", TreeNode.class);
         assertThat(node3).extracting(TreeNode::getTitle).isEqualTo("t1");
         assertThat(node3.getChildren()).hasSize(1).extracting(TreeNode::getTitle).contains("t2");

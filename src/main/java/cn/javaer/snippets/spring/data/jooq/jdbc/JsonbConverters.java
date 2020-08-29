@@ -78,7 +78,7 @@ public class JsonbConverters {
 
         @Override
         public JsonNode convert(final PGobject source) {
-            return Json.INSTANCE.read(source.getValue());
+            return Json.DEFAULT.read(source.getValue());
         }
     }
 
@@ -93,7 +93,7 @@ public class JsonbConverters {
         @Override
         public PGobject convert(@NonNull final JsonNode source) {
             try {
-                final String json = Json.INSTANCE.write(source);
+                final String json = Json.DEFAULT.write(source);
                 final PGobject obj = new PGobject();
                 obj.setType("jsonb");
                 obj.setValue(json);
