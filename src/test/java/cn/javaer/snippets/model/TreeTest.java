@@ -28,42 +28,11 @@ class TreeTest {
 
         assertThat(treeNodes).hasSize(2);
         //language=JSON
-        JSONAssert.assertEquals("[\n" +
-                "  {\n" +
-                "    \"title\": \"河北省\",\n" +
-                "    \"children\": [\n" +
-                "      {\n" +
-                "        \"title\": \"石家庄市\",\n" +
-                "        " +
-                "\"children\": [\n" +
-                "          {\n" +
-                "            \"title\": \"长安区\"\n" +
-                "          }, {\n" +
-                "            \"title\": " +
-                "\"新华区\"\n" +
-                " " +
-                "\n" +
-                "          }\n" +
-                "        ]\n" +
-                "      }\n" +
-                "    ]\n" +
-                "  }, {\n" +
-                "  \"title\": \"山东省\",\n" +
-                "  \"children\": [\n" +
-                "    {\n" +
-                "      \"title\":" +
-                " " +
-                "\"太原市\",\n" +
-                "      \"children\": [\n" +
-                "        {\n" +
-                "          \"title\": \"小店区\"\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}\n" +
-                "]\n",
-            Json.DEFAULT.write(treeNodes), false);
+        JSONAssert.assertEquals("[{\"title\":\"河北省\",\"children\":[{\"title\":\"石家庄市\"," +
+                "\"children\":[{\"title\":\"长安区\"},{\"title\":\"新华区\"}]},{\"title\":\"唐山市\"," +
+                "\"children\":[{\"title\":\"开平区\"}]}]},{\"title\":\"山东省\"," +
+                "\"children\":[{\"title\":\"太原市\",\"children\":[{\"title\":\"小店区\"}]}]}]",
+            Json.NON_EMPTY.write(treeNodes), false);
     }
 
     @Test
