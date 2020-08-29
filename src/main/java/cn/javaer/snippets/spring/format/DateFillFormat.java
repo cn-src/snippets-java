@@ -22,16 +22,16 @@ import java.time.LocalTime;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
 public @interface DateFillFormat {
-    
+
     /**
      * 日期的格式
      */
-    String dataPattern() default "yyyy-MM-dd";
+    String datePattern() default "yyyy-MM-dd";
 
     /**
      * 日期时间的格式
      */
-    String dataTimePattern() default "yyyy-MM-dd HH:mm:ss";
+    String dateTimePattern() default "yyyy-MM-dd HH:mm:ss";
 
     /**
      * 在已有的日期上偏移天数

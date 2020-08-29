@@ -20,13 +20,13 @@ public final class DateFillParser implements Parser<LocalDateTime> {
 
     @Override
     public LocalDateTime parse(final String text, @NonNull final Locale locale) {
-        if (this.annotation.dataPattern().length() == text.length()) {
+        if (this.annotation.datePattern().length() == text.length()) {
             final LocalDate date = LocalDate.parse(text,
-                    DateTimeFormatter.ofPattern(this.annotation.dataPattern(), locale));
+                DateTimeFormatter.ofPattern(this.annotation.datePattern(), locale));
             return DateFillFormat.Conversion.conversion(date, this.annotation);
         }
         final LocalDateTime dateTime = LocalDateTime.parse(text,
-                DateTimeFormatter.ofPattern(this.annotation.dataTimePattern(), locale));
+            DateTimeFormatter.ofPattern(this.annotation.dateTimePattern(), locale));
         return DateFillFormat.Conversion.conversion(dateTime, this.annotation);
     }
 }

@@ -33,13 +33,13 @@ public class DateFillDeserializer extends JsonDeserializer<LocalDateTime> implem
     public LocalDateTime deserialize(final JsonParser parser,
                                      final DeserializationContext context) throws IOException {
         Objects.requireNonNull(this.dateFillFormat);
-        if (this.dateFillFormat.dataPattern().length() == parser.getText().length()) {
+        if (this.dateFillFormat.datePattern().length() == parser.getText().length()) {
             final LocalDate date = LocalDate.parse(parser.getText(),
-                DateTimeFormatter.ofPattern(this.dateFillFormat.dataPattern()));
+                DateTimeFormatter.ofPattern(this.dateFillFormat.datePattern()));
             return DateFillFormat.Conversion.conversion(date, this.dateFillFormat);
         }
         final LocalDateTime dateTime = LocalDateTime.parse(parser.getText(),
-            DateTimeFormatter.ofPattern(this.dateFillFormat.dataTimePattern()));
+            DateTimeFormatter.ofPattern(this.dateFillFormat.dateTimePattern()));
         return DateFillFormat.Conversion.conversion(dateTime, this.dateFillFormat);
     }
 

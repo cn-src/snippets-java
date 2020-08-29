@@ -25,7 +25,7 @@ public class DateFillFormatter extends EmbeddedValueResolutionSupport implements
     @Override
     @NonNull
     public Printer<?> getPrinter(final DateFillFormat annotation, final Class<?> fieldType) {
-        return new TemporalAccessorPrinter(DateTimeFormatter.ofPattern(annotation.dataTimePattern()));
+        return new TemporalAccessorPrinter(DateTimeFormatter.ofPattern(annotation.dateTimePattern()));
     }
 
     @Override
