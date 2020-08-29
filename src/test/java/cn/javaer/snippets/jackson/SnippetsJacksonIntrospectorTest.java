@@ -1,6 +1,8 @@
 package cn.javaer.snippets.jackson;
 
 import cn.javaer.snippets.spring.format.DateFillFormat;
+import cn.javaer.snippets.spring.format.DateMaxTime;
+import cn.javaer.snippets.spring.format.DateMinTime;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -24,8 +26,14 @@ class SnippetsJacksonIntrospectorTest {
         final SnippetsJacksonIntrospector jacksonIntrospector = new SnippetsJacksonIntrospector();
         objectMapper.setAnnotationIntrospector(jacksonIntrospector);
         //language=JSON
-        final Demo demo = objectMapper.readValue("{\"dateTime\": \"2020-05-05\"}", Demo.class);
-        assertThat(demo.dateTime).isEqualTo(LocalDate.parse("2020-04-05").atTime(LocalTime.MIN));
+        final Demo demo = objectMapper.readValue("{\"dateTime\": \"2020-05-05\",\"dateMinTime\": " +
+            "\"2020-02-05\",\"dateMaxTime\": \"2020-03-05\"}", Demo.class);
+        assertThat(demo.dateTime)
+            .isEqualTo(LocalDate.parse("2020-04-05").atTime(LocalTime.MIN));
+        assertThat(demo.dateMinTime)
+            .isEqualTo(LocalDate.parse("2020-02-05").atTime(LocalTime.MIN));
+        assertThat(demo.dateMaxTime)
+            .isEqualTo(LocalDate.parse("2020-03-05").atTime(LocalTime.MAX));
     }
 
     @Test
@@ -42,6 +50,12 @@ class SnippetsJacksonIntrospectorTest {
     static class Demo {
         @DateFillFormat(fillTime = DateFillFormat.FillTime.MIN, months = -1)
         LocalDateTime dateTime;
+
+        @DateMinTime
+        LocalDateTime dateMinTime;
+
+        @DateMaxTime
+        LocalDateTime dateMaxTime;
     }
 
     @Value
