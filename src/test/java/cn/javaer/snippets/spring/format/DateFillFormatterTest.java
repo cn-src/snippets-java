@@ -34,23 +34,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 class DateFillFormatterTest {
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
-            .withConfiguration(
-                    AutoConfigurations.of(MockMvcAutoConfiguration.class, WebMvcAutoConfiguration.class, DispatcherServletAutoConfiguration.class,
-                            HttpMessageConvertersAutoConfiguration.class, PropertyPlaceholderAutoConfiguration.class));
+        .withConfiguration(
+            AutoConfigurations.of(MockMvcAutoConfiguration.class, WebMvcAutoConfiguration.class,
+                DispatcherServletAutoConfiguration.class,
+                HttpMessageConvertersAutoConfiguration.class,
+                PropertyPlaceholderAutoConfiguration.class));
 
     @Test
     void fillTime() {
         this.contextRunner.withUserConfiguration(TestController.class, WebConfig.class)
-                .run(context -> {
-                    final MockMvc mockMvc = context.getBean(MockMvc.class);
-                    mockMvc.perform(get("/test1?dateTime=2020-01-01")).andExpect(status().isOk());
+            .run(context -> {
+                final MockMvc mockMvc = context.getBean(MockMvc.class);
+                mockMvc.perform(get("/test1?dateTime=2020-01-01")).andExpect(status().isOk());
 
-                    mockMvc.perform(post("/test2")
-                            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                            .param("dateTime", "2020-01-01")
-                    )
-                            .andExpect(status().isOk());
-                });
+                mockMvc.perform(post("/test2")
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .param("dateTime", "2020-01-01")
+                    .param("dateMaxTime", "2020-02-01")
+                    .param("dateMinTime", "2020-02-01")
+                )
+                    .andExpect(status().isOk());
+            });
     }
 
     @Configuration
@@ -75,6 +79,8 @@ class DateFillFormatterTest {
         @PostMapping("test2")
         public void post(final Demo demo) {
             Assertions.assertThat(demo.dateTime).isEqualTo(LocalDate.parse("2020-01-01").atTime(LocalTime.MIN));
+            Assertions.assertThat(demo.dateMaxTime).isEqualTo(LocalDate.parse("2020-02-01").atTime(LocalTime.MAX));
+            Assertions.assertThat(demo.dateMinTime).isEqualTo(LocalDate.parse("2020-02-01").atTime(LocalTime.MIN));
         }
     }
 
@@ -82,5 +88,11 @@ class DateFillFormatterTest {
     static class Demo {
         @DateFillFormat(fillTime = DateFillFormat.FillTime.MIN)
         LocalDateTime dateTime;
+
+        @DateMaxTime
+        LocalDateTime dateMaxTime;
+
+        @DateMinTime
+        LocalDateTime dateMinTime;
     }
 }
