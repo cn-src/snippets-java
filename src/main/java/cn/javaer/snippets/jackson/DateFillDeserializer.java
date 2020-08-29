@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 
 import java.io.IOException;
+import java.lang.reflect.AnnotatedElement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,8 +48,12 @@ public class DateFillDeserializer extends JsonDeserializer<LocalDateTime> implem
     @Override
     public JsonDeserializer<?> createContextual(final DeserializationContext context,
                                                 final BeanProperty property) {
+        final AnnotatedElement element = property.getMember().getAnnotated();
+        if (element == null) {
+            return null;
+        }
         final DateFillFormat dateFillFormat =
-            property.getMember().getAnnotation(DateFillFormat.class);
+            AnnotatedElementUtils.findMergedAnnotation(element, DateFillFormat.class);
         if (null == dateFillFormat) {
             return null;
         }
