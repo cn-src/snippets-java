@@ -78,10 +78,9 @@ public class TreeNode implements Cloneable {
         return this.children;
     }
 
-    @SuppressWarnings({"MethodDoesntCallSuperMethod",
-        "CloneDoesntDeclareCloneNotSupportedException"})
+    @SuppressWarnings({"MethodDoesntCallSuperMethod"})
     @Override
-    protected TreeNode clone() {
+    public TreeNode clone() {
         return new TreeNode(this.title, this.children, this.dynamic);
     }
 

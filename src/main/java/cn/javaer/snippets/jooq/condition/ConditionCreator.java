@@ -11,7 +11,6 @@ import cn.javaer.snippets.jooq.condition.annotation.ConditionGreaterThan;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionIgnore;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionLessOrEqual;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionLessThan;
-import cn.javaer.snippets.model.Tree;
 import cn.javaer.snippets.model.TreeNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -52,7 +51,7 @@ import java.util.function.BiFunction;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ConditionCreator {
     private static final ConcurrentHashMap<Class<?>, List<ClassInfo>> CACHE =
-            new ConcurrentHashMap<>();
+        new ConcurrentHashMap<>();
     private static final Map<Class<? extends Annotation>, BiFunction<Field, Object, Condition>> CONDITION_FUN_MAP = new HashMap<>(5);
 
     static {
@@ -81,8 +80,7 @@ public class ConditionCreator {
         if (CollectionUtils.isEmpty(treeNodes)) {
             return null;
         }
-        TreeNode current = new TreeNode();
-        current.setChildren(new ArrayList<>(treeNodes));
+        TreeNode current = TreeNode.of("", treeNodes);
         final LinkedList<TreeNode> stack = new LinkedList<>();
         stack.push(current);
 
@@ -90,7 +88,7 @@ public class ConditionCreator {
         while (null != current) {
             if (stack.size() <= fields.length && !CollectionUtils.isEmpty(current.getChildren())) {
                 current = current.getChildren().get(0);
-                stack.push(Tree.cloneTreeNode(current));
+                stack.push(current.clone());
             }
             else {
                 final Condition eq = fields[stack.size() - 2].eq(current.getTitle());
@@ -137,7 +135,7 @@ public class ConditionCreator {
         final List<Condition> conditions = new ArrayList<>();
         final Class<?> clazz = query.getClass();
         final List<ClassInfo> classInfos = CACHE.computeIfAbsent(clazz,
-                ConditionCreator::createClassCache);
+            ConditionCreator::createClassCache);
         final Map<String, BetweenValue> betweenValueMap = new HashMap<>();
         try {
             for (final ClassInfo info : classInfos) {
@@ -166,13 +164,13 @@ public class ConditionCreator {
                         }
                     }
                     else if (ann instanceof ConditionContained
-                            && String[].class.equals(info.readMethod.getReturnType())) {
+                        && String[].class.equals(info.readMethod.getReturnType())) {
                         conditions.add(SQL.containedBy(column, (String[]) value));
                     }
                     else if (ann instanceof ConditionBetweenMin) {
                         final ConditionBetweenMin betweenMin = (ConditionBetweenMin) ann;
                         final String betweenColumn = betweenMin.value().isEmpty() ?
-                                betweenMin.column() : betweenMin.value();
+                            betweenMin.column() : betweenMin.value();
                         Assert.hasText(betweenColumn, () -> "Column must be not empty");
                         BetweenValue betweenValue = betweenValueMap.get(betweenColumn);
                         if (null == betweenValue) {
@@ -189,7 +187,7 @@ public class ConditionCreator {
                     else if (ann instanceof ConditionBetweenMax) {
                         final ConditionBetweenMax betweenMax = (ConditionBetweenMax) ann;
                         final String betweenColumn = betweenMax.value().isEmpty() ?
-                                betweenMax.column() : betweenMax.value();
+                            betweenMax.column() : betweenMax.value();
                         Assert.hasText(betweenColumn, () -> "Column must be not empty");
                         BetweenValue betweenValue = betweenValueMap.get(betweenColumn);
                         if (null == betweenValue) {
@@ -213,7 +211,7 @@ public class ConditionCreator {
         for (final Map.Entry<String, BetweenValue> entry : betweenValueMap.entrySet()) {
             final BetweenValue value = entry.getValue();
             conditions.add(DSL.field(underline(entry.getKey())).between(value.getMin(),
-                    value.getMax()));
+                value.getMax()));
         }
 
         if (conditions.isEmpty()) {
@@ -241,7 +239,7 @@ public class ConditionCreator {
             if (fieldAnnotations != null) {
                 for (final Annotation fieldAnnotation : fieldAnnotations) {
                     if (!AnnotatedElementUtils.isAnnotated(fieldAnnotation.annotationType(),
-                            cn.javaer.snippets.jooq.condition.annotation.Condition.class)) {
+                        cn.javaer.snippets.jooq.condition.annotation.Condition.class)) {
                         continue;
                     }
                     if (null != conditionAnnotation) {
@@ -251,10 +249,10 @@ public class ConditionCreator {
                 }
             }
             final BiFunction<Field, Object, Condition> conditionFun = conditionAnnotation == null ?
-                    null : CONDITION_FUN_MAP.get(conditionAnnotation.annotationType());
+                null : CONDITION_FUN_MAP.get(conditionAnnotation.annotationType());
             classInfos.add(new ClassInfo(conditionAnnotation,
-                    dr.getReadMethod(), DSL.field(underline(name)),
-                    conditionFun));
+                dr.getReadMethod(), DSL.field(underline(name)),
+                conditionFun));
         }
         return classInfos;
     }
