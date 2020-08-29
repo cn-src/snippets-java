@@ -1,11 +1,11 @@
 package cn.javaer.snippets.jackson;
 
+import cn.javaer.snippets.spring.AnnotationUtils;
 import cn.javaer.snippets.spring.format.DateFillFormat;
+import cn.javaer.snippets.spring.format.DateMaxTime;
+import cn.javaer.snippets.spring.format.DateMinTime;
 import com.fasterxml.jackson.databind.introspect.Annotated;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
-import org.springframework.core.annotation.AnnotatedElementUtils;
-
-import java.lang.reflect.AnnotatedElement;
 
 /**
  * @author cn-src
@@ -17,14 +17,11 @@ public class SnippetsJacksonIntrospector extends JacksonAnnotationIntrospector {
 
     @Override
     public Object findDeserializer(final Annotated a) {
-        final AnnotatedElement element = a.getAnnotated();
-        if (element != null) {
-            final DateFillFormat fillFormat =
-                AnnotatedElementUtils.findMergedAnnotation(element, DateFillFormat.class);
-            if (null != fillFormat) {
-                return new DateFillDeserializer(fillFormat);
-            }
-        }
-        return super.findDeserializer(a);
+        
+        return AnnotationUtils.mergeAnnotations(DateFillFormat.class,
+            () -> a.getAnnotation(DateFillFormat.class),
+            () -> a.getAnnotation(DateMinTime.class),
+            () -> a.getAnnotation(DateMaxTime.class)
+        ).map(it -> (Object) new DateFillDeserializer(it)).orElse(super.findDeserializer(a));
     }
 }

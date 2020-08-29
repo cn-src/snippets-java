@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jackson;
 
+import cn.javaer.snippets.spring.AnnotationUtils;
 import cn.javaer.snippets.spring.format.DateFillFormat;
 import cn.javaer.snippets.spring.format.DateMaxTime;
 import cn.javaer.snippets.spring.format.DateMinTime;
@@ -8,9 +9,6 @@ import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
-import org.springframework.core.annotation.MergedAnnotation;
-import org.springframework.core.annotation.MergedAnnotationSelectors;
-import org.springframework.core.annotation.MergedAnnotations;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -51,17 +49,11 @@ public class DateFillDeserializer extends JsonDeserializer<LocalDateTime> implem
     @Override
     public JsonDeserializer<?> createContextual(final DeserializationContext context,
                                                 final BeanProperty property) {
-        final DateFillFormat dateFillFormat = property.getAnnotation(DateFillFormat.class);
-        final DateMinTime dateMinTime = property.getAnnotation(DateMinTime.class);
-        final DateMaxTime dateMaxTime = property.getAnnotation(DateMaxTime.class);
 
-        final DateFillFormat format =
-            MergedAnnotations.from(dateMinTime, dateMaxTime, dateFillFormat)
-                .get(DateFillFormat.class, null, MergedAnnotationSelectors.firstDirectlyDeclared())
-                .synthesize(MergedAnnotation::isPresent).orElse(null);
-        if (null == format) {
-            return null;
-        }
-        return new DateFillDeserializer(format);
+        return AnnotationUtils.mergeAnnotations(DateFillFormat.class,
+            () -> property.getAnnotation(DateFillFormat.class),
+            () -> property.getAnnotation(DateMinTime.class),
+            () -> property.getAnnotation(DateMaxTime.class)
+        ).map(DateFillDeserializer::new).orElse(null);
     }
 }
