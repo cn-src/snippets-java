@@ -49,7 +49,7 @@ public @interface DateFillFormat {
     int months() default 0;
 
     /**
-     * 填充时间的方式
+     * 在只有日期的时候, 填充时间的方式
      */
     FillTime fillTime();
 
