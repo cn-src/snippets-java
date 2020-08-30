@@ -7,13 +7,21 @@
 # Snippets Java
 > 一些零散的Java代码片段，集成 jar 后可直接使用
 
-* jOOQ Condition 动态创建支持
-* jOOQ Geometry 几何类型支持
-* jOOQ 额外函数支持
-* jOOQ 自定义生成器
-* Spring Data JDBC & jOOQ 扩展支持
-* Spring Data & Eclipse Collections 扩展支持
-* Kryo & Eclipse Collections 序列化支持
+## jOOQ 扩展
+* 使用 `ConditionBuilder` 可动态构建 where 条件
+* 使用 `ConditionCreator` 和 `@Condition` 系列注解可构建样例查询
+* 使用 `cn.javaer.snippets.jooq.SQL` 扩展支持了 PostgreSQL 相关函数
+* 使用 `Geometry` 简单支持了几何对象
+* 使用 `JsonbField` 扩展 PostgreSQL 的 JSONB 支持
+* 使用 `JsonbField` 扩展 PostgreSQL 的 JSONB 支持
+* 使用 `SimpleJooqJdbcRepository` 将 jOOQ 和 Spring Data JDBC 集成
+
+## Kryo 序列化
+* 支持 Eclipse Collections 集合序列化支持
+
+## Spring Data
+* 扩展 Eclipse Collections 支持，返回值可以使用 Eclipse Collections 的集合类型
+
 * 自定义 Spring 事务注解支持
 * 完善的异常处理机制，消息国际化，OpenApi异常响应文档自动生成
 * p6spy SQL 缩进格式化支持

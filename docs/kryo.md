@@ -5,13 +5,13 @@
 * Kryo [池化封装](https://github.com/EsotericSoftware/kryo#pooling)
 ```java
 class Demo {
-    KryoHelper kryoHelper = new KryoHelper(kryo -> {
+    KryoHelper kryoPool = new KryoHelper(kryo -> {
         kryo.register(User.class);
     });
 
     void demo() {
-        byte[] bytes = kryoHelper.writeClassAndObject(user);
-        User user = kryoHelper.readClassAndObject(bytes);
+        byte[] bytes = kryoPool.writeClassAndObject(user);
+        User user = kryoPool.readClassAndObject(bytes);
     }
 }
 ```  

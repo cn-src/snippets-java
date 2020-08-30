@@ -8,15 +8,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author cn-src
  */
-class KryoHelperTest {
+class KryoPoolTest {
     @Test
     void name() {
-        final KryoHelper kryoHelper = new KryoHelper(kryo -> {
+        final KryoPool kryoPool = new KryoPool(kryo -> {
             kryo.register(City.class);
         });
 
-        final byte[] bytes = kryoHelper.writeClassAndObject(new City("n1"));
-        final Object city = kryoHelper.readClassAndObject(bytes);
+        final byte[] bytes = kryoPool.writeClassAndObject(new City("n1"));
+        final Object city = kryoPool.readClassAndObject(bytes);
         assertThat(city).hasFieldOrPropertyWithValue("name", "n1");
     }
 }

@@ -18,15 +18,15 @@ import java.util.function.Consumer;
 /**
  * @author cn-src
  */
-public class KryoHelper {
+public class KryoPool {
 
     private final Consumer<Kryo> configurer;
 
-    public KryoHelper() {
+    public KryoPool() {
         this.configurer = kryo -> { };
     }
 
-    public KryoHelper(final Consumer<Kryo> configurer) {
+    public KryoPool(final Consumer<Kryo> configurer) {
         this.configurer = configurer;
     }
 
@@ -59,7 +59,7 @@ public class KryoHelper {
             if (Util.isClassAvailable("org.jooq.JSONB")) {
                 kryo.register(JSONB.class, new JSONBSerializer());
             }
-            KryoHelper.this.configurer.accept(kryo);
+            KryoPool.this.configurer.accept(kryo);
             return kryo;
         }
     };
