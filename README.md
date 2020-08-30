@@ -5,7 +5,8 @@
 [![](https://jitpack.io/v/cn-src/snippets-java.svg)](https://jitpack.io/#cn-src/snippets-java)
 
 # Snippets Java
-> 一些零散的Java代码片段，集成 jar 后可直接使用，查看单元测试可获取详细用法
+> 一些Java代码片段，主要提供一些工具类和框架的扩展
+> Spring Boot 集成后可直接使用，查看单元测试可获取详细用法
 
 ## jOOQ 扩展
 * 使用 `ConditionBuilder` 可动态构建 where 条件
