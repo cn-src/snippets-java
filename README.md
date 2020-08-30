@@ -47,5 +47,3 @@
 
 ## Spring Data
 * 扩展 Eclipse Collections 支持，返回值可以使用 Eclipse Collections 的集合类型
-
-[文档](https://cn-src.gitee.io/snippets-java/)
