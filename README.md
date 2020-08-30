@@ -13,7 +13,6 @@
 * 使用 `cn.javaer.snippets.jooq.SQL` 扩展支持了 PostgreSQL 相关函数
 * 使用 `Geometry` 简单支持了几何对象
 * 使用 `JsonbField` 扩展 PostgreSQL 的 JSONB 支持
-* 使用 `JsonbField` 扩展 PostgreSQL 的 JSONB 支持
 * 使用 `SimpleJooqJdbcRepository` 将 jOOQ 和 Spring Data JDBC 集成
 
 ## jackson
