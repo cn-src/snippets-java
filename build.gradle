@@ -4,7 +4,7 @@ plugins {
     id 'java-library'
     id 'jacoco'
     id 'maven-publish'
-    id "com.github.ben-manes.versions" version "0.28.0"
+    id "com.github.ben-manes.versions" version "0.29.0"
     id 'org.springframework.boot' version '2.3.3.RELEASE' apply false
 }
 apply plugin: 'io.spring.dependency-management'
@@ -27,10 +27,10 @@ dependencies {
     optionalApi 'org.springframework.boot:spring-boot-starter-validation'
 
     optionalApi 'org.simpleflatmapper:sfm-jooq:8.2.3'
-    optionalApi 'org.eclipse.collections:eclipse-collections:10.3.0'
+    optionalApi 'org.eclipse.collections:eclipse-collections:10.4.0'
     optionalApi 'com.esotericsoftware:kryo:5.0.0-RC9'
-    optionalApi 'io.github.classgraph:classgraph:4.8.87'
-    optionalApi 'org.springdoc:springdoc-openapi-webmvc-core:1.4.4'
+    optionalApi 'io.github.classgraph:classgraph:4.8.89'
+    optionalApi 'org.springdoc:springdoc-openapi-webmvc-core:1.4.5'
     optionalApi 'org.jooq:jooq-codegen:3.13.4'
     optionalApi 'p6spy:p6spy:3.9.1'
 
