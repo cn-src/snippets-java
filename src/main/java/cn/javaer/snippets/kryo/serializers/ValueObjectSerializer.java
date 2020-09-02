@@ -58,7 +58,7 @@ public class ValueObjectSerializer<T> extends FieldSerializer<T> {
             return (T) this.constructor.newInstance(fieldValues);
         }
         catch (final InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            throw new KryoException("Unable to instantiate object", e);
         }
     }
 
