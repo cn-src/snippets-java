@@ -30,7 +30,7 @@ dependencies {
     optionalApi 'org.eclipse.collections:eclipse-collections:10.4.0'
     optionalApi 'com.esotericsoftware:kryo:5.0.0-RC9'
     optionalApi 'io.github.classgraph:classgraph:4.8.89'
-    optionalApi 'org.springdoc:springdoc-openapi-webmvc-core:1.4.5'
+    optionalApi 'org.springdoc:springdoc-openapi-webmvc-core:1.4.6'
     optionalApi 'org.jooq:jooq-codegen:3.13.4'
     optionalApi 'p6spy:p6spy:3.9.1'
 
@@ -43,8 +43,8 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'com.h2database:h2'
-    testImplementation 'org.testcontainers:postgresql:1.14.3'
-    testImplementation 'org.testcontainers:junit-jupiter:1.14.3'
+    testImplementation 'org.testcontainers:postgresql:1.15.0-rc1'
+    testImplementation 'org.testcontainers:junit-jupiter:1.15.0-rc1'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
