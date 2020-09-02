@@ -22,6 +22,7 @@
 
 ## Kryo 序列化
 * 支持 Eclipse Collections 集合序列化支持
+* 支持不可变 POJO 对象序列化
 * 使用 `KryoPool` Kryo 对象池
 
 ## 日期格式化扩展
