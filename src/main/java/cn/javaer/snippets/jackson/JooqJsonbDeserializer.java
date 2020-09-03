@@ -1,6 +1,7 @@
 package cn.javaer.snippets.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import org.jooq.JSONB;
@@ -21,6 +22,7 @@ public class JooqJsonbDeserializer extends StdDeserializer<JSONB> {
 
     @Override
     public JSONB deserialize(final JsonParser parser, final DeserializationContext cont) throws IOException {
-        return JSONB.valueOf(parser.getText());
+        final TreeNode treeNode = parser.readValueAsTree();
+        return JSONB.valueOf(treeNode.toString());
     }
 }
