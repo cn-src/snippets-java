@@ -39,11 +39,14 @@ public class Json {
         module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dataTimeFormat));
         module.addSerializer(LocalDate.class, new LocalDateSerializer(dataFormat));
         module.addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormat));
+        // TODO 判断是否 JSONB 存在
         module.addSerializer(JSONB.class, JooqJsonbSerializer.INSTANCE);
 
         module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dataTimeFormat));
         module.addDeserializer(LocalDate.class, new LocalDateDeserializer(dataFormat));
         module.addDeserializer(LocalTime.class, new LocalTimeDeserializer(timeFormat));
+        // TODO
+        module.addDeserializer(JSONB.class, JooqJsonbDeserializer.INSTANCE);
 
         defaultX.registerModule(module);
         DEFAULT = new Json(defaultX);
