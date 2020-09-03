@@ -1,5 +1,6 @@
 package cn.javaer.snippets.spring.autoconfigure.jackson;
 
+import cn.javaer.snippets.jackson.JooqJsonbDeserializer;
 import cn.javaer.snippets.jackson.JooqJsonbSerializer;
 import cn.javaer.snippets.jackson.Json;
 import cn.javaer.snippets.jackson.SnippetsJacksonIntrospector;
@@ -34,7 +35,7 @@ import java.time.format.DateTimeFormatter;
 @ConditionalOnClass({ObjectMapper.class})
 @AutoConfigureBefore(JacksonAutoConfiguration.class)
 @ConditionalOnProperty(prefix = "snippets.jackson", name = "enabled", havingValue = "true",
-        matchIfMissing = true)
+    matchIfMissing = true)
 @EnableConfigurationProperties(SnippetsJacksonProperties.class)
 public class SnippetsJacksonAutoConfiguration {
 
@@ -44,25 +45,25 @@ public class SnippetsJacksonAutoConfiguration {
             it.annotationIntrospector(SnippetsJacksonIntrospector.INSTANCE);
 
             final DateTimeFormatter dateTimeFormatter =
-                    DateTimeFormatter.ofPattern(snippetsJacksonProperties.getFormat().getDateTime());
+                DateTimeFormatter.ofPattern(snippetsJacksonProperties.getFormat().getDateTime());
             final DateTimeFormatter dateFormatter =
-                    DateTimeFormatter.ofPattern(snippetsJacksonProperties.getFormat().getDate());
+                DateTimeFormatter.ofPattern(snippetsJacksonProperties.getFormat().getDate());
             final DateTimeFormatter timeFormatter =
-                    DateTimeFormatter.ofPattern(snippetsJacksonProperties.getFormat().getTime());
+                DateTimeFormatter.ofPattern(snippetsJacksonProperties.getFormat().getTime());
 
             it.deserializerByType(LocalDateTime.class,
-                    new LocalDateTimeDeserializer(dateTimeFormatter));
+                new LocalDateTimeDeserializer(dateTimeFormatter));
             it.deserializerByType(LocalDate.class,
-                    new LocalDateDeserializer(dateFormatter));
+                new LocalDateDeserializer(dateFormatter));
             it.deserializerByType(LocalTime.class,
-                    new LocalTimeDeserializer(timeFormatter));
+                new LocalTimeDeserializer(timeFormatter));
 
             it.serializerByType(LocalDateTime.class,
-                    new LocalDateTimeSerializer(dateTimeFormatter));
+                new LocalDateTimeSerializer(dateTimeFormatter));
             it.serializerByType(LocalDate.class,
-                    new LocalDateSerializer(dateFormatter));
+                new LocalDateSerializer(dateFormatter));
             it.serializerByType(LocalTime.class,
-                    new LocalTimeSerializer(timeFormatter));
+                new LocalTimeSerializer(timeFormatter));
         };
     }
 
@@ -79,7 +80,10 @@ public class SnippetsJacksonAutoConfiguration {
     public static class JooqJacksonAutoConfiguration {
         @Bean
         public Jackson2ObjectMapperBuilderCustomizer snippetsJooqJacksonCustomizer() {
-            return it -> it.serializerByType(JSONB.class, JooqJsonbSerializer.INSTANCE);
+            return it -> {
+                it.serializerByType(JSONB.class, JooqJsonbSerializer.INSTANCE);
+                it.deserializerByType(JSONB.class, JooqJsonbDeserializer.INSTANCE);
+            };
         }
     }
 }
