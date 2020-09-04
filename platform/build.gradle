@@ -5,6 +5,7 @@ plugins {
 ext.datasourceDecoratorVersion = '1.6.2'
 ext.springdocVersion = '1.4.6'
 ext.simpleflatmapperVersion = '8.2.3'
+ext.testcontainersVersion = '1.15.0-rc1'
 
 dependencies {
     constraints {
@@ -32,6 +33,9 @@ dependencies {
         api 'com.esotericsoftware:kryo:5.0.0-RC9'
         api 'io.github.classgraph:classgraph:4.8.89'
         api 'p6spy:p6spy:3.9.1'
+
+        api "org.testcontainers:postgresql:${testcontainersVersion}"
+        api "org.testcontainers:junit-jupiter:${testcontainersVersion}"
     }
 }
 

@@ -43,8 +43,8 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     testImplementation 'com.h2database:h2'
-    testImplementation 'org.testcontainers:postgresql:1.15.0-rc1'
-    testImplementation 'org.testcontainers:junit-jupiter:1.15.0-rc1'
+    testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
