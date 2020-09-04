@@ -1,6 +1,7 @@
 package cn.javaer.snippets.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,41 @@ public interface MergeUtils {
                     srcPropSetter.accept(s, p);
                 }
             }
+        }
+        return src;
+    }
+
+    /**
+     * 合并 List, 当 props 属于 src 中对象的一个属性时，根据 id 匹配设置属性值。
+     *
+     * @param src 源 List
+     * @param props 属性 List
+     * @param srcPropSetter setter
+     * @param srcPropIdGetter getter
+     * @param propIdGetter getter
+     * @param <S> 源类型
+     * @param <P> 属性类型
+     * @param <ID> id 类型
+     *
+     * @return 源 List
+     */
+    static <S, P, ID> List<S> mergePropertyList(
+        final List<S> src, final List<P> props, final BiConsumer<S, List<P>> srcPropSetter,
+        final Function<S, ID[]> srcPropIdGetter, final Function<P, ID> propIdGetter) {
+
+        if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
+            return src;
+        }
+        for (final S s : src) {
+            final ID[] ids = srcPropIdGetter.apply(s);
+            final List<P> subProps = new ArrayList<>();
+            for (final P p : props) {
+                final ID pId = propIdGetter.apply(p);
+                if (ids != null && Arrays.asList(ids).contains(pId)) {
+                    subProps.add(p);
+                }
+            }
+            srcPropSetter.accept(s, subProps);
         }
         return src;
     }
