@@ -15,6 +15,7 @@
 * 使用 `Geometry` 简单支持了几何对象
 * 使用 `JsonbField` 扩展 PostgreSQL 的 JSONB 支持
 * 使用 `SimpleJooqJdbcRepository` 将 jOOQ 和 Spring Data JDBC 集成
+* `@DataJooqJdbcTest` JooqJdbcRepository 测试支持
 
 ## jackson
 * 使用 `cn.javaer.snippets.jackson.Json` 便捷的 JSON 工具
