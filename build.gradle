@@ -7,44 +7,42 @@ plugins {
     id "com.github.ben-manes.versions" version "0.29.0"
     id 'org.springframework.boot' version '2.3.3.RELEASE' apply false
 }
-apply plugin: 'io.spring.dependency-management'
+//apply plugin: 'io.spring.dependency-management'
 
 allprojects {
     group 'cn.javaer.snippets'
     version '1.0-SNAPSHOT'
     sourceCompatibility = '1.8'
 }
-java {
-    registerFeature('optional') {
-        usingSourceSet(sourceSets.main)
-    }
-}
 
 dependencies {
+    api platform(project(':platform'))
+    api platform(SpringBootPlugin.BOM_COORDINATES)
 
-    optionalApi 'org.springframework.boot:spring-boot-starter-web'
-    optionalApi 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    optionalApi 'org.springframework.boot:spring-boot-starter-jooq'
-    optionalApi 'org.springframework.boot:spring-boot-starter-validation'
-    optionalApi 'org.springframework.boot:spring-boot-starter-security'
-    optionalApi 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-test'
 
-    optionalApi 'org.simpleflatmapper:sfm-jooq:8.2.3'
-    optionalApi 'org.eclipse.collections:eclipse-collections:10.4.0'
-    optionalApi 'com.esotericsoftware:kryo:5.0.0-RC9'
-    optionalApi 'io.github.classgraph:classgraph:4.8.89'
-    optionalApi 'org.springdoc:springdoc-openapi-webmvc-core:1.4.6'
-    optionalApi 'org.jooq:jooq-codegen:3.13.4'
-    optionalApi 'p6spy:p6spy:3.9.1'
+    implementation 'org.jooq:jooq-codegen'
 
-    optionalApi 'org.postgresql:postgresql'
+    implementation 'org.simpleflatmapper:sfm-jooq'
+    implementation 'org.eclipse.collections:eclipse-collections'
+    implementation 'com.esotericsoftware:kryo'
+    implementation 'io.github.classgraph:classgraph'
+    implementation 'org.springdoc:springdoc-openapi-webmvc-core'
+    implementation 'p6spy:p6spy'
+
+    implementation 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
-    annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.3.3.RELEASE'
 
     testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     testImplementation 'com.h2database:h2'
     testImplementation 'org.testcontainers:postgresql:1.15.0-rc1'
     testImplementation 'org.testcontainers:junit-jupiter:1.15.0-rc1'
@@ -53,17 +51,17 @@ dependencies {
     }
 }
 
-dependencyManagement {
-    imports {
-        mavenBom SpringBootPlugin.BOM_COORDINATES
-    }
-}
+//dependencyManagement {
+//    imports {
+//        mavenBom SpringBootPlugin.BOM_COORDINATES
+//    }
+//}
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
+//configurations {
+//    compileOnly {
+//        extendsFrom annotationProcessor
+//    }
+//}
 
 repositories {
     mavenCentral()
