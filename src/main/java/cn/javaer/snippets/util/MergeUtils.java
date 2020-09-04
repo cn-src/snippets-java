@@ -9,11 +9,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * 映射转换工具类。
+ * 合并转换工具类。
  *
  * @author cn-src
  */
-public interface MappingUtils {
+public interface MergeUtils {
 
     /**
      * 一对多合并转换，以唯一 Key 为基准，将对象中部分数据合并转换成对象的 Map 属性。

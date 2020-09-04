@@ -2,7 +2,7 @@ package cn.javaer.snippets.model;
 
 import cn.javaer.snippets.model.pojo.Product;
 import cn.javaer.snippets.model.pojo.Product2;
-import cn.javaer.snippets.util.MappingUtils;
+import cn.javaer.snippets.util.MergeUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -25,7 +25,7 @@ class MappingUtilsTest {
             new Product(2L, "n1", "c1-2", "c2-2", 2L),
             new Product(3L, "n1", "c1-1", "c2-2", 2L)
         );
-        final List<Product2> results = MappingUtils.mergePropertyToMap(
+        final List<Product2> results = MergeUtils.mergePropertyToMap(
             products,
             Product::getId,
             Product2::getId,
@@ -71,7 +71,7 @@ class MappingUtilsTest {
             new Product(3L, "n1", "c1-1", "c2-2", 2L)
         );
 
-        final List<Product> results = MappingUtils.mergePropertyToMap(
+        final List<Product> results = MergeUtils.mergePropertyToMap(
             products,
             Product::getId,
             Product::getDynamicData,
