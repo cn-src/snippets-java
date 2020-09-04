@@ -3,15 +3,8 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 plugins {
     id 'java-library'
     id 'jacoco'
-    id 'maven-publish'
     id "com.github.ben-manes.versions" version "0.29.0"
     id 'org.springframework.boot' version '2.3.3.RELEASE' apply false
-}
-
-allprojects {
-    group 'cn.javaer.snippets'
-    version '1.0-SNAPSHOT'
-    sourceCompatibility = '1.8'
 }
 
 java {
@@ -72,20 +65,27 @@ jacocoTestReport {
         html.enabled false
     }
 }
+allprojects {
+    apply plugin: 'maven-publish'
 
+    group 'cn.javaer.snippets'
+    version '1.0-SNAPSHOT'
+    sourceCompatibility = '1.8'
+    publishing {
+        repositories {
+            maven {
+                def releasesRepoUrl = "$buildDir/repos/releases"
+                def snapshotsRepoUrl = "$buildDir/repos/snapshots"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            }
+        }
+    }
+}
 publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = 'com.github.cn-src'
             from components.java
-        }
-
-    }
-    repositories {
-        maven {
-            def releasesRepoUrl = "$buildDir/repos/releases"
-            def snapshotsRepoUrl = "$buildDir/repos/snapshots"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
         }
     }
 }
