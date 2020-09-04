@@ -9,6 +9,7 @@ ext.simpleflatmapperVersion = '8.2.3'
 
 dependencies {
     constraints {
+        api "${group}:snippets-java:${version}"
         api "com.github.gavlyukovskiy:p6spy-spring-boot-starter:${datasourceDecoratorVersion}"
         api "com.github.gavlyukovskiy:flexy-pool-spring-boot-starter:${datasourceDecoratorVersion}"
 
