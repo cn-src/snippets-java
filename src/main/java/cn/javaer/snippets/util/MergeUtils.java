@@ -16,6 +16,39 @@ import java.util.function.Function;
 public interface MergeUtils {
 
     /**
+     * 合并 List, 当 props 属于 src 中对象的一个属性时，根据 id 匹配设置属性值。
+     *
+     * @param src 源 List
+     * @param props 属性 List
+     * @param srcPropSetter setter
+     * @param srcPropIdGetter getter
+     * @param propIdGetter getter
+     * @param <S> 源类型
+     * @param <P> 属性类型
+     * @param <ID> id 类型
+     *
+     * @return 源 List
+     */
+    static <S, P, ID> List<S> mergeProperty(
+        final List<S> src, final List<P> props, final BiConsumer<S, P> srcPropSetter,
+        final Function<S, ID> srcPropIdGetter, final Function<P, ID> propIdGetter) {
+
+        if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
+            return src;
+        }
+        for (final P p : props) {
+            final ID pId = propIdGetter.apply(p);
+            for (final S s : src) {
+                final ID sId = srcPropIdGetter.apply(s);
+                if (sId != null && sId.equals(pId)) {
+                    srcPropSetter.accept(s, p);
+                }
+            }
+        }
+        return src;
+    }
+
+    /**
      * 一对多合并转换，以唯一 Key 为基准，将对象中部分数据合并转换成对象的 Map 属性。
      *
      * 合并以 uKeyGetter 获取的对象进行比较。源对象和目标对象是同一类型。

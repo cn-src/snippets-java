@@ -1,20 +1,48 @@
-package cn.javaer.snippets.model;
+package cn.javaer.snippets.util;
 
-import cn.javaer.snippets.model.pojo.Product;
-import cn.javaer.snippets.model.pojo.Product2;
-import cn.javaer.snippets.util.MergeUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 /**
  * @author cn-src
  */
-class MappingUtilsTest {
+class MergeUtilsTest {
     ObjectMapper objectMapper = new ObjectMapper();
+
+    @Test
+    void mergeProperty() {
+        final List<Demo> demos = Arrays.asList(
+            new Demo("p0", null, null),
+            new Demo("p1", 1L, null),
+            new Demo("p2", 1L, null),
+            new Demo("p3", 2L, null));
+
+        final Prop p1 = new Prop(1L, "n1");
+        final Prop p2 = new Prop(2L, "n2");
+        final List<Prop> props = Arrays.asList(p1, p2);
+
+        final List<Demo> result = MergeUtils.mergeProperty(demos, props, Demo::setDemoProp,
+            Demo::getDemoPropId, Prop::getId);
+
+        assertThat(result).extracting(Demo::getProp1, Demo::getDemoProp)
+            .contains(
+                tuple("p0", null),
+                tuple("p1", p1),
+                tuple("p2", p1),
+                tuple("p3", p2)
+            );
+    }
 
     @Test
     void toOneToManyMap() throws Exception {
@@ -112,5 +140,39 @@ class MappingUtilsTest {
             "  }\n" +
             "}\n" +
             "]", this.objectMapper.writeValueAsString(results), false);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Demo {
+        String prop1;
+        Long demoPropId;
+        Prop demoProp;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Prop {
+        Long id;
+        String name;
+    }
+
+    @Data
+    @FieldNameConstants
+    static class Product {
+        final Long id;
+        final String name;
+        final String category1;
+        final String category2;
+        final Long count;
+        Map<String, Long> dynamicData;
+    }
+
+    @Data
+    @FieldNameConstants
+    static class Product2 {
+        final Long id;
+        final String name;
+        Map<String, Long> dynamicData;
     }
 }
