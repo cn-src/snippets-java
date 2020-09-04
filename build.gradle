@@ -9,10 +9,11 @@ plugins {
 }
 apply plugin: 'io.spring.dependency-management'
 
-group 'cn.javaer.snippets'
-version '1.0-SNAPSHOT'
-sourceCompatibility = '1.8'
-
+allprojects {
+    group 'cn.javaer.snippets'
+    version '1.0-SNAPSHOT'
+    sourceCompatibility = '1.8'
+}
 java {
     registerFeature('optional') {
         usingSourceSet(sourceSets.main)

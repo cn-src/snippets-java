@@ -1,0 +1,52 @@
+plugins {
+    id 'java-platform'
+    id 'maven-publish'
+}
+
+ext.datasourceDecoratorVersion = '1.6.2'
+ext.springdocVersion = '1.4.6'
+ext.simpleflatmapperVersion = '8.2.3'
+
+dependencies {
+    constraints {
+        api "com.github.gavlyukovskiy:p6spy-spring-boot-starter:${datasourceDecoratorVersion}"
+        api "com.github.gavlyukovskiy:flexy-pool-spring-boot-starter:${datasourceDecoratorVersion}"
+
+        api "org.springdoc:springdoc-openapi-ui:${springdocVersion}"
+        api "org.springdoc:springdoc-openapi-webmvc-core:${springdocVersion}"
+        api "org.springdoc:springdoc-openapi-security:${springdocVersion}"
+
+        api "org.simpleflatmapper:sfm-jooq:${simpleflatmapperVersion}"
+        api "org.simpleflatmapper:sfm-csv:${simpleflatmapperVersion}"
+
+        api 'org.ehcache:ehcache:3.9.0'
+        api 'com.fasterxml.jackson.datatype:jackson-datatype-eclipse-collections:2.11.2'
+        api 'com.google.guava:guava:29.0-jre'
+        api 'io.github.classgraph:classgraph:4.8.89'
+        api 'com.esotericsoftware:kryo:5.0.0-RC9'
+        api 'org.apache.commons:commons-collections4:4.4'
+        api 'org.apache.commons:commons-lang3:3.11'
+        api 'commons-io:commons-io:2.7'
+        api 'com.alibaba:easyexcel:2.2.6'
+        api 'org.eclipse.collections:eclipse-collections:10.4.0'
+        api 'com.esotericsoftware:kryo:5.0.0-RC9'
+        api 'io.github.classgraph:classgraph:4.8.89'
+        api 'p6spy:p6spy:3.9.1'
+    }
+}
+
+publishing {
+    publications {
+        mavenPlatform(MavenPublication) {
+            artifactId = 'snippets-platform'
+            from components.javaPlatform
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "$buildDir/repos/releases"
+            def snapshotsRepoUrl = "$buildDir/repos/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
+}

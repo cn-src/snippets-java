@@ -1,2 +1,3 @@
 rootProject.name = 'snippets-java'
+include 'platform'
 
