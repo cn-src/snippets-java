@@ -4,6 +4,7 @@ import cn.javaer.snippets.spring.data.jooq.QueryStep;
 import org.jooq.Condition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import java.util.Optional;
 /**
  * @author cn-src
  */
+@NoRepositoryBean
 public interface JooqJdbcStepExecutor<T> {
 
     /**

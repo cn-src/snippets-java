@@ -2,6 +2,7 @@ package cn.javaer.snippets.spring.data.jooq.jdbc;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
  *
  * @author cn-src
  */
+@NoRepositoryBean
 public interface JooqJdbcAuditableExecutor<T, ID> {
 
     /**
