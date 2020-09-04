@@ -9,3 +9,12 @@ cn.javaer.snippets.spring.autoconfigure.exception.ExceptionAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.springdoc.SpringDocAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.data.domain.PageableAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.task.SnippetsTaskExecutionAutoConfiguration
+# AutoConfigureDataJooqJdbc auto-configuration imports
+cn.javaer.snippets.test.spring.autoconfigure.data.jooq.jdbc.AutoConfigureDataJooqJdbc=\
+cn.javaer.snippets.spring.autoconfigure.data.jooq.jdbc.JooqJdbcRepositoriesAutoConfiguration,\
+org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration,\
+org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,\
+org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,\
+org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration,\
+org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration,\
+org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration
