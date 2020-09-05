@@ -34,6 +34,15 @@
 * `TreeNode` 支持树状结构，主要用于 UI 的树结构相关组件
 * 支持与 POJO 的互相转换
 
+## 组合模型
+> 如果遵循严格的不可变对象设计，但有时候需要附加属性或对象时。
+> 组合模型可以存放对象和附加属性或对象，在 JSON 序列化时如同序列化成一个对象。
+
+* `Assembler` 组合对象
+* `DynamicAssembler` 组合动态对象
+* `Creator` 添加 `createdBy` 属性对象
+* `Auditor` 添加 `updatedBy` `createdBy` 属性对象
+
 ## p6spy SQL日志扩展
 * p6spy 是驱动级别的统一输出 SQL 日志，无论你混合使用何种基于 JDBC 的框架
 * p6spy 可输出填充 SQL 参数的 SQL 日志
