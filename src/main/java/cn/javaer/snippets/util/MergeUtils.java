@@ -1,6 +1,8 @@
 package cn.javaer.snippets.util;
 
 import cn.javaer.snippets.model.Assemblers;
+import cn.javaer.snippets.model.Auditor;
+import cn.javaer.snippets.model.Creator;
 import cn.javaer.snippets.model.DynamicAssembler;
 import cn.javaer.snippets.util.function.Function3;
 
@@ -87,6 +89,35 @@ public interface MergeUtils {
                     result.add(resultFun.apply(s, p));
                 }
             }
+        }
+        return result;
+    }
+
+    static <R, S, P, ID> List<R> mergeProperty(
+        final List<S> src, final Function<S, ID> srcPropIdGetter,
+        final Function3<S, P, P, R> resultFun,
+        final List<P> props,
+        final Function<P, ID> prop1IdGetter, final Function<P, ID> prop2IdGetter) {
+
+        if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
+            return Collections.emptyList();
+        }
+        final List<R> result = new ArrayList<>(src.size());
+        for (final S s : src) {
+            final ID sId = srcPropIdGetter.apply(s);
+            P usedP1 = null;
+            P usedP2 = null;
+            for (final P p : props) {
+                final ID p1Id = prop1IdGetter.apply(p);
+                if (sId != null && sId.equals(p1Id)) {
+                    usedP1 = p;
+                }
+                final ID p2Id = prop2IdGetter.apply(p);
+                if (sId != null && sId.equals(p2Id)) {
+                    usedP2 = p;
+                }
+            }
+            result.add(resultFun.apply(s, usedP1, usedP2));
         }
         return result;
     }
@@ -218,6 +249,22 @@ public interface MergeUtils {
         return mergePropertyList(src, srcPropIdGetter, (s, ps) -> {
             return Assemblers.ofDynamic(s, propName, ps);
         }, props, propIdGetter);
+    }
+
+    static <S, P, ID> List<Creator<S, P>> mergeToCreator(
+        final List<S> src, final Function<S, ID> srcPropIdGetter,
+        final List<P> props, final Function<P, ID> propIdGetter) {
+        return mergeProperty(src, srcPropIdGetter, (BiFunction<S, P, Creator<S, P>>) Creator::of,
+            props,
+            propIdGetter);
+    }
+
+    static <R, S, P, ID> List<Auditor<S, P>> mergeToAuditor(
+        final List<S> src, final Function<S, ID> srcPropIdGetter,
+        final List<P> props,
+        final Function<P, ID> prop1IdGetter, final Function<P, ID> prop2IdGetter) {
+        return mergeProperty(src, srcPropIdGetter, Auditor::of, props, prop1IdGetter,
+            prop2IdGetter);
     }
 
     /**
