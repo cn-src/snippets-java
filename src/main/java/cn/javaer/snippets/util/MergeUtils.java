@@ -2,6 +2,7 @@ package cn.javaer.snippets.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public interface MergeUtils {
      *
      * @param src 源 List
      * @param props 属性 List
-     * @param srcPropSetter setter
+     * @param srcPropSetter srcPropSetter
      * @param srcPropIdGetter getter
      * @param propIdGetter getter
      * @param <S> 源类型
@@ -47,6 +48,41 @@ public interface MergeUtils {
             }
         }
         return src;
+    }
+
+    /**
+     * 合并 List, 当 props 属于 src 中对象的一个属性时，根据 id 匹配设置属性值。
+     *
+     * @param src 源 List
+     * @param props 属性 List
+     * @param resultFun resultFun
+     * @param srcPropIdGetter getter
+     * @param propIdGetter getter
+     * @param <S> 源类型
+     * @param <P> 属性类型
+     * @param <ID> id 类型
+     *
+     * @return 源 List
+     */
+    static <R, S, P, ID> List<R> mergePropertyToBean(
+        final List<S> src, final List<P> props,
+        final BiFunction<S, P, R> resultFun,
+        final Function<S, ID> srcPropIdGetter, final Function<P, ID> propIdGetter) {
+
+        if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
+            return Collections.emptyList();
+        }
+        final List<R> result = new ArrayList<>(src.size());
+        for (final P p : props) {
+            final ID pId = propIdGetter.apply(p);
+            for (final S s : src) {
+                final ID sId = srcPropIdGetter.apply(s);
+                if (sId != null && sId.equals(pId)) {
+                    result.add(resultFun.apply(s, p));
+                }
+            }
+        }
+        return result;
     }
 
     /**
