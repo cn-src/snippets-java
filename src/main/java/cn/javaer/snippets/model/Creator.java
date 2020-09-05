@@ -2,6 +2,7 @@ package cn.javaer.snippets.model;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Value;
+import org.springframework.data.annotation.Immutable;
 
 /**
  * 适用于需要展示创建者信息，不支持反序列化.
@@ -9,6 +10,7 @@ import lombok.Value;
  * @author cn-src
  */
 @Value
+@Immutable
 public class Creator<T, C> {
     @JsonUnwrapped
     T unwrapped;

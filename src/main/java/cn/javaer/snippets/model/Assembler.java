@@ -2,11 +2,13 @@ package cn.javaer.snippets.model;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Value;
+import org.springframework.data.annotation.Immutable;
 
 /**
  * @author cn-src
  */
 @Value
+@Immutable
 public class Assembler<T1, T2> {
     @JsonUnwrapped
     T1 unwrapped1;
