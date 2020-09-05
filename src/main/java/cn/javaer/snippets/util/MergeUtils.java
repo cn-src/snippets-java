@@ -64,7 +64,7 @@ public interface MergeUtils {
      *
      * @return 源 List
      */
-    static <R, S, P, ID> List<R> mergePropertyToBean(
+    static <R, S, P, ID> List<R> mergeProperty(
         final List<S> src, final List<P> props,
         final BiFunction<S, P, R> resultFun,
         final Function<S, ID> srcPropIdGetter, final Function<P, ID> propIdGetter) {
