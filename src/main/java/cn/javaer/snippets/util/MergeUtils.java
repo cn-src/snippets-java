@@ -1,5 +1,7 @@
 package cn.javaer.snippets.util;
 
+import cn.javaer.snippets.util.function.Function3;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,8 +34,9 @@ public interface MergeUtils {
      * @return 源 List
      */
     static <S, P, ID> List<S> mergeProperty(
-        final List<S> src, final List<P> props, final BiConsumer<S, P> srcPropSetter,
-        final Function<S, ID> srcPropIdGetter, final Function<P, ID> propIdGetter) {
+        final List<S> src, final Function<S, ID> srcPropIdGetter,
+        final BiConsumer<S, P> srcPropSetter,
+        final List<P> props, final Function<P, ID> propIdGetter) {
 
         if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
             return src;
@@ -54,9 +57,9 @@ public interface MergeUtils {
      * 合并 List, 当 props 属于 src 中对象的一个属性时，根据 id 匹配设置属性值。
      *
      * @param src 源 List
-     * @param props 属性 List
-     * @param resultFun resultFun
      * @param srcPropIdGetter getter
+     * @param resultFun resultFun
+     * @param props 属性 List
      * @param propIdGetter getter
      * @param <S> 源类型
      * @param <P> 属性类型
@@ -65,9 +68,9 @@ public interface MergeUtils {
      * @return 源 List
      */
     static <R, S, P, ID> List<R> mergeProperty(
-        final List<S> src, final List<P> props,
+        final List<S> src, final Function<S, ID> srcPropIdGetter,
         final BiFunction<S, P, R> resultFun,
-        final Function<S, ID> srcPropIdGetter, final Function<P, ID> propIdGetter) {
+        final List<P> props, final Function<P, ID> propIdGetter) {
 
         if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
             return Collections.emptyList();
@@ -81,6 +84,59 @@ public interface MergeUtils {
                     result.add(resultFun.apply(s, p));
                 }
             }
+        }
+        return result;
+    }
+
+    /**
+     * 合并 List, 当 props 属于 src 中对象的一个属性时，根据 id 匹配设置属性值。
+     *
+     * @param src 源 List
+     * @param srcPropIdGetter getter
+     * @param resultFun resultFun
+     * @param props1 属性1 List
+     * @param prop1IdGetter getter
+     * @param props2 属性2 List
+     * @param prop2IdGetter getter
+     * @param <S> 源类型
+     * @param <P1> 属性类型
+     * @param <P2> 属性类型
+     * @param <ID> id 类型
+     *
+     * @return 源 List
+     */
+    static <R, S, P1, P2, ID> List<R> mergeProperty(
+        final List<S> src, final Function<S, ID> srcPropIdGetter,
+        final Function3<S, P1, P2, R> resultFun,
+        final List<P1> props1, final Function<P1, ID> prop1IdGetter,
+        final List<P2> props2, final Function<P2, ID> prop2IdGetter) {
+
+        if (src == null || src.isEmpty()) {
+            return Collections.emptyList();
+        }
+        final List<R> result = new ArrayList<>(src.size());
+        for (final S s : src) {
+            final ID sId = srcPropIdGetter.apply(s);
+
+            P1 usedP1 = null;
+            if (props1 != null) {
+                for (final P1 p1 : props1) {
+                    final ID pId = prop1IdGetter.apply(p1);
+                    if (sId != null && sId.equals(pId)) {
+                        usedP1 = p1;
+                    }
+                }
+            }
+            P2 usedP2 = null;
+            if (props2 != null) {
+                for (final P2 p2 : props2) {
+                    final ID pId = prop2IdGetter.apply(p2);
+                    if (sId != null && sId.equals(pId)) {
+                        usedP2 = p2;
+                    }
+                }
+            }
+            result.add(resultFun.apply(s, usedP1, usedP2));
         }
         return result;
     }

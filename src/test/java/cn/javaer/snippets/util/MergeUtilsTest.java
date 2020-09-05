@@ -32,8 +32,9 @@ class MergeUtilsTest {
         final Prop p2 = new Prop(2L, "n2");
         final List<Prop> props = Arrays.asList(p1, p2);
 
-        final List<Demo> result = MergeUtils.mergeProperty(demos, props, Demo::setDemoProp,
-            Demo::getDemoPropId, Prop::getId);
+        final List<Demo> result = MergeUtils.mergeProperty(
+            demos, Demo::getDemoPropId, Demo::setDemoProp,
+            props, Prop::getId);
 
         assertThat(result).extracting(Demo::getProp1, Demo::getDemoProp)
             .contains(
