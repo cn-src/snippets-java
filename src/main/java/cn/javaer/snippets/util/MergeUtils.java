@@ -62,6 +62,7 @@ public interface MergeUtils {
      * @param props 属性 List
      * @param propIdGetter getter
      * @param <S> 源类型
+     * @param <R> 返回类型
      * @param <P> 属性类型
      * @param <ID> id 类型
      *
@@ -99,6 +100,7 @@ public interface MergeUtils {
      * @param props2 属性2 List
      * @param prop2IdGetter getter
      * @param <S> 源类型
+     * @param <R> 返回类型
      * @param <P1> 属性类型
      * @param <P2> 属性类型
      * @param <ID> id 类型
