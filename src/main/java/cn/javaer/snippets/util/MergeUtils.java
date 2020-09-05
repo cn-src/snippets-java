@@ -1,5 +1,7 @@
 package cn.javaer.snippets.util;
 
+import cn.javaer.snippets.model.Assemblers;
+import cn.javaer.snippets.model.DynamicAssembler;
 import cn.javaer.snippets.util.function.Function3;
 
 import java.util.ArrayList;
@@ -177,6 +179,45 @@ public interface MergeUtils {
             srcPropSetter.accept(s, subProps);
         }
         return src;
+    }
+
+    static <R, S, P, ID> List<R> mergePropertyList(
+        final List<S> src, final Function<S, ID[]> srcPropIdGetter,
+        final BiFunction<S, List<P>, R> srcPropSetter,
+        final List<P> props, final Function<P, ID> propIdGetter) {
+
+        if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
+            return Collections.emptyList();
+        }
+        final List<R> result = new ArrayList<>(src.size());
+        for (final S s : src) {
+            final ID[] ids = srcPropIdGetter.apply(s);
+            final List<P> subProps = new ArrayList<>();
+            for (final P p : props) {
+                final ID pId = propIdGetter.apply(p);
+                if (ids != null && Arrays.asList(ids).contains(pId)) {
+                    subProps.add(p);
+                }
+            }
+            result.add(srcPropSetter.apply(s, subProps));
+        }
+        return result;
+    }
+
+    static <S, P, ID> List<DynamicAssembler<S, P>> mergeToAssembler(
+        final List<S> src, final Function<S, ID> srcPropIdGetter,
+        final String propName, final List<P> props, final Function<P, ID> propIdGetter) {
+        return mergeProperty(src, srcPropIdGetter, (s, p) -> {
+            return Assemblers.ofDynamic(s, propName, p);
+        }, props, propIdGetter);
+    }
+
+    static <S, P, ID> List<DynamicAssembler<S, List<P>>> mergeToAssemblerList(
+        final List<S> src, final Function<S, ID[]> srcPropIdGetter,
+        final String propName, final List<P> props, final Function<P, ID> propIdGetter) {
+        return mergePropertyList(src, srcPropIdGetter, (s, ps) -> {
+            return Assemblers.ofDynamic(s, propName, ps);
+        }, props, propIdGetter);
     }
 
     /**
