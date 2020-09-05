@@ -7,20 +7,20 @@ import lombok.Value;
  * @author cn-src
  */
 @Value
-public class Auditor<T, U, C> {
+public class Auditor<T, U> {
     @JsonUnwrapped
     T unwrapped;
     U updatedBy;
-    C createdBy;
+    U createdBy;
 
-    Auditor(final T unwrapped, final U updatedBy, final C createdBy) {
+    Auditor(final T unwrapped, final U updatedBy, final U createdBy) {
         this.unwrapped = unwrapped;
         this.updatedBy = updatedBy;
         this.createdBy = createdBy;
     }
 
-    public static <T, U, C> Auditor<T, U, C>
-    of(final T unwrapped, final U updatedBy, final C createdBy) {
+    public static <T, U> Auditor<T, U>
+    of(final T unwrapped, final U updatedBy, final U createdBy) {
         return new Auditor<>(unwrapped, updatedBy, createdBy);
     }
 }
