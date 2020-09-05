@@ -158,8 +158,9 @@ public interface MergeUtils {
      * @return 源 List
      */
     static <S, P, ID> List<S> mergePropertyList(
-        final List<S> src, final List<P> props, final BiConsumer<S, List<P>> srcPropSetter,
-        final Function<S, ID[]> srcPropIdGetter, final Function<P, ID> propIdGetter) {
+        final List<S> src, final Function<S, ID[]> srcPropIdGetter,
+        final BiConsumer<S, List<P>> srcPropSetter,
+        final List<P> props, final Function<P, ID> propIdGetter) {
 
         if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
             return src;
