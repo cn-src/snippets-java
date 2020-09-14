@@ -108,7 +108,7 @@ public class PGDSL extends PostgresDSL {
     }
 
     @Support(SQLDialect.POSTGRES)
-    public static Field<String> stAsGeoJSON(final Field<Geometry> geom) {
+    public static Field<String> stAsGeoJson(final Field<Geometry> geom) {
         return DSL.function("ST_AsGeoJSON", SQLDataType.LONGVARCHAR, geom);
     }
 }

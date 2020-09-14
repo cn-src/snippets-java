@@ -29,7 +29,7 @@ class PGDSLTest {
 
     @Test
     void stAsGeoJSON() {
-        final Field<String> stAsGeoJSON = PGDSL.stAsGeoJSON(DSL.field("geom", PGDSL.GEOMETRY_TYPE));
+        final Field<String> stAsGeoJSON = PGDSL.stAsGeoJson(DSL.field("geom", PGDSL.GEOMETRY_TYPE));
         assertThat(this.dsl.renderInlined(stAsGeoJSON))
             .isEqualTo("ST_AsGeoJSON(geom)");
     }
