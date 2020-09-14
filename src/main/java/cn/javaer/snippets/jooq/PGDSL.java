@@ -40,7 +40,7 @@ public class PGDSL extends PostgresDSL {
     }
 
     @Support(SQLDialect.POSTGRES)
-    public static Condition containsJsonb(final Field<JSONB> jsonField, final String jsonKey,
+    public static Condition jsonbContains(final Field<JSONB> jsonField, final String jsonKey,
                                           final Object jsonValue) {
         final String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
@@ -48,7 +48,7 @@ public class PGDSL extends PostgresDSL {
     }
 
     @Support(SQLDialect.POSTGRES)
-    public static Condition containsJsonb(final Field<JSONB> jsonField, final JSONB jsonb) {
+    public static Condition jsonbContains(final Field<JSONB> jsonField, final JSONB jsonb) {
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
             DSL.val(jsonb, jsonField.getDataType()));
     }

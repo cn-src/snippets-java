@@ -157,7 +157,7 @@ public class ConditionCreator {
                     }
                     else if (ann instanceof ConditionContains) {
                         if (JSONB.class.equals(info.readMethod.getReturnType())) {
-                            conditions.add(PGDSL.containsJsonb(column, (JSONB) value));
+                            conditions.add(PGDSL.jsonbContains(column, (JSONB) value));
                         }
                         else {
                             conditions.add(column.contains(value));
