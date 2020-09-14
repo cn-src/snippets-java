@@ -3,7 +3,7 @@ package cn.javaer.snippets.jooq.condition;
 import cn.javaer.snippets.jooq.PGDSL;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionBetweenMax;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionBetweenMin;
-import cn.javaer.snippets.jooq.condition.annotation.ConditionContained;
+import cn.javaer.snippets.jooq.condition.annotation.ConditionContainedIn;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionContains;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionEqual;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionGreaterOrEqual;
@@ -163,7 +163,7 @@ public class ConditionCreator {
                             conditions.add(column.contains(value));
                         }
                     }
-                    else if (ann instanceof ConditionContained
+                    else if (ann instanceof ConditionContainedIn
                         && String[].class.equals(info.readMethod.getReturnType())) {
                         conditions.add(PGDSL.containedIn(column, (String[]) value));
                     }

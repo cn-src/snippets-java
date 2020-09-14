@@ -2,7 +2,7 @@ package cn.javaer.snippets.jooq.condition;
 
 import cn.javaer.snippets.jooq.condition.annotation.ConditionBetweenMax;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionBetweenMin;
-import cn.javaer.snippets.jooq.condition.annotation.ConditionContained;
+import cn.javaer.snippets.jooq.condition.annotation.ConditionContainedIn;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionContains;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionEqual;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionGreaterOrEqual;
@@ -34,7 +34,7 @@ public class QueryFull {
     @ConditionContains
     private JSONB jsonb1;
 
-    @ConditionContained
+    @ConditionContainedIn
     private String[] str4;
 
     @ConditionLessThan
