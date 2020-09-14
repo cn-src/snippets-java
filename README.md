@@ -11,7 +11,7 @@
 ## jOOQ 扩展
 * 使用 `ConditionBuilder` 可动态构建 where 条件
 * 使用 `ConditionCreator` 和 `@Condition` 系列注解可构建样例查询
-* 使用 `cn.javaer.snippets.jooq.SQL` 扩展支持了 PostgreSQL 相关函数
+* 使用 `cn.javaer.snippets.jooq.PGDSL` 扩展支持了 PostgreSQL 相关函数
 * 使用 `Geometry` 简单支持了几何对象
 * 使用 `JsonbField` 扩展 PostgreSQL 的 JSONB 支持
 * 使用 `SimpleJooqJdbcRepository` 将 jOOQ 和 Spring Data JDBC 集成
