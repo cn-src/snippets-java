@@ -13,6 +13,7 @@ import org.jooq.Support;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.tools.json.JSONValue;
+import org.jooq.util.postgres.PostgresDSL;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -21,21 +22,21 @@ import java.util.Collections;
 /**
  * @author cn-src
  */
-public class SQL {
+public class PGDSL extends PostgresDSL {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static DataType<Geometry> GEOMETRY_TYPE =
-            SQLDataType.OTHER.asConvertedDataType((Converter) PostGISGeometryConverter.INSTANCE);
+        SQLDataType.OTHER.asConvertedDataType((Converter) PostGISGeometryConverter.INSTANCE);
 
-    private SQL() {
+    protected PGDSL() {
     }
 
     /**
      * 被包含，操作符: <@
      */
     @Support(SQLDialect.POSTGRES)
-    public static <T> Condition containedBy(final Field<T> field, final T value) {
+    public static <T> Condition containedIn(final Field<T> field, final T value) {
         return DSL.condition("{0} <@ {1}", field,
-                DSL.val(value, field.getDataType()));
+            DSL.val(value, field.getDataType()));
     }
 
     @Support(SQLDialect.POSTGRES)
@@ -43,13 +44,13 @@ public class SQL {
                                           final Object jsonValue) {
         final String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
-                DSL.val(json, jsonField.getDataType()));
+            DSL.val(json, jsonField.getDataType()));
     }
 
     @Support(SQLDialect.POSTGRES)
     public static Condition containsJsonb(final Field<JSONB> jsonField, final JSONB jsonb) {
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
-                DSL.val(jsonb, jsonField.getDataType()));
+            DSL.val(jsonb, jsonField.getDataType()));
     }
 
     @Support(SQLDialect.POSTGRES)
@@ -64,8 +65,8 @@ public class SQL {
                                                            final Field<?> valueField) {
 
         final Field<?> field =
-                Arrays.stream(keyFields).reduce((f1, f2) -> f1.concat(DSL.inline(keySeparator),
-                        f2)).orElse(null);
+            Arrays.stream(keyFields).reduce((f1, f2) -> f1.concat(DSL.inline(keySeparator),
+                f2)).orElse(null);
         return new JsonbField<>("jsonb_object_agg", SQLDataType.JSONB, field, valueField);
     }
 

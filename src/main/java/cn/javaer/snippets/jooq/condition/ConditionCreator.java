@@ -1,6 +1,6 @@
 package cn.javaer.snippets.jooq.condition;
 
-import cn.javaer.snippets.jooq.SQL;
+import cn.javaer.snippets.jooq.PGDSL;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionBetweenMax;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionBetweenMin;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionContained;
@@ -157,7 +157,7 @@ public class ConditionCreator {
                     }
                     else if (ann instanceof ConditionContains) {
                         if (JSONB.class.equals(info.readMethod.getReturnType())) {
-                            conditions.add(SQL.containsJsonb(column, (JSONB) value));
+                            conditions.add(PGDSL.containsJsonb(column, (JSONB) value));
                         }
                         else {
                             conditions.add(column.contains(value));
@@ -165,7 +165,7 @@ public class ConditionCreator {
                     }
                     else if (ann instanceof ConditionContained
                         && String[].class.equals(info.readMethod.getReturnType())) {
-                        conditions.add(SQL.containedBy(column, (String[]) value));
+                        conditions.add(PGDSL.containedIn(column, (String[]) value));
                     }
                     else if (ann instanceof ConditionBetweenMin) {
                         final ConditionBetweenMin betweenMin = (ConditionBetweenMin) ann;

@@ -1,6 +1,6 @@
 package cn.javaer.snippets.jooq.condition;
 
-import cn.javaer.snippets.jooq.SQL;
+import cn.javaer.snippets.jooq.PGDSL;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.JSONB;
@@ -27,8 +27,8 @@ class ConditionBuilderTest {
             .append(objectField::contains, "object")
             .append(arrayField::contains, new String[]{"str1", "str2"})
             .dateTime(dateTimeField::betweenSymmetric, LocalDate.now(), LocalDate.now())
-            .append(SQL::containedBy, arrayField, new String[]{"value"})
-            .append(SQL::containsJsonb, jsonbField, "key", "value")
+            .append(PGDSL::containedIn, arrayField, new String[]{"value"})
+            .append(PGDSL::containsJsonb, jsonbField, "key", "value")
             .build();
 
         final String sql = DSL.using(SQLDialect.POSTGRES)
