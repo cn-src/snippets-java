@@ -44,7 +44,6 @@ publishing {
     publications {
         mavenPlatform(MavenPublication) {
             groupId = 'com.github.cn-src'
-            artifactId = 'snippets-platform'
             from components.javaPlatform
         }
     }

@@ -1,77 +1,13 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
-
-plugins {
-    id 'java-library'
-    id 'jacoco'
-    id "com.github.ben-manes.versions" version "0.33.0"
-    id 'org.springframework.boot' version '2.3.3.RELEASE' apply false
-}
-
-java {
-    registerFeature('optional') {
-        usingSourceSet(sourceSets.main)
-    }
-    withSourcesJar()
-}
-
-dependencies {
-    api platform(project(':platform'))
-    api platform(SpringBootPlugin.BOM_COORDINATES)
-
-    optionalApi 'org.springframework.boot:spring-boot-starter-web'
-    optionalApi 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    optionalApi 'org.springframework.boot:spring-boot-starter-jooq'
-    optionalApi 'org.springframework.boot:spring-boot-starter-validation'
-    optionalApi 'org.springframework.boot:spring-boot-starter-security'
-    optionalApi 'org.springframework.boot:spring-boot-starter-test'
-
-    optionalApi 'org.jooq:jooq-codegen'
-
-    optionalApi 'org.simpleflatmapper:sfm-jooq'
-    optionalApi 'org.eclipse.collections:eclipse-collections'
-    optionalApi 'com.esotericsoftware:kryo'
-    optionalApi 'com.github.jknack:handlebars'
-    optionalApi 'io.github.classgraph:classgraph'
-    optionalApi 'org.springdoc:springdoc-openapi-webmvc-core'
-    optionalApi 'p6spy:p6spy'
-
-    optionalApi 'org.postgresql:postgresql'
-    compileOnly 'org.projectlombok:lombok'
-    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.3.3.RELEASE'
-
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-    testImplementation 'com.h2database:h2'
-    testImplementation 'org.testcontainers:postgresql'
-    testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-test {
-    useJUnitPlatform()
-    jvmArgs += ["-Dorg.jooq.no-logo=true"]
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        html.enabled false
-    }
-}
-allprojects {
+subprojects {
     apply plugin: 'maven-publish'
 
     group 'cn.javaer.snippets'
     version '1.0-SNAPSHOT'
-    sourceCompatibility = '1.8'
+
+    repositories {
+        mavenCentral()
+    }
+
     publishing {
         repositories {
             maven {
@@ -82,11 +18,4 @@ allprojects {
         }
     }
 }
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId = 'com.github.cn-src'
-            from components.java
-        }
-    }
-}
+
