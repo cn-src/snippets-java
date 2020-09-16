@@ -30,6 +30,7 @@ dependencies {
     optionalApi 'org.simpleflatmapper:sfm-jooq'
     optionalApi 'org.eclipse.collections:eclipse-collections'
     optionalApi 'com.esotericsoftware:kryo'
+    optionalApi 'com.github.jknack:handlebars'
     optionalApi 'io.github.classgraph:classgraph'
     optionalApi 'org.springdoc:springdoc-openapi-webmvc-core'
     optionalApi 'p6spy:p6spy'

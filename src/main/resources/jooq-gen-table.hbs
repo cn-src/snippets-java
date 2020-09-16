@@ -1,0 +1,39 @@
+{{!@formatter:off}}
+package {{generatedPackage}};
+
+import org.jooq.Field;
+import org.jooq.Name;
+import org.jooq.Record;
+import org.jooq.Table;
+import org.jooq.TableField;
+import org.jooq.TableOptions;
+import org.jooq.impl.DSL;
+import org.jooq.impl.TableImpl;
+
+/**
+ * This class is automatic generated.
+ */
+@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+public class {{tableClassName}} extends TableImpl<Record> {
+
+    public static final {{tableClassName}} {{staticFieldName}} = new {{tableClassName}}();
+{{#each columnMetas}}
+    public final TableField<Record, {{fieldType}}> {{tableFieldName}} = createField(DSL.name("{{columnName}}"), {{sqlType}}, this, ""{{#if enumType}}, {{{enumConverter}}}{{/if}});
+{{/each}}
+    public {{tableClassName}}() {
+        this(DSL.name("{{tableName}}"), null);
+    }
+
+    private {{tableClassName}}(Name alias, Table<Record> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private {{tableClassName}}(Name alias, Table<Record> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    }
+
+    @Override
+    public {{tableClassName}} as(String alias) {
+        return new {{tableClassName}}(DSL.name(alias), this);
+    }
+}
