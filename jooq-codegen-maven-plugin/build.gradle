@@ -12,13 +12,12 @@ mavenPlugin {
 dependencies {
     implementation 'org.apache.maven:maven-plugin-api:3.6.3'
     compileOnly 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.6.0'
-    implementation(project(':snippets-java'))
+    deps(project(':snippets-java'))
 }
 
 publishing {
     publications {
         mavenPlugin(MavenPublication) {
-            groupId = 'com.github.cn-src'
             from components.java
         }
     }

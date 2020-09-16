@@ -43,7 +43,6 @@ dependencies {
 publishing {
     publications {
         mavenPlatform(MavenPublication) {
-            groupId = 'com.github.cn-src'
             from components.javaPlatform
         }
     }

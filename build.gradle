@@ -1,7 +1,7 @@
 subprojects {
     apply plugin: 'maven-publish'
 
-    group 'cn.javaer.snippets'
+    group 'com.github.cn-src'
     version '1.0-SNAPSHOT'
 
     repositories {
