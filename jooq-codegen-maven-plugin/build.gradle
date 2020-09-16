@@ -11,6 +11,8 @@ mavenPlugin {
 }
 dependencies {
     implementation 'org.apache.maven:maven-plugin-api:3.6.3'
+    implementation 'org.apache.maven:maven-core:3.6.3'
+    implementation(project(':snippets-java'))
     compileOnly 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.6.0'
     deps(project(':snippets-java'))
 }
