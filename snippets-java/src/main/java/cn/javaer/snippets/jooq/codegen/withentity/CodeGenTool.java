@@ -39,7 +39,7 @@ public class CodeGenTool {
             Files.walk(genDir)
                 .sorted(Comparator.reverseOrder())
                 .map(Path::toFile)
-                .forEach(File::deleteOnExit);
+                .forEach(File::delete);
             Files.createDirectories(genDir);
             final Template template = handlebars.compile("jooq-gen-table");
             final List<TableMeta> tableMetas = scan(genPackage, packageNamesToScan);
