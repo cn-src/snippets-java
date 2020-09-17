@@ -20,17 +20,28 @@ public class ColumnMeta {
     String columnName;
     String tableFieldName;
 
-    public ColumnMeta(final FieldInfo fieldInfo) {
-        this.fieldName = fieldInfo.getName();
-        this.fieldType = type(fieldInfo.getTypeDescriptor().toString());
+    public ColumnMeta(final String fieldName, final String fieldType, final String columnName) {
+        this.fieldName = fieldName;
+        this.fieldType = type(fieldType);
         this.enumType = CodeGenTool.enums.containsName(this.fieldType);
         this.sqlType = this.enumType ? "org.jooq.impl.SQLDataType.VARCHAR" :
             TypeMapping.get(this.fieldType);
         this.enumConverter = this.enumType ? enumConverter(this.fieldType) : "";
-        final String columnValue = NameUtils.columnValue(fieldInfo);
-        this.columnName = columnValue.isEmpty() ?
-            NameUtils.toLcUnderline(fieldInfo.getName()) : columnValue;
+        this.columnName = columnName;
         this.tableFieldName = NameUtils.toUcUnderline(this.fieldName);
+    }
+
+    public ColumnMeta(final FieldInfo fieldInfo) {
+        this(fieldInfo.getName(), fieldInfo.getTypeDescriptor().toString(),
+            NameUtils.defaultValue(NameUtils.columnValue(fieldInfo),
+                NameUtils.toLcUnderline(fieldInfo.getName()))
+        );
+    }
+
+    public ColumnMeta(final GenColumn genColumn) {
+        this(genColumn.field(), genColumn.fieldType().getName(),
+            NameUtils.defaultValue(genColumn.column(),
+                NameUtils.toLcUnderline(genColumn.field())));
     }
 
     static String enumConverter(final String fieldType) {

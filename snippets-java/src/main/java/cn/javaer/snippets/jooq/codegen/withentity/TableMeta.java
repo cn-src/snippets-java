@@ -1,9 +1,11 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
+import io.github.classgraph.AnnotationInfo;
 import io.github.classgraph.ClassInfo;
 import lombok.Value;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -32,5 +34,19 @@ public class TableMeta {
             .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
             .map(ColumnMeta::new)
             .collect(Collectors.toList());
+
+        final Optional<GenColumn[]> genColumnsOpt = Optional.ofNullable(classInfo.getAnnotationInfo(
+            "cn.javaer.snippets.jooq.codegen.withentity.GenColumns"))
+            .map(AnnotationInfo::getParameterValues)
+            .map(it -> it.getValue("value"))
+            .map(GenColumn[].class::cast);
+        if (genColumnsOpt.isPresent()) {
+            final GenColumn[] genColumns = genColumnsOpt.get();
+            for (final GenColumn genColumn : genColumns) {
+                if (this.columnMetas.stream().noneMatch(it -> it.getFieldName().equals(genColumn.field()))) {
+                    this.columnMetas.add(new ColumnMeta(genColumn));
+                }
+            }
+        }
     }
 }
