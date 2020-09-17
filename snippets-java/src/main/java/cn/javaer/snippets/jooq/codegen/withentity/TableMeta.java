@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
+import io.github.classgraph.AnnotationClassRef;
 import io.github.classgraph.AnnotationInfo;
 import io.github.classgraph.AnnotationInfoList;
 import io.github.classgraph.AnnotationParameterValueList;
@@ -43,12 +44,13 @@ public class TableMeta {
             final AnnotationParameterValueList parameterValues =
                 annotationInfo.getParameterValues();
             final String fieldName = (String) parameterValues.getValue("field");
-            final Class<?> fieldType = (Class<?>) parameterValues.getValue("fieldType");
+            final String fieldType =
+                ((AnnotationClassRef) parameterValues.getValue("fieldType")).getName();
             final String columnName = (String) parameterValues.getValue("column");
             if (this.columnMetas.stream().noneMatch(it -> it.getFieldName().equals(fieldName))) {
                 final String s = NameUtils.defaultValue(columnName,
                     NameUtils.toLcUnderline(fieldName));
-                this.columnMetas.add(new ColumnMeta(fieldName, fieldType.getName(), s));
+                this.columnMetas.add(new ColumnMeta(fieldName, fieldType, s));
             }
         }
     }
