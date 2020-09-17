@@ -26,7 +26,7 @@ public class DefinedErrorInfo {
     }
 
     public DefinedErrorInfo(final HttpStatus httpStatus) {
-        this(httpStatus, "");
+        this(httpStatus.name(), httpStatus.value(), httpStatus.getReasonPhrase());
     }
 
     public DefinedErrorInfo(final HttpStatus httpStatus, final String message) {
