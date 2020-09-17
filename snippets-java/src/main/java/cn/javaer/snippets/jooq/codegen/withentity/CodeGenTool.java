@@ -8,6 +8,7 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -15,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -34,7 +36,10 @@ public class CodeGenTool {
         final Handlebars handlebars = new Handlebars(loader);
         final Path genDir = getFilePath(dir, genPackage);
         try {
-            Files.deleteIfExists(genDir);
+            Files.walk(genDir)
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(File::deleteOnExit);
             Files.createDirectories(genDir);
             final Template template = handlebars.compile("jooq-gen-table");
             final List<TableMeta> tableMetas = scan(genPackage, packageNamesToScan);
