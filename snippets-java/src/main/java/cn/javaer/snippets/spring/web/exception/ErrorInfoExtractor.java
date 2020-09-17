@@ -1,5 +1,6 @@
 package cn.javaer.snippets.spring.web.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -144,8 +145,30 @@ public class ErrorInfoExtractor {
         return DefinedErrorInfo.of(httpStatus, message);
     }
 
+    public DefinedErrorInfo extract(final Exception e, final boolean isIncludeMessage) {
+        if (!isIncludeMessage) {
+            return this.extract(e.getClass(), false);
+        }
+        final DefinedErrorInfo info = this.extract(e.getClass(), false);
+        if (null == info) {
+            return null;
+        }
+        if (e.getCause() instanceof InvalidFormatException) {
+            final InvalidFormatException cause = (InvalidFormatException) e.getCause();
+            final Object value = cause.getValue();
+            final String message = this.messageSourceAccessor.getMessage(
+                "PARAM_INVALID_FORMAT", new Object[]{value});
+            return DefinedErrorInfo.of(info, message);
+        }
+        return info;
+    }
+
     public Map<String, DefinedErrorInfo> getConfiguredErrorInfos() {
         return Collections.unmodifiableMap(this.configuredErrorMapping);
+    }
+
+    public MessageSourceAccessor getMessageSourceAccessor() {
+        return this.messageSourceAccessor;
     }
 
     static Map<String, DefinedErrorInfo> getInternalErrorMapping() {

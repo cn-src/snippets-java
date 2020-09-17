@@ -61,7 +61,7 @@ public class DefinedErrorInfo {
     public static DefinedErrorInfo of(final ResponseStatus responseStatus, final String message) {
         final HttpStatus httpStatus = responseStatus.code() == HttpStatus.INTERNAL_SERVER_ERROR ?
             responseStatus.value() : responseStatus.code();
-        
+
         return DefinedErrorInfo.of(httpStatus, message);
     }
 
@@ -81,5 +81,14 @@ public class DefinedErrorInfo {
 
     public static DefinedErrorInfo of(final HttpStatus httpStatus, final String message) {
         return new DefinedErrorInfo(httpStatus.name(), httpStatus.value(), message);
+    }
+
+    public static DefinedErrorInfo of(final String error, final HttpStatus httpStatus) {
+        return new DefinedErrorInfo(error, httpStatus.value(),
+            httpStatus.getReasonPhrase());
+    }
+
+    public static DefinedErrorInfo of(final DefinedErrorInfo errorInfo, final String message) {
+        return new DefinedErrorInfo(errorInfo.error, errorInfo.status, message);
     }
 }

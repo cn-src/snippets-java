@@ -40,8 +40,8 @@ public class GlobalExceptionAdvice {
         final HttpServletRequest request, final Exception e) {
         this.logger.error("", e);
 
-        final DefinedErrorInfo definedErrorInfo = this.errorInfoExtractor.extract(
-            e.getClass(), this.includeMessage);
+        final DefinedErrorInfo definedErrorInfo = this.errorInfoExtractor.extract(e,
+            this.includeMessage);
 
         final RuntimeErrorInfo runtimeErrorInfo;
         if (null != definedErrorInfo) {
