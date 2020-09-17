@@ -36,7 +36,7 @@ public class TypeMapping {
         mapping.put("org.jooq.JSON", "org.jooq.impl.SQLDataType.JSON");
         mapping.put("org.jooq.JSONB", "org.jooq.impl.SQLDataType.JSONB");
         mapping.put("cn.javaer.snippets.type.Geometry",
-            "cn.javaer.snippets.jooq.SQL.GEOMETRY_TYPE");
+            "cn.javaer.snippets.jooq.PGDSL.GEOMETRY_TYPE");
         MAPPING = Collections.unmodifiableMap(mapping);
     }
 
