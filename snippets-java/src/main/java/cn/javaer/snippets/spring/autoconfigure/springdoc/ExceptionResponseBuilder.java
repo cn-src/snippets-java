@@ -15,7 +15,6 @@ import org.springdoc.core.SpringDocConfigProperties;
 import org.springframework.web.method.HandlerMethod;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author cn-src
@@ -39,7 +38,7 @@ class ExceptionResponseBuilder extends GenericResponseBuilder {
                                     final PropertyResolverUtils propertyResolverUtils,
                                     final ErrorInfoExtractor errorInfoExtractor) {
         super(operationBuilder, returnTypeParsers, springDocConfigProperties,
-                propertyResolverUtils);
+            propertyResolverUtils);
         this.errorInfoExtractor = errorInfoExtractor;
     }
 
@@ -47,21 +46,16 @@ class ExceptionResponseBuilder extends GenericResponseBuilder {
     public ApiResponses build(final Components components, final HandlerMethod handlerMethod,
                               final Operation operation, final MethodAttributes methodAttributes) {
         final ApiResponses apiResponses = super.build(components, handlerMethod, operation,
-                methodAttributes);
+            methodAttributes);
         final Class<?>[] exceptionTypes = handlerMethod.getMethod().getExceptionTypes();
-        final Map<String, DefinedErrorInfo> errorInfos = this.errorInfoExtractor.getErrorInfos();
         for (final Class<?> exceptionType : exceptionTypes) {
             @SuppressWarnings("unchecked")
             final DefinedErrorInfo errorInfo = this.errorInfoExtractor.extract((Class<?
-                    extends Throwable>) exceptionType);
+                extends Throwable>) exceptionType, true);
             if (errorInfo != null) {
                 final ApiResponse response = new ApiResponse();
-                String message = "None";
-                if (errorInfos.containsKey(errorInfo.getError())) {
-                    message = errorInfos.get(errorInfo.getError()).getMessage();
-                }
                 response.setDescription(String.format("error:%s, %s", errorInfo.getError(),
-                        message));
+                    errorInfo.getMessage()));
                 apiResponses.addApiResponse(errorInfo.getStatus().toString(), response);
             }
         }
