@@ -3,6 +3,7 @@ package cn.javaer.snippets.spring.web.exception;
 import lombok.Value;
 import lombok.With;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * @author cn-src
@@ -37,6 +38,31 @@ public class DefinedErrorInfo {
         this.error = httpStatus.name();
         this.status = httpStatus.value();
         this.message = message;
+    }
+
+    public static DefinedErrorInfo of(final Error error) {
+        return new DefinedErrorInfo(error.error(), error.httpCode(), error.message());
+    }
+
+    public static DefinedErrorInfo of(final Error error, final String message) {
+        return new DefinedErrorInfo(error.error(), error.httpCode(), message);
+    }
+
+    public static DefinedErrorInfo of(final ResponseStatus responseStatus) {
+        final HttpStatus httpStatus = responseStatus.code() == HttpStatus.INTERNAL_SERVER_ERROR ?
+            responseStatus.value() : responseStatus.code();
+
+        if (responseStatus.reason().isEmpty()) {
+            return DefinedErrorInfo.of(httpStatus);
+        }
+        return DefinedErrorInfo.of(httpStatus, responseStatus.reason());
+    }
+
+    public static DefinedErrorInfo of(final ResponseStatus responseStatus, final String message) {
+        final HttpStatus httpStatus = responseStatus.code() == HttpStatus.INTERNAL_SERVER_ERROR ?
+            responseStatus.value() : responseStatus.code();
+        
+        return DefinedErrorInfo.of(httpStatus, message);
     }
 
     public static DefinedErrorInfo of(final String error, final Integer status,

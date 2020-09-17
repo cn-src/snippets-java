@@ -6,7 +6,6 @@ import cn.javaer.snippets.spring.web.exception.ErrorInfoExtractor;
 import cn.javaer.snippets.spring.web.exception.GlobalExceptionAdvice;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
@@ -27,15 +26,15 @@ import java.util.ResourceBundle;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({ExceptionMappingProperties.class, ServerProperties.class})
 @ConditionalOnProperty(prefix = "snippets.exception", name = "enabled", havingValue = "true",
-        matchIfMissing = true)
+    matchIfMissing = true)
 public class ExceptionAutoConfiguration implements InitializingBean {
     private final ExceptionMappingProperties exceptionMappingProperties;
     private final ServerProperties serverProperties;
     private Map<String, DefinedErrorInfo> useMapping;
 
     public ExceptionAutoConfiguration(
-            final ExceptionMappingProperties exceptionMappingProperties,
-            final ServerProperties serverProperties) {
+        final ExceptionMappingProperties exceptionMappingProperties,
+        final ServerProperties serverProperties) {
         this.exceptionMappingProperties = exceptionMappingProperties;
         this.serverProperties = serverProperties;
     }
@@ -62,8 +61,7 @@ public class ExceptionAutoConfiguration implements InitializingBean {
 
     @Bean
     ErrorInfoExtractor errorInfoExtractor(final ResourceBundleMessageSource messageSource) {
-        return new ErrorInfoExtractor(this.useMapping, messageSource,
-                this.serverProperties.getError().getIncludeMessage() == ErrorProperties.IncludeAttribute.ALWAYS);
+        return new ErrorInfoExtractor(this.useMapping, messageSource);
     }
 
     @Bean
@@ -83,14 +81,14 @@ public class ExceptionAutoConfiguration implements InitializingBean {
                     final int i = value.indexOf(',');
                     if (i > 0) {
                         final DefinedErrorInfo errorStatus =
-                                new DefinedErrorInfo(value.substring(i + 1),
-                                        Integer.parseInt(value.substring(0,
-                                                i)));
+                            new DefinedErrorInfo(value.substring(i + 1),
+                                Integer.parseInt(value.substring(0,
+                                    i)));
                         this.useMapping.put(entry.getKey(), errorStatus);
                     }
                     else {
                         throw new InvalidConfigurationPropertyValueException(entry.getKey(),
-                                entry.getValue(), "Missing status or error");
+                            entry.getValue(), "Missing status or error");
                     }
                 }
             }

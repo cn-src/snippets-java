@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
-import java.util.Map;
 
 /**
  * @author cn-src
@@ -25,42 +24,36 @@ public class GlobalExceptionAdvice {
 
     private final ErrorProperties errorProperties;
     private final ErrorInfoExtractor errorInfoExtractor;
-    private final Map<String, DefinedErrorInfo> errorInfos;
+    private final boolean includeMessage;
 
     public GlobalExceptionAdvice(final ErrorProperties errorProperties,
                                  final ErrorInfoExtractor errorInfoExtractor) {
         this.errorProperties = errorProperties;
         this.errorInfoExtractor = errorInfoExtractor;
-        this.errorInfos = errorInfoExtractor.getErrorInfos();
+        this.includeMessage =
+            errorProperties.getIncludeMessage() == ErrorProperties.IncludeAttribute.ALWAYS;
     }
 
     @ResponseBody
     @ExceptionHandler({Exception.class})
     public ResponseEntity<RuntimeErrorInfo> handleBadRequestException(
-            final HttpServletRequest request,
-            final Exception e) {
+        final HttpServletRequest request, final Exception e) {
         this.logger.error("", e);
-        final DefinedErrorInfo definedErrorInfo = this.errorInfoExtractor.extract(e.getClass());
+
+        final DefinedErrorInfo definedErrorInfo = this.errorInfoExtractor.extract(
+            e.getClass(), this.includeMessage);
+
         final RuntimeErrorInfo runtimeErrorInfo;
         if (null != definedErrorInfo) {
-            runtimeErrorInfo = new RuntimeErrorInfo(
-                    this.errorInfos.getOrDefault(definedErrorInfo.getError(), definedErrorInfo));
+            runtimeErrorInfo = new RuntimeErrorInfo(definedErrorInfo);
         }
         else {
-            runtimeErrorInfo = this.createNoDefined();
+            runtimeErrorInfo = new RuntimeErrorInfo(
+                DefinedErrorInfo.of(HttpStatus.INTERNAL_SERVER_ERROR));
         }
+
         this.fillInfo(runtimeErrorInfo, request, e);
         return ResponseEntity.status(runtimeErrorInfo.getStatus()).body(runtimeErrorInfo);
-    }
-
-    public RuntimeErrorInfo createNoDefined() {
-        final RuntimeErrorInfo info = new RuntimeErrorInfo();
-        info.setError("INTERNAL_SERVER_ERROR");
-        info.setStatus(500);
-        if (this.errorProperties.getIncludeMessage() == ErrorProperties.IncludeAttribute.ALWAYS) {
-            info.setMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-        }
-        return info;
     }
 
     public void fillInfo(final RuntimeErrorInfo runtimeErrorInfo,

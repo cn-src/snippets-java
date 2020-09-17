@@ -10,18 +10,16 @@ import java.time.LocalDateTime;
  */
 @Data
 public class RuntimeErrorInfo {
-    private Integer status;
     @NotNull
-    private String error;
-    private String message;
+    private final String error;
+    private final Integer status;
+    private final String message;
+
     private String path;
     private String exception;
     private String trace;
     private String traceMessage;
     private LocalDateTime timestamp;
-
-    public RuntimeErrorInfo() {
-    }
 
     public RuntimeErrorInfo(final DefinedErrorInfo definedErrorInfo) {
         this.error = definedErrorInfo.getError();
