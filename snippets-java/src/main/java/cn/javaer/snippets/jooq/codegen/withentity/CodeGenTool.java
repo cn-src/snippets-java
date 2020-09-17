@@ -14,6 +14,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ public class CodeGenTool {
 
     public static void generate(final String dir, final String genPackage,
                                 final String... packageNamesToScan) {
+        logger.info("Code generation with packages:" + Arrays.toString(packageNamesToScan));
         final TemplateLoader loader = new ClassPathTemplateLoader();
         loader.setSuffix(".hbs");
         final Handlebars handlebars = new Handlebars(loader);
