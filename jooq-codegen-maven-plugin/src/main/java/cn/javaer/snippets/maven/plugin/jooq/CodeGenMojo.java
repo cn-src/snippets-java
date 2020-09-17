@@ -42,9 +42,15 @@ public class CodeGenMojo extends AbstractMojo {
     private String basedir;
 
     @Parameter(
+        required = true,
         property = "jooq.codegen.packageName"
     )
     private String packageName;
+
+    @Parameter(
+        property = "jooq.codegen.includePackage"
+    )
+    private String includePackage;
 
     @Parameter(
         property = "jooq.codegen.includePackages"
@@ -64,8 +70,13 @@ public class CodeGenMojo extends AbstractMojo {
             final String actualBasedir = this.basedir == null ?
                 Paths.get(this.project.getBasedir().getAbsolutePath(), "src/main/java").toString() :
                 this.basedir;
-            CodeGenTool.generate(actualBasedir, this.packageName,
-                this.includePackages.toArray(new String[0]));
+            if (null != this.includePackages && !this.includePackages.isEmpty()) {
+                CodeGenTool.generate(actualBasedir, this.packageName,
+                    this.includePackages.toArray(new String[0]));
+            }
+            else {
+                CodeGenTool.generate(actualBasedir, this.packageName, this.includePackage);
+            }
         }
         catch (final Exception ex) {
             throw new MojoExecutionException("Error running jOOQ code generation tool", ex);
