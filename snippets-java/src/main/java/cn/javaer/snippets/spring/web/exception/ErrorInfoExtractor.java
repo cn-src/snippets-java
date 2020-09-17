@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -164,6 +165,12 @@ public class ErrorInfoExtractor {
                 "PARAM_INVALID_FORMAT", new Object[]{value});
             return DefinedErrorInfo.of(info, message);
         }
+        if (e instanceof MethodArgumentTypeMismatchException) {
+            final MethodArgumentTypeMismatchException ec = (MethodArgumentTypeMismatchException) e;
+            final String message = this.messageSourceAccessor.getMessage(
+                "PARAM_INVALID_TYPE", new Object[]{ec.getName(), ec.getValue()});
+            return DefinedErrorInfo.of(info, message);
+        }
         if (e instanceof MethodArgumentNotValidException) {
             final MethodArgumentNotValidException ec = (MethodArgumentNotValidException) e;
             final List<FieldError> fieldErrors = ec.getBindingResult().getFieldErrors();
@@ -246,6 +253,10 @@ public class ErrorInfoExtractor {
             DefinedErrorInfo.of(HttpStatus.SERVICE_UNAVAILABLE));
 
         internalErrorMapping.put("javax.validation.ConstraintViolationException",
+            DefinedErrorInfo.of(HttpStatus.BAD_REQUEST));
+
+        internalErrorMapping.put(
+            "org.springframework.web.method.annotation.MethodArgumentTypeMismatchException",
             DefinedErrorInfo.of(HttpStatus.BAD_REQUEST));
 
         return internalErrorMapping;
