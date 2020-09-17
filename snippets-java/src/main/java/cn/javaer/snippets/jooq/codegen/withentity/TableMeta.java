@@ -1,11 +1,12 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
 import io.github.classgraph.AnnotationInfo;
+import io.github.classgraph.AnnotationInfoList;
+import io.github.classgraph.AnnotationParameterValueList;
 import io.github.classgraph.ClassInfo;
 import lombok.Value;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -35,17 +36,19 @@ public class TableMeta {
             .map(ColumnMeta::new)
             .collect(Collectors.toList());
 
-        final Optional<GenColumn[]> genColumnsOpt = Optional.ofNullable(classInfo.getAnnotationInfo(
-            "cn.javaer.snippets.jooq.codegen.withentity.GenColumns"))
-            .map(AnnotationInfo::getParameterValues)
-            .map(it -> it.getValue("value"))
-            .map(GenColumn[].class::cast);
-        if (genColumnsOpt.isPresent()) {
-            final GenColumn[] genColumns = genColumnsOpt.get();
-            for (final GenColumn genColumn : genColumns) {
-                if (this.columnMetas.stream().noneMatch(it -> it.getFieldName().equals(genColumn.field()))) {
-                    this.columnMetas.add(new ColumnMeta(genColumn));
-                }
+        final AnnotationInfoList annotationInfoList = classInfo.getAnnotationInfo()
+            .filter(it ->
+                "cn.javaer.snippets.jooq.codegen.withentity.GenColumn".equals(it.getName()));
+        for (final AnnotationInfo annotationInfo : annotationInfoList) {
+            final AnnotationParameterValueList parameterValues =
+                annotationInfo.getParameterValues();
+            final String fieldName = (String) parameterValues.getValue("field");
+            final Class<?> fieldType = (Class<?>) parameterValues.getValue("fieldType");
+            final String columnName = (String) parameterValues.getValue("column");
+            if (this.columnMetas.stream().noneMatch(it -> it.getFieldName().equals(fieldName))) {
+                final String s = NameUtils.defaultValue(columnName,
+                    NameUtils.toLcUnderline(fieldName));
+                this.columnMetas.add(new ColumnMeta(fieldName, fieldType.getName(), s));
             }
         }
     }
