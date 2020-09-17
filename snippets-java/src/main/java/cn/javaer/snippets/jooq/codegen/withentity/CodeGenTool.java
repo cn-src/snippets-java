@@ -61,6 +61,7 @@ public class CodeGenTool {
     static List<TableMeta> scan(final String genPackage, final String... packageNames) {
 
         try (final ScanResult scanResult = new ClassGraph()
+            .addClassLoader(Thread.currentThread().getContextClassLoader())
             .enableAllInfo()
             .acceptPackages(packageNames)
             .scan()) {
