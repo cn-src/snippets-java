@@ -15,12 +15,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
  * @author cn-src
  */
 public class CodeGenTool {
+    private static final Logger logger = Logger.getLogger(CodeGenTool.class.getName());
     static ClassInfoList enums = null;
 
     public static void generate(final String dir, final String genPackage,
@@ -34,7 +36,9 @@ public class CodeGenTool {
             Files.createDirectories(genDir);
             final Template template = handlebars.compile("jooq-gen-table");
             final List<TableMeta> tableMetas = scan(genPackage, packageNamesToScan);
+            logger.info("Scan entities total:" + tableMetas.size());
             for (final TableMeta tableMeta : tableMetas) {
+                logger.info("Generate:" + tableMeta.getEntityName());
                 try (final FileWriter writer = new FileWriter(
                     Paths.get(genDir.toString(), tableMeta.getTableClassName() + ".java").toFile())) {
 
