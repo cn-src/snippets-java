@@ -22,7 +22,7 @@ public class ColumnMeta {
 
     public ColumnMeta(final FieldInfo fieldInfo) {
         this.fieldName = fieldInfo.getName();
-        this.fieldType = fieldInfo.getTypeDescriptor().toString();
+        this.fieldType = type(fieldInfo.getTypeDescriptor().toString());
         this.enumType = CodeGenTool.enums.containsName(this.fieldType);
         this.sqlType = this.enumType ? "org.jooq.impl.SQLDataType.VARCHAR" :
             TypeMapping.get(this.fieldType);
@@ -37,5 +37,24 @@ public class ColumnMeta {
         return String.format("new org.jooq.impl.EnumConverter<java.lang.String, %s>(java.lang" +
                 ".String.class, %s.class)",
             fieldType, fieldType);
+    }
+
+    static String type(final String type) {
+        switch (type) {
+            case "short":
+                return Short.class.getName();
+            case "int":
+                return Integer.class.getName();
+            case "long":
+                return Long.class.getName();
+            case "boolean":
+                return Boolean.class.getName();
+            case "float":
+                return Float.class.getName();
+            case "double":
+                return Double.class.getName();
+            default:
+                return type;
+        }
     }
 }
