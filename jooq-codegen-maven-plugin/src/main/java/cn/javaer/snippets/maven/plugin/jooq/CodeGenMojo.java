@@ -71,10 +71,12 @@ public class CodeGenMojo extends AbstractMojo {
                 Paths.get(this.project.getBasedir().getAbsolutePath(), "src/main/java").toString() :
                 this.basedir;
             if (null != this.includePackages && !this.includePackages.isEmpty()) {
+                this.getLog().info("Code generation with packages:" + this.includePackages);
                 CodeGenTool.generate(actualBasedir, this.packageName,
                     this.includePackages.toArray(new String[0]));
             }
             else {
+                this.getLog().info("Code generation with packages" + this.includePackage);
                 CodeGenTool.generate(actualBasedir, this.packageName, this.includePackage);
             }
         }
