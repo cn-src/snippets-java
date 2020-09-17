@@ -76,7 +76,7 @@ public class CodeGenMojo extends AbstractMojo {
                     this.includePackages.toArray(new String[0]));
             }
             else {
-                this.getLog().info("Code generation with packages" + this.includePackage);
+                this.getLog().info("Code generation with package:" + this.includePackage);
                 CodeGenTool.generate(actualBasedir, this.packageName, this.includePackage);
             }
         }
