@@ -55,7 +55,7 @@ public class DefinedErrorInfo implements Comparable<DefinedErrorInfo> {
     }
 
     public static DefinedErrorInfo of(final String error, final int status) {
-        return new DefinedErrorInfo(error, status, "");
+        return new DefinedErrorInfo(error, status, "No message");
     }
 
     public static DefinedErrorInfo of(final HttpStatus httpStatus) {
