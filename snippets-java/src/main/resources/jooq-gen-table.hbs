@@ -19,9 +19,17 @@ import org.jooq.impl.TableImpl;
 public class {{tableClassName}} extends TableImpl<Record> {
 
     public static final {{tableClassName}} {{staticFieldName}} = new {{tableClassName}}();
+
+    public static final Field<?>[] {{staticFieldName}}_FIELDS = new Field[]{ {{#each columnMetas}}{{staticFieldName}}.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}} };
+
 {{#each allColumnMetas}}
     public final TableField<Record, {{fieldType}}> {{tableFieldName}} = createField(DSL.name("{{columnName}}"), {{sqlType}}, this, ""{{#if enumType}}, {{{enumConverter}}}{{/if}});
 {{/each}}
+
+    public final Field<?>[] declaredFields() {
+        return new Field[]{ {{#each columnMetas}}this.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}} };
+    }
+
     public {{tableClassName}}() {
         this(DSL.name("{{tableName}}"), null);
     }
