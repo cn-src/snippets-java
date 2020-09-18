@@ -7,6 +7,7 @@ import io.github.classgraph.AnnotationParameterValueList;
 import io.github.classgraph.ClassInfo;
 import lombok.Value;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,8 @@ public class TableMeta {
     String entityName;
     String staticFieldName;
     List<ColumnMeta> columnMetas;
+
+    List<ColumnMeta> allColumnMetas;
 
     String tableClassName;
 
@@ -37,6 +40,8 @@ public class TableMeta {
             .map(ColumnMeta::new)
             .collect(Collectors.toList());
 
+        final List<ColumnMeta> allColumnMetas = new ArrayList<>(this.columnMetas);
+
         final AnnotationInfoList annotationInfoList = classInfo.getAnnotationInfo()
             .filter(it ->
                 "cn.javaer.snippets.jooq.codegen.withentity.GenColumn".equals(it.getName()));
@@ -47,11 +52,12 @@ public class TableMeta {
             final String fieldType =
                 ((AnnotationClassRef) parameterValues.getValue("fieldType")).getName();
             final String columnName = (String) parameterValues.getValue("column");
-            if (this.columnMetas.stream().noneMatch(it -> it.getFieldName().equals(fieldName))) {
+            if (allColumnMetas.stream().noneMatch(it -> it.getFieldName().equals(fieldName))) {
                 final String s = NameUtils.defaultValue(columnName,
                     NameUtils.toLcUnderline(fieldName));
-                this.columnMetas.add(new ColumnMeta(fieldName, fieldType, s));
+                allColumnMetas.add(new ColumnMeta(fieldName, fieldType, s));
             }
         }
+        this.allColumnMetas = allColumnMetas;
     }
 }
