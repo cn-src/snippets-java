@@ -4,7 +4,7 @@ plugins {
     id 'java-library'
     id 'jacoco'
     id "com.github.ben-manes.versions" version "0.33.0"
-    id 'org.springframework.boot' version '2.3.3.RELEASE' apply false
+    id 'org.springframework.boot' version '2.3.4.RELEASE' apply false
 }
 sourceCompatibility = '1.8'
 java {
