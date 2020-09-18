@@ -4,16 +4,15 @@ import cn.javaer.snippets.model.Assemblers;
 import cn.javaer.snippets.model.Auditor;
 import cn.javaer.snippets.model.Creator;
 import cn.javaer.snippets.model.DynamicAssembler;
+import cn.javaer.snippets.util.function.Consumer3;
 import cn.javaer.snippets.util.function.Function3;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 
 /**
@@ -23,334 +22,178 @@ import java.util.function.Function;
  */
 public interface MergeUtils {
 
-    /**
-     * 合并 List, 当 props 属于 src 中对象的一个属性时，根据 id 匹配设置属性值。
-     *
-     * @param src 源 List
-     * @param props 属性 List
-     * @param srcPropSetter srcPropSetter
-     * @param srcPropIdGetter getter
-     * @param propIdGetter getter
-     * @param <S> 源类型
-     * @param <P> 属性类型
-     * @param <ID> id 类型
-     *
-     * @return 源 List
-     */
-    static <S, P, ID> List<S> mergeProperty(
-        final List<S> src, final Function<S, ID> srcPropIdGetter,
-        final BiConsumer<S, P> srcPropSetter,
-        final List<P> props, final Function<P, ID> propIdGetter) {
-
-        if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
-            return src;
-        }
-        for (final P p : props) {
-            final ID pId = propIdGetter.apply(p);
-            for (final S s : src) {
-                final ID sId = srcPropIdGetter.apply(s);
-                if (sId != null && sId.equals(pId)) {
-                    srcPropSetter.accept(s, p);
-                }
-            }
-        }
-        return src;
-    }
-
-    /**
-     * 合并 List, 当 props 属于 src 中对象的一个属性时，根据 id 匹配设置属性值。
-     *
-     * @param src 源 List
-     * @param srcPropIdGetter getter
-     * @param resultFun resultFun
-     * @param props 属性 List
-     * @param propIdGetter getter
-     * @param <S> 源类型
-     * @param <R> 返回类型
-     * @param <P> 属性类型
-     * @param <ID> id 类型
-     *
-     * @return 源 List
-     */
-    static <R, S, P, ID> List<R> mergeProperty(
-        final List<S> src, final Function<S, ID> srcPropIdGetter,
-        final BiFunction<S, P, R> resultFun,
-        final List<P> props, final Function<P, ID> propIdGetter) {
-
-        if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
-            return Collections.emptyList();
-        }
-        final List<R> result = new ArrayList<>(src.size());
-        for (final P p : props) {
-            final ID pId = propIdGetter.apply(p);
-            for (final S s : src) {
-                final ID sId = srcPropIdGetter.apply(s);
-                if (sId != null && sId.equals(pId)) {
-                    result.add(resultFun.apply(s, p));
-                }
-            }
-        }
-        return result;
-    }
-
-    static <R, S, P, ID> List<R> mergeProperty(
-        final List<S> src, final Function<S, ID> srcPropIdGetter,
-        final Function3<S, P, P, R> resultFun,
-        final List<P> props,
-        final Function<P, ID> prop1IdGetter, final Function<P, ID> prop2IdGetter) {
-
-        if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
-            return Collections.emptyList();
-        }
-        final List<R> result = new ArrayList<>(src.size());
-        for (final S s : src) {
-            final ID sId = srcPropIdGetter.apply(s);
-            P usedP1 = null;
-            P usedP2 = null;
-            for (final P p : props) {
-                final ID p1Id = prop1IdGetter.apply(p);
-                if (sId != null && sId.equals(p1Id)) {
-                    usedP1 = p;
-                }
-                final ID p2Id = prop2IdGetter.apply(p);
-                if (sId != null && sId.equals(p2Id)) {
-                    usedP2 = p;
-                }
-            }
-            result.add(resultFun.apply(s, usedP1, usedP2));
-        }
-        return result;
-    }
-
-    /**
-     * 合并 List, 当 props 属于 src 中对象的一个属性时，根据 id 匹配设置属性值。
-     *
-     * @param src 源 List
-     * @param srcPropIdGetter getter
-     * @param resultFun resultFun
-     * @param props1 属性1 List
-     * @param prop1IdGetter getter
-     * @param props2 属性2 List
-     * @param prop2IdGetter getter
-     * @param <S> 源类型
-     * @param <R> 返回类型
-     * @param <P1> 属性类型
-     * @param <P2> 属性类型
-     * @param <ID> id 类型
-     *
-     * @return 源 List
-     */
-    static <R, S, P1, P2, ID> List<R> mergeProperty(
-        final List<S> src, final Function<S, ID> srcPropIdGetter,
-        final Function3<S, P1, P2, R> resultFun,
-        final List<P1> props1, final Function<P1, ID> prop1IdGetter,
-        final List<P2> props2, final Function<P2, ID> prop2IdGetter) {
-
-        if (src == null || src.isEmpty()) {
-            return Collections.emptyList();
-        }
-        final List<R> result = new ArrayList<>(src.size());
-        for (final S s : src) {
-            final ID sId = srcPropIdGetter.apply(s);
-
-            P1 usedP1 = null;
-            if (props1 != null) {
-                for (final P1 p1 : props1) {
-                    final ID pId = prop1IdGetter.apply(p1);
-                    if (sId != null && sId.equals(pId)) {
-                        usedP1 = p1;
-                    }
-                }
-            }
-            P2 usedP2 = null;
-            if (props2 != null) {
-                for (final P2 p2 : props2) {
-                    final ID pId = prop2IdGetter.apply(p2);
-                    if (sId != null && sId.equals(pId)) {
-                        usedP2 = p2;
-                    }
-                }
-            }
-            result.add(resultFun.apply(s, usedP1, usedP2));
-        }
-        return result;
-    }
-
-    /**
-     * 合并 List, 当 props 属于 src 中对象的一个属性时，根据 id 匹配设置属性值。
-     *
-     * @param src 源 List
-     * @param props 属性 List
-     * @param srcPropSetter setter
-     * @param srcPropIdGetter getter
-     * @param propIdGetter getter
-     * @param <S> 源类型
-     * @param <P> 属性类型
-     * @param <ID> id 类型
-     *
-     * @return 源 List
-     */
-    static <S, P, ID> List<S> mergePropertyList(
-        final List<S> src, final Function<S, ID[]> srcPropIdGetter,
-        final BiConsumer<S, List<P>> srcPropSetter,
-        final List<P> props, final Function<P, ID> propIdGetter) {
-
-        if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
-            return src;
-        }
-        for (final S s : src) {
-            final ID[] ids = srcPropIdGetter.apply(s);
-            final List<P> subProps = new ArrayList<>();
-            for (final P p : props) {
-                final ID pId = propIdGetter.apply(p);
-                if (ids != null && Arrays.asList(ids).contains(pId)) {
-                    subProps.add(p);
-                }
-            }
-            srcPropSetter.accept(s, subProps);
-        }
-        return src;
-    }
-
-    static <R, S, P, ID> List<R> mergePropertyList(
-        final List<S> src, final Function<S, ID[]> srcPropIdGetter,
-        final BiFunction<S, List<P>, R> srcPropSetter,
-        final List<P> props, final Function<P, ID> propIdGetter) {
-
-        if (src == null || src.isEmpty() || props == null || props.isEmpty()) {
-            return Collections.emptyList();
-        }
-        final List<R> result = new ArrayList<>(src.size());
-        for (final S s : src) {
-            final ID[] ids = srcPropIdGetter.apply(s);
-            final List<P> subProps = new ArrayList<>();
-            for (final P p : props) {
-                final ID pId = propIdGetter.apply(p);
-                if (ids != null && Arrays.asList(ids).contains(pId)) {
-                    subProps.add(p);
-                }
-            }
-            result.add(srcPropSetter.apply(s, subProps));
-        }
-        return result;
-    }
-
-    static <S, P, ID> List<DynamicAssembler<S, P>> mergeToAssembler(
-        final List<S> src, final Function<S, ID> srcPropIdGetter,
-        final String propName, final List<P> props, final Function<P, ID> propIdGetter) {
-        return mergeProperty(src, srcPropIdGetter, (s, p) -> {
-            return Assemblers.ofDynamic(s, propName, p);
-        }, props, propIdGetter);
-    }
-
-    static <S, P, ID> List<DynamicAssembler<S, List<P>>> mergeToAssemblerList(
-        final List<S> src, final Function<S, ID[]> srcPropIdGetter,
-        final String propName, final List<P> props, final Function<P, ID> propIdGetter) {
-        return mergePropertyList(src, srcPropIdGetter, (s, ps) -> {
-            return Assemblers.ofDynamic(s, propName, ps);
-        }, props, propIdGetter);
-    }
-
-    static <S, P, ID> List<Creator<S, P>> mergeToCreator(
-        final List<S> src, final Function<S, ID> srcPropIdGetter,
-        final List<P> props, final Function<P, ID> propIdGetter) {
-        return mergeProperty(src, srcPropIdGetter, (BiFunction<S, P, Creator<S, P>>) Creator::of,
-            props,
-            propIdGetter);
-    }
-
-    static <R, S, P, ID> List<Auditor<S, P>> mergeToAuditor(
-        final List<S> src, final Function<S, ID> srcPropIdGetter,
-        final List<P> props,
-        final Function<P, ID> prop1IdGetter, final Function<P, ID> prop2IdGetter) {
-        return mergeProperty(src, srcPropIdGetter, Auditor::of, props, prop1IdGetter,
-            prop2IdGetter);
-    }
-
-    /**
-     * 一对多合并转换，以唯一 Key 为基准，将对象中部分数据合并转换成对象的 Map 属性。
-     *
-     * 合并以 uKeyGetter 获取的对象进行比较。源对象和目标对象是同一类型。
-     *
-     * @param srcList 源对象 List
-     * @param uKeyGetter 源对象获取唯一 Key 的函数
-     * @param mapGetter 对象 Map 属性的读取函数
-     * @param mapSetter 对象 Map 属性的写入函数
-     * @param keyCreator 对象 Map 属性的 key 创建函数
-     * @param valueCreator 对象 Map 属性的 value 创建函数
-     * @param <T> 对T象类型
-     * @param <UK> 唯一主键的类型
-     * @param <MK> 对象 Map 属性的 key 的类型
-     * @param <MV> 对象 Map 属性的 value 的类型
-     *
-     * @return 合并转换之后的对象 List
-     */
-    static <T, UK, MK, MV> List<T> mergePropertyToMap(final List<T> srcList,
-                                                      final Function<T, UK> uKeyGetter,
-                                                      final Function<T, Map<MK, MV>> mapGetter,
-                                                      final BiConsumer<T, Map<MK, MV>> mapSetter,
-                                                      final Function<T, MK> keyCreator,
-                                                      final BiFunction<T, MV, MV> valueCreator) {
-        return mergePropertyToMap(srcList,
-            uKeyGetter, uKeyGetter,
-            mapGetter, mapSetter,
-            keyCreator,
-            valueCreator,
-            t -> t);
-    }
-
-    /**
-     * 一对多合并转换，以唯一 Key 为基准，将源对象中部分数据合并转换成目标对象的 Map 属性。
-     *
-     * 合并以 sourceUkGetter 和 targetUkGetter 获取的对象进行比较。
-     *
-     * @param srcList 源对象 List
-     * @param sourceUkGetter 源对象获取唯一 Key 的函数
-     * @param targetUkGetter 目标对象获取唯一 Key 的函数
-     * @param mapGetter 目标对象 Map 属性的读取函数
-     * @param mapSetter 目标对象 Map 属性的写入函数
-     * @param keyCreator 目标对象 Map 属性的 key 创建函数
-     * @param valueCreator 目标对象 Map 属性的 value 创建函数
-     * @param rCreator 目标对象的创建函数
-     * @param <S> 源对象类型
-     * @param <R> 目标对象类型
-     * @param <UK> 唯一主键的类型
-     * @param <MK> 目标对象 Map 属性的 key 的类型
-     * @param <MV> 目标对象 Map 属性的 value 的类型
-     *
-     * @return 合并转换之后的对象 List
-     */
-    static <S, R, UK, MK, MV> List<R> mergePropertyToMap(final List<S> srcList,
-
-                                                         final Function<S, UK> sourceUkGetter,
-                                                         final Function<R, UK> targetUkGetter,
-                                                         final Function<R, Map<MK, MV>> mapGetter,
-                                                         final BiConsumer<R, Map<MK, MV>> mapSetter,
-
-                                                         final Function<S, MK> keyCreator,
-                                                         final BiFunction<S, MV, MV> valueCreator,
-                                                         final Function<S, R> rCreator) {
+    static <S, R> List<R> merge(final List<S> sList,
+                                final BiPredicate<S, R> mergePredicate,
+                                final BiConsumer<S, R> handler,
+                                final Function<S, R> rCreator) {
         final List<R> results = new ArrayList<>();
-
-        for (final S src : srcList) {
+        for (final S s : sList) {
             final R r = results.stream()
-                .filter(it -> targetUkGetter.apply(it).equals(sourceUkGetter.apply(src)))
+                .filter(it -> mergePredicate.test(s, it))
                 .findFirst()
                 .orElseGet(() -> {
-                    final R initR = rCreator.apply(src);
+                    final R initR = rCreator.apply(s);
                     results.add(initR);
                     return initR;
                 });
-
-            Map<MK, MV> map = mapGetter.apply(r);
-            if (map == null) {
-                final Map<MK, MV> initMap = new HashMap<>();
-                mapSetter.accept(r, initMap);
-                map = initMap;
-            }
-            final MK key = keyCreator.apply(src);
-            map.put(key, valueCreator.apply(src, map.get(key)));
+            handler.accept(s, r);
         }
         return results;
+    }
+
+    static <S> List<S> merge(final List<S> sList,
+                             final BiPredicate<S, S> mergePredicate,
+                             final BiConsumer<S, S> handler) {
+        return merge(sList, mergePredicate, handler, s -> s);
+    }
+
+    static <S, P, R> List<R> merge(final List<S> sList, final List<P> pList,
+                                   final BiPredicate<S, P> mergePredicate,
+                                   final BiFunction<S, P, R> resultFun) {
+
+        if (sList == null || sList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        final List<R> result = new ArrayList<>(sList.size());
+        for (final S s : sList) {
+            P used = null;
+            if (null != pList) {
+                for (final P p : pList) {
+                    if (mergePredicate.test(s, p)) {
+                        used = p;
+                        break;
+                    }
+                }
+            }
+            result.add(resultFun.apply(s, used));
+        }
+        return result;
+    }
+
+    static <S, P> List<S> merge(final List<S> sList, final List<P> pList,
+                                final BiPredicate<S, P> mergePredicate,
+                                final BiConsumer<S, P> resultFun) {
+        return merge(sList, pList, mergePredicate, (s, p) -> {
+            resultFun.accept(s, p);
+            return s;
+        });
+    }
+
+    static <S, P, R> List<R> merge(final List<S> sList, final List<P> pList,
+                                   final BiPredicate<S, P> mergePredicate1,
+                                   final BiPredicate<S, P> mergePredicate2,
+                                   final Function3<S, P, P, R> resultFun) {
+        if (sList == null || sList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        final List<R> result = new ArrayList<>(sList.size());
+        for (final S s : sList) {
+            P p1 = null;
+            P p2 = null;
+            if (pList != null) {
+                for (final P p : pList) {
+                    if (mergePredicate1.test(s, p)) {
+                        p1 = p;
+                    }
+                    if (mergePredicate2.test(s, p)) {
+                        p2 = p;
+                        break;
+                    }
+                }
+            }
+            result.add(resultFun.apply(s, p1, p2));
+        }
+        return result;
+    }
+
+    static <S, P> List<S> merge(final List<S> sList, final List<P> pList,
+                                final BiPredicate<S, P> mergePredicate1,
+                                final BiPredicate<S, P> mergePredicate2,
+                                final Consumer3<S, P, P> resultFun) {
+        return merge(sList, pList, mergePredicate1, mergePredicate2, (s, p1, p2) -> {
+            resultFun.accept(s, p1, p2);
+            return s;
+        });
+    }
+
+    static <R, S, P1, P2> List<R> merge(
+        final List<S> sList,
+        final List<P1> p1List, final BiPredicate<S, P1> mergePredicate1,
+        final List<P2> p2List, final BiPredicate<S, P2> mergePredicate2,
+        final Function3<S, P1, P2, R> resultFun) {
+
+        if (sList == null || sList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        final Function<S, P1> getP1;
+        if (p1List == null || p1List.isEmpty()) {
+            getP1 = (s) -> null;
+        }
+        else {
+            getP1 = (s) -> {
+                for (final P1 p : p1List) {
+                    if (mergePredicate1.test(s, p)) {
+                        return p;
+                    }
+                }
+                return null;
+            };
+        }
+
+        final Function<S, P2> getP2;
+        if (p2List == null || p2List.isEmpty()) {
+            getP2 = (s) -> null;
+        }
+        else {
+            getP2 = (s) -> {
+                for (final P2 p : p2List) {
+                    if (mergePredicate2.test(s, p)) {
+                        return p;
+                    }
+                }
+                return null;
+            };
+        }
+        final List<R> result = new ArrayList<>(sList.size());
+        for (final S s : sList) {
+            result.add(resultFun.apply(s, getP1.apply(s), getP2.apply(s)));
+        }
+        return result;
+    }
+
+    static <S, P1, P2> List<S> merge(
+        final List<S> sList,
+        final List<P1> p1List, final BiPredicate<S, P1> mergePredicate1,
+        final List<P2> p2List, final BiPredicate<S, P2> mergePredicate2,
+        final Consumer3<S, P1, P2> resultFun) {
+        return merge(sList, p1List, mergePredicate1, p2List, mergePredicate2, (s, p1, p2) -> {
+            resultFun.accept(s, p1, p2);
+            return s;
+        });
+    }
+
+    static <S, P> List<DynamicAssembler<S, P>> mergeToAssembler(
+        final String propName,
+        final List<S> sList, final List<P> pList,
+        final BiPredicate<S, P> mergePredicate) {
+
+        return merge(sList, pList, mergePredicate, (s, p) -> {
+            return Assemblers.ofDynamic(s, propName, p);
+        });
+    }
+
+    static <S, P> List<Creator<S, P>> mergeToCreator(
+        final List<S> sList, final List<P> pList,
+        final BiPredicate<S, P> mergePredicate) {
+        return merge(sList, pList, mergePredicate, (BiFunction<S, P, Creator<S, P>>) Creator::of);
+    }
+
+    static <S, P> List<Auditor<S, P>> mergeToAuditor(
+        final List<S> sList, final List<P> pList,
+        final BiPredicate<S, P> mergePredicate1,
+        final BiPredicate<S, P> mergePredicate2) {
+        return merge(sList, pList, mergePredicate1, mergePredicate2,
+            (Function3<S, P, P, Auditor<S, P>>) Auditor::of);
     }
 }

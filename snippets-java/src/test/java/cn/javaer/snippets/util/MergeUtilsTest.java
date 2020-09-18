@@ -1,6 +1,6 @@
 package cn.javaer.snippets.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import cn.javaer.snippets.jackson.Json;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,6 @@ import static org.assertj.core.api.Assertions.tuple;
  * @author cn-src
  */
 class MergeUtilsTest {
-    ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void mergeProperty() {
@@ -30,11 +30,12 @@ class MergeUtilsTest {
 
         final Prop p1 = new Prop(1L, "n1");
         final Prop p2 = new Prop(2L, "n2");
+
         final List<Prop> props = Arrays.asList(p1, p2);
 
-        final List<Demo> result = MergeUtils.mergeProperty(
-            demos, Demo::getDemoPropId, Demo::setDemoProp,
-            props, Prop::getId);
+        final List<Demo> result = MergeUtils.merge(demos, props,
+            (d, p) -> d.demoPropId != null && d.demoPropId.equals(p.id),
+            Demo::setDemoProp);
 
         assertThat(result).extracting(Demo::getProp1, Demo::getDemoProp)
             .contains(
@@ -54,17 +55,19 @@ class MergeUtilsTest {
             new Product(2L, "n1", "c1-2", "c2-2", 2L),
             new Product(3L, "n1", "c1-1", "c2-2", 2L)
         );
-        final List<Product2> results = MergeUtils.mergePropertyToMap(
-            products,
-            Product::getId,
-            Product2::getId,
-            Product2::getDynamicData,
-            Product2::setDynamicData,
-            p -> String.format("%s-%s", p.getCategory1(), p.getCategory2()),
-            (p, old) -> p.getCount() + (old == null ? 0 : old),
-            p -> new Product2(p.getId(), p.getName())
-
+        final List<Product2> results = MergeUtils.merge(products,
+            (p, p2) -> p.id.equals(p2.id),
+            (p, p2) -> {
+                if (p2.getDynamicData() == null) {
+                    p2.setDynamicData(new HashMap<>());
+                }
+                final String key = String.format("%s-%s", p.getCategory1(),
+                    p.getCategory2());
+                p2.getDynamicData().merge(key, p.count, Long::sum);
+            },
+            p -> new Product2(p.id, p.name)
         );
+        System.out.println(Json.DEFAULT.write(results));
         //language=JSON
         JSONAssert.assertEquals("[\n" +
             "  {\n" +
@@ -87,7 +90,7 @@ class MergeUtilsTest {
             "    \"c1-1-c2-2\": 2\n" +
             "  }\n" +
             "}\n" +
-            "]", this.objectMapper.writeValueAsString(results), false);
+            "]", Json.DEFAULT.write(results), false);
     }
 
     @Test
@@ -100,15 +103,16 @@ class MergeUtilsTest {
             new Product(3L, "n1", "c1-1", "c2-2", 2L)
         );
 
-        final List<Product> results = MergeUtils.mergePropertyToMap(
-            products,
-            Product::getId,
-            Product::getDynamicData,
-            Product::setDynamicData,
-            p -> String.format("%s-%s", p.getCategory1(), p.getCategory2()),
-            (p, old) -> p.getCount() + (old == null ? 0 : old)
-
-        );
+        final List<Product> results = MergeUtils.merge(products,
+            (p1, p2) -> p1.id.equals(p2.id),
+            (p1, p2) -> {
+                if (p2.getDynamicData() == null) {
+                    p2.setDynamicData(new HashMap<>());
+                }
+                final String key = String.format("%s-%s", p1.getCategory1(),
+                    p1.getCategory2());
+                p2.getDynamicData().merge(key, p1.count, Long::sum);
+            });
         //language=JSON
         JSONAssert.assertEquals("[\n" +
             "  {\n" +
@@ -140,7 +144,7 @@ class MergeUtilsTest {
             "    \"c1-1-c2-2\": 2\n" +
             "  }\n" +
             "}\n" +
-            "]", this.objectMapper.writeValueAsString(results), false);
+            "]", Json.DEFAULT.write(results), false);
     }
 
     @Data
