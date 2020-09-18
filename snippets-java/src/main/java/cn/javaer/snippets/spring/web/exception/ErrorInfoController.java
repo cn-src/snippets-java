@@ -4,18 +4,20 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * @author cn-src
@@ -24,7 +26,8 @@ import java.util.TreeSet;
 @RequestMapping
 public class ErrorInfoController implements ApplicationContextAware, InitializingBean {
 
-    private Map<String, DefinedErrorInfo> errorInfos;
+    private final TreeSet<DefinedErrorInfo> errorInfos = new TreeSet<>();
+
     private ApplicationContext applicationContext;
     private final ErrorInfoExtractor errorInfoExtractor;
 
@@ -33,7 +36,7 @@ public class ErrorInfoController implements ApplicationContextAware, Initializin
     }
 
     @GetMapping("error_infos")
-    public Map<String, DefinedErrorInfo> errorInfos() {
+    public Set<DefinedErrorInfo> errorInfos() {
         return this.errorInfos;
     }
 
@@ -45,27 +48,27 @@ public class ErrorInfoController implements ApplicationContextAware, Initializin
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        final Collection<Object> controllers =
-            this.applicationContext.getBeansWithAnnotation(Controller.class).values();
 
-        final Map<String, DefinedErrorInfo> infoMap = new HashMap<>();
+        final TreeSet<DefinedErrorInfo> errorInfos =
+            Arrays.stream(HttpStatus.values()).map(DefinedErrorInfo::of)
+                .collect(Collectors.toCollection(TreeSet::new));
+
         if (!this.errorInfoExtractor.getConfiguredErrorInfos().isEmpty()) {
-            infoMap.putAll(this.errorInfoExtractor.getConfiguredErrorInfos());
+            errorInfos.addAll(this.errorInfoExtractor.getConfiguredErrorInfos().values());
         }
 
+        final Collection<Object> controllers =
+            this.applicationContext.getBeansWithAnnotation(Controller.class).values();
         final Map<String, DefinedErrorInfo> controllersErrorMapping =
             this.errorInfoExtractor.getControllersErrorMapping(controllers);
         if (!controllersErrorMapping.isEmpty()) {
-            infoMap.putAll(controllersErrorMapping);
+            errorInfos.addAll(controllersErrorMapping.values());
         }
 
-        final TreeSet<Map.Entry<String, DefinedErrorInfo>> objects =
-            new TreeSet<>(Comparator.comparing(it -> it.getValue().getStatus()));
-        objects.addAll(infoMap.entrySet());
-
-        this.errorInfos = new LinkedHashMap<>(objects.size());
-        for (final Map.Entry<String, DefinedErrorInfo> entry : objects) {
-            this.errorInfos.put(entry.getKey(), entry.getValue());
+        final MessageSourceAccessor accessor = this.errorInfoExtractor.getMessageSourceAccessor();
+        for (final DefinedErrorInfo info : errorInfos) {
+            final String message = accessor.getMessage(info.getError(), info.getMessage());
+            this.errorInfos.add(info.withMessage(message));
         }
     }
 }

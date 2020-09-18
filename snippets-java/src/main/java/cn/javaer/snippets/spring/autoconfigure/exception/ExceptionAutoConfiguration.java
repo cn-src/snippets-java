@@ -81,9 +81,8 @@ public class ExceptionAutoConfiguration implements InitializingBean {
                     final int i = value.indexOf(',');
                     if (i > 0) {
                         final DefinedErrorInfo errorStatus =
-                            new DefinedErrorInfo(value.substring(i + 1),
-                                Integer.parseInt(value.substring(0,
-                                    i)));
+                            DefinedErrorInfo.of(value.substring(i + 1),
+                                Integer.parseInt(value.substring(0, i)));
                         this.useMapping.put(entry.getKey(), errorStatus);
                     }
                     else {

@@ -5,38 +5,22 @@ import lombok.With;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.Comparator;
+import java.util.Objects;
+
 /**
  * @author cn-src
  */
 @Value
-public class DefinedErrorInfo {
+public class DefinedErrorInfo implements Comparable<DefinedErrorInfo> {
     String error;
     Integer status;
     @With String message;
 
-    @Deprecated
-    public DefinedErrorInfo(final String error, final Integer status, final String message) {
+    DefinedErrorInfo(final String error, final Integer status, final String message) {
+        Objects.requireNonNull(error);
         this.error = error;
         this.status = status;
-        this.message = message;
-    }
-
-    @Deprecated
-    public DefinedErrorInfo(final String error, final Integer status) {
-        this.error = error;
-        this.status = status;
-        this.message = "";
-    }
-
-    @Deprecated
-    public DefinedErrorInfo(final HttpStatus httpStatus) {
-        this(httpStatus.name(), httpStatus.value(), httpStatus.getReasonPhrase());
-    }
-
-    @Deprecated
-    public DefinedErrorInfo(final HttpStatus httpStatus, final String message) {
-        this.error = httpStatus.name();
-        this.status = httpStatus.value();
         this.message = message;
     }
 
@@ -90,5 +74,30 @@ public class DefinedErrorInfo {
 
     public static DefinedErrorInfo of(final DefinedErrorInfo errorInfo, final String message) {
         return new DefinedErrorInfo(errorInfo.error, errorInfo.status, message);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
+        final DefinedErrorInfo that = (DefinedErrorInfo) o;
+        return Objects.equals(this.error, that.error);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.error);
+    }
+
+    @Override
+    public int compareTo(final DefinedErrorInfo o) {
+        return Comparator.comparing(DefinedErrorInfo::getStatus,
+            Comparator.nullsLast(Integer::compare))
+            .thenComparing(DefinedErrorInfo::getError, String::compareTo)
+            .compare(this, o);
     }
 }
