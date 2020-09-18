@@ -16,6 +16,8 @@
 * 使用 `JsonbField` 扩展 PostgreSQL 的 JSONB 支持
 * 使用 `SimpleJooqJdbcRepository` 将 jOOQ 和 Spring Data JDBC 集成
 * `@DataJooqJdbcTest` JooqJdbcRepository 测试支持
+* `SnippetsGenerator` `TablesGenerator` jOOQ 自带代码生成器扩展
+* `CodeGenTool` 全新的 jOOQ 代码生成器，无需链接数据库，根据 spring data 注解生成
 
 ## jackson
 * 使用 `cn.javaer.snippets.jackson.Json` 便捷的 JSON 工具
