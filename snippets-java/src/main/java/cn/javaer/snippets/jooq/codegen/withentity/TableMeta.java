@@ -21,9 +21,8 @@ public class TableMeta {
     String entityName;
     String staticFieldName;
     List<ColumnMeta> columnMetas;
-
     List<ColumnMeta> allColumnMetas;
-
+    boolean hasAttachColumn;
     String tableClassName;
 
     public TableMeta(final ClassInfo classInfo, final String generatedPackage) {
@@ -58,6 +57,7 @@ public class TableMeta {
                 allColumnMetas.add(new ColumnMeta(fieldName, fieldType, s));
             }
         }
+        this.hasAttachColumn = allColumnMetas.size() > this.columnMetas.size();
         this.allColumnMetas = allColumnMetas;
     }
 }
