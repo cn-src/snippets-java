@@ -14,10 +14,10 @@ import java.util.Objects;
 @Value
 public class DefinedErrorInfo implements Comparable<DefinedErrorInfo> {
     String error;
-    Integer status;
+    int status;
     @With String message;
 
-    DefinedErrorInfo(final String error, final Integer status, final String message) {
+    DefinedErrorInfo(final String error, final int status, final String message) {
         Objects.requireNonNull(error);
         this.error = error;
         this.status = status;
@@ -49,12 +49,12 @@ public class DefinedErrorInfo implements Comparable<DefinedErrorInfo> {
         return DefinedErrorInfo.of(httpStatus, message);
     }
 
-    public static DefinedErrorInfo of(final String error, final Integer status,
+    public static DefinedErrorInfo of(final String error, final int status,
                                       final String message) {
         return new DefinedErrorInfo(error, status, message);
     }
 
-    public static DefinedErrorInfo of(final String error, final Integer status) {
+    public static DefinedErrorInfo of(final String error, final int status) {
         return new DefinedErrorInfo(error, status, "");
     }
 
@@ -95,8 +95,7 @@ public class DefinedErrorInfo implements Comparable<DefinedErrorInfo> {
 
     @Override
     public int compareTo(final DefinedErrorInfo o) {
-        return Comparator.comparing(DefinedErrorInfo::getStatus,
-            Comparator.nullsLast(Integer::compare))
+        return Comparator.comparing(DefinedErrorInfo::getStatus, Integer::compare)
             .thenComparing(DefinedErrorInfo::getError, String::compareTo)
             .compare(this, o);
     }
