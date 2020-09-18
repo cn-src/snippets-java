@@ -10,6 +10,7 @@ import cn.javaer.snippets.util.function.Function3;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -26,6 +27,14 @@ public interface MergeUtils {
                                 final BiPredicate<S, R> mergePredicate,
                                 final BiConsumer<S, R> handler,
                                 final Function<S, R> rCreator) {
+
+        Objects.requireNonNull(mergePredicate);
+        Objects.requireNonNull(handler);
+        Objects.requireNonNull(rCreator);
+        if (sList == null || sList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         final List<R> results = new ArrayList<>();
         for (final S s : sList) {
             final R r = results.stream()
@@ -51,6 +60,8 @@ public interface MergeUtils {
                                    final BiPredicate<S, P> mergePredicate,
                                    final BiFunction<S, P, R> resultFun) {
 
+        Objects.requireNonNull(mergePredicate);
+        Objects.requireNonNull(resultFun);
         if (sList == null || sList.isEmpty()) {
             return Collections.emptyList();
         }
@@ -84,9 +95,14 @@ public interface MergeUtils {
                                    final BiPredicate<S, P> mergePredicate1,
                                    final BiPredicate<S, P> mergePredicate2,
                                    final Function3<S, P, P, R> resultFun) {
+
+        Objects.requireNonNull(mergePredicate1);
+        Objects.requireNonNull(mergePredicate2);
+        Objects.requireNonNull(resultFun);
         if (sList == null || sList.isEmpty()) {
             return Collections.emptyList();
         }
+
         final List<R> result = new ArrayList<>(sList.size());
         for (final S s : sList) {
             P p1 = null;
@@ -123,9 +139,13 @@ public interface MergeUtils {
         final List<P2> p2List, final BiPredicate<S, P2> mergePredicate2,
         final Function3<S, P1, P2, R> resultFun) {
 
+        Objects.requireNonNull(mergePredicate1);
+        Objects.requireNonNull(mergePredicate2);
+        Objects.requireNonNull(resultFun);
         if (sList == null || sList.isEmpty()) {
             return Collections.emptyList();
         }
+
         final Function<S, P1> getP1;
         if (p1List == null || p1List.isEmpty()) {
             getP1 = (s) -> null;
