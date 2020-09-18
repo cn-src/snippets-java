@@ -193,6 +193,31 @@ public interface MergeUtils {
         });
     }
 
+    static <S, P, R> List<R> mergeList(final List<S> sList, final List<P> pList,
+                                       final BiPredicate<S, P> mergePredicate,
+                                       final BiFunction<List<P>, S, R> resultFun) {
+
+        Objects.requireNonNull(mergePredicate);
+        Objects.requireNonNull(resultFun);
+        if (sList == null || sList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        final List<R> result = new ArrayList<>(sList.size());
+        for (final S s : sList) {
+            final List<P> used = new ArrayList<>();
+            if (null != pList) {
+                for (final P p : pList) {
+                    if (mergePredicate.test(s, p)) {
+                        used.add(p);
+                    }
+                }
+            }
+            result.add(resultFun.apply(used, s));
+        }
+        return result;
+    }
+
     static <S, P> List<DynamicAssembler<S, P>> mergeToAssembler(
         final String propName,
         final List<S> sList, final List<P> pList,
@@ -201,6 +226,15 @@ public interface MergeUtils {
         return merge(sList, pList, mergePredicate, (s, p) -> {
             return Assemblers.ofDynamic(s, propName, p);
         });
+    }
+
+    static <S, P> List<DynamicAssembler<S, List<P>>> mergeListToAssembler(
+        final String propName,
+        final List<S> sList, final List<P> pList,
+        final BiPredicate<S, P> mergePredicate) {
+
+        return mergeList(sList, pList, mergePredicate,
+            (ps, s) -> Assemblers.ofDynamic(s, propName, ps));
     }
 
     static <S, P> List<Creator<S, P>> mergeToCreator(
