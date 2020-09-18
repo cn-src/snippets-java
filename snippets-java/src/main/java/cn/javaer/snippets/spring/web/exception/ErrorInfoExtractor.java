@@ -76,7 +76,7 @@ public class ErrorInfoExtractor {
         return errors;
     }
 
-    public Map<String, DefinedErrorInfo> getControllersErrorMapping(final Collection<Object> controllers) {
+    public Map<String, DefinedErrorInfo> getControllersErrorMapping(final Collection<Object> controllers, final boolean isIncludeMessage) {
         final Map<String, DefinedErrorInfo> result = new HashMap<>();
         for (final Object ctr : controllers) {
             final Method[] methods = ctr.getClass().getDeclaredMethods();
@@ -87,7 +87,7 @@ public class ErrorInfoExtractor {
                         for (final Class<?> type : exceptionTypes) {
                             @SuppressWarnings("unchecked")
                             final Class<? extends Throwable> t = (Class<? extends Throwable>) type;
-                            final DefinedErrorInfo extract = this.extract(t, true);
+                            final DefinedErrorInfo extract = this.extract(t, isIncludeMessage);
                             if (null != extract) {
                                 result.put(t.getName(), extract);
                             }

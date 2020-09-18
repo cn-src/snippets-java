@@ -5,19 +5,16 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 /**
  * @author cn-src
@@ -47,28 +44,21 @@ public class ErrorInfoController implements ApplicationContextAware, Initializin
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
 
-        final TreeSet<DefinedErrorInfo> errorInfos =
-            Arrays.stream(HttpStatus.values()).map(DefinedErrorInfo::of)
-                .collect(Collectors.toCollection(TreeSet::new));
-
-        if (!this.errorInfoExtractor.getConfiguredErrorInfos().isEmpty()) {
-            errorInfos.addAll(this.errorInfoExtractor.getConfiguredErrorInfos().values());
+        final MessageSourceAccessor accessor = this.errorInfoExtractor.getMessageSourceAccessor();
+        for (final DefinedErrorInfo info :
+            this.errorInfoExtractor.getConfiguredErrorInfos().values()) {
+            final String message = accessor.getMessage(info.getError(), info.getMessage());
+            this.errorInfos.add(info.withMessage(message));
         }
 
         final Collection<Object> controllers =
             this.applicationContext.getBeansWithAnnotation(Controller.class).values();
         final Map<String, DefinedErrorInfo> controllersErrorMapping =
-            this.errorInfoExtractor.getControllersErrorMapping(controllers);
+            this.errorInfoExtractor.getControllersErrorMapping(controllers, true);
         if (!controllersErrorMapping.isEmpty()) {
-            errorInfos.addAll(controllersErrorMapping.values());
-        }
-
-        final MessageSourceAccessor accessor = this.errorInfoExtractor.getMessageSourceAccessor();
-        for (final DefinedErrorInfo info : errorInfos) {
-            final String message = accessor.getMessage(info.getError(), info.getMessage());
-            this.errorInfos.add(info.withMessage(message));
+            this.errorInfos.addAll(controllersErrorMapping.values());
         }
     }
 }
