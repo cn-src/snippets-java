@@ -60,7 +60,7 @@ class ExceptionResponseBuilder extends GenericResponseBuilder {
         }
         for (final DefinedErrorInfo errorInfo : errorInfos) {
             final ApiResponse response = new ApiResponse();
-            response.setDescription(String.format("%s: %s", errorInfo.getStatus(),
+            response.setDescription(String.format("%s: %s", errorInfo.getError(),
                 errorInfo.getMessage()));
             apiResponses.addApiResponse(String.valueOf(errorInfo.getStatus()), response);
         }
