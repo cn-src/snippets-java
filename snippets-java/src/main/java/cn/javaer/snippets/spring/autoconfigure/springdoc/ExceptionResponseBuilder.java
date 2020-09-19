@@ -15,6 +15,7 @@ import org.springdoc.core.SpringDocConfigProperties;
 import org.springframework.web.method.HandlerMethod;
 
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * @author cn-src
@@ -48,16 +49,20 @@ class ExceptionResponseBuilder extends GenericResponseBuilder {
         final ApiResponses apiResponses = super.build(components, handlerMethod, operation,
             methodAttributes);
         final Class<?>[] exceptionTypes = handlerMethod.getMethod().getExceptionTypes();
+        final TreeSet<DefinedErrorInfo> errorInfos = new TreeSet<>();
         for (final Class<?> exceptionType : exceptionTypes) {
             @SuppressWarnings("unchecked")
             final DefinedErrorInfo errorInfo = this.errorInfoExtractor.extract((Class<?
                 extends Throwable>) exceptionType, true);
             if (errorInfo != null) {
-                final ApiResponse response = new ApiResponse();
-                response.setDescription(String.format("status:%s, %s", errorInfo.getStatus(),
-                    errorInfo.getMessage()));
-                apiResponses.addApiResponse(errorInfo.getError(), response);
+                errorInfos.add(errorInfo);
             }
+        }
+        for (final DefinedErrorInfo errorInfo : errorInfos) {
+            final ApiResponse response = new ApiResponse();
+            response.setDescription(String.format("status:%s, %s", errorInfo.getStatus(),
+                errorInfo.getMessage()));
+            apiResponses.addApiResponse(errorInfo.getError(), response);
         }
         return apiResponses;
     }
