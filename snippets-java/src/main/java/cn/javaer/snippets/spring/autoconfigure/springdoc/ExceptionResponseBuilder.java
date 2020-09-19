@@ -54,9 +54,9 @@ class ExceptionResponseBuilder extends GenericResponseBuilder {
                 extends Throwable>) exceptionType, true);
             if (errorInfo != null) {
                 final ApiResponse response = new ApiResponse();
-                response.setDescription(String.format("error:%s, %s", errorInfo.getError(),
+                response.setDescription(String.format("status:%s, %s", errorInfo.getStatus(),
                     errorInfo.getMessage()));
-                apiResponses.addApiResponse(errorInfo.getStatus().toString(), response);
+                apiResponses.addApiResponse(errorInfo.getError(), response);
             }
         }
         return apiResponses;
