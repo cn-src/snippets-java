@@ -1,7 +1,6 @@
 package cn.javaer.snippets.jooq.condition.annotation;
 
 import cn.javaer.snippets.jooq.PGDSL;
-import org.assertj.core.util.Arrays;
 import org.jooq.Field;
 import org.jooq.JSONB;
 
@@ -9,7 +8,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.reflect.Array;
 import java.util.function.BiFunction;
 
 /**
@@ -35,14 +33,6 @@ public @interface Condition {
         }),
 
         CONTAINED_IN(PGDSL::containedIn),
-
-        BETWEEN((field, obj) -> {
-            if (!Arrays.isArray(obj) && Array.getLength(obj) != 2) {
-                throw new IllegalStateException("'between' must has two params");
-            }
-            final Object[] objs = (Object[]) obj;
-            return field.between(objs[0], objs[1]);
-        }),
 
         GREATER_THAN(Field::greaterThan),
         GREATER_OR_EQUAL(Field::greaterOrEqual),
