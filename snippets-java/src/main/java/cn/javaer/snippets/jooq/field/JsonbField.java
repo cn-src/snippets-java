@@ -76,21 +76,21 @@ public class JsonbField<R extends Record, T> extends CustomField<T> implements T
         else {
             val = object == null ? null : JSONValue.toJSONString(object);
         }
-        return DSL.condition("{0}::jsonb @> {1}::jsonb", this,
-                DSL.val(val, this.getDataType()));
+        return DSL.condition("{0} @> {1}::jsonb", this,
+            DSL.val(val, this.getDataType()));
     }
 
     @Support(SQLDialect.POSTGRES)
     public Condition containsJsonb(final Field<T> json) {
         return DSL.condition("{0}::jsonb @> {1}::jsonb", this,
-                json);
+            json);
     }
 
     @Support(SQLDialect.POSTGRES)
     public Condition containsJsonb(final String jsonKey, final Object jsonValue) {
         final String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
         return DSL.condition("{0}::jsonb @> {1}::jsonb", this,
-                DSL.val(json, this.getDataType()));
+            DSL.val(json, this.getDataType()));
     }
 
     @Override
