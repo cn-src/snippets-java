@@ -2,7 +2,6 @@ package cn.javaer.snippets.jooq.condition.annotation;
 
 import cn.javaer.snippets.jooq.PGDSL;
 import org.jooq.Field;
-import org.jooq.JSONB;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -25,12 +24,7 @@ public @interface Condition {
          *
          */
         EQUAL(Field::equal),
-        CONTAINS(Field::contains),
-
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        JSONB_CONTAINS((field, o) -> {
-            return PGDSL.contains((Field) field, (JSONB) o);
-        }),
+        CONTAINS(PGDSL::contains),
 
         CONTAINED_IN(PGDSL::containedIn),
 
