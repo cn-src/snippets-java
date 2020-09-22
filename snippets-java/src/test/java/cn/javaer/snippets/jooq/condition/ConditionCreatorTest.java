@@ -57,8 +57,9 @@ class ConditionCreatorTest {
     @Test
     void conditionDateBetween() {
 
-        final Condition condition = ConditionCreator.create(new Query4(LocalDateTime.parse("2020" +
-            "-01-11 00:00:00"), LocalDateTime.parse("2020-04-11 00:00:00")));
+        final Condition condition = ConditionCreator.create(new Query4(
+            LocalDateTime.parse("2020-01-11T00:00:00"),
+            LocalDateTime.parse("2020-04-11T00:00:00")));
         assertThat(this.dsl.render(condition)).isEqualTo("col_name between cast(? as timestamp) " +
             "and cast(? as timestamp)");
     }
