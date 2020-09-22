@@ -19,27 +19,29 @@ class JsonbFieldTest {
 
     @Test
     void contains() {
-        Condition condition = new JsonbField<>("ca", SQLDataType.JSONB, DSL.table("demo"))
-                .containsJsonb(JSONB.valueOf("{}"));
+        final Condition condition = new JsonbField<>("ca", SQLDataType.JSONB, DSL.table("demo"))
+            .jsonbContains(JSONB.valueOf("{}"));
 
-        DSLContext dsl = DSL.using(SQLDialect.POSTGRES);
-        SelectConditionStep<Record> step = dsl.selectFrom(DSL.table("demo"))
-                .where(condition);
-        String renderInlined = dsl.renderInlined(step);
+        final DSLContext dsl = DSL.using(SQLDialect.POSTGRES);
+        final SelectConditionStep<Record> step = dsl.selectFrom(DSL.table("demo"))
+            .where(condition);
+        final String renderInlined = dsl.renderInlined(step);
         assertThat(renderInlined)
-                .isEqualTo("select * from demo where (demo.\"ca\"::jsonb @> cast('{}' as jsonb)::jsonb)");
+            .isEqualTo("select * from demo where (demo.\"ca\"::jsonb @> cast('{}' as jsonb)" +
+                "::jsonb)");
     }
 
     @Test
     void containsKv() {
-        Condition condition = new JsonbField<>("ca", SQLDataType.JSONB, DSL.table("demo"))
-                .containsJsonb("key", "value");
+        final Condition condition = new JsonbField<>("ca", SQLDataType.JSONB, DSL.table("demo"))
+            .jsonbContains("key", "value");
 
-        DSLContext dsl = DSL.using(SQLDialect.POSTGRES);
-        SelectConditionStep<Record> step = dsl.selectFrom(DSL.table("demo"))
-                .where(condition);
-        String renderInlined = dsl.renderInlined(step);
+        final DSLContext dsl = DSL.using(SQLDialect.POSTGRES);
+        final SelectConditionStep<Record> step = dsl.selectFrom(DSL.table("demo"))
+            .where(condition);
+        final String renderInlined = dsl.renderInlined(step);
         assertThat(renderInlined)
-                .isEqualTo("select * from demo where (demo.\"ca\"::jsonb @> cast('{\"key\":\"value\"}' as jsonb)::jsonb)");
+            .isEqualTo("select * from demo where (demo.\"ca\"::jsonb @> cast" +
+                "('{\"key\":\"value\"}' as jsonb)::jsonb)");
     }
 }

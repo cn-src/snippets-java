@@ -62,9 +62,9 @@ public class JsonbField<R extends Record, T> extends CustomField<T> implements T
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Support(SQLDialect.POSTGRES)
-    public Condition containsJsonb(final T object) {
+    public Condition jsonbContains(final T object) {
         if (object instanceof Field) {
-            return this.containsJsonb((Field) object);
+            return this.jsonbContains((Field) object);
         }
         final String val;
         if (object instanceof String) {
@@ -81,12 +81,12 @@ public class JsonbField<R extends Record, T> extends CustomField<T> implements T
     }
 
     @Support(SQLDialect.POSTGRES)
-    public Condition containsJsonb(final Field<T> field) {
+    public Condition jsonbContains(final Field<T> field) {
         return DSL.condition("{0} @> {1}", this, field);
     }
 
     @Support(SQLDialect.POSTGRES)
-    public Condition containsJsonb(final String jsonKey, final Object jsonValue) {
+    public Condition jsonbContains(final String jsonKey, final Object jsonValue) {
         final String json = Json.DEFAULT.write(Collections.singletonMap(jsonKey, jsonValue));
         return DSL.condition("{0} @> {1}::jsonb", this, DSL.val(json, this.getDataType()));
     }
