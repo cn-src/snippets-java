@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jooq.field;
 
+import cn.javaer.snippets.jackson.Json;
 import org.jooq.Condition;
 import org.jooq.Context;
 import org.jooq.DataType;
@@ -74,7 +75,7 @@ public class JsonbField<R extends Record, T> extends CustomField<T> implements T
             val = ((JSONB) object).data();
         }
         else {
-            val = object == null ? null : JSONValue.toJSONString(object);
+            val = object == null ? null : Json.DEFAULT.write(object);
         }
         return DSL.condition("{0} @> {1}::jsonb", this,
             DSL.val(val, this.getDataType()));
