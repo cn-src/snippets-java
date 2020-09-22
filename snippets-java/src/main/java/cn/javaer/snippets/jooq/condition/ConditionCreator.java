@@ -154,14 +154,15 @@ public class ConditionCreator {
         if (conditions.isEmpty()) {
             return null;
         }
-        final Condition condition = conditions.get(0);
+        Condition condition = conditions.get(0);
         for (int i = 1, size = conditions.size(); i < size; i++) {
-            condition.and(conditions.get(i));
+            condition = condition.and(conditions.get(i));
         }
         for (final Map.Entry<String, Pair> entry : biMap.entrySet()) {
             final Pair pair = entry.getValue();
             final Field<Object> column = DSL.field(underline(entry.getKey()));
-            condition.and(pair.operator.getFunction().apply(column, pair.getMin(), pair.getMax()));
+            condition = condition.and(pair.operator.getFunction().apply(column, pair.getMin(),
+                pair.getMax()));
         }
         return condition;
     }

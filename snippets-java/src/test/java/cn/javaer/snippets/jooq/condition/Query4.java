@@ -5,7 +5,7 @@ import cn.javaer.snippets.jooq.condition.annotation.ConditionBetweenMin;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author cn-src
@@ -14,9 +14,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Query4 {
 
-    @ConditionBetweenMin(column = "colName", dateToDateTime = true)
-    private LocalDate start;
+    @ConditionBetweenMin(column = "colName")
+    private LocalDateTime start;
 
-    @ConditionBetweenMax(column = "colName", dateToDateTime = true)
-    private LocalDate end;
+    @ConditionBetweenMax(column = "colName")
+    private LocalDateTime end;
 }

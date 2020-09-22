@@ -13,7 +13,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.jooq.JSONB;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author cn-src
@@ -49,11 +49,11 @@ public class QueryFull {
     @ConditionGreaterOrEqual
     private Integer num4;
 
-    @ConditionBetweenMin(column = "colDate", dateToDateTime = true)
-    private LocalDate startDate;
+    @ConditionBetweenMin(column = "colDate")
+    private LocalDateTime startDate;
 
-    @ConditionBetweenMax(column = "colDate", dateToDateTime = true)
-    private LocalDate endDate;
+    @ConditionBetweenMax(column = "colDate")
+    private LocalDateTime endDate;
 
     @ConditionBetweenMin("colNum")
     private Integer startNum;
