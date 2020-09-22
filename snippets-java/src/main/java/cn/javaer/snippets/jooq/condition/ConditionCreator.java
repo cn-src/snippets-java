@@ -152,18 +152,19 @@ public class ConditionCreator {
                 }
             }
         }
-        if (conditions.isEmpty()) {
+        if (conditions.isEmpty() && biMap.isEmpty()) {
             return null;
         }
-        Condition condition = conditions.get(0);
-        for (int i = 1, size = conditions.size(); i < size; i++) {
-            condition = condition.and(conditions.get(i));
+        Condition condition = null;
+        for (final Condition con : conditions) {
+            condition = condition == null ? con : condition.and(con);
         }
         for (final Map.Entry<String, Pair> entry : biMap.entrySet()) {
             final Pair pair = entry.getValue();
             final Field<Object> column = DSL.field(underline(entry.getKey()));
-            condition = condition.and(pair.operator.getFunction().apply(column, pair.getMin(),
-                pair.getMax()));
+            final Condition con = pair.operator.getFunction().apply(
+                column, pair.getMin(), pair.getMax());
+            condition = condition == null ? con : condition.and(con);
         }
         return condition;
     }
