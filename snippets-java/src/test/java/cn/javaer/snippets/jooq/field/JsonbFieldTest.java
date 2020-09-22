@@ -27,7 +27,7 @@ class JsonbFieldTest {
             .where(condition);
         final String renderInlined = dsl.renderInlined(step);
         assertThat(renderInlined)
-            .isEqualTo("select * from demo where (demo.\"ca\"::jsonb @> cast('{}' as jsonb)" +
+            .isEqualTo("select * from demo where (demo.\"ca\" @> cast('{}' as jsonb)" +
                 "::jsonb)");
     }
 
@@ -41,7 +41,7 @@ class JsonbFieldTest {
             .where(condition);
         final String renderInlined = dsl.renderInlined(step);
         assertThat(renderInlined)
-            .isEqualTo("select * from demo where (demo.\"ca\"::jsonb @> cast" +
+            .isEqualTo("select * from demo where (demo.\"ca\" @> cast" +
                 "('{\"key\":\"value\"}' as jsonb)::jsonb)");
     }
 }
