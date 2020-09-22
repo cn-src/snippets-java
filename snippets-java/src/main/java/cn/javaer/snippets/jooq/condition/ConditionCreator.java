@@ -2,6 +2,7 @@ package cn.javaer.snippets.jooq.condition;
 
 import cn.javaer.snippets.jooq.condition.annotation.BiCondition;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionIgnore;
+import cn.javaer.snippets.jooq.condition.annotation.ConditionTree;
 import cn.javaer.snippets.model.TreeNode;
 import lombok.Data;
 import org.jooq.Condition;
@@ -20,6 +21,8 @@ import org.springframework.util.ReflectionUtils;
 
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -121,13 +124,26 @@ public class ConditionCreator {
                     cn.javaer.snippets.jooq.condition.annotation.Condition.class);
             final BiCondition biConditionAnn =
                 AnnotatedElementUtils.findMergedAnnotation(fd, BiCondition.class);
-            if (ignoreUnannotated && conditionAnn == null && biConditionAnn == null) {
+            final ConditionTree conditionTree =
+                AnnotatedElementUtils.findMergedAnnotation(fd, ConditionTree.class);
+            if (ignoreUnannotated && conditionAnn == null
+                && biConditionAnn == null && conditionTree == null) {
                 continue;
             }
 
             final Object value = ReflectionUtils.invokeMethod(pd.getReadMethod(), query);
             if (!ObjectUtils.isEmpty(value)) {
-                if (null != biConditionAnn) {
+                if (conditionTree != null) {
+                    final Field[] fields = Arrays.stream(conditionTree.value())
+                        .map(DSL::field).toArray(Field[]::new);
+                    if (value instanceof List) {
+                        conditions.add(create((List) value, fields));
+                    }
+                    else {
+                        conditions.add(create((List) Collections.singletonList(value), fields));
+                    }
+                }
+                else if (null != biConditionAnn) {
                     final String column = biConditionAnn.column();
                     Assert.hasLength(column, () -> "'column' must be not empty");
                     final Pair pair = biMap.computeIfAbsent(column, s -> new Pair());
