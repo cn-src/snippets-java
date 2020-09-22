@@ -43,7 +43,7 @@ class ConditionCreatorTest {
             JSONB.valueOf("{\"k\":\"v\"}")));
 
         assertThat(this.dsl.render(condition))
-            .isEqualTo("((jsonb2::jsonb @> cast(? as jsonb)::jsonb) and cast(str2 as varchar) " +
+            .isEqualTo("((jsonb2 @> cast(? as jsonb)::jsonb) and cast(str2 as varchar) " +
                 "like ('%' || replace(replace(replace(?, '!', '!!'), '%', '!%'), '_', '!_') || " +
                 "'%') escape '!')");
     }
