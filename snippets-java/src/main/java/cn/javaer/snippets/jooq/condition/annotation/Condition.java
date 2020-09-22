@@ -29,7 +29,7 @@ public @interface Condition {
 
         @SuppressWarnings({"unchecked", "rawtypes"})
         JSONB_CONTAINS((field, o) -> {
-            return PGDSL.jsonbContains((Field) field, (JSONB) o);
+            return PGDSL.contains((Field) field, (JSONB) o);
         }),
 
         CONTAINED_IN(PGDSL::containedIn),

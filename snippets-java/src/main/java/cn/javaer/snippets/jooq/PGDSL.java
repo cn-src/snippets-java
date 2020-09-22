@@ -23,11 +23,21 @@ import java.util.Collections;
  * @author cn-src
  */
 public class PGDSL extends PostgresDSL {
+    public static final String JSONB_SQL_TYPE = "jsonb";
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static DataType<Geometry> GEOMETRY_TYPE =
         SQLDataType.OTHER.asConvertedDataType((Converter) PostGISGeometryConverter.INSTANCE);
 
     protected PGDSL() {
+    }
+
+    @Support(SQLDialect.POSTGRES)
+    public static <T> Condition contains(final Field<T> field, final T value) {
+        if (JSONB_SQL_TYPE.equals(field.getDataType().getTypeName())) {
+            return DSL.condition("{0} @> {1}::jsonb", field,
+                DSL.val(Json.DEFAULT.write(value), field.getDataType()));
+        }
+        return field.contains(value);
     }
 
     /**
@@ -43,14 +53,8 @@ public class PGDSL extends PostgresDSL {
     public static Condition jsonbContains(final Field<?> jsonField, final String jsonKey,
                                           final Object jsonValue) {
         final String json = Json.DEFAULT.write(Collections.singletonMap(jsonKey, jsonValue));
-        return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
+        return DSL.condition("{0} @> {1}::jsonb", jsonField,
             DSL.val(json, jsonField.getDataType()));
-    }
-
-    @Support(SQLDialect.POSTGRES)
-    public static <T> Condition jsonbContains(final Field<T> jsonField, final T jsonb) {
-        return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
-            DSL.val(Json.DEFAULT.write(jsonb), jsonField.getDataType()));
     }
 
     @Support(SQLDialect.POSTGRES)
