@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 /**
  * @author cn-src
@@ -89,12 +88,6 @@ class ConditionCreatorTest {
             "'_', '!_') || '%') escape '!' and str3 @> ?::varchar[] and (str4 <@ ?::varchar[]) " +
             "and col_num between ? and ? and col_date between cast(? as timestamp) and cast(? as " +
             "timestamp))");
-    }
-
-    @Test
-    void exceptionQuery() {
-        assertThatIllegalStateException()
-            .isThrownBy(() -> ConditionCreator.create(new ExceptionQuery("s1")));
     }
 
     @Test
