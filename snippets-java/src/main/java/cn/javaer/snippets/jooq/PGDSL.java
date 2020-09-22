@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jooq;
 
+import cn.javaer.snippets.jackson.Json;
 import cn.javaer.snippets.jooq.field.JsonbField;
 import cn.javaer.snippets.type.Geometry;
 import org.jooq.Condition;
@@ -12,7 +13,6 @@ import org.jooq.SQLDialect;
 import org.jooq.Support;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
-import org.jooq.tools.json.JSONValue;
 import org.jooq.util.postgres.PostgresDSL;
 
 import java.time.LocalDateTime;
@@ -40,17 +40,17 @@ public class PGDSL extends PostgresDSL {
     }
 
     @Support(SQLDialect.POSTGRES)
-    public static Condition jsonbContains(final Field<JSONB> jsonField, final String jsonKey,
+    public static Condition jsonbContains(final Field<?> jsonField, final String jsonKey,
                                           final Object jsonValue) {
-        final String json = JSONValue.toJSONString(Collections.singletonMap(jsonKey, jsonValue));
+        final String json = Json.DEFAULT.write(Collections.singletonMap(jsonKey, jsonValue));
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
             DSL.val(json, jsonField.getDataType()));
     }
 
     @Support(SQLDialect.POSTGRES)
-    public static Condition jsonbContains(final Field<JSONB> jsonField, final JSONB jsonb) {
+    public static <T> Condition jsonbContains(final Field<T> jsonField, final T jsonb) {
         return DSL.condition("{0}::jsonb @> {1}::jsonb", jsonField,
-            DSL.val(jsonb, jsonField.getDataType()));
+            DSL.val(Json.DEFAULT.write(jsonb), jsonField.getDataType()));
     }
 
     @Support(SQLDialect.POSTGRES)
