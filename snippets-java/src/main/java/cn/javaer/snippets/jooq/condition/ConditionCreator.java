@@ -6,7 +6,9 @@ import cn.javaer.snippets.model.TreeNode;
 import lombok.Data;
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.JSONB;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.lang.NonNull;
@@ -146,8 +148,7 @@ public class ConditionCreator {
                 else {
                     final BiFunction<Field<Object>, Object, Condition> fun =
                         conditionAnn == null ? Field::equal : conditionAnn.value().getFunction();
-                    final Field<Object> column = DSL.field(underline(pd.getName()));
-                    conditions.add(fun.apply(column, value));
+                    conditions.add(fun.apply(createField(pd.getName(), value.getClass()), value));
                 }
             }
         }
@@ -165,6 +166,13 @@ public class ConditionCreator {
                 pair.getMax()));
         }
         return condition;
+    }
+
+    private static Field<Object> createField(final String name, final Class<?> clazz) {
+        if (JSONB.class.equals(clazz)) {
+            return (Field) DSL.field(underline(name), SQLDataType.JSONB);
+        }
+        return DSL.field(underline(name));
     }
 
     private static String underline(final String str) {
