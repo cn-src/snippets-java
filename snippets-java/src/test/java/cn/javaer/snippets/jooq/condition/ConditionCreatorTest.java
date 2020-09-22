@@ -76,14 +76,14 @@ class ConditionCreatorTest {
             .num3(3)
             .num4(4)
             .jsonb1(JSONB.valueOf("{}"))
-            .startDate(LocalDateTime.parse("2020-01-11 00:00:00"))
-            .endDate(LocalDateTime.parse("2020-03-11 00:00:00"))
+            .startDate(LocalDateTime.parse("2020-01-11T00:00:00"))
+            .endDate(LocalDateTime.parse("2020-03-11T00:00:00"))
             .startNum(23)
             .endNum(50)
             .build();
 
         final Condition condition = ConditionCreator.create(queryFull);
-        assertThat(this.dsl.render(condition)).isEqualTo("((jsonb1::jsonb @> cast(? as jsonb)" +
+        assertThat(this.dsl.render(condition)).isEqualTo("((jsonb1 @> cast(? as jsonb)" +
             "::jsonb) and num1 < ? and num2 <= ? and num3 > ? and num4 >= ? and str1 = ? and cast" +
             "(str2 as varchar) like ('%' || replace(replace(replace(?, '!', '!!'), '%', '!%'), " +
             "'_', '!_') || '%') escape '!' and str3 @> ?::varchar[] and (str4 <@ ?::varchar[]) " +
