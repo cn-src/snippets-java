@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Condition
+@Condition(Condition.Operator.LESS_OR_EQUAL)
 public @interface ConditionLessOrEqual {
 }

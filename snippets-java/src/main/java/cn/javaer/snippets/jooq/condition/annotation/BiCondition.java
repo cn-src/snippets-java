@@ -18,7 +18,7 @@ public @interface BiCondition {
 
     Operator operator() default Operator.BETWEEN;
 
-    String column();
+    String column() default "";
 
     ValueType valueType();
 

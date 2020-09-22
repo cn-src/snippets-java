@@ -1,6 +1,7 @@
 package cn.javaer.snippets.jooq.condition;
 
 import cn.javaer.snippets.jooq.condition.annotation.BiCondition;
+import cn.javaer.snippets.jooq.condition.annotation.ConditionIgnore;
 import cn.javaer.snippets.model.TreeNode;
 import lombok.Data;
 import org.jooq.Condition;
@@ -8,7 +9,6 @@ import org.jooq.Field;
 import org.jooq.impl.DSL;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.data.annotation.Transient;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
@@ -110,7 +110,7 @@ public class ConditionCreator {
         for (final PropertyDescriptor pd : pds) {
             final java.lang.reflect.Field fd =
                 ReflectionUtils.findField(query.getClass(), pd.getName());
-            if (fd == null || AnnotatedElementUtils.isAnnotated(fd, Transient.class)) {
+            if (fd == null || AnnotatedElementUtils.isAnnotated(fd, ConditionIgnore.class)) {
                 continue;
             }
 

@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Condition
+@Condition(Condition.Operator.CONTAINED_IN)
 public @interface ConditionContainedIn {
 }

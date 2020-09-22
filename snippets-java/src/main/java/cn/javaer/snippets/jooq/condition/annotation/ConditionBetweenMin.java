@@ -1,5 +1,7 @@
 package cn.javaer.snippets.jooq.condition.annotation;
 
+import org.springframework.core.annotation.AliasFor;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,7 +12,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Condition
+@BiCondition(valueType = BiCondition.ValueType.MIN)
 public @interface ConditionBetweenMin {
 
     /**
@@ -18,17 +20,12 @@ public @interface ConditionBetweenMin {
      *
      * @return Between 的表列名
      */
+    @AliasFor(attribute = "column", annotation = BiCondition.class)
     String value() default "";
 
     /**
      * @see #value()
      */
+    @AliasFor(attribute = "column", annotation = BiCondition.class)
     String column() default "";
-
-    /**
-     * 如果是日期类型，则将 LocalDate 转成 LocalDateTime
-     *
-     * @return true 则进行转换
-     */
-    boolean dateToDateTime() default false;
 }
