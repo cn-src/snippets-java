@@ -17,7 +17,7 @@ import java.util.Objects;
 public interface ResponseUtils {
 
     /**
-     * GZIP 响应.
+     * 进行 GZIP压缩，并以 GZIP 响应.
      *
      * @param body body
      *
