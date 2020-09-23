@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
+import cn.javaer.snippets.util.IoUtils;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
@@ -8,15 +9,12 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -36,11 +34,7 @@ public class CodeGenTool {
         final Handlebars handlebars = new Handlebars(loader);
         final Path genDir = getFilePath(dir, genPackage);
         try {
-            Files.walk(genDir)
-                .sorted(Comparator.reverseOrder())
-                .map(Path::toFile)
-                .forEach(File::delete);
-            Files.createDirectories(genDir);
+            IoUtils.recreateDirectories(genDir);
             final Template template = handlebars.compile("jooq-gen-table");
             final List<TableMeta> tableMetas = scan(genPackage, packageNamesToScan);
             logger.info("Scan entities total:" + tableMetas.size());
