@@ -77,17 +77,14 @@ public interface Tree {
      * 将 Tree 节点数据转换成二维表结构.
      *
      * @param treeNodes Tree 节点数据
-     * @param createFn 实体类创建函数
-     * @param setters 实体类 setter 函数
+     * @param resultFun 实体类创建函数
      * @param <E> 实体类型
      *
      * @return 实体列表
      */
-    @SafeVarargs
-    static <E> List<E> toModel(final List<TreeNode> treeNodes, final Supplier<E> createFn,
-                               final BiConsumer<E, String>... setters) {
-        Objects.requireNonNull(createFn);
-        Objects.requireNonNull(setters);
+    static <E> List<E> toModel(final List<TreeNode> treeNodes,
+                               final Function<List<String>, E> resultFun) {
+        Objects.requireNonNull(resultFun);
 
         if (treeNodes == null || treeNodes.isEmpty()) {
             return Collections.emptyList();
@@ -102,17 +99,17 @@ public interface Tree {
         // 从根节点，遍历到叶子节点，为数据库一条记录，同时移除此叶子节点
         // 当前迭代的节点往根节点方向，以及同级的下级节点移动
         while (null != current) {
-            if (stack.size() <= setters.length && !CollectionUtils.isEmpty(current.getChildren())) {
+            if (!CollectionUtils.isEmpty(current.getChildren())) {
                 current = current.getChildren().get(0);
                 stack.push(current.clone());
             }
             else {
                 final int size = stack.size() - 1;
-                final E e = createFn.get();
+                final List<String> titles = new ArrayList<>(size);
                 for (int i = 0; i < size; i++) {
-                    setters[i].accept(e, stack.get(size - 1 - i).getTitle());
+                    titles.add(stack.get(size - 1 - i).getTitle());
                 }
-                result.add(e);
+                result.add(resultFun.apply(titles));
                 stack.pop();
 
                 TreeNode peek = stack.peek();
@@ -136,5 +133,30 @@ public interface Tree {
             }
         }
         return result;
+    }
+
+    /**
+     * 将 Tree 节点数据转换成二维表结构.
+     *
+     * @param treeNodes Tree 节点数据
+     * @param createFn 实体类创建函数
+     * @param setters 实体类 setter 函数
+     * @param <E> 实体类型
+     *
+     * @return 实体列表
+     */
+    @SafeVarargs
+    static <E> List<E> toModel(final List<TreeNode> treeNodes, final Supplier<E> createFn,
+                               final BiConsumer<E, String>... setters) {
+        Objects.requireNonNull(createFn);
+        Objects.requireNonNull(setters);
+
+        return toModel(treeNodes, titles -> {
+            final E e = createFn.get();
+            for (int i = 0, size = Math.min(titles.size(), setters.length); i < size; i++) {
+                setters[i].accept(e, titles.get(i));
+            }
+            return e;
+        });
     }
 }
