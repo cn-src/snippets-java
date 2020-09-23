@@ -24,7 +24,6 @@ public interface ResponseUtils {
      * @return bytes
      */
     static ResponseEntity<byte[]> gzipWithZip(@NonNull final String body) {
-        Assert.hasLength(body, () -> "Body must be not empty");
 
         return gzip(GzipUtils.zip(body));
     }
@@ -37,7 +36,6 @@ public interface ResponseUtils {
      * @return bytes
      */
     static ResponseEntity<byte[]> gzip(final byte[] body) {
-        Assert.isTrue(body != null && body.length > 0, () -> "Body must be not empty");
 
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
