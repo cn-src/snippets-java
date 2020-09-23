@@ -38,13 +38,25 @@ public interface GzipUtils {
      */
     @Nullable
     static byte[] zip(final String str, final Charset encoding) {
-        if (str == null || str.length() == 0) {
+        return zip(str.getBytes(encoding));
+    }
+
+    /**
+     * GZIP 压缩.
+     *
+     * @param bytes bytes
+     *
+     * @return byte[]
+     */
+    @Nullable
+    static byte[] zip(final byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
             return null;
         }
         try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
              final GZIPOutputStream gzip = new GZIPOutputStream(out)) {
 
-            gzip.write(str.getBytes(encoding));
+            gzip.write(bytes);
             gzip.finish();
             // toByteArray 前需刷新缓存
             return out.toByteArray();
