@@ -54,6 +54,30 @@ public interface IoUtils {
     }
 
     /**
+     * 创建多级目录
+     *
+     * @param dir 目录
+     */
+    static void createDirectories(final Path dir) {
+        try {
+            Files.createDirectories(dir);
+        }
+        catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * 重新生成此目录.
+     *
+     * @param dir dir
+     */
+    static void recreateDirectories(final Path dir) {
+        deleteRecursively(dir);
+        createDirectories(dir);
+    }
+
+    /**
      * 删除目录以及所有文件
      *
      * @param root 根路径
