@@ -8,7 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 
-import java.nio.charset.StandardCharsets;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Objects;
 
 /**
@@ -67,8 +68,13 @@ public interface ResponseUtils {
         Assert.notNull(resource, () -> "Resource must be not null");
         Assert.notNull(filename, () -> "Filename must be not null");
 
-        final String file = new String(filename.getBytes(StandardCharsets.UTF_8),
-            StandardCharsets.ISO_8859_1);
+        final String file;
+        try {
+            file = URLEncoder.encode(filename, "UTF-8");
+        }
+        catch (final UnsupportedEncodingException e) {
+            throw new IllegalStateException(e);
+        }
 
         return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
