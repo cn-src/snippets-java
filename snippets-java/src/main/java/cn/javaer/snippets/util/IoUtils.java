@@ -3,6 +3,8 @@ package cn.javaer.snippets.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -11,6 +13,45 @@ import java.util.Comparator;
  * @author cn-src
  */
 public interface IoUtils {
+
+    /**
+     * @see #readToString(Path, Charset)
+     */
+    static String readToString(final File file) {
+        return readToString(file, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * @see #readToString(Path, Charset)
+     */
+    static String readToString(final File file, final Charset charset) {
+        return readToString(file.toPath(), charset);
+    }
+
+    /**
+     * @see #readToString(Path, Charset)
+     */
+    static String readToString(final Path file) {
+        return readToString(file, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 将文件读取为 String.
+     *
+     * @param file 文件
+     * @param charset 文件编码
+     *
+     * @return String
+     */
+    static String readToString(final Path file, final Charset charset) {
+        try {
+            final byte[] bytes = Files.readAllBytes(file);
+            return new String(bytes, charset);
+        }
+        catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
     /**
      * 删除目录以及所有文件
