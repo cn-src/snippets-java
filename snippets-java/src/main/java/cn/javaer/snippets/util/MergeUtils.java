@@ -56,6 +56,19 @@ public interface MergeUtils {
         return merge(sList, mergePredicate, handler, s -> s);
     }
 
+    /**
+     * 将 pList 的数据合并到 sList 中，并返回新的 List.
+     *
+     * @param sList 源 List
+     * @param pList 进行合并的 List
+     * @param mergePredicate 合并条件
+     * @param resultFun 新结果对象创建函数
+     * @param <S> S
+     * @param <P> P
+     * @param <R> R
+     *
+     * @return 新 List
+     */
     static <S, P, R> List<R> merge(final List<S> sList, final List<P> pList,
                                    final BiPredicate<S, P> mergePredicate,
                                    final BiFunction<S, P, R> resultFun) {
@@ -82,6 +95,18 @@ public interface MergeUtils {
         return result;
     }
 
+    /**
+     * 将 pList 的数据合并到 sList 中，并返回新的 sList.
+     *
+     * @param sList 源 List
+     * @param pList 进行合并的 List
+     * @param mergePredicate 合并条件
+     * @param resultFun 新结果对象创建函数
+     * @param <S> S
+     * @param <P> P
+     *
+     * @return 新的 S List
+     */
     static <S, P> List<S> merge(final List<S> sList, final List<P> pList,
                                 final BiPredicate<S, P> mergePredicate,
                                 final BiConsumer<S, P> resultFun) {
