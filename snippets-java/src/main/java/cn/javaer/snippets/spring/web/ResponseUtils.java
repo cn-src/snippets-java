@@ -23,13 +23,10 @@ public interface ResponseUtils {
      *
      * @return bytes
      */
-    static ResponseEntity<byte[]> gzip(@NonNull final String body) {
+    static ResponseEntity<byte[]> gzipWithZip(@NonNull final String body) {
         Assert.hasLength(body, () -> "Body must be not empty");
 
-        return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .header(HttpHeaders.CONTENT_ENCODING, "gzip")
-            .body(GzipUtils.zip(body));
+        return gzip(GzipUtils.zip(body));
     }
 
     /**
