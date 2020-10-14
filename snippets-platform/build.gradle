@@ -34,6 +34,7 @@ dependencies {
         api 'com.esotericsoftware:kryo:5.0.0-RC9'
         api 'io.github.classgraph:classgraph:4.8.89'
         api 'p6spy:p6spy:3.9.1'
+        api 'org.jetbrains:annotations:20.1.0'
 
         api "org.testcontainers:postgresql:${testcontainersVersion}"
         api "org.testcontainers:junit-jupiter:${testcontainersVersion}"
