@@ -6,6 +6,7 @@ import cn.javaer.snippets.model.Creator;
 import cn.javaer.snippets.model.DynamicAssembler;
 import cn.javaer.snippets.util.function.Consumer3;
 import cn.javaer.snippets.util.function.Function3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +26,7 @@ public interface MergeUtils {
 
     static <S, R> List<R> merge(final List<S> sList,
                                 final BiPredicate<S, R> mergePredicate,
-                                final BiConsumer<S, R> handler,
+                                final BiConsumer<S, @Nullable R> handler,
                                 final Function<S, R> rCreator) {
 
         Objects.requireNonNull(mergePredicate);
@@ -52,7 +53,7 @@ public interface MergeUtils {
 
     static <S> List<S> merge(final List<S> sList,
                              final BiPredicate<S, S> mergePredicate,
-                             final BiConsumer<S, S> handler) {
+                             final BiConsumer<S, @Nullable S> handler) {
         return merge(sList, mergePredicate, handler, s -> s);
     }
 
@@ -71,7 +72,7 @@ public interface MergeUtils {
      */
     static <S, P, R> List<R> merge(final List<S> sList, final List<P> pList,
                                    final BiPredicate<S, P> mergePredicate,
-                                   final BiFunction<S, P, R> resultFun) {
+                                   final BiFunction<S, @Nullable P, R> resultFun) {
 
         Objects.requireNonNull(mergePredicate);
         Objects.requireNonNull(resultFun);
@@ -109,7 +110,7 @@ public interface MergeUtils {
      */
     static <S, P> List<S> merge(final List<S> sList, final List<P> pList,
                                 final BiPredicate<S, P> mergePredicate,
-                                final BiConsumer<S, P> resultFun) {
+                                final BiConsumer<S, @Nullable P> resultFun) {
         return merge(sList, pList, mergePredicate, (s, p) -> {
             resultFun.accept(s, p);
             return s;
@@ -119,7 +120,7 @@ public interface MergeUtils {
     static <S, P, R> List<R> merge(final List<S> sList, final List<P> pList,
                                    final BiPredicate<S, P> mergePredicate1,
                                    final BiPredicate<S, P> mergePredicate2,
-                                   final Function3<S, P, P, R> resultFun) {
+                                   final Function3<S, @Nullable P, @Nullable P, R> resultFun) {
 
         Objects.requireNonNull(mergePredicate1);
         Objects.requireNonNull(mergePredicate2);
@@ -151,7 +152,7 @@ public interface MergeUtils {
     static <S, P> List<S> merge(final List<S> sList, final List<P> pList,
                                 final BiPredicate<S, P> mergePredicate1,
                                 final BiPredicate<S, P> mergePredicate2,
-                                final Consumer3<S, P, P> resultFun) {
+                                final Consumer3<S, @Nullable P, @Nullable P> resultFun) {
         return merge(sList, pList, mergePredicate1, mergePredicate2, (s, p1, p2) -> {
             resultFun.accept(s, p1, p2);
             return s;
