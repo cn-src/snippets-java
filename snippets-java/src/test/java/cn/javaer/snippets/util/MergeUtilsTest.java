@@ -35,7 +35,9 @@ class MergeUtilsTest {
 
         final List<Demo> result = MergeUtils.merge(demos, props,
             (d, p) -> d.demoPropId != null && d.demoPropId.equals(p.id),
-            Demo::setDemoProp);
+            (demo, prop) -> {
+                prop.ifPresent(demo::setDemoProp);
+            });
 
         assertThat(result).extracting(Demo::getProp1, Demo::getDemoProp)
             .contains(
