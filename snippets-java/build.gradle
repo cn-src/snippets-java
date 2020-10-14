@@ -35,12 +35,12 @@ dependencies {
     optionalApi 'org.springdoc:springdoc-openapi-webmvc-core'
     optionalApi 'p6spy:p6spy'
 
+    optionalApi 'org.jetbrains:annotations'
     optionalApi 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.3.3.RELEASE'
-    implementation 'org.jetbrains:annotations'
 
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
