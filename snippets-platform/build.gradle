@@ -5,7 +5,7 @@ plugins {
 ext.datasourceDecoratorVersion = '1.6.2'
 ext.springdocVersion = '1.4.6'
 ext.simpleflatmapperVersion = '8.2.3'
-ext.testcontainersVersion = '1.15.0-rc1'
+ext.testcontainersVersion = '1.15.0-rc2'
 
 dependencies {
     constraints {
