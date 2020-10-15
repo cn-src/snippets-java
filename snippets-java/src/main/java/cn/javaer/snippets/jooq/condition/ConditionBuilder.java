@@ -37,7 +37,7 @@ public class ConditionBuilder {
     public ConditionBuilder append(final boolean isAppend,
                                    @NotNull final Supplier<@NotNull Condition> supplier) {
         if (isAppend) {
-            this.required(supplier);
+            return this.required(supplier);
         }
         return this;
     }
