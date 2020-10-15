@@ -34,6 +34,13 @@ public class ConditionBuilder {
         return this;
     }
 
+    public ConditionBuilder append(final boolean isAppend, final Condition condition) {
+        if (isAppend) {
+            this.conditions.add(condition);
+        }
+        return this;
+    }
+
     public ConditionBuilder isNotNull(final Field<?>... fields) {
         if (null != fields && fields.length > 0) {
             if (fields.length == 1) {
