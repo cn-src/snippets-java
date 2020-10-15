@@ -66,9 +66,24 @@ public class ConditionBuilder {
     }
 
     @SafeVarargs
+    public final ConditionBuilder append(final TreeNode treeNode,
+                                         @NotNull final Field<String>... fields) {
+        return this.append(ConditionCreator.create(treeNode, fields));
+    }
+
+    @SafeVarargs
     public final ConditionBuilder append(final List<TreeNode> treeNodes,
                                          @NotNull final Field<String>... fields) {
         return this.append(ConditionCreator.create(treeNodes, fields));
+    }
+
+    @SafeVarargs
+    public final ConditionBuilder appendWithField(final TreeNode treeNode,
+                                                  @NotNull final Field<String>... fields) {
+        if (null == treeNode || ObjectUtils.isEmpty(fields)) {
+            return this;
+        }
+        return this.append(ConditionCreator.create(treeNode, fields));
     }
 
     @SafeVarargs
