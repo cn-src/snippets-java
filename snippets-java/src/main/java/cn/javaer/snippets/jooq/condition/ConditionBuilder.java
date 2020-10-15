@@ -41,6 +41,14 @@ public class ConditionBuilder {
         return this;
     }
 
+    public ConditionBuilder append(final boolean isAppend,
+                                   @NotNull final Supplier<@NotNull Condition> supplier) {
+        if (isAppend) {
+            this.required(supplier);
+        }
+        return this;
+    }
+
     public ConditionBuilder isNotNull(final Field<?>... fields) {
         if (null != fields && fields.length > 0) {
             if (fields.length == 1) {
