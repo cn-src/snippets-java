@@ -5,6 +5,8 @@ import cn.javaer.snippets.jooq.condition.annotation.ConditionIgnore;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionTree;
 import cn.javaer.snippets.model.TreeNode;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.JSONB;
@@ -12,8 +14,6 @@ import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -50,8 +50,18 @@ public class ConditionCreator {
 
     @Nullable
     @SafeVarargs
+    public static Condition create(final TreeNode treeNode,
+                                   @NotNull final Field<String>... fields) {
+        if (null == treeNode) {
+            return null;
+        }
+        return create(Collections.singletonList(treeNode), fields);
+    }
+
+    @Nullable
+    @SafeVarargs
     public static Condition create(final List<TreeNode> treeNodes,
-                                   @NonNull final Field<String>... fields) {
+                                   @NotNull final Field<String>... fields) {
         Objects.requireNonNull(fields);
         if (CollectionUtils.isEmpty(treeNodes)) {
             return null;
