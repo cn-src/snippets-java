@@ -34,13 +34,6 @@ public class ConditionBuilder {
         return this;
     }
 
-    public ConditionBuilder append(final boolean isAppend, final Condition condition) {
-        if (isAppend) {
-            this.conditions.add(condition);
-        }
-        return this;
-    }
-
     public ConditionBuilder append(final boolean isAppend,
                                    @NotNull final Supplier<@NotNull Condition> supplier) {
         if (isAppend) {
