@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
@@ -67,6 +68,15 @@ public class ConditionBuilder {
     @SafeVarargs
     public final ConditionBuilder append(final List<TreeNode> treeNodes,
                                          @NotNull final Field<String>... fields) {
+        return this.append(ConditionCreator.create(treeNodes, fields));
+    }
+
+    @SafeVarargs
+    public final ConditionBuilder appendWithField(final List<TreeNode> treeNodes,
+                                                  @NotNull final Field<String>... fields) {
+        if (CollectionUtils.isEmpty(treeNodes) || ObjectUtils.isEmpty(fields)) {
+            return this;
+        }
         return this.append(ConditionCreator.create(treeNodes, fields));
     }
 
