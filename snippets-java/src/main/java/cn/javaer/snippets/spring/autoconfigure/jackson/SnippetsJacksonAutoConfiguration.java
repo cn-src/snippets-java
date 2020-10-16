@@ -13,6 +13,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import org.jooq.JSONB;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -69,6 +70,7 @@ public class SnippetsJacksonAutoConfiguration {
 
     @Bean
     @Primary
+    @ConditionalOnBean(ObjectMapper.class)
     @ConditionalOnMissingBean(Json.class)
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public Json json(final ObjectMapper objectMapper) {
