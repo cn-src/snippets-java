@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.data.web.SpringDataWebAutoConfigur
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -17,21 +18,34 @@ import org.springframework.data.domain.Pageable;
 @ConditionalOnClass(Pageable.class)
 @AutoConfigureBefore(SpringDataWebAutoConfiguration.class)
 @ConditionalOnProperty(prefix = "snippets.spring.data.pageable", name = "enabled", havingValue =
-        "true",
-        matchIfMissing = true)
+    "true",
+    matchIfMissing = true)
 @EnableConfigurationProperties(SpringDataWebProperties.class)
 public class PageableAutoConfiguration implements InitializingBean {
+    private static final String PAGE_PARAMETER = "spring.data.web.pageable.page-parameter";
+    private static final String SIZE_PARAMETER = "spring.data.web.pageable.size-parameter";
+    private static final String ONE_INDEXED_PARAMETERS = "spring.data.web.pageable" +
+        ".one-indexed-parameters";
     private final SpringDataWebProperties properties;
+    private final Environment environment;
 
-    public PageableAutoConfiguration(final SpringDataWebProperties properties) {
+    public PageableAutoConfiguration(final SpringDataWebProperties properties,
+                                     final Environment environment) {
         this.properties = properties;
+        this.environment = environment;
     }
 
     @Override
     public void afterPropertiesSet() {
         final SpringDataWebProperties.Pageable pageable = this.properties.getPageable();
-        pageable.setPageParameter("_page");
-        pageable.setSizeParameter("_size");
-        pageable.setOneIndexedParameters(true);
+        if (!this.environment.containsProperty(PAGE_PARAMETER)) {
+            pageable.setPageParameter("_page");
+        }
+        if (!this.environment.containsProperty(SIZE_PARAMETER)) {
+            pageable.setSizeParameter("_size");
+        }
+        if (!this.environment.containsProperty(ONE_INDEXED_PARAMETERS)) {
+            pageable.setOneIndexedParameters(true);
+        }
     }
 }
