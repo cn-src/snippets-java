@@ -8,9 +8,7 @@ import org.jooq.Field;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -66,20 +64,20 @@ public class ConditionBuilder {
     }
 
     @SafeVarargs
-    public final ConditionBuilder append(final TreeNode treeNode,
-                                         @NotNull final Field<String>... fields) {
+    public final ConditionBuilder requiredField(final TreeNode treeNode,
+                                                @NotNull final Field<String>... fields) {
         return this.append(ConditionCreator.create(treeNode, fields));
     }
 
     @SafeVarargs
-    public final ConditionBuilder append(final List<TreeNode> treeNodes,
-                                         @NotNull final Field<String>... fields) {
+    public final ConditionBuilder requiredField(final List<TreeNode> treeNodes,
+                                                @NotNull final Field<String>... fields) {
         return this.append(ConditionCreator.create(treeNodes, fields));
     }
 
     @SafeVarargs
-    public final ConditionBuilder appendWithField(final TreeNode treeNode,
-                                                  @NotNull final Field<String>... fields) {
+    public final ConditionBuilder append(final TreeNode treeNode,
+                                         @NotNull final Field<String>... fields) {
         if (null == treeNode || ObjectUtils.isEmpty(fields)) {
             return this;
         }
@@ -87,8 +85,8 @@ public class ConditionBuilder {
     }
 
     @SafeVarargs
-    public final ConditionBuilder appendWithField(final List<TreeNode> treeNodes,
-                                                  @NotNull final Field<String>... fields) {
+    public final ConditionBuilder append(final List<TreeNode> treeNodes,
+                                         @NotNull final Field<String>... fields) {
         if (CollectionUtils.isEmpty(treeNodes) || ObjectUtils.isEmpty(fields)) {
             return this;
         }
@@ -110,26 +108,6 @@ public class ConditionBuilder {
             return this;
         }
         this.conditions.add(fun.apply(t1, t2));
-        return this;
-    }
-
-    public ConditionBuilder dateTime(@NotNull final DataTimeBiFunction fun,
-                                     final LocalDate start, final LocalDate end) {
-        if (null == start && null == end) {
-            return this;
-        }
-        final LocalDateTime startTime = Objects.requireNonNull(start).atTime(LocalTime.MIN);
-        final LocalDateTime endTime = Objects.requireNonNull(end).atTime(LocalTime.MAX);
-        this.conditions.add(fun.apply(startTime, endTime));
-        return this;
-    }
-
-    public ConditionBuilder dateTime(@NotNull final DataTimeBiFunction fun,
-                                     final LocalDateTime start, final LocalDateTime end) {
-        if (null == start && null == end) {
-            return this;
-        }
-        this.conditions.add(fun.apply(start, end));
         return this;
     }
 

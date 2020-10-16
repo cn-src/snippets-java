@@ -8,7 +8,6 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -18,6 +17,7 @@ class ConditionBuilderTest {
 
     @Test
     void append() {
+        final Field<String> nullField = null;
         final Field<String> objectField = DSL.field("object", String.class);
         final Field<String[]> arrayField = DSL.field("array", String[].class);
         final Field<JSONB> jsonbField = DSL.field("jsonb", JSONB.class);
@@ -26,9 +26,10 @@ class ConditionBuilderTest {
         final Condition condition = new ConditionBuilder()
             .append(objectField::contains, "object")
             .append(arrayField::contains, new String[]{"str1", "str2"})
-            .dateTime(dateTimeField::betweenSymmetric, LocalDate.now(), LocalDate.now())
+            .append(dateTimeField::betweenSymmetric, LocalDateTime.now(), LocalDateTime.now())
             .append(PGDSL::containedIn, arrayField, new String[]{"value"})
             .append(PGDSL::jsonbContains, jsonbField, "key", "value")
+            .append(Field::eq, nullField, "")
             .build();
 
         final String sql = DSL.using(SQLDialect.POSTGRES)
