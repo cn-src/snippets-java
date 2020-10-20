@@ -13,6 +13,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import org.jooq.JSONB;
+import org.jooq.Record;
 
 import java.io.UncheckedIOException;
 import java.time.LocalDate;
@@ -41,6 +42,7 @@ public class Json {
         module.addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormat));
         // TODO 判断是否 JSONB 存在
         module.addSerializer(JSONB.class, JooqJsonbSerializer.INSTANCE);
+        module.addSerializer(Record.class, JooqRecordSerializer.INSTANCE);
 
         module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dataTimeFormat));
         module.addDeserializer(LocalDate.class, new LocalDateDeserializer(dataFormat));
