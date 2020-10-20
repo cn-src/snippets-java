@@ -9,7 +9,7 @@ import org.jooq.SelectOrderByStep;
 import org.jooq.SelectSeekStepN;
 import org.jooq.SortField;
 import org.jooq.Table;
-import org.jooq.UpdateConditionStep;
+import org.jooq.Update;
 import org.jooq.UpdateSetFirstStep;
 import org.jooq.UpdateSetMoreStep;
 import org.jooq.impl.DSL;
@@ -46,10 +46,9 @@ public class StepUtils {
     }
 
     public static SelectSeekStepN<?> sortStep(final SelectOrderByStep<?> step, final Sort sort) {
-        @SuppressWarnings("rawtypes")
-        final SortField[] fields = sort.map(it -> it.isAscending() ?
-                DSL.field(it.getProperty()).asc()
-                : DSL.field(it.getProperty()).desc()).toList().toArray(new SortField[0]);
+        @SuppressWarnings("rawtypes") final SortField[] fields = sort.map(it -> it.isAscending() ?
+            DSL.field(it.getProperty()).asc()
+            : DSL.field(it.getProperty()).desc()).toList().toArray(new SortField[0]);
         return step.orderBy(fields);
     }
 
@@ -57,23 +56,23 @@ public class StepUtils {
         final Sort sort = pageable.getSort();
         if (sort.isSorted()) {
             return sortStep(step, sort).offset(pageable.getOffset())
-                    .limit(pageable.getPageSize());
+                .limit(pageable.getPageSize());
         }
         return step.offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
+            .limit(pageable.getPageSize());
     }
 
-    public static UpdateConditionStep<?> updateByIdAndCreatorStep(
-            final DSLContext dsl, final Table<Record> table,
-            final RelationalPersistentEntity<?> persistentEntity, final Object auditor,
-            final Object instance) {
+    public static Update<?> updateByIdAndCreatorStep(
+        final DSLContext dsl, final Table<Record> table,
+        final RelationalPersistentEntity<?> persistentEntity, final Object auditor,
+        final Object instance) {
 
         final UpdateSetFirstStep<Record> updateStep = dsl.update(table);
         UpdateSetMoreStep<Record> updateStepMore = null;
         Condition idCondition = null;
         Condition createdByCondition = null;
         final PersistentPropertyAccessor<?> propertyAccessor =
-                persistentEntity.getPropertyAccessor(instance);
+            persistentEntity.getPropertyAccessor(instance);
 
         for (final RelationalPersistentProperty property : persistentEntity) {
             if (property.isTransient() || property.isAnnotationPresent(CreatedDate.class)) {
@@ -97,8 +96,11 @@ public class StepUtils {
                 continue;
             }
             updateStepMore = updateStep.set(DSL.field(columnName),
-                    propertyAccessor.getProperty(property));
+                propertyAccessor.getProperty(property));
         }
-        return Objects.requireNonNull(updateStepMore).where(Objects.requireNonNull(idCondition).and(Objects.requireNonNull(createdByCondition)));
+        return Objects.requireNonNull(updateStepMore)
+            .where(Objects.requireNonNull(idCondition)
+                .and(Objects.requireNonNull(createdByCondition)))
+            .limit(1);
     }
 }

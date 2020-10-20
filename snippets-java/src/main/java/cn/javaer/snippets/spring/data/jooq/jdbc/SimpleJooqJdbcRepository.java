@@ -9,7 +9,7 @@ import org.jooq.Field;
 import org.jooq.Query;
 import org.jooq.Record;
 import org.jooq.Table;
-import org.jooq.UpdateConditionStep;
+import org.jooq.Update;
 import org.jooq.impl.DSL;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.annotation.CreatedBy;
@@ -251,8 +251,10 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     @SuppressWarnings("ConstantConditions")
     @Override
     public Optional<T> findOne(final Condition condition) {
-        final Query query =
-            this.dsl.select(this.fieldsFromEntity).from(this.table).where(condition).getQuery();
+        final Query query = this.dsl.select(this.fieldsFromEntity)
+            .from(this.table)
+            .where(condition)
+            .limit(1);
         try {
             return Optional.of(this.jdbcOperations.queryForObject(query.getSQL(),
                 query.getBindValues().toArray(),
@@ -265,8 +267,8 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
     @Override
     public List<T> findAll(final Condition condition) {
-        final Query query =
-            this.dsl.select(this.fieldsFromEntity).from(this.table).where(condition).getQuery();
+        final Query query = this.dsl.select(this.fieldsFromEntity)
+            .from(this.table).where(condition);
 
         return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
             this.entityRowMapper);
@@ -293,16 +295,14 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
         final Query query = this.dsl.selectCount()
             .from(this.table)
-            .where(condition)
-            .getQuery();
+            .where(condition);
         return this.jdbcOperations.queryForObject(query.getSQL(), query.getBindValues().toArray()
             , Long.class);
     }
 
     @Override
     public boolean exists(final Condition condition) {
-        final Query query =
-            this.dsl.selectOne().from(this.table).where(condition).limit(1).getQuery();
+        final Query query = this.dsl.selectOne().from(this.table).where(condition).limit(1);
         final Integer one = this.jdbcOperations.queryForObject(query.getSQL(),
             query.getBindValues().toArray(), Integer.class);
         return one != null;
@@ -332,7 +332,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
         final Query query = this.dsl.select(this.fieldsFromEntity).from(this.table)
             .where(DSL.field(this.persistentEntity.getIdColumn().getReference()).eq(id))
-            .and(DSL.field(createByColumn).eq(auditor));
+            .and(DSL.field(createByColumn).eq(auditor)).limit(1);
 
         try {
             return Optional.of(this.jdbcOperations.queryForObject(query.getSQL(),
@@ -389,7 +389,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         final Object auditor = this.auditorAware.getCurrentAuditor()
             .orElseThrow(() -> new IllegalStateException(AUDITOR_MUST_BE_NOT_NULL));
 
-        final UpdateConditionStep<?> updateStep = StepUtils.updateByIdAndCreatorStep(this.dsl,
+        final Update<?> updateStep = StepUtils.updateByIdAndCreatorStep(this.dsl,
             this.table,
             this.persistentEntity, auditor, instance);
         this.jdbcOperations.update(updateStep.getSQL(), updateStep.getBindValues());
@@ -408,7 +408,8 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
         final Query query = this.dsl.deleteFrom(this.table)
             .where(DSL.field(this.persistentEntity.getIdColumn().getReference()).eq(id))
-            .and(DSL.field(createByColumn).eq(auditor));
+            .and(DSL.field(createByColumn).eq(auditor))
+            .limit(1);
         this.jdbcOperations.update(query.getSQL(), query.getBindValues());
     }
 }
