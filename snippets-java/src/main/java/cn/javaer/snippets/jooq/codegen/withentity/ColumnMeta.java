@@ -65,10 +65,7 @@ public class ColumnMeta {
         if (fieldType.endsWith("[]") && !"byte[]".equals(fieldType)) {
             return true;
         }
-        if ("org.jooq.JSONB".equals(fieldType)) {
-            return true;
-        }
-        return false;
+        return "org.jooq.JSONB".equals(fieldType);
     }
 
     static String type(final String type) {
