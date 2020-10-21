@@ -275,6 +275,14 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     }
 
     @Override
+    public List<T> findAll(final Condition condition, final Sort sort) {
+        final Query query = StepUtils.sortStep(this.dsl.select(this.fieldsFromEntity)
+            .from(this.table).where(condition), sort);
+        return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
+            this.entityRowMapper);
+    }
+
+    @Override
     public Page<T> findAll(final Condition condition, final Pageable pageable) {
         final long count = this.count(condition);
         if (count == 0) {

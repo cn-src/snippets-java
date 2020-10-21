@@ -4,6 +4,7 @@ import cn.javaer.snippets.spring.data.jooq.QueryStep;
 import org.jooq.Condition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
@@ -32,6 +33,16 @@ public interface JooqJdbcStepExecutor<T> {
      * @return 实体 List
      */
     List<T> findAll(Condition condition);
+
+    /**
+     * 查询多个实体
+     *
+     * @param condition 查询条件
+     * @param sort 排序条件
+     *
+     * @return 实体 List
+     */
+    List<T> findAll(Condition condition, Sort sort);
 
     /**
      * 分页查询多个实体
