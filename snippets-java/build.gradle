@@ -1,19 +1,9 @@
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
-    id 'java-library'
-    id 'jacoco'
-    id "com.github.ben-manes.versions" version "0.33.0"
-    id 'org.springframework.boot' version '2.3.4.RELEASE' apply false
+    id 'snippets-conventions'
+    id 'org.springframework.boot' apply false
 }
-sourceCompatibility = '1.8'
-java {
-    registerFeature('optional') {
-        usingSourceSet(sourceSets.main)
-    }
-    withSourcesJar()
-}
-
 dependencies {
     api platform(project(':snippets-platform'))
     api platform(SpringBootPlugin.BOM_COORDINATES)
@@ -49,25 +39,5 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-}
-
-test {
-    useJUnitPlatform()
-    jvmArgs += ["-Dorg.jooq.no-logo=true"]
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        html.enabled false
-    }
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
     }
 }

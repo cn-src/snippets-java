@@ -1,0 +1,33 @@
+plugins {
+    id 'java-library'
+    id 'jacoco'
+    id "com.github.ben-manes.versions"
+}
+
+sourceCompatibility = '1.8'
+java {
+    registerFeature('optional') {
+        usingSourceSet(sourceSets.main)
+    }
+    withSourcesJar()
+}
+
+test {
+    useJUnitPlatform()
+    jvmArgs += ["-Dorg.jooq.no-logo=true"]
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}

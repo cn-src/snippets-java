@@ -1,0 +1,12 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+dependencies {
+    implementation "com.github.ben-manes:gradle-versions-plugin:0.33.0"
+    implementation "org.springframework.boot:spring-boot-gradle-plugin:2.3.4.RELEASE"
+}
+
+repositories {
+    gradlePluginPortal()
+}
