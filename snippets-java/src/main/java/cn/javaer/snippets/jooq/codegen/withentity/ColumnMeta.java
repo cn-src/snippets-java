@@ -1,5 +1,7 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
+import cn.javaer.snippets.jooq.field.ArrayField;
+import cn.javaer.snippets.jooq.field.JsonbField;
 import io.github.classgraph.FieldInfo;
 import lombok.Value;
 
@@ -9,15 +11,14 @@ import lombok.Value;
 @Value
 public class ColumnMeta {
     String fieldName;
-
     String fieldType;
-
     boolean enumType;
-
+    boolean customField;
     String enumConverter;
-
     String sqlType;
     String columnName;
+
+    String customFieldType;
     String tableFieldName;
 
     public ColumnMeta(final String fieldName, final String fieldType, final String columnName) {
@@ -29,6 +30,8 @@ public class ColumnMeta {
         this.enumConverter = this.enumType ? enumConverter(this.fieldType) : "";
         this.columnName = columnName;
         this.tableFieldName = NameUtils.toUcUnderline(this.fieldName);
+        this.customField = isCustomField(fieldType);
+        this.customFieldType = "";
     }
 
     public ColumnMeta(final FieldInfo fieldInfo) {
@@ -48,6 +51,26 @@ public class ColumnMeta {
         return String.format("new org.jooq.impl.EnumConverter<java.lang.String, %s>(java.lang" +
                 ".String.class, %s.class)",
             fieldType, fieldType);
+    }
+
+    static String customFieldType(final String fieldType) {
+        if (fieldType.endsWith("[]") && !"byte[]".equals(fieldType)) {
+            return ArrayField.class.getName();
+        }
+        if (org.jooq.JSONB.class.getName().equals(fieldType)) {
+            return JsonbField.class.getName();
+        }
+        return "";
+    }
+
+    static boolean isCustomField(final String fieldType) {
+        if (fieldType.endsWith("[]") && !"byte[]".equals(fieldType)) {
+            return true;
+        }
+        if (org.jooq.JSONB.class.getName().equals(fieldType)) {
+            return true;
+        }
+        return false;
     }
 
     static String type(final String type) {
