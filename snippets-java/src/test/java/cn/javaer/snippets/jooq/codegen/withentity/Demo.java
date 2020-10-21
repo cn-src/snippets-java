@@ -16,6 +16,8 @@ public class Demo {
 
     String name;
 
+    String[] org;
+
     JSONB jsonb;
 
     LocalDateTime createdDate;
