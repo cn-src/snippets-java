@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import javax.sql.DataSource;
 
@@ -23,49 +24,52 @@ import javax.sql.DataSource;
 @Testcontainers
 class TablesGeneratorTest {
     @Container
-    private final PostgreSQLContainer<?> container = new PostgreSQLContainer<>("mdillon/postgis:10-alpine")
-            .withDatabaseName(TablesGeneratorTest.class.getSimpleName());
+    private final PostgreSQLContainer<?> container =
+        new PostgreSQLContainer<>(DockerImageName.parse("postgis/postgis:10-2.5-alpine")
+        .asCompatibleSubstituteFor("postgres"))
+        .withDatabaseName(TablesGeneratorTest.class.getSimpleName());
 
     @Test
     void generateTable() throws Exception {
-        DataSourceInfo dataSourceInfo = TestContainer.createDataSourceInfo(this.container);
-        DataSource dataSource = TestContainer.createDataSource(dataSourceInfo);
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        final DataSourceInfo dataSourceInfo = TestContainer.createDataSourceInfo(this.container);
+        final DataSource dataSource = TestContainer.createDataSource(dataSourceInfo);
+        final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         // language=PostgreSQL
         jdbcTemplate.execute("CREATE TABLE demo\n" +
-                "(\n" +
-                "    " +
-                "id           bigserial NOT NULL\n" +
-                "       " +
-                " CONSTRAINT demo_pkey" +
-                " PRIMARY KEY,\n" +
-                "    geom1        geometry(Polygon, 4326),\n" +
-                "    geom2        geometry(Polygon, 4326),\n" +
-                "    jsonb1       jsonb,\n" +
-                "    jsonb2       jsonb,\n" +
-                "    created_time timestamp\n" +
-                ");");
-        Configuration configuration = new Configuration()
-                .withJdbc(new Jdbc()
-                        .withDriver("org.postgresql.Driver")
-                        .withUrl(dataSourceInfo.getJdbcUrl())
-                        .withUser(dataSourceInfo.getUsername())
-                        .withPassword(dataSourceInfo.getPassword())
+            "(\n" +
+            "    " +
+            "id           bigserial NOT NULL\n" +
+            "       " +
+            " CONSTRAINT demo_pkey" +
+            " PRIMARY KEY,\n" +
+            "    geom1        geometry(Polygon, 4326),\n" +
+            "    geom2        geometry(Polygon, 4326),\n" +
+            "    jsonb1       jsonb,\n" +
+            "    jsonb2       jsonb,\n" +
+            "    created_time timestamp\n" +
+            ");");
+        final Configuration configuration = new Configuration()
+            .withJdbc(new Jdbc()
+                .withDriver("org.postgresql.Driver")
+                .withUrl(dataSourceInfo.getJdbcUrl())
+                .withUser(dataSourceInfo.getUsername())
+                .withPassword(dataSourceInfo.getPassword())
+            )
+            .withGenerator(new Generator()
+                .withName(TablesGenerator.class.getName())
+                .withDatabase(new Database()
+                    .withName(PostgresDatabase.class.getName())
+                    .withInputSchema("public")
+                    .withIncludes(".*")
+                    .withExcludes("spatial_ref_sys|geography_columns|geometry_columns" +
+                        "|raster_columns|raster_overviews")
                 )
-                .withGenerator(new Generator()
-                        .withName(TablesGenerator.class.getName())
-                        .withDatabase(new Database()
-                                .withName(PostgresDatabase.class.getName())
-                                .withInputSchema("public")
-                                .withIncludes(".*")
-                                .withExcludes("spatial_ref_sys|geography_columns|geometry_columns|raster_columns|raster_overviews")
-                        )
-                        .withTarget(new Target()
-                                .withClean(true)
-                                .withPackageName("test.gen")
-                                .withDirectory(System.getProperty("user.dir") + "/src/test/java")
-                        )
-                );
+                .withTarget(new Target()
+                    .withClean(true)
+                    .withPackageName("test.gen")
+                    .withDirectory(System.getProperty("user.dir") + "/src/test/java")
+                )
+            );
         GenerationTool.generate(configuration);
     }
 }
