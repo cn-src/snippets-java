@@ -1,7 +1,5 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
-import cn.javaer.snippets.jooq.field.ArrayField;
-import cn.javaer.snippets.jooq.field.JsonbField;
 import io.github.classgraph.FieldInfo;
 import lombok.Value;
 
@@ -55,10 +53,10 @@ public class ColumnMeta {
 
     static String customFieldType(final String fieldType) {
         if (fieldType.endsWith("[]") && !"byte[]".equals(fieldType)) {
-            return ArrayField.class.getName();
+            return "cn.javaer.snippets.jooq.field.ArrayField";
         }
-        if (org.jooq.JSONB.class.getName().equals(fieldType)) {
-            return JsonbField.class.getName();
+        if ("org.jooq.JSONB".equals(fieldType)) {
+            return "cn.javaer.snippets.jooq.field.JsonbField";
         }
         return "";
     }
@@ -67,7 +65,7 @@ public class ColumnMeta {
         if (fieldType.endsWith("[]") && !"byte[]".equals(fieldType)) {
             return true;
         }
-        if (org.jooq.JSONB.class.getName().equals(fieldType)) {
+        if ("org.jooq.JSONB".equals(fieldType)) {
             return true;
         }
         return false;
