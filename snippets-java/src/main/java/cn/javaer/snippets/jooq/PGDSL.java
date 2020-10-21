@@ -1,6 +1,7 @@
 package cn.javaer.snippets.jooq;
 
 import cn.javaer.snippets.jackson.Json;
+import cn.javaer.snippets.jooq.condition.ContainedInCondition;
 import cn.javaer.snippets.jooq.field.JsonbField;
 import cn.javaer.snippets.type.Geometry;
 import org.jooq.Condition;
@@ -45,8 +46,7 @@ public class PGDSL extends PostgresDSL {
      */
     @Support(SQLDialect.POSTGRES)
     public static <T> Condition containedIn(final Field<T> field, final T value) {
-        return DSL.condition("{0} <@ {1}", field,
-            DSL.val(value, field.getDataType()));
+        return new ContainedInCondition<>(field, value);
     }
 
     @Support(SQLDialect.POSTGRES)
