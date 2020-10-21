@@ -31,7 +31,7 @@ public class ColumnMeta {
         this.columnName = columnName;
         this.tableFieldName = NameUtils.toUcUnderline(this.fieldName);
         this.customField = isCustomField(fieldType);
-        this.customFieldType = "";
+        this.customFieldType = customFieldType(fieldType);
     }
 
     public ColumnMeta(final FieldInfo fieldInfo) {
