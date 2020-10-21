@@ -45,17 +45,24 @@ public class StepUtils {
         return fields.toArray(new Field[0]);
     }
 
-    public static SelectSeekStepN<?> sortStep(final SelectOrderByStep<?> step, final Sort sort) {
-        @SuppressWarnings("rawtypes") final SortField[] fields = sort.map(it -> it.isAscending() ?
-            DSL.field(it.getProperty()).asc()
-            : DSL.field(it.getProperty()).desc()).toList().toArray(new SortField[0]);
+    public static SelectSeekStepN<?> sortStep(final RelationalPersistentEntity<?> persistentEntity,
+                                              final SelectOrderByStep<?> step, final Sort sort) {
+
+        @SuppressWarnings("rawtypes") final SortField[] fields = sort.map(it -> {
+            final String colName = persistentEntity.getRequiredPersistentProperty(it.getProperty())
+                .getColumnName().getReference();
+            return it.isAscending() ? DSL.field(colName).asc() : DSL.field(colName).desc();
+        }).toList().toArray(new SortField[0]);
         return step.orderBy(fields);
     }
 
-    public static SelectLimitPercentAfterOffsetStep<?> pageableStep(final SelectOrderByStep<?> step, final Pageable pageable) {
+    public static SelectLimitPercentAfterOffsetStep<?> pageableStep(
+        final RelationalPersistentEntity<?> persistentEntity,
+        final SelectOrderByStep<?> step, final Pageable pageable) {
+
         final Sort sort = pageable.getSort();
         if (sort.isSorted()) {
-            return sortStep(step, sort).offset(pageable.getOffset())
+            return sortStep(persistentEntity, step, sort).offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
         }
         return step.offset(pageable.getOffset())

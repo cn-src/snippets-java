@@ -276,8 +276,9 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
     @Override
     public List<T> findAll(final Condition condition, final Sort sort) {
-        final Query query = StepUtils.sortStep(this.dsl.select(this.fieldsFromEntity)
-            .from(this.table).where(condition), sort);
+        final Query query = StepUtils.sortStep(this.persistentEntity,
+            this.dsl.select(this.fieldsFromEntity)
+                .from(this.table).where(condition), sort);
         return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
             this.entityRowMapper);
     }
@@ -288,8 +289,9 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         if (count == 0) {
             return new PageImpl<>(Collections.emptyList());
         }
-        final Query query = StepUtils.pageableStep(this.dsl.select(this.fieldsFromEntity)
-            .from(this.table).where(condition), pageable);
+        final Query query = StepUtils.pageableStep(this.persistentEntity,
+            this.dsl.select(this.fieldsFromEntity)
+                .from(this.table).where(condition), pageable);
 
         final List<T> list = this.jdbcOperations.query(query.getSQL(),
             query.getBindValues().toArray(),
@@ -381,7 +383,8 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
             Objects.requireNonNull(this.persistentEntity.getPersistentProperty(CreatedBy.class))
                 .getColumnName().getReference();
         final Query query =
-            StepUtils.pageableStep(this.dsl.select(this.fieldsFromEntity).from(this.table)
+            StepUtils.pageableStep(this.persistentEntity,
+                this.dsl.select(this.fieldsFromEntity).from(this.table)
                 .where(DSL.field(createByColumn).eq(auditor)), pageable);
 
         final List<T> list = this.jdbcOperations.query(query.getSQL(),
