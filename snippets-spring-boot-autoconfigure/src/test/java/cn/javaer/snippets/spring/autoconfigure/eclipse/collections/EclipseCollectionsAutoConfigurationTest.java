@@ -1,8 +1,8 @@
 package cn.javaer.snippets.spring.autoconfigure.eclipse.collections;
 
-import cn.javaer.snippets.TestAutoConfigurationPackage;
-import cn.javaer.snippets.empty.EmptyDataPackage;
+import cn.javaer.snippets.spring.autoconfigure.TestAutoConfigurationPackage;
 import cn.javaer.snippets.spring.autoconfigure.eclipse.collections.pojo.City;
+import cn.javaer.snippets.spring.autoconfigure.empty.EmptyDataPackage;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.data.jdbc.JdbcRepositoriesAutoConfiguration;
@@ -28,27 +28,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 class EclipseCollectionsAutoConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(EclipseCollectionsAutoConfiguration.class))
-            .withPropertyValues("spring.datasource.name:test");
+        .withConfiguration(AutoConfigurations.of(EclipseCollectionsAutoConfiguration.class))
+        .withPropertyValues("spring.datasource.name:test");
 
     @Test
     void basicAutoConfiguration() {
         this.contextRunner.withConfiguration(AutoConfigurations.of(
-                DataSourceAutoConfiguration.class,
-                JdbcTemplateAutoConfiguration.class,
-                DataSourceTransactionManagerAutoConfiguration.class,
-                JdbcRepositoriesAutoConfiguration.class))
-                .withUserConfiguration(DataSourceConfiguration.class)
-                .run(context -> {
-                    assertThat(context).hasSingleBean(CityRepository.class);
-                    final JdbcTemplate jdbcTemplate = context.getBean(JdbcTemplate.class);
-                    jdbcTemplate.execute("DROP TABLE IF EXISTS city");
-                    jdbcTemplate.execute("CREATE TABLE city ( id  INTEGER IDENTITY PRIMARY KEY, name VARCHAR(30) )");
+            DataSourceAutoConfiguration.class,
+            JdbcTemplateAutoConfiguration.class,
+            DataSourceTransactionManagerAutoConfiguration.class,
+            JdbcRepositoriesAutoConfiguration.class))
+            .withUserConfiguration(DataSourceConfiguration.class)
+            .run(context -> {
+                assertThat(context).hasSingleBean(CityRepository.class);
+                final JdbcTemplate jdbcTemplate = context.getBean(JdbcTemplate.class);
+                jdbcTemplate.execute("DROP TABLE IF EXISTS city");
+                jdbcTemplate.execute("CREATE TABLE city ( id  INTEGER IDENTITY PRIMARY KEY, name " +
+                    "VARCHAR(30) )");
 
-                    final CityRepository cityRepository = context.getBean(CityRepository.class);
-                    cityRepository.save(new City("name"));
-                    assertThat(cityRepository.findAll()).hasSize(1);
-                });
+                final CityRepository cityRepository = context.getBean(CityRepository.class);
+                cityRepository.save(new City("name"));
+                assertThat(cityRepository.findAll()).hasSize(1);
+            });
     }
 
     @Configuration(proxyBeanMethods = false)

@@ -1,6 +1,6 @@
 package cn.javaer.snippets.spring.autoconfigure.jackson;
 
-import cn.javaer.snippets.spring.format.DateFillFormat;
+import cn.javaer.snippets.format.DateFillFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.jooq.JSONB;
@@ -21,8 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class SnippetsJacksonAutoConfigurationTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(
-                    SnippetsJacksonAutoConfiguration.class, JacksonAutoConfiguration.class));
+        .withConfiguration(AutoConfigurations.of(
+            SnippetsJacksonAutoConfiguration.class, JacksonAutoConfiguration.class));
 
     @Test
     void auto() throws Exception {
@@ -40,12 +40,12 @@ class SnippetsJacksonAutoConfigurationTest {
             assertThat(demo.dateTime).isEqualTo(LocalDate.parse("2020-05-05").atTime(LocalTime.MAX));
             //language=JSON
             JSONAssert.assertEquals("{\"dateTime\":\"2020-05-05 23:59:59\"," +
-                    "\"str\":\"val\"," +
-                    "\"jsonb\":{\"demo\":123}," +
-                    "\"localDateTime\":\"2020-01-01 00:00:00\"," +
-                    " \"" +
-                    "localDate\":\"2020-01-01\"," +
-                    "\"localTime\":\"00:00:00\"}", value, true);
+                "\"str\":\"val\"," +
+                "\"jsonb\":{\"demo\":123}," +
+                "\"localDateTime\":\"2020-01-01 00:00:00\"," +
+                " \"" +
+                "localDate\":\"2020-01-01\"," +
+                "\"localTime\":\"00:00:00\"}", value, true);
         });
     }
 
