@@ -85,7 +85,7 @@ class ConditionCreatorTest {
         assertThat(this.dsl.render(condition)).isEqualTo("((jsonb1 @> cast(? as jsonb)" +
             "::jsonb) and num1 < ? and num2 <= ? and num3 > ? and num4 >= ? and str1 = ? and cast" +
             "(str2 as varchar) like ('%' || replace(replace(replace(?, '!', '!!'), '%', '!%'), " +
-            "'_', '!_') || '%') escape '!' and str3 @> ?::varchar[] and (str4 <@ ?::varchar[]) " +
+            "'_', '!_') || '%') escape '!' and str3 @> ?::varchar[] and str4 <@ ?::varchar[] " +
             "and col_num between ? and ? and col_date between cast(? as timestamp) and cast(? as " +
             "timestamp))");
     }
