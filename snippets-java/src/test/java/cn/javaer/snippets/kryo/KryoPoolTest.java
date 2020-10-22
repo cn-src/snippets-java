@@ -1,7 +1,6 @@
 package cn.javaer.snippets.kryo;
 
 import cn.javaer.snippets.kryo.serializers.ValueObjectSerializer;
-import cn.javaer.snippets.spring.autoconfigure.eclipse.collections.pojo.City;
 import lombok.Value;
 import org.junit.jupiter.api.Test;
 

@@ -1,8 +1,8 @@
 package cn.javaer.snippets.spring.autoconfigure.data.jooq.jdbc;
 
-import cn.javaer.snippets.TestAutoConfigurationPackage;
-import cn.javaer.snippets.TestContainer;
-import cn.javaer.snippets.empty.EmptyDataPackage;
+import cn.javaer.snippets.spring.autoconfigure.TestAutoConfigurationPackage;
+import cn.javaer.snippets.spring.autoconfigure.TestContainer;
+import cn.javaer.snippets.spring.autoconfigure.empty.EmptyDataPackage;
 import cn.javaer.snippets.spring.data.jooq.jdbc.config.EnableJooqJdbcRepositories;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
