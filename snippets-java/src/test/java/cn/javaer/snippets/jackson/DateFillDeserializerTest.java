@@ -1,8 +1,8 @@
 package cn.javaer.snippets.jackson;
 
-import cn.javaer.snippets.spring.format.DateFillFormat;
-import cn.javaer.snippets.spring.format.DateMaxTime;
-import cn.javaer.snippets.spring.format.DateMinTime;
+import cn.javaer.snippets.format.DateFillFormat;
+import cn.javaer.snippets.format.DateMaxTime;
+import cn.javaer.snippets.format.DateMinTime;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
