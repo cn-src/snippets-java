@@ -20,7 +20,7 @@
 * `CodeGenTool` 全新的 jOOQ 代码生成器，无需链接数据库，基于实体类生成，支持 spring data 注解
 
 ## jackson
-* 使用 `cn.javaer.snippets.jackson.Json` 便捷的 JSON 工具
+* 使用 `cn.javaer.snippets.spring.jackson.Json` 便捷的 JSON 工具
 * 支持 jOOQ 相关类型的序列化
 
 ## Kryo 序列化

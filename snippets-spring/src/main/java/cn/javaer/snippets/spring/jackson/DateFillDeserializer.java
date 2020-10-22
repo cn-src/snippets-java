@@ -1,9 +1,9 @@
-package cn.javaer.snippets.jackson;
+package cn.javaer.snippets.spring.jackson;
 
-import cn.javaer.snippets.format.DateFillFormat;
-import cn.javaer.snippets.format.DateMaxTime;
-import cn.javaer.snippets.format.DateMinTime;
-import cn.javaer.snippets.util.AnnotationUtils;
+import cn.javaer.snippets.spring.AnnotationUtils;
+import cn.javaer.snippets.spring.format.DateFillFormat;
+import cn.javaer.snippets.spring.format.DateMaxTime;
+import cn.javaer.snippets.spring.format.DateMinTime;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
