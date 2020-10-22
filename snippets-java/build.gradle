@@ -8,15 +8,11 @@ dependencies {
     api platform(project(':snippets-platform'))
     api platform(SpringBootPlugin.BOM_COORDINATES)
 
-    optionalApi 'org.springframework.boot:spring-boot-starter-web'
-    optionalApi 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    optionalApi 'org.springframework.boot:spring-boot-starter-jooq'
-    optionalApi 'org.springframework.boot:spring-boot-starter-validation'
-    optionalApi 'org.springframework.boot:spring-boot-starter-security'
+    optionalApi 'org.springframework.data:spring-data-commons'
     optionalApi 'org.springframework.boot:spring-boot-starter-test'
+    optionalApi 'org.springframework:spring-tx'
 
     optionalApi 'org.jooq:jooq-codegen'
-
     optionalApi 'org.simpleflatmapper:sfm-jooq'
     optionalApi 'org.eclipse.collections:eclipse-collections'
     optionalApi 'com.esotericsoftware:kryo'
