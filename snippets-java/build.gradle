@@ -9,8 +9,6 @@ dependencies {
     api platform(SpringBootPlugin.BOM_COORDINATES)
 
     optionalApi 'org.springframework.data:spring-data-commons'
-    optionalApi 'org.springframework.boot:spring-boot-starter-test'
-    optionalApi 'org.springframework:spring-tx'
 
     optionalApi 'org.jooq:jooq-codegen'
     optionalApi 'org.simpleflatmapper:sfm-jooq'
