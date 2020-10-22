@@ -7,6 +7,7 @@ plugins {
 dependencies {
     api platform(project(':snippets-platform'))
     api platform(SpringBootPlugin.BOM_COORDINATES)
+    annotationProcessor platform(SpringBootPlugin.BOM_COORDINATES)
     implementation(project(':snippets-java'))
     implementation(project(':snippets-spring'))
 
