@@ -2,7 +2,6 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
     id 'snippets-conventions'
-    id 'org.springframework.boot' apply false
 }
 
 dependencies {
@@ -31,12 +30,12 @@ dependencies {
     optionalApi 'org.jetbrains:annotations'
     optionalApi 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'
-    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
-    annotationProcessor 'org.projectlombok:lombok:1.18.16'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.3.4.RELEASE'
+    compileOnly 'com.google.code.findbugs:jsr305'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+    testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'com.h2database:h2'
     testImplementation 'org.testcontainers:postgresql'
     testImplementation 'org.testcontainers:junit-jupiter'
