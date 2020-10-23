@@ -13,6 +13,7 @@ import org.jooq.Update;
 import org.jooq.impl.DSL;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.auditing.AuditingHandler;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -61,13 +62,16 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     private final Field<?>[] fieldsFromEntity;
     private final AuditorAware<?> auditorAware;
 
+    private final AuditingHandler auditingHandler;
+
     public SimpleJooqJdbcRepository(final DSLContext dsl,
                                     final RelationalMappingContext context,
                                     final RelationalPersistentEntity<T> persistentEntity,
                                     final JdbcAggregateOperations entityOperations,
                                     final NamedParameterJdbcOperations jdbcOperations,
                                     final JdbcConverter jdbcConverter,
-                                    final AuditorAware<?> auditorAware) {
+                                    final AuditorAware<?> auditorAware,
+                                    final AuditingHandler auditingHandler) {
         this.entityOperations = entityOperations;
         this.jdbcConverter = jdbcConverter;
         this.jdbcOperations = jdbcOperations.getJdbcOperations();
@@ -78,6 +82,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         this.table = DSL.table(this.persistentEntity.getTableName().getReference());
         this.fieldsFromEntity = StepUtils.getFields(persistentEntity);
         this.auditorAware = auditorAware;
+        this.auditingHandler = auditingHandler;
     }
 
     /**
@@ -181,6 +186,9 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     @Transactional
     @Override
     public T insert(final T instance) {
+        if (this.auditingHandler != null) {
+            this.auditingHandler.markCreated(instance);
+        }
         return this.entityOperations.insert(instance);
     }
 
@@ -385,7 +393,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         final Query query =
             StepUtils.pageableStep(this.persistentEntity,
                 this.dsl.select(this.fieldsFromEntity).from(this.table)
-                .where(DSL.field(createByColumn).eq(auditor)), pageable);
+                    .where(DSL.field(createByColumn).eq(auditor)), pageable);
 
         final List<T> list = this.jdbcOperations.query(query.getSQL(),
             query.getBindValues().toArray(),

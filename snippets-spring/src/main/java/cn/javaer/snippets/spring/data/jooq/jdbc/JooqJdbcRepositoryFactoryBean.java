@@ -5,6 +5,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.data.auditing.AuditingHandler;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jdbc.core.convert.DataAccessStrategy;
 import org.springframework.data.jdbc.core.convert.DefaultDataAccessStrategy;
@@ -29,7 +30,7 @@ import java.util.Optional;
  * @see JdbcRepositoryFactoryBean
  */
 public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID extends Serializable>
-        extends TransactionalRepositoryFactoryBeanSupport<T, S, ID> implements ApplicationEventPublisherAware {
+    extends TransactionalRepositoryFactoryBeanSupport<T, S, ID> implements ApplicationEventPublisherAware {
 
     private ApplicationEventPublisher publisher;
     private BeanFactory beanFactory;
@@ -44,6 +45,7 @@ public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
 
     private DSLContext dslContext;
     private AuditorAware<?> auditorAware;
+    private AuditingHandler auditingHandler;
 
     protected JooqJdbcRepositoryFactoryBean(final Class<? extends T> repositoryInterface) {
         super(repositoryInterface);
@@ -60,8 +62,10 @@ public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
     @Override
     protected RepositoryFactorySupport doCreateRepositoryFactory() {
 
-        final JooqJdbcRepositoryFactory jdbcRepositoryFactory = new JooqJdbcRepositoryFactory(this.dataAccessStrategy, this.mappingContext,
-                this.converter, this.dialect, this.publisher, this.operations, this.dslContext, this.auditorAware);
+        final JooqJdbcRepositoryFactory jdbcRepositoryFactory =
+            new JooqJdbcRepositoryFactory(this.dataAccessStrategy, this.mappingContext,
+                this.converter, this.dialect, this.publisher, this.operations, this.dslContext,
+                this.auditorAware, this.auditingHandler);
         jdbcRepositoryFactory.setQueryMappingConfiguration(this.queryMappingConfiguration);
         jdbcRepositoryFactory.setEntityCallbacks(this.entityCallbacks);
 
@@ -113,43 +117,61 @@ public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
     @Override
     public void afterPropertiesSet() {
 
-        Assert.state(this.mappingContext != null, "MappingContext is required and must not be null!");
-        Assert.state(this.converter != null, "RelationalConverter is required and must not be null!");
+        Assert.state(this.mappingContext != null, "MappingContext is required and must not be " +
+            "null!");
+        Assert.state(this.converter != null, "RelationalConverter is required and must not be " +
+            "null!");
 
         if (this.auditorAware == null) {
 
-            Assert.state(this.beanFactory != null, "If no AuditorAware are set a BeanFactory must be available.");
+            Assert.state(this.beanFactory != null, "If no AuditorAware are set a BeanFactory must" +
+                " be available.");
 
-            this.auditorAware = this.beanFactory.getBeanProvider(AuditorAware.class).getIfAvailable(() -> Optional::empty);
+            this.auditorAware =
+                this.beanFactory.getBeanProvider(AuditorAware.class).getIfAvailable(() -> Optional::empty);
+        }
+
+        if (this.auditingHandler == null) {
+
+            Assert.state(this.beanFactory != null,
+                "If no AuditingHandler are set a BeanFactory must be available.");
+
+            this.auditingHandler =
+                this.beanFactory.getBeanProvider(AuditingHandler.class).getIfAvailable();
         }
 
         if (this.dslContext == null) {
 
-            Assert.state(this.beanFactory != null, "If no DSLContext are set a BeanFactory must be available.");
+            Assert.state(this.beanFactory != null, "If no DSLContext are set a BeanFactory must " +
+                "be available.");
 
             this.dslContext = this.beanFactory.getBean(DSLContext.class);
         }
 
         if (this.operations == null) {
 
-            Assert.state(this.beanFactory != null, "If no JdbcOperations are set a BeanFactory must be available.");
+            Assert.state(this.beanFactory != null, "If no JdbcOperations are set a BeanFactory " +
+                "must be available.");
 
             this.operations = this.beanFactory.getBean(NamedParameterJdbcOperations.class);
         }
 
         if (this.dataAccessStrategy == null) {
 
-            Assert.state(this.beanFactory != null, "If no DataAccessStrategy is set a BeanFactory must be available.");
+            Assert.state(this.beanFactory != null, "If no DataAccessStrategy is set a BeanFactory" +
+                " must be available.");
 
             this.dataAccessStrategy = this.beanFactory.getBeanProvider(DataAccessStrategy.class)
-                    .getIfAvailable(() -> {
-                        Assert.state(this.dialect != null, "Dialect is required and must not be null!");
+                .getIfAvailable(() -> {
+                    Assert.state(this.dialect != null, "Dialect is required and must not be null!");
 
-                        final SqlGeneratorSource sqlGeneratorSource = new SqlGeneratorSource(this.mappingContext, this.converter,
-                                this.dialect);
-                        return new DefaultDataAccessStrategy(sqlGeneratorSource, this.mappingContext, this.converter,
-                                this.operations);
-                    });
+                    final SqlGeneratorSource sqlGeneratorSource =
+                        new SqlGeneratorSource(this.mappingContext, this.converter,
+                            this.dialect);
+                    return new DefaultDataAccessStrategy(sqlGeneratorSource, this.mappingContext,
+                        this.converter,
+                        this.operations);
+                });
         }
 
         if (this.queryMappingConfiguration == null) {
