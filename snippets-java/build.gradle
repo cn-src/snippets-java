@@ -7,6 +7,7 @@ dependencies {
     api platform(project(':snippets-platform'))
     api platform(SpringBootPlugin.BOM_COORDINATES)
     annotationProcessor platform(SpringBootPlugin.BOM_COORDINATES)
+    testAnnotationProcessor platform(SpringBootPlugin.BOM_COORDINATES)
 
     optionalApi 'org.springframework.data:spring-data-commons'
 
