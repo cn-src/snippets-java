@@ -9,7 +9,10 @@ ext.testcontainersVersion = '1.15.0-rc2'
 
 dependencies {
     constraints {
-        api "${group}:snippets-java:${version}"
+        api project(':snippets-java')
+        api project(':snippets-spring')
+        api project(':snippets-spring-boot-autoconfigure')
+        api project(':snippets-jooq-codegen-maven-plugin')
         api "com.github.gavlyukovskiy:p6spy-spring-boot-starter:${datasourceDecoratorVersion}"
         api "com.github.gavlyukovskiy:flexy-pool-spring-boot-starter:${datasourceDecoratorVersion}"
 
