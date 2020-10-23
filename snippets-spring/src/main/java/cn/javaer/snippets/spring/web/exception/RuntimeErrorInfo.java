@@ -1,8 +1,8 @@
 package cn.javaer.snippets.spring.web.exception;
 
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
