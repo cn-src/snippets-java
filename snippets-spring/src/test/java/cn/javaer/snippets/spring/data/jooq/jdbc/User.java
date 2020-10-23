@@ -1,10 +1,14 @@
-package cn.javaer.snippets.spring.data.jooq.jdbc.pojo;
+package cn.javaer.snippets.spring.data.jooq.jdbc;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
+
+import java.time.LocalDateTime;
 
 /**
  * @author cn-src
@@ -12,17 +16,16 @@ import org.springframework.data.relational.core.mapping.Table;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("T_USER")
-public class User {
+@Table("users")
+class User {
     @Id
     private Long id;
 
     private String name;
 
-    private String gender;
+    @CreatedBy
+    private Long createdById;
 
-    public User(final String name, final String gender) {
-        this.name = name;
-        this.gender = gender;
-    }
+    @CreatedDate
+    private LocalDateTime createdDate;
 }
