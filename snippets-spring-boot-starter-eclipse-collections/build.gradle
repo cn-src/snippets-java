@@ -1,16 +1,8 @@
 plugins {
-    id 'java-library'
+    id 'snippets-starter'
 }
 
 dependencies {
-    api platform(project(':snippets-platform'))
     api 'org.eclipse.collections:eclipse-collections'
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-}
