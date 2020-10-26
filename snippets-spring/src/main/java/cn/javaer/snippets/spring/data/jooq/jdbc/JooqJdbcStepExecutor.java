@@ -2,6 +2,7 @@ package cn.javaer.snippets.spring.data.jooq.jdbc;
 
 import cn.javaer.snippets.spring.data.jooq.QueryStep;
 import org.jooq.Condition;
+import org.jooq.Query;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -80,4 +81,13 @@ public interface JooqJdbcStepExecutor<T> {
      * @return 实体 List
      */
     List<T> findAll(QueryStep queryStep);
+
+    /**
+     * 查询多个实体
+     *
+     * @param query jOOQ 查询
+     *
+     * @return 实体 List
+     */
+    List<T> findAll(Query query);
 }

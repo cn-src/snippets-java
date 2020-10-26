@@ -334,6 +334,12 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     }
 
     @Override
+    public List<T> findAll(Query query) {
+        return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
+            this.entityRowMapper);
+    }
+
+    @Override
     public DSLContext dsl() {
         return this.dsl;
     }
