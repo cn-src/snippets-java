@@ -4,4 +4,6 @@ include 'snippets-java'
 include 'snippets-spring'
 include 'snippets-jooq-codegen-maven-plugin'
 include 'snippets-spring-boot-autoconfigure'
+include 'snippets-spring-boot-starter-eclipse-collections'
+include 'snippets-spring-boot-starter-jackson'
 
