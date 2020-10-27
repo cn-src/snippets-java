@@ -9,8 +9,8 @@ dependencies {
     api platform(SpringBootPlugin.BOM_COORDINATES)
     annotationProcessor platform(SpringBootPlugin.BOM_COORDINATES)
     testAnnotationProcessor platform(SpringBootPlugin.BOM_COORDINATES)
-    implementation(project(':snippets-java'))
-    implementation(project(':snippets-spring'))
+    api(project(':snippets-java'))
+    api(project(':snippets-spring'))
 
     optionalApi 'org.springframework.boot:spring-boot-starter-web'
     optionalApi 'org.springframework.boot:spring-boot-starter-data-jdbc'
