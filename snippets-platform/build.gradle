@@ -7,6 +7,11 @@ dependencies {
         api project(':snippets-java')
         api project(':snippets-spring')
         api project(':snippets-spring-boot-autoconfigure')
+        api project(':snippets-spring-boot-starter')
+        api project(':snippets-spring-boot-starter-data-jooq-jdbc')
+        api project(':snippets-spring-boot-starter-eclipse-collections')
+        api project(':snippets-spring-boot-starter-sfm-jooq')
+        api project(':snippets-spring-boot-starter-springdoc')
         api project(':snippets-jooq-codegen-maven-plugin')
         api "com.github.gavlyukovskiy:p6spy-spring-boot-starter:${datasourceDecoratorVersion}"
         api "com.github.gavlyukovskiy:flexy-pool-spring-boot-starter:${datasourceDecoratorVersion}"
