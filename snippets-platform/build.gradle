@@ -13,6 +13,7 @@ dependencies {
         api project(':snippets-spring-boot-starter-sfm-jooq')
         api project(':snippets-spring-boot-starter-springdoc')
         api project(':snippets-jooq-codegen-maven-plugin')
+        
         api "com.github.gavlyukovskiy:p6spy-spring-boot-starter:${datasourceDecoratorVersion}"
         api "com.github.gavlyukovskiy:flexy-pool-spring-boot-starter:${datasourceDecoratorVersion}"
 
