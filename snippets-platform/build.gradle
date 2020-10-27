@@ -14,20 +14,6 @@ dependencies {
         api project(':snippets-spring-boot-starter-springdoc')
         api project(':snippets-jooq-codegen-maven-plugin')
 
-        api "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringBootVersion}"
-        api "org.mybatis.spring.boot:mybatis-spring-boot-starter-test:${mybatisSpringBootVersion}"
-
-        api "com.github.gavlyukovskiy:p6spy-spring-boot-starter:${datasourceDecoratorVersion}"
-        api "com.github.gavlyukovskiy:flexy-pool-spring-boot-starter:${datasourceDecoratorVersion}"
-
-        api "org.springdoc:springdoc-openapi-ui:${springdocVersion}"
-        api "org.springdoc:springdoc-openapi-webmvc-core:${springdocVersion}"
-        api "org.springdoc:springdoc-openapi-security:${springdocVersion}"
-        api "org.springdoc:springdoc-openapi-data-rest:${springdocVersion}"
-
-        api "org.simpleflatmapper:sfm-jooq:${simpleflatmapperVersion}"
-        api "org.simpleflatmapper:sfm-csv:${simpleflatmapperVersion}"
-
         api "com.google.guava:guava:${guavaVersion}"
         api "com.google.code.findbugs:jsr305:${jsr305Version}"
         api "org.eclipse.collections:eclipse-collections:${eclipseCollectionsVersion}"
@@ -42,6 +28,27 @@ dependencies {
         api "com.alibaba:easyexcel:${easyexcelVersion}"
         api "p6spy:p6spy:${p6spyVersion}"
         api "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
+
+        api "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringBootVersion}"
+        api "org.mybatis.spring.boot:mybatis-spring-boot-starter-test:${mybatisSpringBootVersion}"
+
+        api "com.github.gavlyukovskiy:p6spy-spring-boot-starter:${datasourceDecoratorVersion}"
+        api "com.github.gavlyukovskiy:flexy-pool-spring-boot-starter:${datasourceDecoratorVersion}"
+
+        api "org.springdoc:springdoc-openapi-ui:${springdocVersion}"
+        api "org.springdoc:springdoc-openapi-webmvc-core:${springdocVersion}"
+        api "org.springdoc:springdoc-openapi-security:${springdocVersion}"
+        api "org.springdoc:springdoc-openapi-data-rest:${springdocVersion}"
+
+        api "org.simpleflatmapper:sfm-jooq:${simpleflatmapperVersion}"
+        api "org.simpleflatmapper:sfm-csv:${simpleflatmapperVersion}"
+
+        api "de.codecentric:spring-boot-admin-server:${springBootAdminVerison}"
+        api "de.codecentric:spring-boot-admin-server-ui:${springBootAdminVerison}"
+        api "de.codecentric:spring-boot-admin-client:${springBootAdminVerison}"
+        api "de.codecentric:spring-boot-admin-starter-client:${springBootAdminVerison}"
+        api "de.codecentric:spring-boot-admin-starter-server:${springBootAdminVerison}"
+        api "de.codecentric:spring-boot-admin-server-cloud:${springBootAdminVerison}"
 
         api "org.spockframework:spock-core:${spockVerison}"
         api "org.spockframework:spock-guice:${spockVerison}"
