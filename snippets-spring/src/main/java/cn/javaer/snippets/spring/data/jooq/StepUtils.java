@@ -106,7 +106,6 @@ public class StepUtils {
         }
         return Objects.requireNonNull((UpdateSetMoreStep<?>) updateStep)
             .where(Objects.requireNonNull(idCondition)
-                .and(Objects.requireNonNull(createdByCondition)))
-            .limit(1);
+                .and(Objects.requireNonNull(createdByCondition)));
     }
 }
