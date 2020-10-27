@@ -6,6 +6,7 @@ import cn.javaer.snippets.spring.data.jooq.StepUtils;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
+import org.jooq.JSONB;
 import org.jooq.Query;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -32,6 +33,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -229,7 +231,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
                 final Object value = propertyAccessor.getProperty(property);
                 values.add(value);
             }
-            batchValues.add(values.toArray());
+            batchValues.add(this.conversion(values.toArray()));
         }
         return this.jdbcOperations.batchUpdate(sqlBuilder.toString(), batchValues);
     }
@@ -417,7 +419,8 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         final Update<?> updateStep = StepUtils.updateByIdAndCreatorStep(this.dsl,
             this.table,
             this.persistentEntity, auditor, instance);
-        this.jdbcOperations.update(updateStep.getSQL(), updateStep.getBindValues().toArray());
+        this.jdbcOperations.update(updateStep.getSQL(),
+            this.conversion(updateStep.getBindValues().toArray()));
         return instance;
     }
 
@@ -436,5 +439,22 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
             .and(DSL.field(createByColumn).eq(auditor))
             .limit(1);
         this.jdbcOperations.update(query.getSQL(), query.getBindValues().toArray());
+    }
+
+    Object[] conversion(final Object[] objs) {
+        if (objs.length == 0) {
+            return objs;
+        }
+        final Object[] params = new Object[objs.length];
+        for (int i = 0, le = objs.length; i < le; i++) {
+            if (objs[i] instanceof JSONB) {
+                params[i] = this.jdbcConverter.writeJdbcValue(objs[i], JSONB.class, Types.OTHER);
+            }
+            else {
+                params[i] = objs[i];
+            }
+        }
+
+        return params;
     }
 }
