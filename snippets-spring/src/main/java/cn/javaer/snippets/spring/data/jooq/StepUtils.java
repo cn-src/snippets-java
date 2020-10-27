@@ -10,8 +10,8 @@ import org.jooq.SelectSeekStepN;
 import org.jooq.SortField;
 import org.jooq.Table;
 import org.jooq.Update;
-import org.jooq.UpdateSetFirstStep;
 import org.jooq.UpdateSetMoreStep;
+import org.jooq.UpdateSetStep;
 import org.jooq.impl.DSL;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -74,8 +74,7 @@ public class StepUtils {
         final RelationalPersistentEntity<?> persistentEntity, final Object auditor,
         final Object instance) {
 
-        final UpdateSetFirstStep<Record> updateStep = dsl.update(table);
-        UpdateSetMoreStep<Record> updateStepMore = null;
+        UpdateSetStep<?> updateStep = dsl.update(table);
         Condition idCondition = null;
         Condition createdByCondition = null;
         final PersistentPropertyAccessor<?> propertyAccessor =
@@ -95,17 +94,17 @@ public class StepUtils {
                 continue;
             }
             if (property.isAnnotationPresent(LastModifiedBy.class)) {
-                updateStepMore = updateStep.set(DSL.field(columnName), auditor);
+                updateStep = updateStep.set(DSL.field(columnName), auditor);
                 continue;
             }
             if (property.isAnnotationPresent(LastModifiedDate.class)) {
-                updateStepMore = updateStep.set(DSL.field(columnName), LocalDateTime.now());
+                updateStep = updateStep.set(DSL.field(columnName), LocalDateTime.now());
                 continue;
             }
-            updateStepMore = updateStep.set(DSL.field(columnName),
+            updateStep = updateStep.set(DSL.field(columnName),
                 propertyAccessor.getProperty(property));
         }
-        return Objects.requireNonNull(updateStepMore)
+        return Objects.requireNonNull((UpdateSetMoreStep<?>) updateStep)
             .where(Objects.requireNonNull(idCondition)
                 .and(Objects.requireNonNull(createdByCondition)))
             .limit(1);
