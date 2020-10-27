@@ -8,4 +8,5 @@ include 'snippets-spring-boot-starter-eclipse-collections'
 include 'snippets-spring-boot-starter'
 include 'snippets-spring-boot-starter-data-jooq-jdbc'
 include 'snippets-spring-boot-starter-sfm-jooq'
+include 'snippets-spring-boot-starter-springdoc'
 
