@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    api 'org.eclipse.collections:eclipse-collections'
+    api "org.eclipse.collections:eclipse-collections:${eclipseCollectionsVersion}"
 }
 

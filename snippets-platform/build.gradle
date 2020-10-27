@@ -2,11 +2,6 @@ plugins {
     id 'java-platform'
 }
 
-ext.datasourceDecoratorVersion = '1.6.2'
-ext.springdocVersion = '1.4.6'
-ext.simpleflatmapperVersion = '8.2.3'
-ext.testcontainersVersion = '1.15.0-rc2'
-
 dependencies {
     constraints {
         api project(':snippets-java')
@@ -23,22 +18,20 @@ dependencies {
         api "org.simpleflatmapper:sfm-jooq:${simpleflatmapperVersion}"
         api "org.simpleflatmapper:sfm-csv:${simpleflatmapperVersion}"
 
-        api 'com.google.code.findbugs:jsr305:3.0.2'
-        api 'org.ehcache:ehcache:3.9.0'
-        api 'com.fasterxml.jackson.datatype:jackson-datatype-eclipse-collections:2.11.2'
-        api 'com.google.guava:guava:29.0-jre'
-        api 'com.github.jknack:handlebars:4.2.0'
-        api 'io.github.classgraph:classgraph:4.8.89'
-        api 'com.esotericsoftware:kryo:5.0.0-RC9'
-        api 'org.apache.commons:commons-collections4:4.4'
-        api 'org.apache.commons:commons-lang3:3.11'
-        api 'commons-io:commons-io:2.7'
-        api 'com.alibaba:easyexcel:2.2.6'
-        api 'org.eclipse.collections:eclipse-collections:10.4.0'
-        api 'com.esotericsoftware:kryo:5.0.0-RC9'
-        api 'io.github.classgraph:classgraph:4.8.89'
-        api 'p6spy:p6spy:3.9.1'
-        api 'org.jetbrains:annotations:20.1.0'
+        api "com.google.code.findbugs:jsr305:${jsr305Version}"
+        api "org.ehcache:ehcache:${ehcacheVersion}"
+        api "com.fasterxml.jackson.datatype:jackson-datatype-eclipse-collections:${jacksonDatatypeEclipseCollectionsVersion}"
+        api "com.google.guava:guava:${guavaVersion}"
+        api "com.github.jknack:handlebars:${handlebarsVersion}"
+        api "io.github.classgraph:classgraph:${classgraphVersion}"
+        api "com.esotericsoftware:kryo:${kryoVersion}"
+        api "org.apache.commons:commons-collections4:${commonsCollections4Version}"
+        api "org.apache.commons:commons-lang3:${commonsLang3Version}"
+        api "commons-io:commons-io:${commonsIoVersion}"
+        api "com.alibaba:easyexcel:${easyexcelVersion}"
+        api "org.eclipse.collections:eclipse-collections:${eclipseCollectionsVersion}"
+        api "p6spy:p6spy:${p6spyVersion}"
+        api "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
 
         api "org.testcontainers:postgresql:${testcontainersVersion}"
         api "org.testcontainers:junit-jupiter:${testcontainersVersion}"
