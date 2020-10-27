@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.jooq.impl.DSL.primaryKey;
 
 /**
@@ -52,7 +54,8 @@ class SimpleJooqJdbcRepositoryTest {
             .jsonb1(JSONB.valueOf("{\"k\":1}"))
             .build());
         final User user = this.userJdbcRepository.findById(1L).orElse(null);
-        System.out.println(user);
+        assertThat(user).extracting(User::getId, User::getJsonb1)
+            .contains(tuple(1L, JSONB.valueOf("{\"k\":1}")));
     }
 
     @Test
