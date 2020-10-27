@@ -13,7 +13,10 @@ dependencies {
         api project(':snippets-spring-boot-starter-sfm-jooq')
         api project(':snippets-spring-boot-starter-springdoc')
         api project(':snippets-jooq-codegen-maven-plugin')
-        
+
+        api "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringBootVersion}"
+        api "org.mybatis.spring.boot:mybatis-spring-boot-starter-test:${mybatisSpringBootVersion}"
+
         api "com.github.gavlyukovskiy:p6spy-spring-boot-starter:${datasourceDecoratorVersion}"
         api "com.github.gavlyukovskiy:flexy-pool-spring-boot-starter:${datasourceDecoratorVersion}"
 
