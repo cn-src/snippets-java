@@ -1,14 +1,12 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
-
 plugins {
     id 'snippets-conventions'
 }
 
 dependencies {
     api platform(project(':snippets-platform'))
-    api platform(SpringBootPlugin.BOM_COORDINATES)
-    annotationProcessor platform(SpringBootPlugin.BOM_COORDINATES)
-    testAnnotationProcessor platform(SpringBootPlugin.BOM_COORDINATES)
+    api platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+    annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+    testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     implementation(project(':snippets-java'))
 
     optionalApi 'org.springframework.boot:spring-boot-starter-web'
