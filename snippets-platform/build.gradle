@@ -40,8 +40,11 @@ dependencies {
         api "org.springdoc:springdoc-openapi-security:${springdocVersion}"
         api "org.springdoc:springdoc-openapi-data-rest:${springdocVersion}"
 
-        api "org.simpleflatmapper:sfm-jooq:${simpleflatmapperVersion}"
         api "org.simpleflatmapper:sfm-csv:${simpleflatmapperVersion}"
+        api "org.simpleflatmapper:sfm-poi:${simpleflatmapperVersion}"
+        api "org.simpleflatmapper:sfm-jdbc:${simpleflatmapperVersion}"
+        api "org.simpleflatmapper:sfm-jooq:${simpleflatmapperVersion}"
+        api "org.simpleflatmapper:sfm-springjdbc:${simpleflatmapperVersion}"
 
         api "de.codecentric:spring-boot-admin-server:${springBootAdminVerison}"
         api "de.codecentric:spring-boot-admin-server-ui:${springBootAdminVerison}"
