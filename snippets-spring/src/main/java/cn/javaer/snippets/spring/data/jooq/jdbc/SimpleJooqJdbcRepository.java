@@ -334,7 +334,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
     }
 
     @Override
-    public List<T> findAll(Query query) {
+    public List<T> findAll(final Query query) {
         return this.jdbcOperations.query(query.getSQL(), query.getBindValues().toArray(),
             this.entityRowMapper);
     }
@@ -417,7 +417,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         final Update<?> updateStep = StepUtils.updateByIdAndCreatorStep(this.dsl,
             this.table,
             this.persistentEntity, auditor, instance);
-        this.jdbcOperations.update(updateStep.getSQL(), updateStep.getBindValues());
+        this.jdbcOperations.update(updateStep.getSQL(), updateStep.getBindValues().toArray());
         return instance;
     }
 
@@ -435,6 +435,6 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
             .where(DSL.field(this.persistentEntity.getIdColumn().getReference()).eq(id))
             .and(DSL.field(createByColumn).eq(auditor))
             .limit(1);
-        this.jdbcOperations.update(query.getSQL(), query.getBindValues());
+        this.jdbcOperations.update(query.getSQL(), query.getBindValues().toArray());
     }
 }
