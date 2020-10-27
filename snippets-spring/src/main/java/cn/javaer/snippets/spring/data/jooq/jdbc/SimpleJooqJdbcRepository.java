@@ -12,7 +12,6 @@ import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.Update;
 import org.jooq.impl.DSL;
-import org.postgresql.util.PGobject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.auditing.AuditingHandler;
@@ -34,7 +33,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -449,15 +447,7 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         final Object[] params = new Object[objs.length];
         for (int i = 0, le = objs.length; i < le; i++) {
             if (objs[i] instanceof JSONB) {
-                final PGobject obj = new PGobject();
-                obj.setType("jsonb");
-                try {
-                    obj.setValue(((JSONB) objs[i]).data());
-                }
-                catch (final SQLException e) {
-                    throw new IllegalStateException(e);
-                }
-                params[i] = obj;
+                params[i] = JsonbConverters.JsonbToConverter.INSTANCE.convert((JSONB) objs[i]);
             }
             else {
                 params[i] = objs[i];
