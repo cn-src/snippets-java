@@ -48,27 +48,29 @@ class SimpleJooqJdbcRepositoryTest {
 
     @Test
     void insert() {
+        final JSONB jsonb1 = JSONB.valueOf("{\"k\":1}");
         this.userJdbcRepository.insert(User.builder()
             .id(1L)
             .name("n1")
-            .jsonb1(JSONB.valueOf("{\"k\":1}"))
+            .jsonb1(jsonb1)
             .build());
         final User user = this.userJdbcRepository.findById(1L).orElse(null);
         assertThat(user).extracting(User::getId, User::getJsonb1)
-            .contains(tuple(1L, JSONB.valueOf("{\"k\":1}")));
+            .contains(tuple(1L, jsonb1));
     }
 
     @Test
     void update() {
+        final JSONB jsonb1 = JSONB.valueOf("{\"k\":1}");
         final User instance = User.builder()
             .id(1L)
             .name("n1")
-            .jsonb1(JSONB.valueOf("{\"k\":1}"))
+            .jsonb1(jsonb1)
             .build();
         this.userJdbcRepository.insert(instance);
         instance.setName("nn");
         final User user = this.userJdbcRepository.updateByIdAndCreator(instance);
         assertThat(user).extracting(User::getId, User::getName, User::getJsonb1)
-            .contains(tuple(1L, "nn", JSONB.valueOf("{\"k\":1}")));
+            .contains(tuple(1L, "nn", jsonb1));
     }
 }
