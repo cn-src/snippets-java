@@ -43,6 +43,13 @@ dependencies {
         api "p6spy:p6spy:${p6spyVersion}"
         api "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
 
+        api "org.spockframework:spock-core:${spockVerison}"
+        api "org.spockframework:spock-guice:${spockVerison}"
+        api "org.spockframework:spock-junit4:${spockVerison}"
+        api "org.spockframework:spock-spring:${spockVerison}"
+        api "org.spockframework:spock-tapestry:${spockVerison}"
+        api "org.spockframework:spock-unitils:${spockVerison}"
+
         api "org.testcontainers:postgresql:${testcontainersVersion}"
         api "org.testcontainers:mysql:${testcontainersVersion}"
         api "org.testcontainers:mariadb:${testcontainersVersion}"
