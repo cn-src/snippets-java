@@ -68,6 +68,7 @@ class SimpleJooqJdbcRepositoryTest {
         this.userJdbcRepository.insert(instance);
         instance.setName("nn");
         final User user = this.userJdbcRepository.updateByIdAndCreator(instance);
-        System.out.println(user);
+        assertThat(user).extracting(User::getId, User::getName, User::getJsonb1)
+            .contains(tuple(1L, "nn", JSONB.valueOf("{\"k\":1}")));
     }
 }
