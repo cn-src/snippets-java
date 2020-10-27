@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import org.jooq.JSONB;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -26,6 +27,8 @@ class User {
     private Long id;
 
     private String name;
+
+    private JSONB jsonb1;
 
     @CreatedBy
     private Long createdById;
