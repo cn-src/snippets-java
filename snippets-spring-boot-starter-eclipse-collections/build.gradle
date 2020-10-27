@@ -4,5 +4,7 @@ plugins {
 
 dependencies {
     api "org.eclipse.collections:eclipse-collections:${eclipseCollectionsVersion}"
+    api "com.fasterxml.jackson.datatype:jackson-datatype-eclipse-collections:${jacksonDatatypeEclipseCollectionsVersion}"
+
 }
 
