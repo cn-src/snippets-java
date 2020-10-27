@@ -28,6 +28,14 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+            pom.withXml {
+                asNode().remove(asNode().dependencyManagement)
+                asNode().dependencies.'*'.findAll() {
+                    it.optional.text() == 'true'
+                }.each() {
+                    it.parent().remove(it)
+                }
+            }
         }
     }
 }

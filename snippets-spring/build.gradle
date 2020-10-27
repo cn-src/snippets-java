@@ -7,7 +7,7 @@ dependencies {
     api platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-    implementation(project(':snippets-java'))
+    api(project(':snippets-java'))
 
     optionalApi 'org.springframework.boot:spring-boot-starter-web'
     optionalApi 'org.springframework.boot:spring-boot-starter-data-jdbc'
