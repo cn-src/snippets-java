@@ -25,8 +25,11 @@ dependencies {
         api "org.springdoc:springdoc-openapi-security:${springdocVersion}"
         api "org.springdoc:springdoc-openapi-data-rest:${springdocVersion}"
 
-        api "org.simpleflatmapper:sfm-jooq:${simpleflatmapperVersion}"
         api "org.simpleflatmapper:sfm-csv:${simpleflatmapperVersion}"
+        api "org.simpleflatmapper:sfm-poi:${simpleflatmapperVersion}"
+        api "org.simpleflatmapper:sfm-jooq:${simpleflatmapperVersion}"
+        api "org.simpleflatmapper:sfm-jdbc:${simpleflatmapperVersion}"
+        api "org.simpleflatmapper:sfm-springjdbc:${simpleflatmapperVersion}"
 
         api "com.google.guava:guava:${guavaVersion}"
         api "com.google.code.findbugs:jsr305:${jsr305Version}"
