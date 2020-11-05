@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({ExceptionMappingProperties.class, ServerProperties.class})
 @ConditionalOnWebApplication
-@ConditionalOnProperty(prefix = "snippets.exception", name = "enabled", havingValue = "true",
+@ConditionalOnProperty(prefix = "snippets.web.exception", name = "enabled", havingValue = "true",
     matchIfMissing = true)
 public class ExceptionAutoConfiguration implements InitializingBean {
     private final ExceptionMappingProperties exceptionMappingProperties;
