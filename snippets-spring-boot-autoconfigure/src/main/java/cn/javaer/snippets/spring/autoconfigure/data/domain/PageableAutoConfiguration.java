@@ -17,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(Pageable.class)
 @AutoConfigureBefore(SpringDataWebAutoConfiguration.class)
-@ConditionalOnProperty(prefix = "snippets.spring.data.pageable", name = "enabled", havingValue =
+@ConditionalOnProperty(prefix = "snippets.data.pageable", name = "enabled", havingValue =
     "true",
     matchIfMissing = true)
 @EnableConfigurationProperties(SpringDataWebProperties.class)
