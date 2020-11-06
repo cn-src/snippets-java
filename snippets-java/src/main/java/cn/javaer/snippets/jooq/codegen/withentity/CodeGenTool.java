@@ -71,8 +71,10 @@ public class CodeGenTool {
                 scanResult.getClassesWithFieldAnnotation("org.springframework.data.annotation.Id");
             tableClass.addAll(idClass);
             enums = scanResult.getAllEnums();
-
-            return tableClass.stream().distinct().map(it -> new TableMeta(it, genPackage))
+            final ClassInfoList tableMetas = new ClassInfoList();
+            tableMetas.addAll(tableClass);
+            tableMetas.addAll(idClass);
+            return tableMetas.stream().distinct().map(it -> new TableMeta(it, genPackage))
                 .collect(Collectors.toList());
         }
     }
