@@ -30,6 +30,8 @@ dependencies {
         api "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
         api "com.googlecode.cqengine:cqengine:${cqengineVersion}"
 
+        api "org.mybatis:mybatis:${mybatisVersion}"
+        api "org.mybatis:mybatis-spring:${mybatisSpringVersion}"
         api "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringBootVersion}"
         api "org.mybatis.spring.boot:mybatis-spring-boot-starter-test:${mybatisSpringBootVersion}"
 
