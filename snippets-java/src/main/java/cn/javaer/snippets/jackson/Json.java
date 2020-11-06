@@ -22,10 +22,25 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
+ * 基于 jackson 的工具类，与常规的纯静态方法的工具类设计的不同之处在于，可传入不同的 ObjectMapper
+ * 来实例化新的工具对象，方便定制扩展，同时提供静态常量实例来方便直接使用。
+ *
+ * <p>
+ * 此工具目前主要是对受检查异常进行转换抛出。
+ * </p>
+ *
  * @author cn-src
  */
 public class Json {
+
+    /**
+     * 默认实例
+     */
     public static final Json DEFAULT;
+
+    /**
+     * 序列化时忽略空对象的实例
+     */
     public static final Json NON_EMPTY;
 
     static {
@@ -62,6 +77,11 @@ public class Json {
 
     private final ObjectMapper objectMapper;
 
+    /**
+     * 根据 ObjectMapper 创建新实例。
+     *
+     * @param objectMapper ObjectMapper
+     */
     public Json(final ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
