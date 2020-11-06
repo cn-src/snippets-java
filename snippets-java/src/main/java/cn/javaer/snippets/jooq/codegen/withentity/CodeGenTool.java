@@ -64,12 +64,15 @@ public class CodeGenTool {
             .enableAllInfo()
             .acceptPackages(packageNames)
             .scan()) {
-            final ClassInfoList classInfoList =
+            final ClassInfoList tableClass =
+                scanResult.getClassesWithFieldAnnotation(
+                    "org.springframework.data.relational.core.mapping.Table");
+            final ClassInfoList idClass =
                 scanResult.getClassesWithFieldAnnotation("org.springframework.data.annotation.Id");
-
+            tableClass.addAll(idClass);
             enums = scanResult.getAllEnums();
 
-            return classInfoList.stream().map(it -> new TableMeta(it, genPackage))
+            return tableClass.stream().distinct().map(it -> new TableMeta(it, genPackage))
                 .collect(Collectors.toList());
         }
     }
