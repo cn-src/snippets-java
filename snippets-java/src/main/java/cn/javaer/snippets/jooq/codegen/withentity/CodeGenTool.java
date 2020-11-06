@@ -20,12 +20,22 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
+ * jOOQ 代码生成工具，针对注解了 {@link org.springframework.data.relational.core.mapping.Table}
+ * 或者 {@link org.springframework.data.annotation.Id} 的实体类的元数据信息生成类型安全的 jOOQ 代码。
+ *
  * @author cn-src
  */
 public class CodeGenTool {
     private static final Logger logger = Logger.getLogger(CodeGenTool.class.getName());
     static ClassInfoList enums = null;
 
+    /**
+     * 生成代码.
+     *
+     * @param dir 生成代码存放的根目录
+     * @param genPackage 生成代码的 package
+     * @param packageNamesToScan 要扫面的实体类或者相关的枚举类等的 package
+     */
     public static void generate(final String dir, final String genPackage,
                                 final String... packageNamesToScan) {
         logger.info("Code generation with packages:" + Arrays.toString(packageNamesToScan));
