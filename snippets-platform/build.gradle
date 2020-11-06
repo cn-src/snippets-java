@@ -33,6 +33,7 @@ dependencies {
         api "org.mybatis:mybatis:${mybatisVersion}"
         api "org.mybatis:mybatis-spring:${mybatisSpringVersion}"
         api "org.mybatis.dynamic-sql:mybatis-dynamic-sql:${mybatisDynamicSqlVersion}"
+        api "org.mybatis.caches:mybatis-ehcache:${mybatisEhcacheVersion}"
         api "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringBootVersion}"
         api "org.mybatis.spring.boot:mybatis-spring-boot-starter-test:${mybatisSpringBootVersion}"
 
