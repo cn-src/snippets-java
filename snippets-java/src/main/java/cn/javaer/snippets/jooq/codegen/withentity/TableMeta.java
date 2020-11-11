@@ -21,6 +21,7 @@ public class TableMeta {
     String entityName;
     String staticFieldName;
     List<ColumnMeta> columnMetas;
+    List<ColumnMeta> declaredColumnMetas;
     List<ColumnMeta> allColumnMetas;
     boolean hasAttachColumn;
     String tableClassName;
@@ -36,6 +37,13 @@ public class TableMeta {
         this.columnMetas = classInfo.getDeclaredFieldInfo().stream()
             .filter(it -> !it.isStatic())
             .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
+            .map(ColumnMeta::new)
+            .collect(Collectors.toList());
+        this.declaredColumnMetas = classInfo.getDeclaredFieldInfo().stream()
+            .filter(it -> !it.isStatic())
+            .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
+            .filter(it -> !it.hasAnnotation(
+                "cn.javaer.snippets.jooq.codegen.withentity.ExcludeDeclared"))
             .map(ColumnMeta::new)
             .collect(Collectors.toList());
 

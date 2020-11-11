@@ -20,7 +20,7 @@ public class {{tableClassName}} extends TableImpl<Record> {
 
     public static final {{tableClassName}} {{staticFieldName}} = new {{tableClassName}}();
 {{~#if hasAttachColumn}}
-    public static final Field<?>[] {{staticFieldName}}_FIELDS = new Field[]{ {{#each columnMetas}}{{staticFieldName}}.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}} };
+    public static final Field<?>[] {{staticFieldName}}_FIELDS = new Field[]{ {{#each declaredColumnMetas}}{{staticFieldName}}.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}} };
 {{~/if~}}
 {{#each allColumnMetas}}
 {{#if customField}}
@@ -31,7 +31,7 @@ public class {{tableClassName}} extends TableImpl<Record> {
 {{/each}}
 {{#if hasAttachColumn}}
     public final Field<?>[] declaredFields() {
-        return new Field[]{ {{#each columnMetas}}this.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}} };
+        return new Field[]{ {{#each declaredColumnMetas}}this.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}} };
     }
 {{/if}}
     public {{tableClassName}}() {
