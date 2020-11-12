@@ -35,6 +35,8 @@ import java.sql.ResultSet;
 /**
  * A {@link RecordMapper} that maps database rows to domain objects.
  *
+ * 使用 sfm-jdbc 来从 ResultSet 到实体对象的转换。
+ *
  * @author cn-src
  */
 public class ResultSetRecordMapper<P> implements RecordMapper<JdbcRecord, Record<P>> {
