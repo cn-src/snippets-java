@@ -30,6 +30,7 @@ public class ResultSetRecordMapper<P> implements RecordMapper<JdbcRecord, Record
     public ResultSetRecordMapper(final Class<P> recordClass) {
         this.mapper = JdbcMapperFactory
             .newInstance()
+            .ignorePropertyNotFound()
             .newMapper(recordClass);
     }
 
