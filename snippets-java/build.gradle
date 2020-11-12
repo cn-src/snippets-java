@@ -11,6 +11,8 @@ dependencies {
 
     optionalApi 'org.jooq:jooq-codegen'
     optionalApi 'org.simpleflatmapper:sfm-jooq'
+    optionalApi 'org.simpleflatmapper:sfm-jdbc'
+    optionalApi 'org.jeasy:easy-batch-core'
     optionalApi 'org.eclipse.collections:eclipse-collections'
     optionalApi 'com.esotericsoftware:kryo'
     optionalApi 'com.github.jknack:handlebars'
