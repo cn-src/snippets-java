@@ -7,6 +7,7 @@ dependencies {
     annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
 
+    optionalApi 'org.springframework:spring-jdbc'
     optionalApi 'org.springframework.data:spring-data-commons'
 
     optionalApi 'org.jooq:jooq-codegen'
