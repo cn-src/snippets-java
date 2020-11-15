@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jackson;
 
+import cn.javaer.snippets.util.ReflectionUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -12,8 +13,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import org.jooq.JSONB;
-import org.jooq.Record;
 
 import java.io.UncheckedIOException;
 import java.time.LocalDate;
@@ -55,15 +54,18 @@ public class Json {
         module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dataTimeFormat));
         module.addSerializer(LocalDate.class, new LocalDateSerializer(dataFormat));
         module.addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormat));
-        // TODO 判断是否 JSONB 存在
-        module.addSerializer(JSONB.class, JooqJsonbSerializer.INSTANCE);
-        module.addSerializer(Record.class, JooqRecordSerializer.INSTANCE);
 
         module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dataTimeFormat));
         module.addDeserializer(LocalDate.class, new LocalDateDeserializer(dataFormat));
         module.addDeserializer(LocalTime.class, new LocalTimeDeserializer(timeFormat));
-        // TODO
-        module.addDeserializer(JSONB.class, JooqJsonbDeserializer.INSTANCE);
+
+        ReflectionUtils.getClass("org.jooq.JSONB").ifPresent(it -> {
+            module.addSerializer((Class) it, JooqJsonbSerializer.INSTANCE);
+            module.addDeserializer((Class) it, JooqJsonbDeserializer.INSTANCE);
+        });
+        ReflectionUtils.getClass("org.jooq.Record").ifPresent(it -> {
+            module.addSerializer((Class) it, JooqRecordSerializer.INSTANCE);
+        });
 
         defaultX.registerModule(module);
         DEFAULT = new Json(defaultX);
