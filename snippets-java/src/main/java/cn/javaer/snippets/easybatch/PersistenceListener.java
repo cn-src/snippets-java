@@ -6,6 +6,7 @@ import org.jeasy.batch.core.listener.JobListener;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * @author cn-src
@@ -16,6 +17,9 @@ public class PersistenceListener implements JobListener {
 
     public PersistenceListener(final JdbcTemplate jdbcTemplate,
                                final JobExecutionRecord jobRecord) {
+        Objects.requireNonNull(jdbcTemplate, "'jdbcTemplate' must be not null");
+        Objects.requireNonNull(jobRecord, "'jobRecord' must be not null");
+
         this.jdbcTemplate = jdbcTemplate;
         this.jobRecord = jobRecord;
     }
