@@ -8,6 +8,7 @@ import org.jeasy.batch.core.job.JobReport;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -32,6 +33,8 @@ public class JobExecutionRecord {
     private LocalDateTime createdDate;
 
     public static JobExecutionRecord newRecord(final String jobName) {
+        Objects.requireNonNull(jobName, "'jobName' must be not null");
+
         final JobExecutionRecord record = new JobExecutionRecord();
         record.setId(UUID.randomUUID().toString());
         record.setJobName(jobName);
@@ -41,6 +44,8 @@ public class JobExecutionRecord {
 
     public static JobExecutionRecord newRecord(final String jobName, final String batchId,
                                                final LocalDateTime dataEndTime) {
+        Objects.requireNonNull(jobName, "'jobName' must be not null");
+
         final JobExecutionRecord record = newRecord(jobName);
         record.setBatchId(batchId);
         record.setDataEndTime(dataEndTime);
@@ -50,6 +55,8 @@ public class JobExecutionRecord {
     public static JobExecutionRecord newRecord(final String jobName, final String batchId,
                                                final LocalDateTime dataStartTime,
                                                final LocalDateTime dataEndTime) {
+        Objects.requireNonNull(jobName, "'jobName' must be not null");
+
         final JobExecutionRecord record = newRecord(jobName);
         record.setBatchId(batchId);
         record.setDataStartTime(dataStartTime);
@@ -57,7 +64,8 @@ public class JobExecutionRecord {
         return record;
     }
 
-    public void update(final JobReport jobReport) {
+    public void updateFrom(final JobReport jobReport) {
+
         if (jobReport.getStatus() != null) {
             this.setJobStatus(jobReport.getStatus().name());
         }

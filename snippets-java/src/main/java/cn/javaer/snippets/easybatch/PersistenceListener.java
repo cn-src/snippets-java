@@ -48,7 +48,7 @@ public class PersistenceListener implements JobListener {
 
     @Override
     public void afterJob(final JobReport jobReport) {
-        this.jobRecord.update(jobReport);
+        this.jobRecord.updateFrom(jobReport);
         this.jdbcTemplate.update("UPDATE easybatch_job_record SET  job_name = ?, " +
                 "job_start_time = ?, job_end_time = ?, job_status = ?, batch_id = ?," +
                 " data_start_time = ?, data_end_time = ?, read_count = ?, write_count = ?, " +
