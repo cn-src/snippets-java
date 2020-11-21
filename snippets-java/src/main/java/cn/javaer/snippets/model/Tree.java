@@ -23,7 +23,14 @@ public interface Tree {
     @SafeVarargs
     static <E> List<TreeNode> of(final List<E> models,
                                  final Function<E, String>... getters) {
-        return of(models, TreeNodeHandler.EMPTY, getters);
+        return of(models, false, TreeNodeHandler.EMPTY, getters);
+    }
+
+    @SuppressWarnings("unchecked")
+    @SafeVarargs
+    static <E> List<TreeNode> ofIgnoreEmpty(final List<E> models,
+                                            final Function<E, String>... getters) {
+        return of(models, true, TreeNodeHandler.EMPTY, getters);
     }
 
     /**
@@ -38,6 +45,7 @@ public interface Tree {
      */
     @SafeVarargs
     static <E> List<TreeNode> of(final List<E> models,
+                                 final boolean ignoreEmpty,
                                  final TreeNodeHandler<E> handler,
                                  final Function<E, String>... getters) {
         Objects.requireNonNull(getters);
@@ -60,7 +68,7 @@ public interface Tree {
                 if (first.isPresent()) {
                     current = first.get();
                 }
-                else {
+                else if (!(ignoreEmpty && (cell == null || cell.isEmpty()))) {
                     final TreeNode treeNode = TreeNode.of(cell);
                     handler.apply(treeNode, row, depth, current.getChildren().size());
                     current.getChildren().add(treeNode);
