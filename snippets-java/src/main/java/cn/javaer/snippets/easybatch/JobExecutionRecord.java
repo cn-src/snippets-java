@@ -1,12 +1,16 @@
 package cn.javaer.snippets.easybatch;
 
 import cn.javaer.snippets.jackson.Json;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
+import org.jeasy.batch.core.job.Job;
 import org.jeasy.batch.core.job.JobMetrics;
 import org.jeasy.batch.core.job.JobReport;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -15,6 +19,7 @@ import java.util.UUID;
  * @author cn-src
  */
 @Data
+@Setter(AccessLevel.PROTECTED)
 public class JobExecutionRecord {
     private String id;
     private String jobName;
@@ -31,6 +36,8 @@ public class JobExecutionRecord {
     private String jobParameters;
     private String lastError;
     private LocalDateTime createdDate;
+
+    private transient JobMetrics jobMetrics;
 
     public static JobExecutionRecord newRecord(final String jobName) {
         Objects.requireNonNull(jobName, "'jobName' must be not null");
@@ -89,6 +96,19 @@ public class JobExecutionRecord {
             this.setWriteCount(metrics.getWriteCount());
             this.setFilterCount(metrics.getFilterCount());
             this.setErrorCount(metrics.getErrorCount());
+        }
+    }
+
+    public void registryJobMetrics(final Job job) {
+        final Class<?> aClass;
+        try {
+            aClass = Class.forName("org.jeasy.batch.core.job.BatchJob");
+            final Field field = aClass.getDeclaredField("metrics");
+            field.setAccessible(true);
+            this.jobMetrics = (JobMetrics) field.get(job);
+        }
+        catch (final ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalStateException(e);
         }
     }
 }

@@ -1,5 +1,6 @@
 package cn.javaer.snippets.easybatch;
 
+import org.jeasy.batch.core.job.JobMetrics;
 import org.jeasy.batch.core.job.JobParameters;
 import org.jeasy.batch.core.job.JobReport;
 import org.jeasy.batch.core.listener.JobListener;
@@ -7,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.WeakHashMap;
 
 /**
  * @author cn-src
@@ -14,18 +16,30 @@ import java.util.Objects;
 public class PersistenceListener implements JobListener {
     private final JdbcTemplate jdbcTemplate;
     private final JobExecutionRecord jobRecord;
+    private final WeakHashMap<String, JobMetrics> monitor;
 
     public PersistenceListener(final JdbcTemplate jdbcTemplate,
-                               final JobExecutionRecord jobRecord) {
+                               final JobExecutionRecord jobRecord,
+                               final WeakHashMap<String, JobMetrics> monitor) {
         Objects.requireNonNull(jdbcTemplate, "'jdbcTemplate' must be not null");
         Objects.requireNonNull(jobRecord, "'jobRecord' must be not null");
 
         this.jdbcTemplate = jdbcTemplate;
         this.jobRecord = jobRecord;
+        this.monitor = monitor;
+    }
+
+    public PersistenceListener(final JdbcTemplate jdbcTemplate,
+                               final JobExecutionRecord jobRecord) {
+        this(jdbcTemplate, jobRecord, null);
     }
 
     @Override
     public void beforeJob(final JobParameters jobParameters) {
+        if (this.monitor != null) {
+            this.monitor.put(this.jobRecord.getBatchId(), this.jobRecord.getJobMetrics());
+        }
+
         if (this.jobRecord.getDataStartTime() == null) {
             final LocalDateTime dataStartTime = this.jdbcTemplate.queryForObject(
                 "SELECT data_start_time FROM easybatch_job_time WHERE job_name=?",
@@ -52,6 +66,10 @@ public class PersistenceListener implements JobListener {
 
     @Override
     public void afterJob(final JobReport jobReport) {
+        if (this.monitor != null) {
+            this.monitor.remove(this.jobRecord.getBatchId());
+        }
+        
         this.jobRecord.updateFrom(jobReport);
         this.jdbcTemplate.update("UPDATE easybatch_job_record SET  job_name = ?, " +
                 "job_start_time = ?, job_end_time = ?, job_status = ?, batch_id = ?," +
