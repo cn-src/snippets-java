@@ -16,6 +16,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
+ * easy-batch 的执行记录.
+ *
  * @author cn-src
  */
 @Data
@@ -71,6 +73,11 @@ public class JobExecutionRecord {
         return record;
     }
 
+    /**
+     * 从 JobReport 中更新记录信息.
+     *
+     * @param jobReport JobReport
+     */
     public void updateFrom(final JobReport jobReport) {
 
         if (jobReport.getStatus() != null) {
@@ -99,6 +106,11 @@ public class JobExecutionRecord {
         }
     }
 
+    /**
+     * 获取 Job 的监控信息并注册给 JobExecutionRecord.
+     *
+     * @param job Job
+     */
     public void registryJobMetrics(final Job job) {
         final Class<?> aClass;
         try {
