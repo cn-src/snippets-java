@@ -4,6 +4,7 @@ import org.jeasy.batch.core.record.Batch;
 import org.jeasy.batch.core.record.Record;
 import org.jeasy.batch.core.util.Utils;
 import org.jeasy.batch.core.writer.RecordWriter;
+import org.simpleflatmapper.jdbc.spring.JdbcTemplateCrud;
 import org.simpleflatmapper.jdbc.spring.JdbcTemplateMapperFactory;
 import org.simpleflatmapper.jdbc.spring.SqlParameterSourceFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -34,6 +35,10 @@ public class SfmJdbcRecordWriter<P> implements RecordWriter<P> {
         Utils.checkNotNull(parameterSourceFactory, "parameterSourceFactory");
         this.call = (list) -> new NamedParameterJdbcTemplate(jdbcTemplate)
             .batchUpdate(query, parameterSourceFactory.newSqlParameterSources(list));
+    }
+
+    public SfmJdbcRecordWriter(final JdbcTemplateCrud<P, ?> crud) {
+        this.call = crud::create;
     }
 
     @Override
