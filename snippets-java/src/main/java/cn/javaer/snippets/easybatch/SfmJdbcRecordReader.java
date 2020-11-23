@@ -22,10 +22,10 @@ import static org.jeasy.batch.core.util.Utils.checkNotNull;
 /**
  * @author cn-src
  */
-public class JdbcTimeRangeRecordReader implements RecordReader<ResultSet> {
+public class SfmJdbcRecordReader implements RecordReader<ResultSet> {
 
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(JdbcTimeRangeRecordReader.class.getSimpleName());
+        LoggerFactory.getLogger(SfmJdbcRecordReader.class.getSimpleName());
 
     private final QueryPreparer<TimeRange> selectQueryPreparer;
     private final DataSource dataSource;
@@ -41,8 +41,8 @@ public class JdbcTimeRangeRecordReader implements RecordReader<ResultSet> {
     private int fetchSize;
     private final JobExecutionRecord jobRecord;
 
-    public JdbcTimeRangeRecordReader(final DataSource dataSource, final String query,
-                                     final JobExecutionRecord jobRecord) {
+    public SfmJdbcRecordReader(final DataSource dataSource, final String query,
+                               final JobExecutionRecord jobRecord) {
         checkNotNull(dataSource, "dataSource");
         checkNotNull(query, "query");
         checkNotNull(jobRecord, "jobRecord");
