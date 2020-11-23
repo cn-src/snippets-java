@@ -13,14 +13,14 @@ import java.util.WeakHashMap;
 /**
  * @author cn-src
  */
-public class PersistenceListener implements JobListener {
+public class PersistenceJobListener implements JobListener {
     private final JdbcTemplate jdbcTemplate;
-    private final JobExecutionRecord jobRecord;
+    private final PersistenceJobRecord jobRecord;
     private final WeakHashMap<String, JobMetrics> monitor;
 
-    public PersistenceListener(final JdbcTemplate jdbcTemplate,
-                               final JobExecutionRecord jobRecord,
-                               final WeakHashMap<String, JobMetrics> monitor) {
+    public PersistenceJobListener(final JdbcTemplate jdbcTemplate,
+                                  final PersistenceJobRecord jobRecord,
+                                  final WeakHashMap<String, JobMetrics> monitor) {
         Objects.requireNonNull(jdbcTemplate, "'jdbcTemplate' must be not null");
         Objects.requireNonNull(jobRecord, "'jobRecord' must be not null");
 
@@ -29,8 +29,8 @@ public class PersistenceListener implements JobListener {
         this.monitor = monitor;
     }
 
-    public PersistenceListener(final JdbcTemplate jdbcTemplate,
-                               final JobExecutionRecord jobRecord) {
+    public PersistenceJobListener(final JdbcTemplate jdbcTemplate,
+                                  final PersistenceJobRecord jobRecord) {
         this(jdbcTemplate, jobRecord, null);
     }
 
@@ -69,7 +69,7 @@ public class PersistenceListener implements JobListener {
         if (this.monitor != null) {
             this.monitor.remove(this.jobRecord.getBatchId());
         }
-        
+
         this.jobRecord.updateFrom(jobReport);
         this.jdbcTemplate.update("UPDATE easybatch_job_record SET  job_name = ?, " +
                 "job_start_time = ?, job_end_time = ?, job_status = ?, batch_id = ?," +

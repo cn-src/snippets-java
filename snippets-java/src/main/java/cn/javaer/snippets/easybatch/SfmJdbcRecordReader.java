@@ -39,10 +39,10 @@ public class SfmJdbcRecordReader implements RecordReader<ResultSet> {
     private int maxRows;
     private int queryTimeout;
     private int fetchSize;
-    private final JobExecutionRecord jobRecord;
+    private final PersistenceJobRecord jobRecord;
 
     public SfmJdbcRecordReader(final DataSource dataSource, final String query,
-                               final JobExecutionRecord jobRecord) {
+                               final PersistenceJobRecord jobRecord) {
         checkNotNull(dataSource, "dataSource");
         checkNotNull(query, "query");
         checkNotNull(jobRecord, "jobRecord");

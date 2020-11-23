@@ -22,7 +22,7 @@ import java.util.UUID;
  */
 @Data
 @Setter(AccessLevel.PROTECTED)
-public class JobExecutionRecord {
+public class PersistenceJobRecord {
     private String id;
     private String jobName;
     private LocalDateTime jobStartTime;
@@ -41,32 +41,32 @@ public class JobExecutionRecord {
 
     private transient JobMetrics jobMetrics;
 
-    public static JobExecutionRecord newRecord(final String jobName) {
+    public static PersistenceJobRecord newRecord(final String jobName) {
         Objects.requireNonNull(jobName, "'jobName' must be not null");
 
-        final JobExecutionRecord record = new JobExecutionRecord();
+        final PersistenceJobRecord record = new PersistenceJobRecord();
         record.setId(UUID.randomUUID().toString());
         record.setJobName(jobName);
         record.setCreatedDate(LocalDateTime.now());
         return record;
     }
 
-    public static JobExecutionRecord newRecord(final String jobName, final String batchId,
-                                               final LocalDateTime dataEndTime) {
+    public static PersistenceJobRecord newRecord(final String jobName, final String batchId,
+                                                 final LocalDateTime dataEndTime) {
         Objects.requireNonNull(jobName, "'jobName' must be not null");
 
-        final JobExecutionRecord record = newRecord(jobName);
+        final PersistenceJobRecord record = newRecord(jobName);
         record.setBatchId(batchId);
         record.setDataEndTime(dataEndTime);
         return record;
     }
 
-    public static JobExecutionRecord newRecord(final String jobName, final String batchId,
-                                               final LocalDateTime dataStartTime,
-                                               final LocalDateTime dataEndTime) {
+    public static PersistenceJobRecord newRecord(final String jobName, final String batchId,
+                                                 final LocalDateTime dataStartTime,
+                                                 final LocalDateTime dataEndTime) {
         Objects.requireNonNull(jobName, "'jobName' must be not null");
 
-        final JobExecutionRecord record = newRecord(jobName);
+        final PersistenceJobRecord record = newRecord(jobName);
         record.setBatchId(batchId);
         record.setDataStartTime(dataStartTime);
         record.setDataEndTime(dataEndTime);
