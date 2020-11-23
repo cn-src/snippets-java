@@ -22,7 +22,7 @@ import static org.jeasy.batch.core.util.Utils.checkNotNull;
 /**
  * @author cn-src
  */
-public class JdbcTimeRangeRecordReader implements RecordReader {
+public class JdbcTimeRangeRecordReader implements RecordReader<ResultSet> {
 
     private static final Logger LOGGER =
         LoggerFactory.getLogger(JdbcTimeRangeRecordReader.class.getSimpleName());

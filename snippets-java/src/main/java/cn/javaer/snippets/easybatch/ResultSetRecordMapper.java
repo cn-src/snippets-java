@@ -3,7 +3,6 @@ package cn.javaer.snippets.easybatch;
 import org.jeasy.batch.core.mapper.RecordMapper;
 import org.jeasy.batch.core.record.GenericRecord;
 import org.jeasy.batch.core.record.Record;
-import org.jeasy.batch.jdbc.JdbcRecord;
 import org.simpleflatmapper.jdbc.JdbcMapper;
 import org.simpleflatmapper.jdbc.JdbcMapperFactory;
 
@@ -17,7 +16,7 @@ import java.sql.ResultSet;
  *
  * @author cn-src
  */
-public class ResultSetRecordMapper<P> implements RecordMapper<JdbcRecord, Record<P>> {
+public class ResultSetRecordMapper<P> implements RecordMapper<ResultSet, P> {
 
     private final JdbcMapper<P> mapper;
 
@@ -40,7 +39,7 @@ public class ResultSetRecordMapper<P> implements RecordMapper<JdbcRecord, Record
     }
 
     @Override
-    public Record<P> processRecord(final JdbcRecord record) throws Exception {
+    public Record<P> processRecord(final Record<ResultSet> record) throws Exception {
         final ResultSet resultSet = record.getPayload();
         final P p = this.mapper.map(resultSet);
         return new GenericRecord<>(record.getHeader(), p);
