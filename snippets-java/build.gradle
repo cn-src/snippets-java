@@ -13,6 +13,7 @@ dependencies {
     optionalApi 'org.jooq:jooq-codegen'
     optionalApi 'org.simpleflatmapper:sfm-jooq'
     optionalApi 'org.simpleflatmapper:sfm-jdbc'
+    optionalApi 'org.simpleflatmapper:sfm-springjdbc'
     optionalApi 'org.jeasy:easy-batch-jdbc'
     optionalApi 'org.eclipse.collections:eclipse-collections'
     optionalApi 'com.esotericsoftware:kryo'
