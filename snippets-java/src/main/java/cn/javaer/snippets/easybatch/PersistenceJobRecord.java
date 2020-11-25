@@ -115,7 +115,7 @@ public class PersistenceJobRecord {
      *
      * @param job Job
      */
-    public void registryJobMetrics(final Job job) {
+    public void registryJobReport(final Job job) {
         final Class<?> aClass;
         try {
             aClass = Class.forName("org.jeasy.batch.core.job.BatchJob");
