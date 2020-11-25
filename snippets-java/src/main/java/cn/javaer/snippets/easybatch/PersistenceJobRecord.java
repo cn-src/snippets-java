@@ -39,7 +39,7 @@ public class PersistenceJobRecord {
     private String lastError;
     private LocalDateTime createdDate;
 
-    private transient JobMetrics jobMetrics;
+    private transient JobReport jobReport;
 
     public static PersistenceJobRecord newRecord(final String jobName) {
         Objects.requireNonNull(jobName, "'jobName' must be not null");
@@ -78,24 +78,24 @@ public class PersistenceJobRecord {
      *
      * @param jobReport JobReport
      */
-    public void updateFrom(final JobReport jobReport) {
+    public void updateJobReport() {
 
-        if (jobReport.getStatus() != null) {
-            this.setJobStatus(jobReport.getStatus().name());
+        if (this.jobReport.getStatus() != null) {
+            this.setJobStatus(this.jobReport.getStatus().name());
         }
 
-        if (jobReport.getLastError() != null) {
+        if (this.jobReport.getLastError() != null) {
             final StringWriter stackTrace = new StringWriter();
-            jobReport.getLastError().printStackTrace(new PrintWriter(stackTrace));
+            this.jobReport.getLastError().printStackTrace(new PrintWriter(stackTrace));
             stackTrace.flush();
             this.setLastError(stackTrace.toString());
         }
 
-        if (jobReport.getParameters() != null) {
-            this.setJobParameters(Json.DEFAULT.write(jobReport.getParameters()));
+        if (this.jobReport.getParameters() != null) {
+            this.setJobParameters(Json.DEFAULT.write(this.jobReport.getParameters()));
         }
 
-        final JobMetrics metrics = jobReport.getMetrics();
+        final JobMetrics metrics = this.jobReport.getMetrics();
         if (null != metrics) {
             this.setJobStartTime(metrics.getStartTime());
             this.setJobEndTime(metrics.getEndTime());
@@ -115,9 +115,9 @@ public class PersistenceJobRecord {
         final Class<?> aClass;
         try {
             aClass = Class.forName("org.jeasy.batch.core.job.BatchJob");
-            final Field field = aClass.getDeclaredField("metrics");
+            final Field field = aClass.getDeclaredField("report");
             field.setAccessible(true);
-            this.jobMetrics = (JobMetrics) field.get(job);
+            this.jobReport = (JobReport) field.get(job);
         }
         catch (final ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
             throw new IllegalStateException(e);
