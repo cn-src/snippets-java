@@ -73,29 +73,33 @@ public class PersistenceJobRecord {
         return record;
     }
 
+    public void updateJobReport() {
+        this.updateJobReport(this.jobReport);
+    }
+
     /**
      * 从 JobReport 中更新记录信息.
      *
-     * @param jobReport JobReport
+     * @param usedJobReport JobReport
      */
-    public void updateJobReport() {
+    public void updateJobReport(final JobReport usedJobReport) {
 
-        if (this.jobReport.getStatus() != null) {
-            this.setJobStatus(this.jobReport.getStatus().name());
+        if (usedJobReport.getStatus() != null) {
+            this.setJobStatus(usedJobReport.getStatus().name());
         }
 
-        if (this.jobReport.getLastError() != null) {
+        if (usedJobReport.getLastError() != null) {
             final StringWriter stackTrace = new StringWriter();
-            this.jobReport.getLastError().printStackTrace(new PrintWriter(stackTrace));
+            usedJobReport.getLastError().printStackTrace(new PrintWriter(stackTrace));
             stackTrace.flush();
             this.setLastError(stackTrace.toString());
         }
 
-        if (this.jobReport.getParameters() != null) {
-            this.setJobParameters(Json.DEFAULT.write(this.jobReport.getParameters()));
+        if (usedJobReport.getParameters() != null) {
+            this.setJobParameters(Json.DEFAULT.write(usedJobReport.getParameters()));
         }
 
-        final JobMetrics metrics = this.jobReport.getMetrics();
+        final JobMetrics metrics = usedJobReport.getMetrics();
         if (null != metrics) {
             this.setJobStartTime(metrics.getStartTime());
             this.setJobEndTime(metrics.getEndTime());

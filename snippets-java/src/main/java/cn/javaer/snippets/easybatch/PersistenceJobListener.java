@@ -70,17 +70,17 @@ public class PersistenceJobListener implements JobListener, BatchListener<Object
         if (this.monitor != null) {
             this.monitor.remove(this.jobRecord.getBatchId());
         }
-
+        this.jobRecord.updateJobReport(jobReport);
         this.saveJobReport();
     }
 
     @Override
     public void afterBatchWriting(final Batch<Object> batch) {
+        this.jobRecord.updateJobReport();
         this.saveJobReport();
     }
 
     void saveJobReport() {
-        this.jobRecord.updateJobReport();
         this.jdbcTemplate.update("UPDATE easybatch_job_record SET  job_name = ?, " +
                 "job_start_time = ?, job_end_time = ?, job_status = ?, batch_id = ?," +
                 " data_start_time = ?, data_end_time = ?, read_count = ?, write_count = ?, " +
