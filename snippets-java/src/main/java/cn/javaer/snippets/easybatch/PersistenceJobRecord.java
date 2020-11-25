@@ -74,6 +74,9 @@ public class PersistenceJobRecord {
     }
 
     public void updateJobReport() {
+        if (this.jobReport == null) {
+            return;
+        }
         this.updateJobReport(this.jobReport);
     }
 
