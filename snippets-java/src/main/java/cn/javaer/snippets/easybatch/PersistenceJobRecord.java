@@ -114,7 +114,7 @@ public class PersistenceJobRecord {
     }
 
     /**
-     * 获取 Job 的监控信息并注册给 JobExecutionRecord.
+     * 获取 Job 的监控信息并注册给 PersistenceJobRecord.
      *
      * @param job Job
      */
