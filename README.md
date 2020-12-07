@@ -3,6 +3,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2544a8647cde45598ec7fe0dd1cf76c5)](https://www.codacy.com/manual/cn-src/snippets-java?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=cn-src/snippets-java&amp;utm_campaign=Badge_Grade)
 [![codecov](https://codecov.io/gh/cn-src/snippets-java/branch/master/graph/badge.svg)](https://codecov.io/gh/cn-src/snippets-java)
 [![](https://jitpack.io/v/cn-src/snippets-java.svg)](https://jitpack.io/#cn-src/snippets-java)
+![Lines of code](https://img.shields.io/tokei/lines/github/cn-src/snippets-java)
 
 # Snippets Java
 
