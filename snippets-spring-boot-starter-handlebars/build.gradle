@@ -1,0 +1,8 @@
+plugins {
+    id 'snippets-starter'
+}
+
+dependencies {
+    api "com.github.jknack:handlebars:${handlebarsVersion}"
+}
+
