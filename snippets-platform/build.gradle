@@ -8,6 +8,7 @@ dependencies {
         api project(':snippets-spring')
         api project(':snippets-spring-boot-autoconfigure')
         api project(':snippets-spring-boot-starter')
+        api project(':snippets-spring-boot-starter-handlebars')
         api project(':snippets-spring-boot-starter-data-jooq-jdbc')
         api project(':snippets-spring-boot-starter-eclipse-collections')
         api project(':snippets-spring-boot-starter-sfm-jooq')
