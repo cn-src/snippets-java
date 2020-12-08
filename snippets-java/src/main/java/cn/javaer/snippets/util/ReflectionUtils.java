@@ -12,7 +12,7 @@ public interface ReflectionUtils {
             Class.forName(className);
             return true;
         }
-        catch (final Exception ex) {
+        catch (final ClassNotFoundException ex) {
             return false;
         }
     }
