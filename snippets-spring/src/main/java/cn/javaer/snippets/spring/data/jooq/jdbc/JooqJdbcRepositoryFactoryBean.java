@@ -68,6 +68,7 @@ public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
                 this.auditorAware, this.auditingHandler);
         jdbcRepositoryFactory.setQueryMappingConfiguration(this.queryMappingConfiguration);
         jdbcRepositoryFactory.setEntityCallbacks(this.entityCallbacks);
+        jdbcRepositoryFactory.setBeanFactory(this.beanFactory);
 
         return jdbcRepositoryFactory;
     }
@@ -75,12 +76,17 @@ public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
     @Autowired
     protected void setMappingContext(final RelationalMappingContext mappingContext) {
 
+        Assert.notNull(mappingContext, "MappingContext must not be null");
+
         super.setMappingContext(mappingContext);
         this.mappingContext = mappingContext;
     }
 
     @Autowired
     protected void setDialect(final Dialect dialect) {
+
+        Assert.notNull(dialect, "Dialect must not be null");
+
         this.dialect = dialect;
     }
 
@@ -90,15 +96,24 @@ public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
 
     @Autowired(required = false)
     public void setQueryMappingConfiguration(final QueryMappingConfiguration queryMappingConfiguration) {
+
+        Assert.notNull(queryMappingConfiguration, "QueryMappingConfiguration must not be null");
+
         this.queryMappingConfiguration = queryMappingConfiguration;
     }
 
     public void setJdbcOperations(final NamedParameterJdbcOperations operations) {
+
+        Assert.notNull(operations, "NamedParameterJdbcOperations must not be null");
+
         this.operations = operations;
     }
 
     @Autowired
     public void setConverter(final JdbcConverter converter) {
+
+        Assert.notNull(converter, "JdbcConverter must not be null");
+
         this.converter = converter;
     }
 
@@ -116,11 +131,6 @@ public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
 
     @Override
     public void afterPropertiesSet() {
-
-        Assert.state(this.mappingContext != null, "MappingContext is required and must not be " +
-            "null!");
-        Assert.state(this.converter != null, "RelationalConverter is required and must not be " +
-            "null!");
 
         if (this.auditorAware == null) {
 
@@ -148,26 +158,32 @@ public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
             this.dslContext = this.beanFactory.getBean(DSLContext.class);
         }
 
+        Assert.state(this.mappingContext != null, "MappingContext is required and must not be " +
+            "null!");
+        Assert.state(this.converter != null, "RelationalConverter is required and must not be " +
+            "null!");
+
         if (this.operations == null) {
 
-            Assert.state(this.beanFactory != null, "If no JdbcOperations are set a BeanFactory " +
-                "must be available.");
+            Assert.state(this.beanFactory != null, "If no JdbcOperations are set a BeanFactory must be" +
+                " available.");
 
             this.operations = this.beanFactory.getBean(NamedParameterJdbcOperations.class);
         }
 
         if (this.dataAccessStrategy == null) {
 
-            Assert.state(this.beanFactory != null, "If no DataAccessStrategy is set a BeanFactory" +
-                " must be available.");
+            Assert.state(this.beanFactory != null, "If no DataAccessStrategy is set a BeanFactory must" +
+                " be available.");
 
-            this.dataAccessStrategy = this.beanFactory.getBeanProvider(DataAccessStrategy.class)
+            this.dataAccessStrategy = this.beanFactory.getBeanProvider(DataAccessStrategy.class) //
                 .getIfAvailable(() -> {
+
                     Assert.state(this.dialect != null, "Dialect is required and must not be null!");
 
                     final SqlGeneratorSource sqlGeneratorSource =
                         new SqlGeneratorSource(this.mappingContext, this.converter,
-                            this.dialect);
+                        this.dialect);
                     return new DefaultDataAccessStrategy(sqlGeneratorSource, this.mappingContext,
                         this.converter,
                         this.operations);
