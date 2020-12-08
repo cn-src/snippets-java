@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 import static org.jooq.impl.DSL.primaryKey;
 
 /**
@@ -55,8 +54,8 @@ class SimpleJooqJdbcRepositoryTest {
             .jsonb1(jsonb1)
             .build());
         final User user = this.userJdbcRepository.findById(1L).orElse(null);
-        assertThat(user).extracting(User::getId, User::getJsonb1)
-            .contains(tuple(1L, jsonb1));
+        assertThat(user).extracting(User::getId).isEqualTo(1L);
+        assertThat(user).extracting(User::getJsonb1).isEqualTo(jsonb1);
     }
 
     @Test
@@ -70,7 +69,8 @@ class SimpleJooqJdbcRepositoryTest {
         this.userJdbcRepository.insert(instance);
         instance.setName("nn");
         final User user = this.userJdbcRepository.updateByIdAndCreator(instance);
-        assertThat(user).extracting(User::getId, User::getName, User::getJsonb1)
-            .contains(tuple(1L, "nn", jsonb1));
+        assertThat(user).extracting(User::getId).isEqualTo(1L);
+        assertThat(user).extracting(User::getName).isEqualTo("nn");
+        assertThat(user).extracting(User::getJsonb1).isEqualTo(jsonb1);
     }
 }
