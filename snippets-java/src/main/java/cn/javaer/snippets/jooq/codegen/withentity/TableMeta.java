@@ -42,16 +42,14 @@ public class TableMeta {
         this.declaredColumnMetas = classInfo.getDeclaredFieldInfo().stream()
             .filter(it -> !it.isStatic())
             .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
-            .filter(it -> !it.hasAnnotation(
-                "cn.javaer.snippets.jooq.codegen.withentity.ExcludeDeclared"))
+            .filter(it -> !it.hasAnnotation(ExcludeDeclared.class.getName()))
             .map(ColumnMeta::new)
             .collect(Collectors.toList());
 
         final List<ColumnMeta> allColumnMetas = new ArrayList<>(this.columnMetas);
 
         final AnnotationInfoList annotationInfoList = classInfo.getAnnotationInfo()
-            .filter(it ->
-                "cn.javaer.snippets.jooq.codegen.withentity.GenColumn".equals(it.getName()));
+            .filter(it -> GenColumn.class.getName().equals(it.getName()));
         for (final AnnotationInfo annotationInfo : annotationInfoList) {
             final AnnotationParameterValueList parameterValues =
                 annotationInfo.getParameterValues();
