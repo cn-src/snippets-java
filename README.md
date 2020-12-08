@@ -5,10 +5,10 @@
 [![](https://jitpack.io/v/cn-src/snippets-java.svg)](https://jitpack.io/#cn-src/snippets-java)
 ![Lines of code](https://img.shields.io/tokei/lines/github/cn-src/snippets-java)
 
+***
 # Snippets Java
-
-> 一些Java代码片段，主要提供一些工具类和框架的扩展
-> Spring Boot 集成后可直接使用，查看单元测试可获取详细用法
+> 随时提炼一些 Java 代码片段，直接集成使用。
+***
 
 ## jOOQ 扩展
 
