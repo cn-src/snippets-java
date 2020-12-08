@@ -48,7 +48,7 @@ class SimpleJooqJdbcRepositoryTest {
 
     @Test
     void insert() {
-        final JSONB jsonb1 = JSONB.valueOf("{\"k\":1}");
+        final JSONB jsonb1 = JSONB.valueOf("{\"k\": 1}");
         this.userJdbcRepository.insert(User.builder()
             .id(1L)
             .name("n1")
@@ -61,7 +61,7 @@ class SimpleJooqJdbcRepositoryTest {
 
     @Test
     void update() {
-        final JSONB jsonb1 = JSONB.valueOf("{\"k\":1}");
+        final JSONB jsonb1 = JSONB.valueOf("{\"k\": 1}");
         final User instance = User.builder()
             .id(1L)
             .name("n1")
