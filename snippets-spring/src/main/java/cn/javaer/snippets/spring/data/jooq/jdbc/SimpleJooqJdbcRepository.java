@@ -24,7 +24,6 @@ import org.springframework.data.jdbc.core.JdbcAggregateOperations;
 import org.springframework.data.jdbc.core.convert.EntityRowMapper;
 import org.springframework.data.jdbc.core.convert.JdbcConverter;
 import org.springframework.data.mapping.PersistentPropertyAccessor;
-import org.springframework.data.relational.core.mapping.RelationalMappingContext;
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
 import org.springframework.data.relational.core.mapping.RelationalPersistentProperty;
 import org.springframework.data.util.Streamable;
@@ -53,7 +52,6 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
     private final JdbcAggregateOperations entityOperations;
     private final JdbcOperations jdbcOperations;
-    private final JdbcConverter jdbcConverter;
     private final Class<T> entityClass;
     private final EntityRowMapper<T> entityRowMapper;
     private final RelationalPersistentEntity<T> persistentEntity;
@@ -65,16 +63,14 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
 
     private final AuditingHandler auditingHandler;
 
-    public SimpleJooqJdbcRepository(final DSLContext dsl,
-                                    final RelationalMappingContext context,
+    public SimpleJooqJdbcRepository(final JdbcAggregateOperations entityOperations,
                                     final RelationalPersistentEntity<T> persistentEntity,
-                                    final JdbcAggregateOperations entityOperations,
+                                    final DSLContext dsl,
                                     final NamedParameterJdbcOperations jdbcOperations,
                                     final JdbcConverter jdbcConverter,
                                     final AuditorAware<?> auditorAware,
                                     final AuditingHandler auditingHandler) {
         this.entityOperations = entityOperations;
-        this.jdbcConverter = jdbcConverter;
         this.jdbcOperations = jdbcOperations.getJdbcOperations();
         this.entityClass = persistentEntity.getType();
         this.entityRowMapper = new EntityRowMapper<>(persistentEntity, jdbcConverter);

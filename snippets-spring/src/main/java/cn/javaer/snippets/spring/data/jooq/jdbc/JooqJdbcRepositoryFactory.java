@@ -1,6 +1,7 @@
 package cn.javaer.snippets.spring.data.jooq.jdbc;
 
 import org.jooq.DSLContext;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.auditing.AuditingHandler;
 import org.springframework.data.domain.AuditorAware;
@@ -39,8 +40,8 @@ public class JooqJdbcRepositoryFactory extends RepositoryFactorySupport {
     private final ApplicationEventPublisher publisher;
     private final DataAccessStrategy accessStrategy;
     private final NamedParameterJdbcOperations operations;
-
     private final Dialect dialect;
+    @Nullable private BeanFactory beanFactory;
 
     private QueryMappingConfiguration queryMappingConfiguration = QueryMappingConfiguration.EMPTY;
 
@@ -85,17 +86,11 @@ public class JooqJdbcRepositoryFactory extends RepositoryFactorySupport {
             final Constructor<? extends QueryLookupStrategy> constructor = (Constructor<?
                 extends QueryLookupStrategy>) Class.forName("org" +
                 ".springframework.data.jdbc.repository.support.JdbcQueryLookupStrategy")
-                .getDeclaredConstructor(ApplicationEventPublisher.class,
-                    EntityCallbacks.class,
-                    RelationalMappingContext.class,
-                    JdbcConverter.class,
-                    Dialect.class,
-                    QueryMappingConfiguration.class,
-                    NamedParameterJdbcOperations.class);
+                .getDeclaredConstructors()[0];
             this.constructor = constructor;
             this.constructor.setAccessible(true);
         }
-        catch (final NoSuchMethodException | ClassNotFoundException e) {
+        catch (final ClassNotFoundException e) {
             throw new IllegalStateException(e);
         }
     }
@@ -121,19 +116,19 @@ public class JooqJdbcRepositoryFactory extends RepositoryFactorySupport {
     protected Object getTargetRepository(final RepositoryInformation repositoryInformation) {
 
         final JdbcAggregateTemplate template = new JdbcAggregateTemplate(this.publisher,
-            this.context, this.converter, this.accessStrategy);
-
-        final SimpleJooqJdbcRepository<?, Object> repository = new SimpleJooqJdbcRepository<>(
-            this.dslContext, this.context,
-            this.context.getRequiredPersistentEntity(repositoryInformation.getDomainType()),
-            template, this.operations, this.converter, this.auditorAware, this.auditingHandler
-        );
+            this.context, this.converter,
+            this.accessStrategy);
 
         if (this.entityCallbacks != null) {
             template.setEntityCallbacks(this.entityCallbacks);
         }
 
-        return repository;
+        final RelationalPersistentEntity<?> persistentEntity = this.context
+            .getRequiredPersistentEntity(repositoryInformation.getDomainType());
+
+        return this.getTargetRepositoryViaReflection(repositoryInformation.getRepositoryBaseClass(),
+            template, persistentEntity,
+            this.dslContext, this.operations, this.converter, this.auditorAware, this.auditingHandler);
     }
 
     @Override
@@ -147,7 +142,7 @@ public class JooqJdbcRepositoryFactory extends RepositoryFactorySupport {
         try {
             return Optional.of(this.constructor.newInstance(this.publisher, this.entityCallbacks,
                 this.context, this.converter, this.dialect,
-                this.queryMappingConfiguration, this.operations));
+                this.queryMappingConfiguration, this.operations, this.beanFactory));
         }
         catch (final InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalStateException(e);
@@ -156,5 +151,10 @@ public class JooqJdbcRepositoryFactory extends RepositoryFactorySupport {
 
     public void setEntityCallbacks(final EntityCallbacks entityCallbacks) {
         this.entityCallbacks = entityCallbacks;
+    }
+
+    @Override
+    public void setBeanFactory(@Nullable final BeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
     }
 }
