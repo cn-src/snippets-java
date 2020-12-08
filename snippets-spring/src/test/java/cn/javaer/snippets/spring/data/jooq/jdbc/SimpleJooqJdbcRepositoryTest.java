@@ -34,7 +34,7 @@ class SimpleJooqJdbcRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        this.dsl.dropTableIfExists("users");
+        this.dsl.dropTableIfExists("users").execute();
         this.dsl.createTable("users")
             .column("id", SQLDataType.BIGINT.nullable(false).identity(true))
             .column("name", SQLDataType.VARCHAR(50))
