@@ -12,11 +12,14 @@ import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * @author cn-src
  */
 public class JooqJdbcRepositoryConfigExtension extends RepositoryConfigurationExtensionSupport {
+
+    private static final String DEFAULT_TRANSACTION_MANAGER_BEAN_NAME = "transactionManager";
 
     @NonNull
     @Override
@@ -41,16 +44,20 @@ public class JooqJdbcRepositoryConfigExtension extends RepositoryConfigurationEx
                             final RepositoryConfigurationSource source) {
 
         source.getAttribute("jdbcOperationsRef")
-                .filter(StringUtils::hasText)
-                .ifPresent(s -> builder.addPropertyReference("jdbcOperations", s));
+            .filter(StringUtils::hasText)
+            .ifPresent(s -> builder.addPropertyReference("jdbcOperations", s));
 
         source.getAttribute("dataAccessStrategyRef")
-                .filter(StringUtils::hasText)
-                .ifPresent(s -> builder.addPropertyReference("dataAccessStrategy", s));
+            .filter(StringUtils::hasText)
+            .ifPresent(s -> builder.addPropertyReference("dataAccessStrategy", s));
 
         source.getAttribute("dslContextRef")
-                .filter(StringUtils::hasText)
-                .ifPresent(s -> builder.addPropertyReference("dslContext", s));
+            .filter(StringUtils::hasText)
+            .ifPresent(s -> builder.addPropertyReference("dslContext", s));
+
+        final Optional<String> transactionManagerRef = source.getAttribute("transactionManagerRef");
+        builder.addPropertyValue("transactionManager",
+            transactionManagerRef.orElse(DEFAULT_TRANSACTION_MANAGER_BEAN_NAME));
     }
 
     /**
