@@ -35,15 +35,6 @@ class PGDSLTest {
     }
 
     @Test
-    void jsonbObjectAgg() {
-        final JsonbField<Record, JSONB> jsonbField = PGDSL.jsonbObjectAgg(DSL.field("f1"
-            , String.class), DSL.field(
-            "f2", String.class));
-        assertThat(this.dsl.renderInlined(jsonbField))
-            .isEqualTo("jsonb_object_agg(f1,f2)");
-    }
-
-    @Test
     void jsonbObjectAgg2() {
         final JsonbField<Record, JSONB> jsonbField = PGDSL.jsonbObjectAgg(new Field[]{DSL.field("f1"
             , String.class), DSL.field(
