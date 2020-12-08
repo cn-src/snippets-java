@@ -3,9 +3,10 @@ subprojects {
 
     group 'com.github.cn-src'
     version '1.0-SNAPSHOT'
-    
+
     repositories {
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 
     publishing {
