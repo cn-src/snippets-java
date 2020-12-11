@@ -1,6 +1,7 @@
 package cn.javaer.snippets.spring.autoconfigure.springdoc;
 
 import cn.javaer.snippets.spring.autoconfigure.exception.ExceptionAutoConfiguration;
+import cn.javaer.snippets.spring.security.PrincipalId;
 import cn.javaer.snippets.spring.web.exception.ErrorInfoExtractor;
 import cn.javaer.snippets.springdoc.PageDoc;
 import cn.javaer.snippets.springdoc.PageableDoc;
@@ -34,7 +35,7 @@ import java.util.List;
 @AutoConfigureAfter({ExceptionAutoConfiguration.class})
 @AutoConfigureBefore({SpringDocConfiguration.class, SpringDocConfigProperties.class})
 @ConditionalOnProperty(prefix = "snippets.springdoc", name = "enabled", havingValue = "true",
-        matchIfMissing = true)
+    matchIfMissing = true)
 public class SpringDocAutoConfiguration implements InitializingBean {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -46,14 +47,16 @@ public class SpringDocAutoConfiguration implements InitializingBean {
                                            final SpringDocConfigProperties springDocConfigProperties,
                                            final PropertyResolverUtils propertyResolverUtils) {
         return new ExceptionResponseBuilder(operationBuilder, returnTypeParsers,
-                springDocConfigProperties, propertyResolverUtils, errorInfoExtractor);
+            springDocConfigProperties, propertyResolverUtils, errorInfoExtractor);
     }
 
     @Override
     public void afterPropertiesSet() {
         SpringDocUtils.getConfig().replaceWithClass(Pageable.class,
-                PageableDoc.class);
+            PageableDoc.class);
         SpringDocUtils.getConfig().replaceWithClass(Page.class,
-                PageDoc.class);
+            PageDoc.class);
+
+        SpringDocUtils.getConfig().addAnnotationsToIgnore(PrincipalId.class);
     }
 }
