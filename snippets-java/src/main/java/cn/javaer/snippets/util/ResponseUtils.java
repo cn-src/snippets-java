@@ -1,7 +1,6 @@
-package cn.javaer.snippets.spring.web;
+package cn.javaer.snippets.util;
 
 import cn.javaer.snippets.jackson.Json;
-import cn.javaer.snippets.util.GzipUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
