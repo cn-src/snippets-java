@@ -38,7 +38,7 @@ public interface ResponseUtils {
      */
     static ResponseEntity<byte[]> jsonGzipCompress(@NonNull final String body) {
 
-        return jsonGzip(GzipUtils.zip(body));
+        return jsonGzip(GzipUtils.compress(body));
     }
 
     /**

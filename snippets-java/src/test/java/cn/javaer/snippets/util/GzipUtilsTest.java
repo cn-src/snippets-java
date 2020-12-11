@@ -10,8 +10,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GzipUtilsTest {
     @Test
     void zip() {
-        final byte[] bytes = GzipUtils.zip("demo");
-        final String str = GzipUtils.unzipToString(bytes);
+        final byte[] bytes = GzipUtils.compress("demo");
+        final String str = GzipUtils.unCompressToString(bytes);
         assertThat(str).isEqualTo("demo");
     }
 }

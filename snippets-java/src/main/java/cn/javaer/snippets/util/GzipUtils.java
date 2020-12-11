@@ -24,8 +24,8 @@ public interface GzipUtils {
      * @return byte[]
      */
     @Nullable
-    static byte[] zip(final String str) {
-        return zip(str, StandardCharsets.UTF_8);
+    static byte[] compress(final String str) {
+        return compress(str, StandardCharsets.UTF_8);
     }
 
     /**
@@ -37,8 +37,8 @@ public interface GzipUtils {
      * @return byte[]
      */
     @Nullable
-    static byte[] zip(final String str, final Charset encoding) {
-        return zip(str.getBytes(encoding));
+    static byte[] compress(final String str, final Charset encoding) {
+        return compress(str.getBytes(encoding));
     }
 
     /**
@@ -49,7 +49,7 @@ public interface GzipUtils {
      * @return byte[]
      */
     @Nullable
-    static byte[] zip(final byte[] bytes) {
+    static byte[] compress(final byte[] bytes) {
         if (bytes == null || bytes.length == 0) {
             return null;
         }
@@ -74,7 +74,7 @@ public interface GzipUtils {
      * @return data
      */
     @Nullable
-    static byte[] unzip(final byte[] bytes) {
+    static byte[] unCompress(final byte[] bytes) {
         if (bytes == null || bytes.length == 0) {
             return null;
         }
@@ -103,10 +103,10 @@ public interface GzipUtils {
      * @return data
      */
     @Nullable
-    static String unzipToString(final byte[] bytes) {
+    static String unCompressToString(final byte[] bytes) {
         if (bytes == null || bytes.length == 0) {
             return null;
         }
-        return new String(unzip(bytes), StandardCharsets.UTF_8);
+        return new String(unCompress(bytes), StandardCharsets.UTF_8);
     }
 }
