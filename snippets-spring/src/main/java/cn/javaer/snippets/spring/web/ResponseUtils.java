@@ -1,5 +1,6 @@
 package cn.javaer.snippets.spring.web;
 
+import cn.javaer.snippets.jackson.Json;
 import cn.javaer.snippets.util.GzipUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -18,15 +19,27 @@ import java.util.Objects;
 public interface ResponseUtils {
 
     /**
+     * 序列化成 json 并进行 GZIP压缩，并以 GZIP 响应.
+     *
+     * @param body body
+     *
+     * @return bytes
+     */
+    static ResponseEntity<byte[]> jsonGzipCompress(@NonNull final Object body) {
+
+        return jsonGzipCompress(Json.DEFAULT.write(body));
+    }
+
+    /**
      * 进行 GZIP压缩，并以 GZIP 响应.
      *
      * @param body body
      *
      * @return bytes
      */
-    static ResponseEntity<byte[]> gzipWithZip(@NonNull final String body) {
+    static ResponseEntity<byte[]> jsonGzipCompress(@NonNull final String body) {
 
-        return gzip(GzipUtils.zip(body));
+        return jsonGzip(GzipUtils.zip(body));
     }
 
     /**
@@ -36,7 +49,7 @@ public interface ResponseUtils {
      *
      * @return bytes
      */
-    static ResponseEntity<byte[]> gzip(final byte[] body) {
+    static ResponseEntity<byte[]> jsonGzip(final byte[] body) {
 
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
