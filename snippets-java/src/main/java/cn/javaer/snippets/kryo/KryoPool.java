@@ -45,6 +45,8 @@ public class KryoPool {
     };
 
     private final Pool<Kryo> kryoPool = new Pool<Kryo>(true, false, 8) {
+
+        @SuppressWarnings("AlibabaUndefineMagicConstant")
         @Override
         protected Kryo create() {
             final Kryo kryo = new Kryo();
