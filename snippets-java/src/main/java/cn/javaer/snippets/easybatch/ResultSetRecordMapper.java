@@ -39,7 +39,7 @@ public class ResultSetRecordMapper<P> implements RecordMapper<ResultSet, P> {
     }
 
     @Override
-    public Record<P> processRecord(final Record<ResultSet> record) throws Exception {
+    public Record<P> processRecord(final Record<ResultSet> record) {
         final ResultSet resultSet = record.getPayload();
         final P p = this.mapper.map(resultSet);
         return new GenericRecord<>(record.getHeader(), p);
