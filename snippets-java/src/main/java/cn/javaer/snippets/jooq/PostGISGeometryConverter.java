@@ -1,6 +1,7 @@
 package cn.javaer.snippets.jooq;
 
 import cn.javaer.snippets.type.Geometry;
+import org.jetbrains.annotations.NotNull;
 import org.jooq.Converter;
 import org.postgresql.util.PGobject;
 
@@ -19,34 +20,34 @@ public enum PostGISGeometryConverter implements Converter<PGobject, Geometry> {
     private static final long serialVersionUID = 599360862926272439L;
 
     @Override
-    public Geometry from(PGobject db) {
+    public Geometry from(final PGobject db) {
 
         return null == db ? null : Geometry.valueOf(db.getValue());
     }
 
     @Override
-    public PGobject to(Geometry userObject) {
+    public PGobject to(final Geometry userObject) {
         if (null == userObject) {
             return null;
         }
-        PGobject pg = new PGobject();
+        final PGobject pg = new PGobject();
         try {
             pg.setType("geometry");
             pg.setValue(userObject.data());
         }
-        catch (SQLException e) {
+        catch (final SQLException e) {
             throw new IllegalStateException(e);
         }
         return pg;
     }
 
     @Override
-    public Class<PGobject> fromType() {
+    public @NotNull Class<PGobject> fromType() {
         return PGobject.class;
     }
 
     @Override
-    public Class<Geometry> toType() {
+    public @NotNull Class<Geometry> toType() {
         return Geometry.class;
     }
 }
