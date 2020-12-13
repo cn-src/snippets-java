@@ -11,8 +11,11 @@ public interface CityRepository extends CrudRepository<City, Long> {
 ```
 
 ## 批量插入
+
 ```java
-<S extends T> int[] batchInsert(Iterable<S> entities);
+interface Demo {
+    <S extends T> int[] batchInsert(Iterable<S> entities);
+}
 ```
 
 ## jOOQ 支持
@@ -69,6 +72,7 @@ public interface JooqJdbcStepExecutor<T> {
 ```
 
 ## 审计条件支持
+
 ```java
 public interface JooqJdbcAuditableExecutor<T, ID> {
 
