@@ -30,6 +30,7 @@ import java.time.format.DateTimeFormatter;
  *
  * @author cn-src
  */
+@SuppressWarnings("ALL")
 public class Json {
 
     /**
