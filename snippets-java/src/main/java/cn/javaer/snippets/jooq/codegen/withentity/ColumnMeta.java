@@ -7,6 +7,7 @@ import lombok.Value;
 /**
  * @author cn-src
  */
+@SuppressWarnings("AlibabaUndefineMagicConstant")
 @Value
 public class ColumnMeta {
     String fieldName;

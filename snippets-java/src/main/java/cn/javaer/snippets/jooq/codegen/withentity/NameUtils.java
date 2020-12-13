@@ -11,6 +11,13 @@ import java.util.Optional;
  */
 interface NameUtils {
 
+    /**
+     * 解析出表名.
+     *
+     * @param classInfo ClassInfo
+     *
+     * @return 表名
+     */
     static String tableValue(final ClassInfo classInfo) {
         return Optional.ofNullable(classInfo.getAnnotationInfo(
             "org.springframework.data.relational.core.mapping.Table"))
@@ -20,6 +27,13 @@ interface NameUtils {
             .orElse("");
     }
 
+    /**
+     * 解析出列名.
+     *
+     * @param fieldInfo FieldInfo
+     *
+     * @return 列名
+     */
     static String columnValue(final FieldInfo fieldInfo) {
         return Optional.ofNullable(fieldInfo.getAnnotationInfo(
             "org.springframework.data.relational.core.mapping.Column"))
