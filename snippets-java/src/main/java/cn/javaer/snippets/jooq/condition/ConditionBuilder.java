@@ -8,7 +8,6 @@ import org.jooq.Field;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -143,10 +142,5 @@ public class ConditionBuilder {
          * @return Condition
          */
         Condition apply(T1 t1, T2 t2, T3 t3);
-    }
-
-    @FunctionalInterface
-    public interface DataTimeBiFunction {
-        Condition apply(LocalDateTime t1, LocalDateTime t2);
     }
 }
