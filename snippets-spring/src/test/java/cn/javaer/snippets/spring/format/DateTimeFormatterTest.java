@@ -64,7 +64,7 @@ class DateTimeFormatterTest {
     static class WebConfig implements WebMvcConfigurer {
         @Override
         public void addFormatters(final FormatterRegistry registry) {
-            registry.addFormatterForFieldAnnotation(new DateFillFormatter());
+            registry.addFormatterForFieldAnnotation(new DateTimeFormatter());
         }
     }
 

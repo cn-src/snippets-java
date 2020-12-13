@@ -12,10 +12,10 @@ import java.util.Locale;
 /**
  * @author cn-src
  */
-public final class DateFillParser implements Parser<LocalDateTime> {
+public final class DateTimeParser implements Parser<LocalDateTime> {
     private final DateTimeFormat annotation;
 
-    public DateFillParser(final DateTimeFormat annotation) {
+    public DateTimeParser(final DateTimeFormat annotation) {
         this.annotation = annotation;
     }
 
