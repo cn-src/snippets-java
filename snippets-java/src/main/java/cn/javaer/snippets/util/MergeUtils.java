@@ -20,10 +20,22 @@ import java.util.function.Function;
 /**
  * 合并转换工具类。
  *
- * @author cn-src
+ * @author cn -src
  */
 public interface MergeUtils {
 
+    /**
+     * Merge list.
+     *
+     * @param <S> the type parameter
+     * @param <R> the type parameter
+     * @param sList the s list
+     * @param mergePredicate the merge predicate
+     * @param handler the handler
+     * @param rCreator the r creator
+     *
+     * @return the list
+     */
     static <S, R> List<R> merge(final List<S> sList,
                                 final BiPredicate<S, R> mergePredicate,
                                 final BiConsumer<S, R> handler,
@@ -51,6 +63,16 @@ public interface MergeUtils {
         return results;
     }
 
+    /**
+     * Merge list.
+     *
+     * @param <S> the type parameter
+     * @param sList the s list
+     * @param mergePredicate the merge predicate
+     * @param handler the handler
+     *
+     * @return the list
+     */
     static <S> List<S> merge(final List<S> sList,
                              final BiPredicate<S, S> mergePredicate,
                              final BiConsumer<S, S> handler) {
@@ -60,13 +82,13 @@ public interface MergeUtils {
     /**
      * 将 pList 的数据合并到 sList 中，并返回新的 List.
      *
+     * @param <S> S
+     * @param <P> P
+     * @param <R> R
      * @param sList 源 List
      * @param pList 进行合并的 List
      * @param mergePredicate 合并条件
      * @param resultFun 新结果对象创建函数
-     * @param <S> S
-     * @param <P> P
-     * @param <R> R
      *
      * @return 新 List
      */
@@ -99,12 +121,12 @@ public interface MergeUtils {
     /**
      * 将 pList 的数据合并到 sList 中，并返回新的 sList.
      *
+     * @param <S> S
+     * @param <P> P
      * @param sList 源 List
      * @param pList 进行合并的 List
      * @param mergePredicate 合并条件
      * @param resultFun 新结果对象创建函数
-     * @param <S> S
-     * @param <P> P
      *
      * @return 新的 S List
      */
@@ -117,6 +139,20 @@ public interface MergeUtils {
         });
     }
 
+    /**
+     * Merge list.
+     *
+     * @param <S> the type parameter
+     * @param <P> the type parameter
+     * @param <R> the type parameter
+     * @param sList the s list
+     * @param pList the p list
+     * @param mergePredicate1 the merge predicate 1
+     * @param mergePredicate2 the merge predicate 2
+     * @param resultFun the result fun
+     *
+     * @return the list
+     */
     static <S, P, R> List<R> merge(final List<S> sList, final List<P> pList,
                                    final BiPredicate<S, P> mergePredicate1,
                                    final BiPredicate<S, P> mergePredicate2,
@@ -149,6 +185,19 @@ public interface MergeUtils {
         return result;
     }
 
+    /**
+     * Merge list.
+     *
+     * @param <S> the type parameter
+     * @param <P> the type parameter
+     * @param sList the s list
+     * @param pList the p list
+     * @param mergePredicate1 the merge predicate 1
+     * @param mergePredicate2 the merge predicate 2
+     * @param resultFun the result fun
+     *
+     * @return the list
+     */
     static <S, P> List<S> merge(final List<S> sList, final List<P> pList,
                                 final BiPredicate<S, P> mergePredicate1,
                                 final BiPredicate<S, P> mergePredicate2,
@@ -159,6 +208,22 @@ public interface MergeUtils {
         });
     }
 
+    /**
+     * Merge list.
+     *
+     * @param <R> the type parameter
+     * @param <S> the type parameter
+     * @param <P1> the type parameter
+     * @param <P2> the type parameter
+     * @param sList the s list
+     * @param p1List the p 1 list
+     * @param mergePredicate1 the merge predicate 1
+     * @param p2List the p 2 list
+     * @param mergePredicate2 the merge predicate 2
+     * @param resultFun the result fun
+     *
+     * @return the list
+     */
     static <R, S, P1, P2> List<R> merge(
         final List<S> sList,
         final List<P1> p1List, final BiPredicate<S, P1> mergePredicate1,
@@ -208,6 +273,21 @@ public interface MergeUtils {
         return result;
     }
 
+    /**
+     * Merge list.
+     *
+     * @param <S> the type parameter
+     * @param <P1> the type parameter
+     * @param <P2> the type parameter
+     * @param sList the s list
+     * @param p1List the p 1 list
+     * @param mergePredicate1 the merge predicate 1
+     * @param p2List the p 2 list
+     * @param mergePredicate2 the merge predicate 2
+     * @param resultFun the result fun
+     *
+     * @return the list
+     */
     static <S, P1, P2> List<S> merge(
         final List<S> sList,
         final List<P1> p1List, final BiPredicate<S, P1> mergePredicate1,
@@ -219,6 +299,19 @@ public interface MergeUtils {
         });
     }
 
+    /**
+     * Merge list list.
+     *
+     * @param <S> the type parameter
+     * @param <P> the type parameter
+     * @param <R> the type parameter
+     * @param sList the s list
+     * @param pList the p list
+     * @param mergePredicate the merge predicate
+     * @param resultFun the result fun
+     *
+     * @return the list
+     */
     static <S, P, R> List<R> mergeList(final List<S> sList, final List<P> pList,
                                        final BiPredicate<S, P> mergePredicate,
                                        final BiFunction<List<P>, S, R> resultFun) {
@@ -244,6 +337,18 @@ public interface MergeUtils {
         return result;
     }
 
+    /**
+     * Merge to assembler list.
+     *
+     * @param <S> the type parameter
+     * @param <P> the type parameter
+     * @param propName the prop name
+     * @param sList the s list
+     * @param pList the p list
+     * @param mergePredicate the merge predicate
+     *
+     * @return the list
+     */
     static <S, P> List<DynamicAssembler<S, P>> mergeToAssembler(
         final String propName,
         final List<S> sList, final List<P> pList,
@@ -254,6 +359,18 @@ public interface MergeUtils {
         });
     }
 
+    /**
+     * Merge list to assembler list.
+     *
+     * @param <S> the type parameter
+     * @param <P> the type parameter
+     * @param propName the prop name
+     * @param sList the s list
+     * @param pList the p list
+     * @param mergePredicate the merge predicate
+     *
+     * @return the list
+     */
     static <S, P> List<DynamicAssembler<S, List<P>>> mergeListToAssembler(
         final String propName,
         final List<S> sList, final List<P> pList,
@@ -263,6 +380,17 @@ public interface MergeUtils {
             (ps, s) -> Assemblers.ofDynamic(s, propName, ps));
     }
 
+    /**
+     * Merge to creator list.
+     *
+     * @param <S> the type parameter
+     * @param <P> the type parameter
+     * @param sList the s list
+     * @param pList the p list
+     * @param mergePredicate the merge predicate
+     *
+     * @return the list
+     */
     static <S, P> List<Creator<S, P>> mergeToCreator(
         final List<S> sList, final List<P> pList,
         final BiPredicate<S, P> mergePredicate) {
@@ -271,6 +399,18 @@ public interface MergeUtils {
         });
     }
 
+    /**
+     * Merge to auditor list.
+     *
+     * @param <S> the type parameter
+     * @param <P> the type parameter
+     * @param sList the s list
+     * @param pList the p list
+     * @param mergePredicate1 the merge predicate 1
+     * @param mergePredicate2 the merge predicate 2
+     *
+     * @return the list
+     */
     static <S, P> List<Auditor<S, P>> mergeToAuditor(
         final List<S> sList, final List<P> pList,
         final BiPredicate<S, P> mergePredicate1,
