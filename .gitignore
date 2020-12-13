@@ -1,6 +1,7 @@
 *.iml
 .idea/*
 !.idea/inspectionProfiles/
+!.idea/scopes/
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
