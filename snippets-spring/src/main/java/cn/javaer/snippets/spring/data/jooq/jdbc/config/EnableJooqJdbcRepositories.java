@@ -19,6 +19,7 @@ import cn.javaer.snippets.spring.data.jooq.jdbc.JooqJdbcRepositoryFactoryBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 import org.springframework.data.jdbc.repository.support.JdbcRepositoryFactoryBean;
 import org.springframework.data.repository.config.DefaultRepositoryBaseClass;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -35,12 +36,8 @@ import java.lang.annotation.Target;
  * class for Spring Data
  * repositories by default.
  *
- * @author Jens Schauder
- * @author Greg Turnquist
- * @author Mark Paluch
- * @author Fei Dong
- * @author Antoine Sauray
- * @see AbstractJdbcConfiguration
+ * @author cn-src
+ * @see EnableJdbcRepositories
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
