@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
+import cn.javaer.snippets.util.StrUtils;
 import io.github.classgraph.FieldInfo;
 import lombok.Value;
 
@@ -27,22 +28,22 @@ public class ColumnMeta {
             TypeMapping.get(this.fieldType);
         this.enumConverter = this.enumType ? enumConverter(this.fieldType) : "";
         this.columnName = columnName;
-        this.tableFieldName = NameUtils.toUcUnderline(this.fieldName);
+        this.tableFieldName = StrUtils.toSnakeUpper(this.fieldName);
         this.customField = isCustomField(fieldType);
         this.customFieldType = customFieldType(fieldType);
     }
 
     public ColumnMeta(final FieldInfo fieldInfo) {
         this(fieldInfo.getName(), fieldInfo.getTypeDescriptor().toString(),
-            NameUtils.defaultValue(NameUtils.columnValue(fieldInfo),
-                NameUtils.toLcUnderline(fieldInfo.getName()))
+            StrUtils.defaultEmpty(NameUtils.columnValue(fieldInfo),
+                StrUtils.toSnakeLower(fieldInfo.getName()))
         );
     }
 
     public ColumnMeta(final GenColumn genColumn) {
         this(genColumn.field(), genColumn.fieldType().getName(),
-            NameUtils.defaultValue(genColumn.column(),
-                NameUtils.toLcUnderline(genColumn.field())));
+            StrUtils.defaultEmpty(genColumn.column(),
+                StrUtils.toSnakeLower(genColumn.field())));
     }
 
     static String enumConverter(final String fieldType) {

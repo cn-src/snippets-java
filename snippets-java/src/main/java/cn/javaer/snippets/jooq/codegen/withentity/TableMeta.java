@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
+import cn.javaer.snippets.util.StrUtils;
 import io.github.classgraph.AnnotationClassRef;
 import io.github.classgraph.AnnotationInfo;
 import io.github.classgraph.AnnotationInfoList;
@@ -29,10 +30,10 @@ public class TableMeta {
     public TableMeta(final ClassInfo classInfo, final String generatedPackage) {
         this.generatedPackage = generatedPackage;
         this.entityName = classInfo.getSimpleName();
-        this.staticFieldName = NameUtils.toUcUnderline(classInfo.getSimpleName());
+        this.staticFieldName = StrUtils.toSnakeUpper(classInfo.getSimpleName());
         final String tableValue = NameUtils.tableValue(classInfo);
         this.tableName = tableValue.isEmpty() ?
-            NameUtils.toLcUnderline(classInfo.getSimpleName()) : tableValue;
+            StrUtils.toSnakeLower(classInfo.getSimpleName()) : tableValue;
         this.tableClassName = "T" + this.entityName;
         this.columnMetas = classInfo.getDeclaredFieldInfo().stream()
             .filter(it -> !it.isStatic())
@@ -58,8 +59,8 @@ public class TableMeta {
                 ((AnnotationClassRef) parameterValues.getValue("fieldType")).getName();
             final String columnName = (String) parameterValues.getValue("column");
             if (allColumnMetas.stream().noneMatch(it -> it.getFieldName().equals(fieldName))) {
-                final String s = NameUtils.defaultValue(columnName,
-                    NameUtils.toLcUnderline(fieldName));
+                final String s = StrUtils.defaultEmpty(columnName,
+                    StrUtils.toSnakeLower(fieldName));
                 allColumnMetas.add(new ColumnMeta(fieldName, fieldType, s));
             }
         }
