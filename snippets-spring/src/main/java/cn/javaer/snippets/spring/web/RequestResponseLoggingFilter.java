@@ -3,6 +3,7 @@ package cn.javaer.snippets.spring.web;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -43,10 +44,10 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            final HttpServletRequest request,
-            final HttpServletResponse response,
-            final FilterChain filterChain)
-            throws ServletException, IOException {
+        final @NotNull HttpServletRequest request,
+        final @NotNull HttpServletResponse response,
+        final @NotNull FilterChain filterChain)
+        throws ServletException, IOException {
 
         final boolean isFirstRequest = !this.isAsyncDispatch(request);
         HttpServletRequest requestToUse = request;
@@ -94,7 +95,7 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
 
         // body
         final ContentCachingRequestWrapper wrapper =
-                WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
+            WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
         if (wrapper != null) {
             final byte[] buf = wrapper.getContentAsByteArray();
             if (buf.length > 0) {
@@ -112,13 +113,13 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
 
     protected void afterResponse(final HttpServletResponse response) throws IOException {
         final ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response,
-                ContentCachingResponseWrapper.class);
+            ContentCachingResponseWrapper.class);
         if (null != wrapper) {
             final byte[] data = wrapper.getContentAsByteArray();
             if (data.length > 0) {
                 wrapper.copyBodyToResponse();
                 this.logger.debug("Response\n" + this.jsonFormat(new String(data,
-                        StandardCharsets.UTF_8)));
+                    StandardCharsets.UTF_8)));
             }
         }
     }
