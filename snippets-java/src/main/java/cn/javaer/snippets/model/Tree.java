@@ -19,6 +19,15 @@ import java.util.function.Supplier;
  */
 public interface Tree {
 
+    /**
+     * 模型列表转树结构列表.
+     *
+     * @param <E> 模型的范型
+     * @param models 模型列表
+     * @param getters 模型属性的 Getter
+     *
+     * @return TreeNode List
+     */
     @SuppressWarnings("unchecked")
     @SafeVarargs
     static <E> List<TreeNode> of(final List<E> models,
@@ -26,6 +35,15 @@ public interface Tree {
         return of(models, TreeNodeHandler.EMPTY, false, getters);
     }
 
+    /**
+     * 模型列表转树结构列表，忽略空值.
+     *
+     * @param <E> 模型的范型
+     * @param models 模型列表
+     * @param getters 模型属性的 Getter
+     *
+     * @return TreeNode List
+     */
     @SuppressWarnings("unchecked")
     @SafeVarargs
     static <E> List<TreeNode> ofIgnoreEmpty(final List<E> models,
@@ -33,6 +51,16 @@ public interface Tree {
         return of(models, TreeNodeHandler.EMPTY, true, getters);
     }
 
+    /**
+     * 模型列表转树结构列表.
+     *
+     * @param <E> 模型的范型
+     * @param models 模型列表
+     * @param handler TreeNode 自定义处理器
+     * @param getters 模型属性的 Getter
+     *
+     * @return TreeNode List
+     */
     @SafeVarargs
     static <E> List<TreeNode> of(final List<E> models,
                                  final TreeNodeHandler<E> handler,
@@ -40,6 +68,16 @@ public interface Tree {
         return of(models, handler, false, getters);
     }
 
+    /**
+     * 模型列表转树结构列表，忽略空值.
+     *
+     * @param <E> 模型的范型
+     * @param models 模型列表
+     * @param handler TreeNode 自定义处理器
+     * @param getters 模型属性的 Getter
+     *
+     * @return TreeNode List
+     */
     @SafeVarargs
     static <E> List<TreeNode> ofIgnoreEmpty(final List<E> models,
                                             final TreeNodeHandler<E> handler,
@@ -50,12 +88,13 @@ public interface Tree {
     /**
      * 将实体列表数据转换成树结构，比如多级区域数据转换成前端 UI 组件需要的 Tree 结构.
      *
+     * @param <E> 实体类型
      * @param models 二维表结构的实体数据
      * @param handler 额外的附加处理，
+     * @param ignoreEmpty 是否忽略空值
      * @param getters 实体的哪些字段 getter 用于转换成树
-     * @param <E> 实体类型
      *
-     * @return 根节点的所有子节点
+     * @return 根节点的所有子节点 list
      */
     @SafeVarargs
     static <E> List<TreeNode> of(final List<E> models,
@@ -82,12 +121,13 @@ public interface Tree {
                 if (first.isPresent()) {
                     current = first.get();
                 }
-                else if (!(ignoreEmpty && (cell == null || cell.isEmpty()))) {
-                    final TreeNode treeNode = TreeNode.of(cell);
-                    handler.apply(treeNode, row, depth, current.getChildren().size());
-                    current.getChildren().add(treeNode);
-                    current = treeNode;
-                }
+                else //noinspection AlibabaAvoidComplexCondition
+                    if (!(ignoreEmpty && (cell == null || cell.isEmpty()))) {
+                        final TreeNode treeNode = TreeNode.of(cell);
+                        handler.apply(treeNode, row, depth, current.getChildren().size());
+                        current.getChildren().add(treeNode);
+                        current = treeNode;
+                    }
                 depth++;
             }
             current = root;
