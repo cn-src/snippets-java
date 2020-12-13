@@ -29,6 +29,7 @@ import java.util.Optional;
  * @author cn-src
  * @see JdbcRepositoryFactoryBean
  */
+@SuppressWarnings("SpringJavaAutowiredMembersInspection")
 public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID extends Serializable>
     extends TransactionalRepositoryFactoryBeanSupport<T, S, ID> implements ApplicationEventPublisherAware {
 
@@ -137,8 +138,9 @@ public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
             Assert.state(this.beanFactory != null, "If no AuditorAware are set a BeanFactory must" +
                 " be available.");
 
-            this.auditorAware =
-                this.beanFactory.getBeanProvider(AuditorAware.class).getIfAvailable(() -> Optional::empty);
+            //noinspection NullableProblems
+            this.auditorAware = this.beanFactory.getBeanProvider(AuditorAware.class)
+                .getIfAvailable(() -> Optional::empty);
         }
 
         if (this.auditingHandler == null) {
@@ -165,7 +167,8 @@ public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
 
         if (this.operations == null) {
 
-            Assert.state(this.beanFactory != null, "If no JdbcOperations are set a BeanFactory must be" +
+            Assert.state(this.beanFactory != null, "If no JdbcOperations are set a BeanFactory " +
+                "must be" +
                 " available.");
 
             this.operations = this.beanFactory.getBean(NamedParameterJdbcOperations.class);
@@ -173,17 +176,18 @@ public class JooqJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
 
         if (this.dataAccessStrategy == null) {
 
-            Assert.state(this.beanFactory != null, "If no DataAccessStrategy is set a BeanFactory must" +
+            Assert.state(this.beanFactory != null, "If no DataAccessStrategy is set a BeanFactory" +
+                " must" +
                 " be available.");
 
-            this.dataAccessStrategy = this.beanFactory.getBeanProvider(DataAccessStrategy.class) //
+            this.dataAccessStrategy = this.beanFactory.getBeanProvider(DataAccessStrategy.class)
                 .getIfAvailable(() -> {
 
                     Assert.state(this.dialect != null, "Dialect is required and must not be null!");
 
                     final SqlGeneratorSource sqlGeneratorSource =
                         new SqlGeneratorSource(this.mappingContext, this.converter,
-                        this.dialect);
+                            this.dialect);
                     return new DefaultDataAccessStrategy(sqlGeneratorSource, this.mappingContext,
                         this.converter,
                         this.operations);
