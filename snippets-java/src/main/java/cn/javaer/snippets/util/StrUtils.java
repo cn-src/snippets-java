@@ -74,4 +74,16 @@ public interface StrUtils {
         }
         return sb.toString();
     }
+
+    /**
+     * 如果字符串为空，则使用默认值.
+     *
+     * @param value String
+     * @param defaultValue String
+     *
+     * @return String
+     */
+    static String defaultEmpty(final String value, final String defaultValue) {
+        return value == null || value.isEmpty() ? defaultValue : value;
+    }
 }
