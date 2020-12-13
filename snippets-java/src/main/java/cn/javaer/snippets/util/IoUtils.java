@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * @author cn-src
@@ -44,6 +45,8 @@ public interface IoUtils {
      * @return String
      */
     static String readToString(final Path file, final Charset charset) {
+        Objects.requireNonNull(file);
+        Objects.requireNonNull(charset);
         try {
             final byte[] bytes = Files.readAllBytes(file);
             return new String(bytes, charset);
