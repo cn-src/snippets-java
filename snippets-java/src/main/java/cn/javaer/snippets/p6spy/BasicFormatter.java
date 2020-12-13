@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
  * @author Gavin King
  * @author Steve Ebersole
  */
+@SuppressWarnings("ALL")
 public class BasicFormatter {
     private static final String WHITESPACE = " \n\r\f\t";
     private static final Set<String> BEGIN_CLAUSES = new HashSet<>();
@@ -95,9 +96,9 @@ public class BasicFormatter {
 
         public FormatProcess(final String sql) {
             this.tokens = new StringTokenizer(
-                    sql,
-                    "()+*/-=<>'`\"[]," + WHITESPACE,
-                    true
+                sql,
+                "()+*/-=<>'`\"[]," + WHITESPACE,
+                true
             );
         }
 
@@ -294,8 +295,8 @@ public class BasicFormatter {
             this.newline();
             this.afterBeginBeforeEnd = false;
             this.afterByOrSetOrFromOrSelect = "by".equals(this.lcToken)
-                    || "set".equals(this.lcToken)
-                    || "from".equals(this.lcToken);
+                || "set".equals(this.lcToken)
+                || "from".equals(this.lcToken);
         }
 
         private void beginNewClause() {
@@ -368,11 +369,11 @@ public class BasicFormatter {
             final char begin = tok.charAt(0);
             final boolean isIdentifier = Character.isJavaIdentifierStart(begin) || '"' == begin;
             return isIdentifier &&
-                    !LOGICAL.contains(tok) &&
-                    !END_CLAUSES.contains(tok) &&
-                    !QUANTIFIERS.contains(tok) &&
-                    !DML.contains(tok) &&
-                    !MISC.contains(tok);
+                !LOGICAL.contains(tok) &&
+                !END_CLAUSES.contains(tok) &&
+                !QUANTIFIERS.contains(tok) &&
+                !DML.contains(tok) &&
+                !MISC.contains(tok);
         }
 
         private static boolean isWhitespace(final String token) {
