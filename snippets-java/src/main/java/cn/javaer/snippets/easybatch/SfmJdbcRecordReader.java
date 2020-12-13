@@ -64,10 +64,7 @@ public class SfmJdbcRecordReader implements RecordReader<ResultSet> {
         final TimeRange timeRange = new TimeRange(this.jobRecord.getDataStartTime(),
             this.jobRecord.getDataEndTime());
         this.statement = this.selectQueryPreparer.prepare(this.connection).bind(timeRange);
-//        this.statement = this.connection.prepareStatement(this.query, ResultSet.TYPE_FORWARD_ONLY,
-//            ResultSet.CONCUR_READ_ONLY);
-//        这种使用方式目前会出现参数下标溢出的问题
-//        this.selectQueryPreparer.prepare(this.connection).bindTo(timeRange, this.statement);
+
         if (this.maxRows >= 1) {
             this.statement.setMaxRows(this.maxRows);
         }
