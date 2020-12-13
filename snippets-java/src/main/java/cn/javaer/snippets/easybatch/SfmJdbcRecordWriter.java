@@ -42,7 +42,7 @@ public class SfmJdbcRecordWriter<P> implements RecordWriter<P> {
     }
 
     @Override
-    public void writeRecords(final Batch<P> batch) throws Exception {
+    public void writeRecords(final Batch<P> batch) {
         final List<P> collect = StreamSupport.stream(batch.spliterator(), false)
             .map(Record::getPayload).collect(Collectors.toList());
         this.call.accept(collect);
