@@ -16,21 +16,40 @@ import java.util.Objects;
 public interface IoUtils {
 
     /**
-     * @see #readToString(Path, Charset)
+     * 读取文件为字符串.
+     *
+     * @param file File
+     *
+     * @return String
+     *
+     * @see #readToString(Path, Charset) #readToString(Path, Charset)
      */
     static String readToString(final File file) {
         return readToString(file, StandardCharsets.UTF_8);
     }
 
     /**
-     * @see #readToString(Path, Charset)
+     * 读取文件为字符串.
+     *
+     * @param file File
+     * @param charset Charset
+     *
+     * @return String
+     *
+     * @see #readToString(Path, Charset) #readToString(Path, Charset)
      */
     static String readToString(final File file, final Charset charset) {
         return readToString(file.toPath(), charset);
     }
 
     /**
-     * @see #readToString(Path, Charset)
+     * 读取文件为字符串.
+     *
+     * @param file Path
+     *
+     * @return String
+     *
+     * @see #readToString(Path, Charset) #readToString(Path, Charset)
      */
     static String readToString(final Path file) {
         return readToString(file, StandardCharsets.UTF_8);
