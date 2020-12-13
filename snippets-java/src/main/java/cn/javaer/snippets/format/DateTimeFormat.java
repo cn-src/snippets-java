@@ -76,6 +76,8 @@ public @interface DateTimeFormat {
          *
          * @param localDate LocalDate
          * @param format DateFillFormat
+         *
+         * @return LocalDate
          */
         static LocalDate computeDate(final LocalDate localDate, final DateTimeFormat format) {
             LocalDate date = localDate;
@@ -109,6 +111,8 @@ public @interface DateTimeFormat {
          *
          * @param localDate LocalDate
          * @param format DateFillFormat
+         *
+         * @return LocalDateTime
          */
         static LocalDateTime conversion(final LocalDate localDate,
                                         final DateTimeFormat format) {
@@ -129,6 +133,8 @@ public @interface DateTimeFormat {
          *
          * @param localDateTime LocalDateTime
          * @param format DateFillFormat
+         *
+         * @return LocalDateTime
          */
         static LocalDateTime conversion(final LocalDateTime localDateTime,
                                         final DateTimeFormat format) {
