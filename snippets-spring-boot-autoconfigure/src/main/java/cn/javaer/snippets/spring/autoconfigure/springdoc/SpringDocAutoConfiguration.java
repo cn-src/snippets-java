@@ -5,8 +5,8 @@ import cn.javaer.snippets.spring.security.PrincipalId;
 import cn.javaer.snippets.spring.web.exception.ErrorInfoExtractor;
 import cn.javaer.snippets.springdoc.PageDoc;
 import cn.javaer.snippets.springdoc.PageableDoc;
-import org.springdoc.core.GenericResponseBuilder;
-import org.springdoc.core.OperationBuilder;
+import org.springdoc.core.GenericResponseService;
+import org.springdoc.core.OperationService;
 import org.springdoc.core.PropertyResolverUtils;
 import org.springdoc.core.ReturnTypeParser;
 import org.springdoc.core.SpringDocConfigProperties;
@@ -41,7 +41,7 @@ public class SpringDocAutoConfiguration implements InitializingBean {
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @ConditionalOnMissingBean
-    GenericResponseBuilder responseBuilder(final OperationBuilder operationBuilder,
+    GenericResponseService responseBuilder(final OperationService operationBuilder,
                                            final ErrorInfoExtractor errorInfoExtractor,
                                            final List<ReturnTypeParser> returnTypeParsers,
                                            final SpringDocConfigProperties springDocConfigProperties,

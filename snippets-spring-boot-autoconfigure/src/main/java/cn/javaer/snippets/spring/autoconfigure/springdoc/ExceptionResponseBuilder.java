@@ -6,9 +6,9 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
-import org.springdoc.core.GenericResponseBuilder;
+import org.springdoc.core.GenericResponseService;
 import org.springdoc.core.MethodAttributes;
-import org.springdoc.core.OperationBuilder;
+import org.springdoc.core.OperationService;
 import org.springdoc.core.PropertyResolverUtils;
 import org.springdoc.core.ReturnTypeParser;
 import org.springdoc.core.SpringDocConfigProperties;
@@ -20,7 +20,7 @@ import java.util.TreeSet;
 /**
  * @author cn-src
  */
-class ExceptionResponseBuilder extends GenericResponseBuilder {
+class ExceptionResponseBuilder extends GenericResponseService {
 
     private final ErrorInfoExtractor errorInfoExtractor;
 
@@ -33,7 +33,7 @@ class ExceptionResponseBuilder extends GenericResponseBuilder {
      * @param propertyResolverUtils the property resolver utils
      * @param errorInfoExtractor errorInfoExtractor
      */
-    public ExceptionResponseBuilder(final OperationBuilder operationBuilder,
+    public ExceptionResponseBuilder(final OperationService operationBuilder,
                                     final List<ReturnTypeParser> returnTypeParsers,
                                     final SpringDocConfigProperties springDocConfigProperties,
                                     final PropertyResolverUtils propertyResolverUtils,
