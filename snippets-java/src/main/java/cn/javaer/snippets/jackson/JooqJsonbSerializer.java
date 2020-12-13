@@ -22,10 +22,6 @@ public class JooqJsonbSerializer extends StdSerializer<JSONB> {
     @Override
     public void serialize(final JSONB jsonb, final JsonGenerator jsonGenerator,
                           final SerializerProvider serializerProvider) throws IOException {
-        if (jsonb.data() == null) {
-            jsonGenerator.writeNull();
-            return;
-        }
         jsonGenerator.writeRawValue(jsonb.data());
     }
 }

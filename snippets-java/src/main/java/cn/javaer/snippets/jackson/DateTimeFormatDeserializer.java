@@ -23,6 +23,7 @@ public class DateTimeFormatDeserializer extends JsonDeserializer<LocalDateTime> 
 
     private final DateTimeFormat dateTimeFormat;
 
+    @SuppressWarnings("unused")
     protected DateTimeFormatDeserializer() {
         this.dateTimeFormat = null;
     }
