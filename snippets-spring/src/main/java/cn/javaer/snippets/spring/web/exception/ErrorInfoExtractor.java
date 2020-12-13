@@ -8,7 +8,6 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,13 +18,9 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.StringJoiner;
 
 /**
@@ -34,46 +29,17 @@ import java.util.StringJoiner;
 public class ErrorInfoExtractor {
 
     private final Map<String, DefinedErrorInfo> configuredErrorMapping;
-    private final ResourceBundleMessageSource messageSource;
     private final MessageSourceAccessor messageSourceAccessor;
 
     public ErrorInfoExtractor(
         final Map<String, DefinedErrorInfo> errorMapping,
         final ResourceBundleMessageSource messageSource) {
 
-        this.messageSource = messageSource;
         this.messageSourceAccessor = new MessageSourceAccessor(messageSource, Locale.CHINESE);
         this.configuredErrorMapping = getInternalErrorMapping();
         if (!CollectionUtils.isEmpty(errorMapping)) {
             this.configuredErrorMapping.putAll(errorMapping);
         }
-    }
-
-    Set<String> getMessageSourceErrors() {
-        final Set<String> errors = new HashSet<>();
-
-        final Method getResourceBundle =
-            Objects.requireNonNull(ReflectionUtils.findMethod(this.messageSource.getClass(),
-                "getResourceBundle", String.class, Locale.class));
-        getResourceBundle.setAccessible(true);
-        final Method getDefaultLocale =
-            Objects.requireNonNull(ReflectionUtils.findMethod(this.messageSourceAccessor.getClass(),
-                "getDefaultLocale"));
-        getDefaultLocale.setAccessible(true);
-        final Locale locale = (Locale) ReflectionUtils.invokeMethod(getDefaultLocale,
-            this.messageSourceAccessor);
-
-        for (final String basename : this.messageSource.getBasenameSet()) {
-
-            final ResourceBundle resourceBundle =
-                (ResourceBundle) ReflectionUtils.invokeMethod(getResourceBundle,
-                    this.messageSource,
-                    basename, locale);
-            if (null != resourceBundle && !resourceBundle.keySet().isEmpty()) {
-                errors.addAll(resourceBundle.keySet());
-            }
-        }
-        return errors;
     }
 
     public Map<String, DefinedErrorInfo> getControllersErrorMapping(final Collection<Object> controllers, final boolean isIncludeMessage) {
@@ -196,7 +162,7 @@ public class ErrorInfoExtractor {
     }
 
     static Map<String, DefinedErrorInfo> getInternalErrorMapping() {
-        final Map<String, DefinedErrorInfo> internalErrorMapping = new HashMap<>();
+        final Map<String, DefinedErrorInfo> internalErrorMapping = new HashMap<>(15);
         internalErrorMapping.put(
             "org.springframework.web.HttpRequestMethodNotSupportedException",
             DefinedErrorInfo.of(HttpStatus.METHOD_NOT_ALLOWED)

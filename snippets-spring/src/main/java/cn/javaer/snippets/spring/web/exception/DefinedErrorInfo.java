@@ -2,6 +2,7 @@ package cn.javaer.snippets.spring.web.exception;
 
 import lombok.Value;
 import lombok.With;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -94,9 +95,9 @@ public class DefinedErrorInfo implements Comparable<DefinedErrorInfo> {
     }
 
     @Override
-    public int compareTo(final DefinedErrorInfo o) {
+    public int compareTo(final @NotNull DefinedErrorInfo errorInfo) {
         return Comparator.comparing(DefinedErrorInfo::getStatus, Integer::compare)
             .thenComparing(DefinedErrorInfo::getError, String::compareTo)
-            .compare(this, o);
+            .compare(this, errorInfo);
     }
 }
