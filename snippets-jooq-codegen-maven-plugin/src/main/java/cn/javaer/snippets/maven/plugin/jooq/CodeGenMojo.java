@@ -16,6 +16,10 @@ import java.util.List;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.GENERATE_SOURCES;
 import static org.apache.maven.plugins.annotations.ResolutionScope.TEST;
 
+/**
+ * @author cn-src
+ */
+@SuppressWarnings("unused")
 @Mojo(
     name = "generate",
     defaultPhase = GENERATE_SOURCES,
@@ -52,6 +56,7 @@ public class CodeGenMojo extends AbstractMojo {
     )
     private String includePackage;
 
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     @Parameter(
         property = "jooq.codegen.includePackages"
     )
