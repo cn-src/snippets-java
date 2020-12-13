@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
-@DateFillFormat(fillTime = DateFillFormat.FillTime.MAX)
+@DateTimeFormat(time = DateTimeFormat.Time.MAX)
 public @interface DateMaxTime {
 
     /**

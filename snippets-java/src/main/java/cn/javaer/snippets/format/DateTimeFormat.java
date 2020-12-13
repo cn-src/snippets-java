@@ -20,7 +20,7 @@ import java.time.LocalTime;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
-public @interface DateFillFormat {
+public @interface DateTimeFormat {
 
     /**
      * 日期的格式
@@ -50,9 +50,9 @@ public @interface DateFillFormat {
     /**
      * 在只有日期的时候, 填充时间的方式
      */
-    FillTime fillTime();
+    Time time();
 
-    enum FillTime {
+    enum Time {
 
         /**
          * 填充当天最小时间
@@ -77,7 +77,7 @@ public @interface DateFillFormat {
          * @param localDate LocalDate
          * @param format DateFillFormat
          */
-        static LocalDate computeDate(final LocalDate localDate, final DateFillFormat format) {
+        static LocalDate computeDate(final LocalDate localDate, final DateTimeFormat format) {
             LocalDate date = localDate;
             final int days = format.days();
             if (days < 0) {
@@ -111,10 +111,10 @@ public @interface DateFillFormat {
          * @param format DateFillFormat
          */
         static LocalDateTime conversion(final LocalDate localDate,
-                                        final DateFillFormat format) {
+                                        final DateTimeFormat format) {
             final LocalDate date = Conversion.computeDate(localDate, format);
 
-            switch (format.fillTime()) {
+            switch (format.time()) {
                 case MIN:
                     return date.atTime(LocalTime.MIN);
                 case MAX:
@@ -131,7 +131,7 @@ public @interface DateFillFormat {
          * @param format DateFillFormat
          */
         static LocalDateTime conversion(final LocalDateTime localDateTime,
-                                        final DateFillFormat format) {
+                                        final DateTimeFormat format) {
             final LocalDate date = Conversion.computeDate(localDateTime.toLocalDate(), format);
             return date.atTime(localDateTime.toLocalTime());
         }

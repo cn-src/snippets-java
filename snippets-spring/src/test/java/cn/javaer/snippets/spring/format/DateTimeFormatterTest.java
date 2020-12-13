@@ -1,8 +1,8 @@
 package cn.javaer.snippets.spring.format;
 
-import cn.javaer.snippets.format.DateFillFormat;
 import cn.javaer.snippets.format.DateMaxTime;
 import cn.javaer.snippets.format.DateMinTime;
+import cn.javaer.snippets.format.DateTimeFormat;
 import lombok.Data;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author cn-src
  */
-class DateFillFormatterTest {
+class DateTimeFormatterTest {
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
         .withConfiguration(
             AutoConfigurations.of(MockMvcAutoConfiguration.class, WebMvcAutoConfiguration.class,
@@ -73,7 +73,7 @@ class DateFillFormatterTest {
     static class TestController {
 
         @GetMapping("test1")
-        public String get(@DateFillFormat(fillTime = DateFillFormat.FillTime.MAX)
+        public String get(@DateTimeFormat(time = DateTimeFormat.Time.MAX)
                           @RequestParam final LocalDateTime dateTime) {
             Assertions.assertThat(dateTime).isEqualTo(LocalDate.parse("2020-01-01").atTime(LocalTime.MAX));
             return dateTime.toString();
@@ -89,7 +89,7 @@ class DateFillFormatterTest {
 
     @Data
     static class Demo {
-        @DateFillFormat(fillTime = DateFillFormat.FillTime.MIN)
+        @DateTimeFormat(time = DateTimeFormat.Time.MIN)
         LocalDateTime dateTime;
 
         @DateMaxTime

@@ -1,8 +1,8 @@
 package cn.javaer.snippets.jackson;
 
-import cn.javaer.snippets.format.DateFillFormat;
 import cn.javaer.snippets.format.DateMaxTime;
 import cn.javaer.snippets.format.DateMinTime;
+import cn.javaer.snippets.format.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -48,7 +48,7 @@ class SnippetsJacksonIntrospectorTest {
 
     @Data
     static class Demo {
-        @DateFillFormat(fillTime = DateFillFormat.FillTime.MIN, months = -1)
+        @DateTimeFormat(time = DateTimeFormat.Time.MIN, months = -1)
         LocalDateTime dateTime;
 
         @DateMinTime
@@ -64,7 +64,7 @@ class SnippetsJacksonIntrospectorTest {
 
         @JsonCreator
         @ConstructorProperties("dateTime")
-        public Demo1(@DateFillFormat(fillTime = DateFillFormat.FillTime.MIN, months = -2) final LocalDateTime dateTime) {
+        public Demo1(@DateTimeFormat(time = DateTimeFormat.Time.MIN, months = -2) final LocalDateTime dateTime) {
             this.dateTime = dateTime;
         }
     }

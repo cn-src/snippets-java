@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
-@DateFillFormat(fillTime = DateFillFormat.FillTime.MIN)
+@DateTimeFormat(time = DateTimeFormat.Time.MIN)
 public @interface DateMinTime {
 
     /**

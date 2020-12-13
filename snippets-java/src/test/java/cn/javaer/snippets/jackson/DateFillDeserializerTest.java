@@ -1,8 +1,8 @@
 package cn.javaer.snippets.jackson;
 
-import cn.javaer.snippets.format.DateFillFormat;
 import cn.javaer.snippets.format.DateMaxTime;
 import cn.javaer.snippets.format.DateMinTime;
+import cn.javaer.snippets.format.DateTimeFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
@@ -32,7 +32,7 @@ class DateFillDeserializerTest {
 
     @Data
     static class Demo {
-        @DateFillFormat(fillTime = DateFillFormat.FillTime.MIN, days = -1)
+        @DateTimeFormat(time = DateTimeFormat.Time.MIN, days = -1)
         @JsonDeserialize(using = DateFillDeserializer.class)
         LocalDateTime dateTime;
 

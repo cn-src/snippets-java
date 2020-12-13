@@ -1,8 +1,8 @@
 package cn.javaer.snippets.jackson;
 
-import cn.javaer.snippets.format.DateFillFormat;
 import cn.javaer.snippets.format.DateMaxTime;
 import cn.javaer.snippets.format.DateMinTime;
+import cn.javaer.snippets.format.DateTimeFormat;
 import cn.javaer.snippets.util.AnnotationUtils;
 import com.fasterxml.jackson.databind.introspect.Annotated;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
@@ -18,8 +18,8 @@ public class SnippetsJacksonIntrospector extends JacksonAnnotationIntrospector {
     @Override
     public Object findDeserializer(final Annotated a) {
 
-        return AnnotationUtils.mergeAnnotations(DateFillFormat.class,
-            () -> a.getAnnotation(DateFillFormat.class),
+        return AnnotationUtils.mergeAnnotations(DateTimeFormat.class,
+            () -> a.getAnnotation(DateTimeFormat.class),
             () -> a.getAnnotation(DateMinTime.class),
             () -> a.getAnnotation(DateMaxTime.class)
         ).map(it -> (Object) new DateFillDeserializer(it)).orElse(super.findDeserializer(a));

@@ -1,7 +1,7 @@
 package cn.javaer.snippets.spring.format;
 
-import cn.javaer.snippets.format.DateFillFormat;
 import cn.javaer.snippets.format.DateMaxTime;
+import cn.javaer.snippets.format.DateTimeFormat;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 
@@ -20,10 +20,10 @@ public class DateMaxTimeTest {
     void name() throws Exception {
 
         final Field dateTime = Demo.class.getDeclaredField("dateTime");
-        final DateFillFormat annotation = AnnotatedElementUtils.findMergedAnnotation(dateTime,
-            DateFillFormat.class);
-        assertThat(Objects.requireNonNull(annotation).fillTime())
-            .isEqualTo(DateFillFormat.FillTime.MAX);
+        final DateTimeFormat annotation = AnnotatedElementUtils.findMergedAnnotation(dateTime,
+            DateTimeFormat.class);
+        assertThat(Objects.requireNonNull(annotation).time())
+            .isEqualTo(DateTimeFormat.Time.MAX);
         assertThat(annotation.datePattern()).isEqualTo("yyyy/MM/dd");
     }
 

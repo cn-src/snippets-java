@@ -1,6 +1,6 @@
 package cn.javaer.snippets.spring.format;
 
-import cn.javaer.snippets.format.DateFillFormat;
+import cn.javaer.snippets.format.DateTimeFormat;
 import org.springframework.context.support.EmbeddedValueResolutionSupport;
 import org.springframework.format.AnnotationFormatterFactory;
 import org.springframework.format.Parser;
@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  * @author cn-src
  */
-public class DateFillFormatter extends EmbeddedValueResolutionSupport implements AnnotationFormatterFactory<DateFillFormat> {
+public class DateFillFormatter extends EmbeddedValueResolutionSupport implements AnnotationFormatterFactory<DateTimeFormat> {
     @Override
     @NonNull
     public Set<Class<?>> getFieldTypes() {
@@ -25,13 +25,13 @@ public class DateFillFormatter extends EmbeddedValueResolutionSupport implements
 
     @Override
     @NonNull
-    public Printer<?> getPrinter(final DateFillFormat annotation, final Class<?> fieldType) {
+    public Printer<?> getPrinter(final DateTimeFormat annotation, final Class<?> fieldType) {
         return new TemporalAccessorPrinter(DateTimeFormatter.ofPattern(annotation.dateTimePattern()));
     }
 
     @Override
     @NonNull
-    public Parser<?> getParser(@NonNull final DateFillFormat annotation, final Class<?> fieldType) {
+    public Parser<?> getParser(@NonNull final DateTimeFormat annotation, final Class<?> fieldType) {
         return new DateFillParser(annotation);
     }
 }

@@ -1,6 +1,6 @@
 package cn.javaer.snippets.spring.autoconfigure.jackson;
 
-import cn.javaer.snippets.format.DateFillFormat;
+import cn.javaer.snippets.format.DateTimeFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.jooq.JSONB;
@@ -51,7 +51,7 @@ class SnippetsJacksonAutoConfigurationTest {
 
     @Data
     static class Demo {
-        @DateFillFormat(fillTime = DateFillFormat.FillTime.MAX)
+        @DateTimeFormat(time = DateTimeFormat.Time.MAX)
         LocalDateTime dateTime;
 
         String str;

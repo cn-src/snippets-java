@@ -1,7 +1,7 @@
 package cn.javaer.snippets.util;
 
-import cn.javaer.snippets.format.DateFillFormat;
 import cn.javaer.snippets.format.DateMinTime;
+import cn.javaer.snippets.format.DateTimeFormat;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,9 +16,9 @@ class AnnotationUtilsTest {
     void name() throws Exception {
         final DateMinTime annotation =
             Demo.class.getDeclaredField("dateTime").getAnnotation(DateMinTime.class);
-        final Optional<DateFillFormat> format =
-            AnnotationUtils.mergeAnnotations(DateFillFormat.class, annotation);
-        Assertions.assertThat(format).get().extracting(DateFillFormat::datePattern)
+        final Optional<DateTimeFormat> format =
+            AnnotationUtils.mergeAnnotations(DateTimeFormat.class, annotation);
+        Assertions.assertThat(format).get().extracting(DateTimeFormat::datePattern)
             .isEqualTo("yyyy/MM/dd");
     }
 

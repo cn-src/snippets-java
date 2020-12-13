@@ -1,8 +1,8 @@
 package cn.javaer.snippets.jackson;
 
-import cn.javaer.snippets.format.DateFillFormat;
 import cn.javaer.snippets.format.DateMaxTime;
 import cn.javaer.snippets.format.DateMinTime;
+import cn.javaer.snippets.format.DateTimeFormat;
 import cn.javaer.snippets.util.AnnotationUtils;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.BeanProperty;
@@ -21,37 +21,37 @@ import java.util.Objects;
  */
 public class DateFillDeserializer extends JsonDeserializer<LocalDateTime> implements ContextualDeserializer {
 
-    private final DateFillFormat dateFillFormat;
+    private final DateTimeFormat dateTimeFormat;
 
     protected DateFillDeserializer() {
-        this.dateFillFormat = null;
+        this.dateTimeFormat = null;
     }
 
-    public DateFillDeserializer(final DateFillFormat dateFillFormat) {
-        Objects.requireNonNull(dateFillFormat);
-        this.dateFillFormat = dateFillFormat;
+    public DateFillDeserializer(final DateTimeFormat dateTimeFormat) {
+        Objects.requireNonNull(dateTimeFormat);
+        this.dateTimeFormat = dateTimeFormat;
     }
 
     @Override
     public LocalDateTime deserialize(final JsonParser parser,
                                      final DeserializationContext context) throws IOException {
-        Objects.requireNonNull(this.dateFillFormat);
-        if (this.dateFillFormat.datePattern().length() == parser.getText().length()) {
+        Objects.requireNonNull(this.dateTimeFormat);
+        if (this.dateTimeFormat.datePattern().length() == parser.getText().length()) {
             final LocalDate date = LocalDate.parse(parser.getText(),
-                DateTimeFormatter.ofPattern(this.dateFillFormat.datePattern()));
-            return DateFillFormat.Conversion.conversion(date, this.dateFillFormat);
+                DateTimeFormatter.ofPattern(this.dateTimeFormat.datePattern()));
+            return DateTimeFormat.Conversion.conversion(date, this.dateTimeFormat);
         }
         final LocalDateTime dateTime = LocalDateTime.parse(parser.getText(),
-            DateTimeFormatter.ofPattern(this.dateFillFormat.dateTimePattern()));
-        return DateFillFormat.Conversion.conversion(dateTime, this.dateFillFormat);
+            DateTimeFormatter.ofPattern(this.dateTimeFormat.dateTimePattern()));
+        return DateTimeFormat.Conversion.conversion(dateTime, this.dateTimeFormat);
     }
 
     @Override
     public JsonDeserializer<?> createContextual(final DeserializationContext context,
                                                 final BeanProperty property) {
 
-        return AnnotationUtils.mergeAnnotations(DateFillFormat.class,
-            () -> property.getAnnotation(DateFillFormat.class),
+        return AnnotationUtils.mergeAnnotations(DateTimeFormat.class,
+            () -> property.getAnnotation(DateTimeFormat.class),
             () -> property.getAnnotation(DateMinTime.class),
             () -> property.getAnnotation(DateMaxTime.class)
         ).map(DateFillDeserializer::new).orElse(null);

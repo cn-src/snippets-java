@@ -1,6 +1,6 @@
 package cn.javaer.snippets.spring.format;
 
-import cn.javaer.snippets.format.DateFillFormat;
+import cn.javaer.snippets.format.DateTimeFormat;
 import org.springframework.format.Parser;
 import org.springframework.lang.NonNull;
 
@@ -13,9 +13,9 @@ import java.util.Locale;
  * @author cn-src
  */
 public final class DateFillParser implements Parser<LocalDateTime> {
-    private final DateFillFormat annotation;
+    private final DateTimeFormat annotation;
 
-    public DateFillParser(final DateFillFormat annotation) {
+    public DateFillParser(final DateTimeFormat annotation) {
         this.annotation = annotation;
     }
 
@@ -24,10 +24,10 @@ public final class DateFillParser implements Parser<LocalDateTime> {
         if (this.annotation.datePattern().length() == text.length()) {
             final LocalDate date = LocalDate.parse(text,
                 DateTimeFormatter.ofPattern(this.annotation.datePattern(), locale));
-            return DateFillFormat.Conversion.conversion(date, this.annotation);
+            return DateTimeFormat.Conversion.conversion(date, this.annotation);
         }
         final LocalDateTime dateTime = LocalDateTime.parse(text,
             DateTimeFormatter.ofPattern(this.annotation.dateTimePattern(), locale));
-        return DateFillFormat.Conversion.conversion(dateTime, this.annotation);
+        return DateTimeFormat.Conversion.conversion(dateTime, this.annotation);
     }
 }
