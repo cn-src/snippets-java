@@ -55,12 +55,6 @@ public class PGDSL extends PostgresDSL {
         return DSL.condition("{0} @> {1}::jsonb", jsonField,
             DSL.val(json, jsonField.getDataType()));
     }
-// 官方已支持
-//    @Support(SQLDialect.POSTGRES)
-//    public static JsonbField<Record, JSONB> jsonbObjectAgg(final Field<?> keyField,
-//                                                           final Field<?> valueField) {
-//        return new JsonbField<>("jsonb_object_agg", SQLDataType.JSONB, keyField, valueField);
-//    }
 
     @Support(SQLDialect.POSTGRES)
     public static JsonbField<Record, JSONB> jsonbObjectAgg(final Field<?>[] keyFields,
@@ -72,12 +66,6 @@ public class PGDSL extends PostgresDSL {
                 f2)).orElse(null);
         return new JsonbField<>("jsonb_object_agg", SQLDataType.JSONB, field, valueField);
     }
-// 官方已支持
-//    @Support(SQLDialect.POSTGRES)
-//    public static Field<String> toChar(final Field<LocalDateTime> timestamp,
-//                                       final String pattern) {
-//        return DSL.function("to_char", SQLDataType.LONGVARCHAR, timestamp, DSL.inline(pattern));
-//    }
 
     /**
      * 自定义聚合函数: first, 取每组中第一个元素.
