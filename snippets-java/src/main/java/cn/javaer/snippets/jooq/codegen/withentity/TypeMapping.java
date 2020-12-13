@@ -40,6 +40,7 @@ public class TypeMapping {
         MAPPING = Collections.unmodifiableMap(mapping);
     }
 
+    @SuppressWarnings("AlibabaUndefineMagicConstant")
     public static String get(final String name) {
         if (name.endsWith("[]")) {
             final String arrayName = name.substring(0, name.length() - 2);
