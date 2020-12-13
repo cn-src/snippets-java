@@ -1,5 +1,6 @@
 *.iml
-.idea
+.idea/*
+!.idea/inspectionProfiles/
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
