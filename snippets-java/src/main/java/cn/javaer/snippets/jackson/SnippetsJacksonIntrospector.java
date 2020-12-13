@@ -22,6 +22,6 @@ public class SnippetsJacksonIntrospector extends JacksonAnnotationIntrospector {
             () -> a.getAnnotation(DateTimeFormat.class),
             () -> a.getAnnotation(DateMinTime.class),
             () -> a.getAnnotation(DateMaxTime.class)
-        ).map(it -> (Object) new DateFillDeserializer(it)).orElse(super.findDeserializer(a));
+        ).map(it -> (Object) new DateTimeFormatDeserializer(it)).orElse(super.findDeserializer(a));
     }
 }

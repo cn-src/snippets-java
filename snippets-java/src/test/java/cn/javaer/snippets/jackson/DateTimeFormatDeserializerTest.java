@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author cn-src
  */
-class DateFillDeserializerTest {
+class DateTimeFormatDeserializerTest {
 
     @Test
     void deserialize() throws Exception {
@@ -33,15 +33,15 @@ class DateFillDeserializerTest {
     @Data
     static class Demo {
         @DateTimeFormat(time = DateTimeFormat.Time.MIN, days = -1)
-        @JsonDeserialize(using = DateFillDeserializer.class)
+        @JsonDeserialize(using = DateTimeFormatDeserializer.class)
         LocalDateTime dateTime;
 
         @DateMinTime(datePattern = "yyyy/MM/dd")
-        @JsonDeserialize(using = DateFillDeserializer.class)
+        @JsonDeserialize(using = DateTimeFormatDeserializer.class)
         LocalDateTime dateMinTime;
 
         @DateMaxTime(datePattern = "yyyy/MM/dd")
-        @JsonDeserialize(using = DateFillDeserializer.class)
+        @JsonDeserialize(using = DateTimeFormatDeserializer.class)
         LocalDateTime dateMaxTime;
     }
 }

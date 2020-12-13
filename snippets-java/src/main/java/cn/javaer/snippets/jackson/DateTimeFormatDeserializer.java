@@ -19,15 +19,15 @@ import java.util.Objects;
 /**
  * @author cn-src
  */
-public class DateFillDeserializer extends JsonDeserializer<LocalDateTime> implements ContextualDeserializer {
+public class DateTimeFormatDeserializer extends JsonDeserializer<LocalDateTime> implements ContextualDeserializer {
 
     private final DateTimeFormat dateTimeFormat;
 
-    protected DateFillDeserializer() {
+    protected DateTimeFormatDeserializer() {
         this.dateTimeFormat = null;
     }
 
-    public DateFillDeserializer(final DateTimeFormat dateTimeFormat) {
+    public DateTimeFormatDeserializer(final DateTimeFormat dateTimeFormat) {
         Objects.requireNonNull(dateTimeFormat);
         this.dateTimeFormat = dateTimeFormat;
     }
@@ -54,6 +54,6 @@ public class DateFillDeserializer extends JsonDeserializer<LocalDateTime> implem
             () -> property.getAnnotation(DateTimeFormat.class),
             () -> property.getAnnotation(DateMinTime.class),
             () -> property.getAnnotation(DateMaxTime.class)
-        ).map(DateFillDeserializer::new).orElse(null);
+        ).map(DateTimeFormatDeserializer::new).orElse(null);
     }
 }
