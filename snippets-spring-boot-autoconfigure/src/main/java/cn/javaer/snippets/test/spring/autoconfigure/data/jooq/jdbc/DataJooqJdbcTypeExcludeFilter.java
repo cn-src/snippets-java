@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.filter.StandardAnnotationCust
  */
 public final class DataJooqJdbcTypeExcludeFilter extends StandardAnnotationCustomizableTypeExcludeFilter<DataJooqJdbcTest> {
 
+    @SuppressWarnings("unused")
     DataJooqJdbcTypeExcludeFilter(final Class<?> testClass) {
         super(testClass);
     }

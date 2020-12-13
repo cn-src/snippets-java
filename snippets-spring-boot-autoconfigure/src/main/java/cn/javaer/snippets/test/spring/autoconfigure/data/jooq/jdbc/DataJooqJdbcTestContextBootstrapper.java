@@ -10,6 +10,7 @@ import org.springframework.test.context.TestContextBootstrapper;
  *
  * @author cn-src
  */
+@SuppressWarnings("unused")
 class DataJooqJdbcTestContextBootstrapper extends SpringBootTestContextBootstrapper {
 
     @Override
