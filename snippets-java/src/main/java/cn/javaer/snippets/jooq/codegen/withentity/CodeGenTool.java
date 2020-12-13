@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
  *
  * @author cn-src
  */
+@SuppressWarnings("JavadocReference")
 public class CodeGenTool {
     private static final Logger logger = Logger.getLogger(CodeGenTool.class.getName());
     static ClassInfoList enums = null;
