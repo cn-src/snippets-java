@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.EqualsAndHashCode;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
@@ -79,6 +80,7 @@ public class TreeNode implements Cloneable {
     }
 
     @JsonAnyGetter
+    @UnmodifiableView
     public @Nullable Map<String, Object> getDynamic() {
         return this.dynamic == null ? null : Collections.unmodifiableMap(this.dynamic);
     }
@@ -87,6 +89,7 @@ public class TreeNode implements Cloneable {
         return this.title;
     }
 
+    @UnmodifiableView
     public @Nullable List<TreeNode> getChildren() {
         return this.children == null ? null : Collections.unmodifiableList(this.children);
     }
