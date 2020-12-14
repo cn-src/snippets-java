@@ -21,6 +21,7 @@ class StrUtilsTest {
         assertThat(StrUtils.toSnakeUpper("snake")).isEqualTo("SNAKE");
         assertThat(StrUtils.toSnakeUpper("SnakeCase")).isEqualTo("SNAKE_CASE");
         assertThat(StrUtils.toSnakeUpper("Snake123")).isEqualTo("SNAKE_123");
+        assertThat(StrUtils.toSnakeUpper("Snake123SNAKE")).isEqualTo("SNAKE_123_SNAKE");
         assertThat(StrUtils.toSnakeUpper("SNAKE_CASE")).isEqualTo("SNAKE_CASE");
         assertThat(StrUtils.toSnakeUpper("snake_case")).isEqualTo("SNAKE_CASE");
     }
@@ -37,6 +38,7 @@ class StrUtilsTest {
         assertThat(StrUtils.toSnakeLower("snake")).isEqualTo("snake");
         assertThat(StrUtils.toSnakeLower("SnakeCase")).isEqualTo("snake_case");
         assertThat(StrUtils.toSnakeLower("Snake123")).isEqualTo("snake_123");
+        assertThat(StrUtils.toSnakeLower("Snake123SNAKE")).isEqualTo("snake_123_snake");
         assertThat(StrUtils.toSnakeLower("SNAKE_CASE")).isEqualTo("snake_case");
         assertThat(StrUtils.toSnakeLower("snake_case")).isEqualTo("snake_case");
     }
