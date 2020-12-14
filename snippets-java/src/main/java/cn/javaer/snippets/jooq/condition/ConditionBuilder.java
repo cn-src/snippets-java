@@ -40,7 +40,7 @@ public class ConditionBuilder {
         return this;
     }
 
-    public ConditionBuilder isNotNull(final Field<?>... fields) {
+    public ConditionBuilder optionalNotNull(final Field<?>... fields) {
         if (null != fields && fields.length > 0) {
             if (fields.length == 1) {
                 this.conditions.add(fields[0].isNotNull());
@@ -82,7 +82,7 @@ public class ConditionBuilder {
         if (fields == null || fields.length == 0) {
             throw new IllegalArgumentException("'fields' must be not empty");
         }
-        
+
         return this.optional(ConditionCreator.create(treeNodes, fields));
     }
 
