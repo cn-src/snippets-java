@@ -47,7 +47,8 @@ public class TreeNode implements Cloneable {
         return new TreeNode(title, children == null ? null : new ArrayList<>(children), null);
     }
 
-    public final TreeNode addChildren(final TreeNode... children) {
+    @SuppressWarnings("UnusedReturnValue")
+    public TreeNode addChildren(final TreeNode... children) {
         if (children == null || children.length == 0) {
             return this;
         }
@@ -59,7 +60,15 @@ public class TreeNode implements Cloneable {
         return this;
     }
 
-    public final TreeNode putDynamic(final String key, final Object value) {
+    public TreeNode removeFirstChild() {
+        if (this.children == null || this.children.isEmpty()) {
+            return this;
+        }
+        this.children.remove(0);
+        return this;
+    }
+
+    public TreeNode putDynamic(final String key, final Object value) {
         if (this.dynamic == null) {
             this.dynamic = new HashMap<>(5);
         }
@@ -67,7 +76,7 @@ public class TreeNode implements Cloneable {
         return this;
     }
 
-    public final TreeNode putAllDynamic(final Map<String, Object> dynamic) {
+    public TreeNode putAllDynamic(final Map<String, Object> dynamic) {
         if (dynamic == null || dynamic.isEmpty()) {
             return this;
         }

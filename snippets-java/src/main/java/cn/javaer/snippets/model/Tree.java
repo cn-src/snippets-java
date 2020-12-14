@@ -115,7 +115,9 @@ public interface Tree {
             for (final Function<E, String> fn : getters) {
                 final String cell = fn.apply(row);
 
-                final Optional<TreeNode> first = current.getChildren().stream()
+                final Optional<TreeNode> first = Optional.ofNullable(current.getChildren())
+                    .orElseGet(Collections::emptyList)
+                    .stream()
                     .filter(it -> Objects.equals(cell, it.getTitle()))
                     .findFirst();
                 if (first.isPresent()) {
@@ -125,7 +127,7 @@ public interface Tree {
                     if (!(ignoreEmpty && (cell == null || cell.isEmpty()))) {
                         final TreeNode treeNode = TreeNode.of(cell);
                         handler.apply(treeNode, row, depth, current.getChildren().size());
-                        current.getChildren().add(treeNode);
+                        current.addChildren(treeNode);
                         current = treeNode;
                     }
                 depth++;
@@ -176,7 +178,7 @@ public interface Tree {
 
                 TreeNode peek = stack.peek();
                 if (peek != null) {
-                    peek.getChildren().remove(0);
+                    peek.removeFirstChild();
                 }
 
                 // 迭代清理一条线的所有孤叶节点
@@ -188,7 +190,7 @@ public interface Tree {
                     }
                     peek = stack.peek();
                     if (peek.getChildren() != null && !peek.getChildren().isEmpty()) {
-                        peek.getChildren().remove(0);
+                        peek.removeFirstChild();
                     }
                 }
                 current = peek;
