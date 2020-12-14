@@ -94,6 +94,10 @@ public class TreeNode implements Cloneable {
         return this;
     }
 
+    public boolean isChildrenEmpty() {
+        return this.children == null || this.children.isEmpty();
+    }
+
     @JsonAnyGetter
     @UnmodifiableView
     public @Nullable Map<String, Object> getDynamic() {
