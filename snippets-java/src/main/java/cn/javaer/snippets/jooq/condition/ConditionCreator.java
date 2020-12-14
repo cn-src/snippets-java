@@ -89,7 +89,7 @@ public class ConditionCreator {
 
                 TreeNode peek = stack.peek();
                 if (peek != null) {
-                    peek.getChildren().remove(0);
+                    peek.removeFirstChild();
                 }
 
                 // 迭代清理一条线的所有孤叶节点
@@ -104,7 +104,7 @@ public class ConditionCreator {
                     }
                     peek = stack.peek();
                     if (peek.getChildren() != null && !peek.getChildren().isEmpty()) {
-                        peek.getChildren().remove(0);
+                        peek.removeFirstChild();
                     }
                 }
                 current = peek;
