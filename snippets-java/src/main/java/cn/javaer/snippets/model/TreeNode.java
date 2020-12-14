@@ -23,8 +23,7 @@ import java.util.StringJoiner;
  */
 @EqualsAndHashCode
 public class TreeNode implements Cloneable {
-    public static final TreeNode EMPTY =
-        new TreeNode("", Collections.emptyList(), Collections.emptyMap());
+    public static final TreeNode EMPTY = TreeNode.of("");
     private @Nullable final String title;
     private @Nullable List<TreeNode> children;
 
