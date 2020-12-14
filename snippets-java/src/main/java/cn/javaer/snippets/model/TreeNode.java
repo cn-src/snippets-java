@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.Nullable;
 
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
@@ -21,61 +22,73 @@ import java.util.StringJoiner;
  */
 @EqualsAndHashCode
 public class TreeNode implements Cloneable {
-    public static final TreeNode EMPTY = new TreeNode("",
-        Collections.emptyList(), Collections.emptyMap());
-    private final String title;
-    private final List<TreeNode> children;
+    public static final TreeNode EMPTY =
+        new TreeNode("", Collections.emptyList(), Collections.emptyMap());
+    private @Nullable final String title;
+    private @Nullable List<TreeNode> children;
 
-    private @JsonAnySetter final Map<String, Object> dynamic;
+    private @Nullable @JsonAnySetter Map<String, Object> dynamic;
 
     @JsonCreator
     @ConstructorProperties({"title", "children", "dynamic"})
-    public TreeNode(final String title, final List<TreeNode> children,
-                    final Map<String, Object> dynamic) {
+    TreeNode(final @Nullable String title, final @Nullable List<TreeNode> children,
+             final @Nullable Map<String, Object> dynamic) {
         this.title = title;
-        this.children = children == null ? new ArrayList<>() : new ArrayList<>(children);
-        this.dynamic = dynamic == null ? new HashMap<>() : new HashMap<>(dynamic);
+        this.children = children;
+        this.dynamic = dynamic;
     }
 
     public static TreeNode of(final String title) {
-        return new TreeNode(title, new ArrayList<>(), new HashMap<>());
+        return new TreeNode(title, null, null);
     }
 
     public static TreeNode of(final String title, final List<TreeNode> children) {
-        return new TreeNode(title, children, new HashMap<>());
+        return new TreeNode(title, children == null ? null : new ArrayList<>(children), null);
     }
 
-    public final TreeNode addChildren(final TreeNode first, final TreeNode... child) {
-        this.children.add(first);
-
-        if (child == null || child.length == 0) {
+    public final TreeNode addChildren(final TreeNode... children) {
+        if (children == null || children.length == 0) {
             return this;
         }
-        this.children.addAll(Arrays.asList(child));
+
+        if (this.children == null) {
+            this.children = new ArrayList<>();
+        }
+        this.children.addAll(Arrays.asList(children));
         return this;
     }
 
     public final TreeNode putDynamic(final String key, final Object value) {
+        if (this.dynamic == null) {
+            this.dynamic = new HashMap<>(5);
+        }
         this.dynamic.put(key, value);
         return this;
     }
 
     public final TreeNode putAllDynamic(final Map<String, Object> dynamic) {
+        if (dynamic == null || dynamic.isEmpty()) {
+            return this;
+        }
+
+        if (this.dynamic == null) {
+            this.dynamic = new HashMap<>(dynamic.size());
+        }
         this.dynamic.putAll(dynamic);
         return this;
     }
 
     @JsonAnyGetter
-    public Map<String, Object> getDynamic() {
-        return this.dynamic;
+    public @Nullable Map<String, Object> getDynamic() {
+        return this.dynamic == null ? null : Collections.unmodifiableMap(this.dynamic);
     }
 
-    public String getTitle() {
+    public @Nullable String getTitle() {
         return this.title;
     }
 
-    public List<TreeNode> getChildren() {
-        return this.children;
+    public @Nullable List<TreeNode> getChildren() {
+        return this.children == null ? null : Collections.unmodifiableList(this.children);
     }
 
     @SuppressWarnings({"MethodDoesntCallSuperMethod"})
@@ -88,7 +101,7 @@ public class TreeNode implements Cloneable {
     public String toString() {
         return new StringJoiner(", ", TreeNode.class.getSimpleName() + "[", "]")
             .add("title=" + this.title)
-            .add("@children.size=" + this.children.size())
+            .add("@children.size=" + (this.children == null ? 0 : this.children.size()))
             .add("dynamic=" + this.dynamic)
             .toString();
     }
