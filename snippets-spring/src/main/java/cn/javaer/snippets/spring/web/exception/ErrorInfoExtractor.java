@@ -43,7 +43,7 @@ public class ErrorInfoExtractor {
     }
 
     public Map<String, DefinedErrorInfo> getControllersErrorMapping(final Collection<Object> controllers, final boolean isIncludeMessage) {
-        final Map<String, DefinedErrorInfo> result = new HashMap<>();
+        final Map<String, DefinedErrorInfo> result = new HashMap<>(20);
         for (final Object ctr : controllers) {
             final Method[] methods = ctr.getClass().getDeclaredMethods();
             for (final Method method : methods) {
