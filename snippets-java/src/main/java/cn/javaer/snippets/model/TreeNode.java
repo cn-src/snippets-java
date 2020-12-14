@@ -2,12 +2,12 @@ package cn.javaer.snippets.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.beans.ConstructorProperties;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,13 +24,18 @@ import java.util.StringJoiner;
 @EqualsAndHashCode
 public class TreeNode implements Cloneable {
     public static final TreeNode EMPTY = TreeNode.of("");
-    private @Nullable final String title;
+
+    @Setter(AccessLevel.PROTECTED)
+    private @Nullable String title;
+
+    @Setter(AccessLevel.PROTECTED)
     private @Nullable List<TreeNode> children;
 
-    private @Nullable @JsonAnySetter Map<String, Object> dynamic;
+    private @Nullable Map<String, Object> dynamic;
 
-    @JsonCreator
-    @ConstructorProperties({"title", "children", "dynamic"})
+    TreeNode() {
+    }
+
     TreeNode(final @Nullable String title, final @Nullable List<TreeNode> children,
              final @Nullable Map<String, Object> dynamic) {
         this.title = title;
@@ -68,6 +73,7 @@ public class TreeNode implements Cloneable {
         return this;
     }
 
+    @JsonAnySetter
     public TreeNode putDynamic(final String key, final Object value) {
         if (this.dynamic == null) {
             this.dynamic = new HashMap<>(5);
