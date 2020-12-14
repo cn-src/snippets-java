@@ -1,5 +1,8 @@
 package cn.javaer.snippets.type;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+import java.beans.ConstructorProperties;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -11,6 +14,8 @@ public final class DateTimeRange {
     private final LocalDateTime start;
     private final LocalDateTime end;
 
+    @JsonCreator
+    @ConstructorProperties({"start", "end"})
     DateTimeRange(final LocalDateTime start, final LocalDateTime end) {
         this.start = start;
         this.end = end;
