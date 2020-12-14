@@ -60,6 +60,7 @@ public class TreeNode implements Cloneable {
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public TreeNode removeFirstChild() {
         if (this.children == null || this.children.isEmpty()) {
             return this;
