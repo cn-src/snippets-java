@@ -121,7 +121,7 @@ public class ConditionCreator {
         final PropertyDescriptor[] pds = BeanUtils.getPropertyDescriptors(query.getClass());
         final List<Condition> conditions = new ArrayList<>(pds.length);
 
-        final Map<String, Pair> biMap = new HashMap<>();
+        final Map<String, Pair> biMap = new HashMap<>(3);
         for (final PropertyDescriptor pd : pds) {
             final java.lang.reflect.Field fd =
                 ReflectionUtils.findField(query.getClass(), pd.getName());
