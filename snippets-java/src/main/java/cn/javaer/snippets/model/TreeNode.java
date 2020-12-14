@@ -94,7 +94,7 @@ public class TreeNode implements Cloneable {
         return this;
     }
 
-    public boolean isChildrenEmpty() {
+    public boolean isEmptyChildren() {
         return this.children == null || this.children.isEmpty();
     }
 
