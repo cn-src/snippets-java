@@ -57,6 +57,11 @@ public class ConditionBuilder {
         return this;
     }
 
+    public ConditionBuilder required(@NotNull final Condition condition) {
+        this.conditions.add(Objects.requireNonNull(condition));
+        return this;
+    }
+
     public ConditionBuilder required(@NotNull final Supplier<@NotNull Condition> supplier) {
         this.conditions.add(Objects.requireNonNull(supplier.get()));
         return this;
