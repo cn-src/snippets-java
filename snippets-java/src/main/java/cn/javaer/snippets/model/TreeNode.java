@@ -33,6 +33,7 @@ public class TreeNode implements Cloneable {
 
     private @Nullable Map<String, Object> dynamic;
 
+    @SuppressWarnings("unused")
     TreeNode() {
     }
 
