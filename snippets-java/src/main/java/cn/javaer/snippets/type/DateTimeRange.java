@@ -14,6 +14,7 @@ public final class DateTimeRange {
     private final LocalDateTime start;
     private final LocalDateTime end;
 
+    @SuppressWarnings("unused")
     @JsonCreator
     @ConstructorProperties({"start", "end"})
     DateTimeRange(final LocalDateTime start, final LocalDateTime end) {
