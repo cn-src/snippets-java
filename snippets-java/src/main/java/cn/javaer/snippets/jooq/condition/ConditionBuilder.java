@@ -25,15 +25,15 @@ public class ConditionBuilder {
 
     private final List<Condition> conditions = new ArrayList<>();
 
-    public ConditionBuilder append(final Condition condition) {
+    public ConditionBuilder optional(final Condition condition) {
         if (null != condition) {
             this.conditions.add(condition);
         }
         return this;
     }
 
-    public ConditionBuilder append(final boolean isAppend,
-                                   @NotNull final Supplier<@NotNull Condition> supplier) {
+    public ConditionBuilder optional(final boolean isAppend,
+                                     @NotNull final Supplier<@NotNull Condition> supplier) {
         if (isAppend) {
             return this.required(supplier);
         }
@@ -52,8 +52,8 @@ public class ConditionBuilder {
         return this;
     }
 
-    public ConditionBuilder append(@NotNull final Supplier<@Nullable Condition> supplier) {
-        this.append(supplier.get());
+    public ConditionBuilder optional(@NotNull final Supplier<@Nullable Condition> supplier) {
+        this.optional(supplier.get());
         return this;
     }
 
@@ -68,35 +68,42 @@ public class ConditionBuilder {
     }
 
     @SafeVarargs
-    public final ConditionBuilder requiredField(final TreeNode treeNode,
+    public final ConditionBuilder optionalValue(final TreeNode treeNode,
                                                 @NotNull final Field<String>... fields) {
-        return this.append(ConditionCreator.create(treeNode, fields));
+        if (fields == null || fields.length == 0) {
+            throw new IllegalArgumentException("'fields' must be not empty");
+        }
+        return this.optional(ConditionCreator.create(treeNode, fields));
     }
 
     @SafeVarargs
-    public final ConditionBuilder requiredField(final List<TreeNode> treeNodes,
+    public final ConditionBuilder optionalValue(final List<TreeNode> treeNodes,
                                                 @NotNull final Field<String>... fields) {
-        return this.append(ConditionCreator.create(treeNodes, fields));
+        if (fields == null || fields.length == 0) {
+            throw new IllegalArgumentException("'fields' must be not empty");
+        }
+        
+        return this.optional(ConditionCreator.create(treeNodes, fields));
     }
 
     @SafeVarargs
-    public final ConditionBuilder append(final TreeNode treeNode, final Field<String>... fields) {
+    public final ConditionBuilder optional(final TreeNode treeNode, final Field<String>... fields) {
         if (null == treeNode || ObjectUtils.isEmpty(fields)) {
             return this;
         }
-        return this.append(ConditionCreator.create(treeNode, fields));
+        return this.optional(ConditionCreator.create(treeNode, fields));
     }
 
     @SafeVarargs
-    public final ConditionBuilder append(final List<TreeNode> treeNodes,
-                                         final Field<String>... fields) {
+    public final ConditionBuilder optional(final List<TreeNode> treeNodes,
+                                           final Field<String>... fields) {
         if (CollectionUtils.isEmpty(treeNodes) || ObjectUtils.isEmpty(fields)) {
             return this;
         }
-        return this.append(ConditionCreator.create(treeNodes, fields));
+        return this.optional(ConditionCreator.create(treeNodes, fields));
     }
 
-    public <T> ConditionBuilder append(@NotNull final Function<T, Condition> fun, final T value) {
+    public <T> ConditionBuilder optional(@NotNull final Function<T, Condition> fun, final T value) {
         if (ObjectUtils.isEmpty(value)) {
             return this;
         }
@@ -105,8 +112,8 @@ public class ConditionBuilder {
         return this;
     }
 
-    public <T1, T2> ConditionBuilder append(@NotNull final BiFunction<T1, T2, Condition> fun,
-                                            final T1 t1, final T2 t2) {
+    public <T1, T2> ConditionBuilder optional(@NotNull final BiFunction<T1, T2, Condition> fun,
+                                              final T1 t1, final T2 t2) {
         if (ObjectUtils.isEmpty(t1) || ObjectUtils.isEmpty(t2)) {
             return this;
         }
@@ -114,8 +121,8 @@ public class ConditionBuilder {
         return this;
     }
 
-    public <T1, T2, T3> ConditionBuilder append(@NotNull final Function3<T1, T2, T3> fun,
-                                                final T1 t1, final T2 t2, final T3 t3) {
+    public <T1, T2, T3> ConditionBuilder optional(@NotNull final Function3<T1, T2, T3> fun,
+                                                  final T1 t1, final T2 t2, final T3 t3) {
         if (ObjectUtils.isEmpty(t1) || ObjectUtils.isEmpty(t2) || ObjectUtils.isEmpty(t3)) {
             return this;
         }
