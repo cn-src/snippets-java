@@ -1,9 +1,14 @@
 package cn.javaer.snippets.util;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * @author cn-src
+ * 反射相关的工具类.
+ *
+ * @author cn -src
  */
 public interface ReflectionUtils {
 
@@ -38,5 +43,19 @@ public interface ReflectionUtils {
         catch (final ClassNotFoundException e) {
             return Optional.empty();
         }
+    }
+
+    /**
+     * 获取继承自父类的泛型类型.
+     *
+     * @param clazz 需要继承带泛型的父类，并且此类需要泛型实参
+     *
+     * @return 泛型类型
+     */
+    static Class<?>[] getSuperclassGenerics(final Class<?> clazz) {
+        final Type type = clazz.getGenericSuperclass();
+        final ParameterizedType pType = (ParameterizedType) type;
+        return Arrays.stream(pType.getActualTypeArguments())
+            .map(Class.class::cast).toArray(Class[]::new);
     }
 }
