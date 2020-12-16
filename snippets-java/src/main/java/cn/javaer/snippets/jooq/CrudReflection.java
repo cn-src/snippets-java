@@ -2,6 +2,7 @@ package cn.javaer.snippets.jooq;
 
 import cn.javaer.snippets.util.ReflectionUtils;
 import cn.javaer.snippets.util.StrUtils;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
 
@@ -17,21 +18,26 @@ import java.util.concurrent.ConcurrentMap;
  * @author cn-src
  */
 public class CrudReflection {
-    private static final ConcurrentMap<Class<?>, List<ColumnMeta>> columnMetaCache =
+    private static final ConcurrentMap<Class<?>, List<ColumnMeta>> COLUMN_META_CACHE =
+        new ConcurrentHashMap<>();
+
+    private static final ConcurrentMap<Class<?>, Table<?>> TABLE_CACHE =
         new ConcurrentHashMap<>();
 
     public static Table<?> getTable(final Class<?> clazz) {
-        return ReflectionUtils.getAnnotationAttributeValue(
-            clazz, "org.springframework.data.relational.core.mapping.Table", "value")
+        return TABLE_CACHE.computeIfAbsent(clazz, it -> ReflectionUtils.getAnnotationAttributeValue(
+            it, "org.springframework.data.relational.core.mapping.Table", "value")
             .map(String.class::cast)
             .map(DSL::table)
-            .orElseGet(() -> DSL.table(StrUtils.toSnakeLower(clazz.getSimpleName())));
+            .orElseGet(() -> DSL.table(StrUtils.toSnakeLower(it.getSimpleName()))));
     }
 
+    @UnmodifiableView
     public static List<ColumnMeta> getColumnMetas(final Class<?> clazz) {
-        return columnMetaCache.computeIfAbsent(clazz, CrudReflection::initColumnMetas);
+        return COLUMN_META_CACHE.computeIfAbsent(clazz, CrudReflection::initColumnMetas);
     }
 
+    @UnmodifiableView
     static List<ColumnMeta> initColumnMetas(final Class<?> clazz) {
         final Field[] fields = clazz.getDeclaredFields();
         if (fields == null || fields.length == 0) {
@@ -72,6 +78,6 @@ public class CrudReflection {
                 .build();
             columnMetas.add(columnMeta);
         }
-        return columnMetas;
+        return Collections.unmodifiableList(columnMetas);
     }
 }
