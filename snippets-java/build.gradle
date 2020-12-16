@@ -2,6 +2,8 @@ plugins {
     id 'snippets-conventions'
 }
 dependencies {
+    implementation 'com.esotericsoftware:reflectasm'
+
     api platform(project(':snippets-platform'))
     api platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
