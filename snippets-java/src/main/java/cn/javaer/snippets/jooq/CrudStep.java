@@ -23,7 +23,7 @@ import java.util.Objects;
 public class CrudStep {
     private final DSLContext dsl;
 
-    public CrudStep(final DSLContext dsl) {
+    public CrudStep(@NotNull final DSLContext dsl) {
         this.dsl = dsl;
     }
 
