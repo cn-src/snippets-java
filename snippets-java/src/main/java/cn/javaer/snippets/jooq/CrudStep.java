@@ -3,6 +3,7 @@ package cn.javaer.snippets.jooq;
 import com.esotericsoftware.reflectasm.MethodAccess;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
+import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.InsertValuesStepN;
@@ -27,7 +28,7 @@ public class CrudStep {
     }
 
     <T, ID> SelectConditionStep<Record> findByIdAndCreatorStep(
-        final ID id, final Class<T> entityClass) {
+        final @NotNull ID id, final @NotNull Class<T> entityClass) {
         Objects.requireNonNull(id);
         Objects.requireNonNull(entityClass);
 
@@ -46,7 +47,7 @@ public class CrudStep {
      *
      * @return the insert values step n
      */
-    public InsertValuesStepN<?> insertStep(final Object entity) {
+    public InsertValuesStepN<?> insertStep(final @NotNull Object entity) {
         Objects.requireNonNull(entity);
 
         final List<ColumnMeta> columnMetas = CrudReflection.getColumnMetas(entity.getClass());
@@ -68,7 +69,7 @@ public class CrudStep {
      *
      * @return the insert values step n
      */
-    public InsertValuesStepN<?> batchInsertStep(final List<?> entities) {
+    public InsertValuesStepN<?> batchInsertStep(@NotNull final List<?> entities) {
         Validate.notEmpty(entities);
 
         final Class<?> clazz = entities.get(0).getClass();
@@ -97,7 +98,7 @@ public class CrudStep {
      *
      * @return the update set more step
      */
-    public UpdateSetMoreStep<?> dynamicUpdateStep(final Object entity) {
+    public UpdateSetMoreStep<?> dynamicUpdateStep(@NotNull final Object entity) {
         Objects.requireNonNull(entity);
 
         final Class<?> clazz = entity.getClass();
