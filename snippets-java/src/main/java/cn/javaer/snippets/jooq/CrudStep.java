@@ -61,7 +61,7 @@ public class CrudStep {
         return step;
     }
 
-    public UpdateSetMoreStep<?> dynamicUpdate(final Object entity) {
+    public UpdateSetMoreStep<?> dynamicUpdateStep(final Object entity) {
         Objects.requireNonNull(entity);
 
         final Class<?> clazz = entity.getClass();

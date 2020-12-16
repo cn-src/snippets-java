@@ -36,7 +36,7 @@ class CrudStepTest {
 
     @Test
     void dynamicUpdate() {
-        final UpdateSetMoreStep<?> step = this.crudStep.dynamicUpdate(new Demo(null, "name"));
+        final UpdateSetMoreStep<?> step = this.crudStep.dynamicUpdateStep(new Demo(null, "name"));
         assertThat(this.dsl.renderInlined(step))
             .isEqualTo("update demo set name = 'name'");
     }
