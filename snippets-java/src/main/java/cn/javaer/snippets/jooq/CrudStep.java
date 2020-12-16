@@ -24,6 +24,8 @@ public class CrudStep {
     private final DSLContext dsl;
 
     public CrudStep(@NotNull final DSLContext dsl) {
+        Objects.requireNonNull(dsl);
+
         this.dsl = dsl;
     }
 
