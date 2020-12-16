@@ -26,6 +26,9 @@ public class CrudReflection {
     private static final ConcurrentMap<Class<?>, ColumnMeta> ID_META_CACHE =
         new ConcurrentHashMap<>();
 
+    private static final ConcurrentMap<Class<?>, ColumnMeta> CREATOR_META_CACHE =
+        new ConcurrentHashMap<>();
+
     private static final ConcurrentMap<Class<?>, List<org.jooq.Field<?>>> FIELDS_CACHE =
         new ConcurrentHashMap<>();
 
@@ -36,6 +39,12 @@ public class CrudReflection {
     public static ColumnMeta getIdColumnMeta(final Class<?> entityClass) {
         return ID_META_CACHE.computeIfAbsent(entityClass, it ->
             getColumnMetas(it).stream().filter(ColumnMeta::isId).findFirst().orElse(null));
+    }
+
+    @Nullable
+    public static ColumnMeta getCreatorColumnMeta(final Class<?> entityClass) {
+        return CREATOR_META_CACHE.computeIfAbsent(entityClass, it ->
+            getColumnMetas(it).stream().filter(ColumnMeta::isCreator).findFirst().orElse(null));
     }
 
     @UnmodifiableView

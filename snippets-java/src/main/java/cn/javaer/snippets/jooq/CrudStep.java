@@ -22,14 +22,16 @@ import java.util.Objects;
  */
 public class CrudStep {
     private final DSLContext dsl;
+    private final AuditorAware<?> auditorAware;
 
-    public CrudStep(@NotNull final DSLContext dsl) {
+    public CrudStep(@NotNull final DSLContext dsl, AuditorAware<?> auditorAware) {
         Objects.requireNonNull(dsl);
 
         this.dsl = dsl;
+        this.auditorAware = auditorAware;
     }
 
-    <T, ID> SelectConditionStep<Record> findByIdAndCreatorStep(
+    public <T, ID> SelectConditionStep<Record> findByIdAndCreatorStep(
         final @NotNull ID id, final @NotNull Class<T> entityClass) {
         Objects.requireNonNull(id);
         Objects.requireNonNull(entityClass);
@@ -37,9 +39,15 @@ public class CrudStep {
         @SuppressWarnings("unchecked") final Field<ID> idColumn =
             (Field<ID>) Objects.requireNonNull(CrudReflection.getIdColumnMeta(entityClass))
                 .getColumn();
+
+        Field<Object> creatorColumn =
+            Objects.requireNonNull(CrudReflection.getCreatorColumnMeta(entityClass))
+                .getColumn();
+
         return this.dsl.select(CrudReflection.getFields(entityClass))
             .from(CrudReflection.getTable(entityClass))
-            .where(idColumn.eq(id));
+            .where(idColumn.eq(id))
+            .and(creatorColumn.eq(auditorAware.getCurrentAuditor().orElse(null)));
     }
 
     /**

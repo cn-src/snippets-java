@@ -11,7 +11,7 @@ public class ColumnMeta {
 
     String field;
     String getterName;
-    Field<?> column;
+    Field<Object> column;
     boolean id;
     boolean creator;
     boolean createdDate;
