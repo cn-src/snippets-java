@@ -11,6 +11,7 @@ import org.jooq.Record;
 import org.jooq.SelectConditionStep;
 import org.jooq.UpdateConditionStep;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +48,7 @@ public class CrudStep {
         return this.dsl.select(CrudReflection.getFields(entityClass))
             .from(CrudReflection.getTable(entityClass))
             .where(idColumn.eq(id))
-            .and(creatorColumn.eq(auditorAware.getCurrentAuditor().orElse(null)));
+            .and(creatorColumn.eq(auditorAware.requiredAuditor()));
     }
 
     /**
@@ -66,7 +67,7 @@ public class CrudStep {
         final MethodAccess methodAccess = MethodAccess.get(entity.getClass());
         for (final ColumnMeta cm : columnMetas) {
             fields.add(cm.getColumn());
-            values.add(methodAccess.invoke(entity, cm.getGetterName()));
+            insertValue(methodAccess, entity, values, cm);
         }
         return this.dsl.insertInto(CrudReflection.getTable(entity.getClass()))
             .columns(fields).values(values);
@@ -94,7 +95,7 @@ public class CrudStep {
         for (final Object entity : entities) {
             final List<Object> rowValue = new ArrayList<>();
             for (final ColumnMeta cm : columnMetas) {
-                rowValue.add(methodAccess.invoke(entity, cm.getGetterName()));
+                insertValue(methodAccess, entity, rowValue, cm);
             }
             step.values(rowValue.toArray());
         }
@@ -115,21 +116,89 @@ public class CrudStep {
         final Map<Field<?>, Object> dynamic = new HashMap<>();
         final List<ColumnMeta> columnMetas = CrudReflection.getColumnMetas(clazz);
         final MethodAccess methodAccess = MethodAccess.get(clazz);
+        Field<Object> idColumn = null;
         Object idValue = null;
         for (final ColumnMeta cm : columnMetas) {
             final Object value = methodAccess.invoke(entity, cm.getGetterName());
             if (cm.isId()) {
+                idColumn = cm.getColumn();
                 idValue = value;
+                continue;
+            }
+            if (cm.isCreator() || cm.isCreatedDate()) {
+                continue;
+            }
+            if (cm.isUpdater()) {
+                dynamic.put(cm.getColumn(), auditorAware.requiredAuditor());
+                continue;
+            }
+            if (cm.isUpdateDate()) {
+                dynamic.put(cm.getColumn(), LocalDateTime.now());
                 continue;
             }
             if (ObjectUtils.isNotEmpty(value)) {
                 dynamic.put(cm.getColumn(), value);
             }
         }
-        final Field<Object> idColumn = Objects.requireNonNull(CrudReflection.getIdColumnMeta(clazz))
-            .getColumn();
 
         return this.dsl.update(CrudReflection.getTable(clazz))
-            .set(dynamic).where(idColumn.eq(idValue));
+            .set(dynamic).where(Objects.requireNonNull(idColumn).eq(idValue));
+    }
+
+    public UpdateConditionStep<?> dynamicUpdateByCreatorStep(@NotNull final Object entity) {
+        Objects.requireNonNull(entity);
+
+        final Class<?> clazz = entity.getClass();
+        final Map<Field<?>, Object> dynamic = new HashMap<>();
+        final List<ColumnMeta> columnMetas = CrudReflection.getColumnMetas(clazz);
+        final MethodAccess methodAccess = MethodAccess.get(clazz);
+        Field<Object> idColumn = null;
+        Object idValue = null;
+        Field<Object> creatorColumn = null;
+        Object auditor = auditorAware.requiredAuditor();
+        for (final ColumnMeta cm : columnMetas) {
+            final Object value = methodAccess.invoke(entity, cm.getGetterName());
+            if (cm.isId()) {
+                idColumn = cm.getColumn();
+                idValue = value;
+                continue;
+            }
+            if (cm.isCreatedDate()) {
+                continue;
+            }
+            if (cm.isCreator()) {
+                creatorColumn = cm.getColumn();
+                continue;
+            }
+
+            if (cm.isUpdater()) {
+                dynamic.put(cm.getColumn(), auditor);
+                continue;
+            }
+            if (cm.isUpdateDate()) {
+                dynamic.put(cm.getColumn(), LocalDateTime.now());
+                continue;
+            }
+            if (ObjectUtils.isNotEmpty(value)) {
+                dynamic.put(cm.getColumn(), value);
+            }
+        }
+
+        return this.dsl.update(CrudReflection.getTable(clazz))
+            .set(dynamic).where(Objects.requireNonNull(idColumn).eq(idValue))
+            .and(Objects.requireNonNull(creatorColumn).eq(auditor));
+    }
+
+    private void insertValue(MethodAccess methodAccess, Object entity,
+                             List<Object> rowValue, ColumnMeta cm) {
+        if (cm.isCreator() || cm.isUpdater()) {
+            rowValue.add(auditorAware.requiredAuditor());
+            return;
+        }
+        if (cm.isCreatedDate() || cm.isUpdateDate()) {
+            rowValue.add(LocalDateTime.now());
+            return;
+        }
+        rowValue.add(methodAccess.invoke(entity, cm.getGetterName()));
     }
 }
