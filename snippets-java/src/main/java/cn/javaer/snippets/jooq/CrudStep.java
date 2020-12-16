@@ -65,7 +65,7 @@ public class CrudStep {
         final List<Object> values = new ArrayList<>();
         final List<Field<?>> fields = new ArrayList<>();
         final MethodAccess methodAccess = MethodAccess.get(entity.getClass());
-        Object auditor = auditorAware.requiredAuditor();
+        Object auditor = auditorAware.getCurrentAuditor().orElse(null);
         LocalDateTime now = LocalDateTime.now();
         for (final ColumnMeta cm : columnMetas) {
             fields.add(cm.getColumn());
@@ -94,7 +94,7 @@ public class CrudStep {
         final InsertValuesStepN<?> step =
             this.dsl.insertInto(CrudReflection.getTable(clazz)).columns(fields);
         final MethodAccess methodAccess = MethodAccess.get(clazz);
-        Object auditor = auditorAware.requiredAuditor();
+        Object auditor = auditorAware.getCurrentAuditor().orElse(null);
         LocalDateTime now = LocalDateTime.now();
         for (final Object entity : entities) {
             final List<Object> rowValue = new ArrayList<>();
@@ -197,7 +197,7 @@ public class CrudStep {
                              List<Object> rowValue, ColumnMeta cm,
                              Object auditor, LocalDateTime updateDate) {
         if (cm.isCreator() || cm.isUpdater()) {
-            rowValue.add(auditor);
+            rowValue.add(Objects.requireNonNull(auditor));
             return;
         }
         if (cm.isCreatedDate() || cm.isUpdateDate()) {
