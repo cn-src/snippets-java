@@ -1,5 +1,7 @@
 package cn.javaer.snippets.util;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -11,6 +13,45 @@ import java.util.Optional;
  * @author cn -src
  */
 public interface ReflectionUtils {
+
+    /**
+     * 判断元素上是否有指定的注解.
+     *
+     * @param element 可注解的元素
+     * @param annotation 注解
+     *
+     * @return 有指定的注解返回 true.
+     */
+    static boolean isAnnotated(final AnnotatedElement element, final String annotation) {
+        //noinspection unchecked
+        return getClass(annotation).map(it -> element.getAnnotation((Class<Annotation>) it))
+            .isPresent();
+    }
+
+    /**
+     * 获取元素上指定注解的属性值.
+     *
+     * @param element 可注解的元素
+     * @param annotation 注解
+     * @param attributeName 注解的属性名
+     *
+     * @return 注解的属性值
+     */
+    static Optional<Object> getAnnotationAttributeValue(final AnnotatedElement element,
+                                                        final String annotation,
+                                                        final String attributeName) {
+        //noinspection unchecked
+        return getClass(annotation)
+            .map(it -> element.getAnnotation((Class<Annotation>) it))
+            .map(it -> {
+                try {
+                    return it.annotationType().getField(attributeName).get(it);
+                }
+                catch (final IllegalAccessException | NoSuchFieldException e) {
+                    throw new IllegalStateException(e);
+                }
+            });
+    }
 
     /**
      * 判断 class 是否存在.
