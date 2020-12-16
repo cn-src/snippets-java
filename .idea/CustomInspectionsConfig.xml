@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CustomInspectionsConfig">
+    <filetypeContainer regex=".*\.java">
+      <element id="0">
+        <comment>不要使用 printStackTrace() 方法，请使用日志记录</comment>
+        <regex>\.printStackTrace\(\)</regex>
+        <severity>Warning</severity>
+      </element>
+    </filetypeContainer>
+  </component>
+</project>

@@ -1,5 +1,6 @@
 *.iml
 .idea/*
+!.idea/CustomInspectionsConfig.xml
 !.idea/inspectionProfiles/
 !.idea/scopes/
 .gradle
