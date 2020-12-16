@@ -6,6 +6,22 @@ package cn.javaer.snippets.util;
 public interface StrUtils {
 
     /**
+     * 将第一个字符大写.
+     *
+     * @param str String
+     *
+     * @return String
+     */
+    static String toFirstCharUpper(final String str) {
+        if (null == str || str.isEmpty()) {
+            return str;
+        }
+        final char[] chars = str.toCharArray();
+        chars[0] = Character.toUpperCase(chars[0]);
+        return String.valueOf(chars);
+    }
+
+    /**
      * 将驼峰字符串转换成下划线大写格式.
      *
      * @param str String
