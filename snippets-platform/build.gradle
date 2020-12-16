@@ -30,6 +30,7 @@ dependencies {
         api "p6spy:p6spy:${p6spyVersion}"
         api "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
         api "com.googlecode.cqengine:cqengine:${cqengineVersion}"
+        api "com.esotericsoftware:reflectasm:${reflectasmVersion}"
 
         api "org.mybatis:mybatis:${mybatisVersion}"
         api "org.mybatis:mybatis-spring:${mybatisSpringVersion}"
