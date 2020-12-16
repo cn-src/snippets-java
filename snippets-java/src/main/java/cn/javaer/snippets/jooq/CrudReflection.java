@@ -2,6 +2,7 @@ package cn.javaer.snippets.jooq;
 
 import cn.javaer.snippets.util.ReflectionUtils;
 import cn.javaer.snippets.util.StrUtils;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 /**
  * @author cn-src
@@ -21,8 +23,28 @@ public class CrudReflection {
     private static final ConcurrentMap<Class<?>, List<ColumnMeta>> COLUMN_META_CACHE =
         new ConcurrentHashMap<>();
 
+    private static final ConcurrentMap<Class<?>, ColumnMeta> ID_META_CACHE =
+        new ConcurrentHashMap<>();
+
+    private static final ConcurrentMap<Class<?>, List<org.jooq.Field<?>>> FIELDS_CACHE =
+        new ConcurrentHashMap<>();
+
     private static final ConcurrentMap<Class<?>, Table<?>> TABLE_CACHE =
         new ConcurrentHashMap<>();
+
+    @Nullable
+    public static ColumnMeta getIdColumnMeta(final Class<?> entityClass) {
+        return ID_META_CACHE.computeIfAbsent(entityClass, it ->
+            getColumnMetas(it).stream().filter(ColumnMeta::isId).findFirst().orElse(null));
+    }
+
+    @UnmodifiableView
+    public static List<org.jooq.Field<?>> getFields(final Class<?> entityClass) {
+        return FIELDS_CACHE.computeIfAbsent(entityClass, it ->
+            Collections.unmodifiableList(getColumnMetas(it)
+                .stream().map(ColumnMeta::getColumn).collect(Collectors.toList())
+            ));
+    }
 
     public static Table<?> getTable(final Class<?> clazz) {
         return TABLE_CACHE.computeIfAbsent(clazz, it -> ReflectionUtils.getAnnotationAttributeValue(

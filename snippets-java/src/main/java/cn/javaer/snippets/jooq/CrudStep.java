@@ -6,6 +6,8 @@ import org.apache.commons.lang3.Validate;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.InsertValuesStepN;
+import org.jooq.Record;
+import org.jooq.SelectConditionStep;
 import org.jooq.UpdateSetMoreStep;
 
 import java.util.ArrayList;
@@ -22,6 +24,19 @@ public class CrudStep {
 
     public CrudStep(final DSLContext dsl) {
         this.dsl = dsl;
+    }
+
+    <T, ID> SelectConditionStep<Record> findByIdAndCreatorStep(
+        final ID id, final Class<T> entityClass) {
+        Objects.requireNonNull(id);
+        Objects.requireNonNull(entityClass);
+
+        @SuppressWarnings("unchecked") final Field<ID> idColumn =
+            (Field<ID>) Objects.requireNonNull(CrudReflection.getIdColumnMeta(entityClass))
+                .getColumn();
+        return this.dsl.select(CrudReflection.getFields(entityClass))
+            .from(CrudReflection.getTable(entityClass))
+            .where(idColumn.eq(id));
     }
 
     /**
