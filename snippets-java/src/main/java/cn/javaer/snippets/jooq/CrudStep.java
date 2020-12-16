@@ -65,9 +65,11 @@ public class CrudStep {
         final List<Object> values = new ArrayList<>();
         final List<Field<?>> fields = new ArrayList<>();
         final MethodAccess methodAccess = MethodAccess.get(entity.getClass());
+        Object auditor = auditorAware.requiredAuditor();
+        LocalDateTime now = LocalDateTime.now();
         for (final ColumnMeta cm : columnMetas) {
             fields.add(cm.getColumn());
-            insertValue(methodAccess, entity, values, cm);
+            insertValue(methodAccess, entity, values, cm, auditor, now);
         }
         return this.dsl.insertInto(CrudReflection.getTable(entity.getClass()))
             .columns(fields).values(values);
@@ -92,10 +94,12 @@ public class CrudStep {
         final InsertValuesStepN<?> step =
             this.dsl.insertInto(CrudReflection.getTable(clazz)).columns(fields);
         final MethodAccess methodAccess = MethodAccess.get(clazz);
+        Object auditor = auditorAware.requiredAuditor();
+        LocalDateTime now = LocalDateTime.now();
         for (final Object entity : entities) {
             final List<Object> rowValue = new ArrayList<>();
             for (final ColumnMeta cm : columnMetas) {
-                insertValue(methodAccess, entity, rowValue, cm);
+                insertValue(methodAccess, entity, rowValue, cm, auditor, now);
             }
             step.values(rowValue.toArray());
         }
@@ -190,13 +194,14 @@ public class CrudStep {
     }
 
     private void insertValue(MethodAccess methodAccess, Object entity,
-                             List<Object> rowValue, ColumnMeta cm) {
+                             List<Object> rowValue, ColumnMeta cm,
+                             Object auditor, LocalDateTime updateDate) {
         if (cm.isCreator() || cm.isUpdater()) {
-            rowValue.add(auditorAware.requiredAuditor());
+            rowValue.add(auditor);
             return;
         }
         if (cm.isCreatedDate() || cm.isUpdateDate()) {
-            rowValue.add(LocalDateTime.now());
+            rowValue.add(updateDate);
             return;
         }
         rowValue.add(methodAccess.invoke(entity, cm.getGetterName()));
