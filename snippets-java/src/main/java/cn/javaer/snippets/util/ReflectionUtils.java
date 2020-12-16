@@ -1,10 +1,13 @@
 package cn.javaer.snippets.util;
 
+import org.apache.commons.lang3.Validate;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -15,6 +18,28 @@ import java.util.Optional;
 public interface ReflectionUtils {
 
     /**
+     * 判断指定方法是否存在.
+     *
+     * @param clazz the clazz
+     * @param methodName the method name
+     * @param parameterTypes the parameter types
+     *
+     * @return the boolean
+     */
+    static boolean hasMethod(final Class<?> clazz, final String methodName,
+                             final Class<?>... parameterTypes) {
+        Objects.requireNonNull(clazz);
+        Objects.requireNonNull(methodName);
+        try {
+            clazz.getDeclaredMethod(methodName, parameterTypes);
+            return true;
+        }
+        catch (final NoSuchMethodException e) {
+            return false;
+        }
+    }
+
+    /**
      * 判断元素上是否有指定的注解.
      *
      * @param element 可注解的元素
@@ -23,6 +48,9 @@ public interface ReflectionUtils {
      * @return 有指定的注解返回 true.
      */
     static boolean isAnnotated(final AnnotatedElement element, final String annotation) {
+        Objects.requireNonNull(element);
+        Validate.notEmpty(annotation);
+
         //noinspection unchecked
         return getClass(annotation).map(it -> element.getAnnotation((Class<Annotation>) it))
             .isPresent();
@@ -40,6 +68,9 @@ public interface ReflectionUtils {
     static Optional<Object> getAnnotationAttributeValue(final AnnotatedElement element,
                                                         final String annotation,
                                                         final String attributeName) {
+        Objects.requireNonNull(element);
+        Validate.notEmpty(annotation);
+        Validate.notEmpty(attributeName);
         //noinspection unchecked
         return getClass(annotation)
             .map(it -> element.getAnnotation((Class<Annotation>) it))
@@ -61,6 +92,7 @@ public interface ReflectionUtils {
      * @return 返回 true 如果存在
      */
     static boolean isPresent(final String className) {
+        Validate.notEmpty(className);
         try {
             Class.forName(className);
             return true;
@@ -78,6 +110,7 @@ public interface ReflectionUtils {
      * @return the class
      */
     static Optional<Class<?>> getClass(final String className) {
+        Validate.notEmpty(className);
         try {
             return Optional.of(Class.forName(className));
         }
@@ -94,6 +127,7 @@ public interface ReflectionUtils {
      * @return 泛型类型
      */
     static Class<?>[] getSuperclassGenerics(final Class<?> clazz) {
+        Objects.requireNonNull(clazz);
         final Type type = clazz.getGenericSuperclass();
         final ParameterizedType pType = (ParameterizedType) type;
         return Arrays.stream(pType.getActualTypeArguments())
