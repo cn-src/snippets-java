@@ -9,6 +9,7 @@ import org.jooq.Field;
 import org.jooq.InsertValuesStepN;
 import org.jooq.Record;
 import org.jooq.SelectConditionStep;
+import org.jooq.TableRecord;
 import org.jooq.UpdateConditionStep;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,25 @@ public class CrudStep {
 
         this.dsl = dsl;
         this.auditorAware = auditorAware;
+    }
+
+    public <M extends TableRecord<?> & FieldsProvider, ID> SelectConditionStep<Record>
+    findByIdStep(final @NotNull ID id, M meta) {
+        Objects.requireNonNull(id);
+
+        return this.dsl.select(meta.selectFields())
+            .from(meta.getTable())
+            .where(meta.requiredId().eq(id));
+    }
+
+    public <M extends TableRecord<?> & FieldsProvider, ID> SelectConditionStep<Record>
+    findByIdAndCreatorStep(final @NotNull ID id, M meta) {
+        Objects.requireNonNull(id);
+
+        return this.dsl.select(meta.selectFields())
+            .from(meta.getTable())
+            .where(meta.requiredId().eq(id))
+            .and(meta.requiredCreatedBy().eq(auditorAware.requiredAuditor()));
     }
 
     public <T, ID> SelectConditionStep<Record> findByIdAndCreatorStep(
