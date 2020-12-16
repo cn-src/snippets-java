@@ -24,6 +24,13 @@ public class CrudStep {
         this.dsl = dsl;
     }
 
+    /**
+     * jOOQ 实体插入.
+     *
+     * @param entity the entity
+     *
+     * @return the insert values step n
+     */
     public InsertValuesStepN<?> insertStep(final Object entity) {
         Objects.requireNonNull(entity);
 
@@ -39,6 +46,13 @@ public class CrudStep {
             .columns(fields).values(values);
     }
 
+    /**
+     * jOOQ 实体批量插入.
+     *
+     * @param entities the entities
+     *
+     * @return the insert values step n
+     */
     public InsertValuesStepN<?> batchInsertStep(final List<?> entities) {
         Validate.notEmpty(entities);
 
@@ -61,6 +75,13 @@ public class CrudStep {
         return step;
     }
 
+    /**
+     * jOOQ 实体动态更新.
+     *
+     * @param entity the entity
+     *
+     * @return the update set more step
+     */
     public UpdateSetMoreStep<?> dynamicUpdateStep(final Object entity) {
         Objects.requireNonNull(entity);
 
