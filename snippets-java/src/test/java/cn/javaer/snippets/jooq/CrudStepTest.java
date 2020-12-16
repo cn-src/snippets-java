@@ -6,6 +6,7 @@ import org.jooq.InsertValuesStepN;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.SelectConditionStep;
+import org.jooq.UpdateConditionStep;
 import org.jooq.UpdateSetMoreStep;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.Test;
@@ -42,10 +43,10 @@ class CrudStepTest {
 
     @Test
     void dynamicUpdateStep() {
-        final UpdateSetMoreStep<?> step = this.crudStep.dynamicUpdateStep(
-            new Demo(null, "name", null));
+        final UpdateConditionStep<?> step = this.crudStep.dynamicUpdateStep(
+            new Demo(3L, "name", null));
         assertThat(this.dsl.renderInlined(step))
-            .isEqualTo("update demo set name = 'name'");
+            .isEqualTo("update demo set name = 'name' where id = 3");
     }
 
     @Test

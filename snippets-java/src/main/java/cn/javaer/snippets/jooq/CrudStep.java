@@ -9,7 +9,7 @@ import org.jooq.Field;
 import org.jooq.InsertValuesStepN;
 import org.jooq.Record;
 import org.jooq.SelectConditionStep;
-import org.jooq.UpdateSetMoreStep;
+import org.jooq.UpdateConditionStep;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,19 +108,28 @@ public class CrudStep {
      *
      * @return the update set more step
      */
-    public UpdateSetMoreStep<?> dynamicUpdateStep(@NotNull final Object entity) {
+    public UpdateConditionStep<?> dynamicUpdateStep(@NotNull final Object entity) {
         Objects.requireNonNull(entity);
 
         final Class<?> clazz = entity.getClass();
         final Map<Field<?>, Object> dynamic = new HashMap<>();
         final List<ColumnMeta> columnMetas = CrudReflection.getColumnMetas(clazz);
         final MethodAccess methodAccess = MethodAccess.get(clazz);
+        Object idValue = null;
         for (final ColumnMeta cm : columnMetas) {
             final Object value = methodAccess.invoke(entity, cm.getGetterName());
+            if (cm.isId()) {
+                idValue = value;
+                continue;
+            }
             if (ObjectUtils.isNotEmpty(value)) {
                 dynamic.put(cm.getColumn(), value);
             }
         }
-        return this.dsl.update(CrudReflection.getTable(clazz)).set(dynamic);
+        final Field<Object> idColumn = Objects.requireNonNull(CrudReflection.getIdColumnMeta(clazz))
+            .getColumn();
+
+        return this.dsl.update(CrudReflection.getTable(clazz))
+            .set(dynamic).where(idColumn.eq(idValue));
     }
 }
