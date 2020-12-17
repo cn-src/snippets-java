@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
@@ -65,13 +66,35 @@ public class ErrorInfoExtractor {
         return result;
     }
 
+    public Optional<DefinedErrorInfo> extract(final Class<? extends Throwable> clazz) {
+        final Error error = AnnotatedElementUtils.findMergedAnnotation(clazz, Error.class);
+        if (error != null) {
+            return Optional.of(DefinedErrorInfo.of(error));
+        }
+        final ResponseStatus responseStatus = AnnotationUtils.findAnnotation(
+            clazz, ResponseStatus.class);
+        if (null != responseStatus) {
+            return Optional.of(DefinedErrorInfo.of(responseStatus));
+        }
+        return Optional.empty();
+    }
+
+//    public Optional<DefinedErrorInfo> extract(final Class<? extends Throwable> clazz,
+//                                              final Map<String, DefinedErrorInfo> configured) {
+//        if (configured.containsKey(clazz.getName())) {
+//            return Optional.of(configured.get(clazz.getName()));
+//        }
+//    }
+
     @Nullable
+    @Deprecated
     public DefinedErrorInfo extract(final Class<? extends Throwable> clazz,
                                     final boolean isIncludeMessage) {
         return this.extract(clazz, isIncludeMessage, this.configuredErrorMapping);
     }
 
     @Nullable
+    @Deprecated
     public DefinedErrorInfo extract(final Class<? extends Throwable> clazz,
                                     final boolean isIncludeMessage,
                                     final Map<String, DefinedErrorInfo> configured) {

@@ -29,6 +29,7 @@ public class DefinedErrorInfo implements Comparable<DefinedErrorInfo> {
         return new DefinedErrorInfo(error.error(), error.httpCode(), error.message());
     }
 
+    @Deprecated
     public static DefinedErrorInfo of(final Error error, final String message) {
         return new DefinedErrorInfo(error.error(), error.httpCode(), message);
     }
@@ -43,6 +44,7 @@ public class DefinedErrorInfo implements Comparable<DefinedErrorInfo> {
         return DefinedErrorInfo.of(httpStatus, responseStatus.reason());
     }
 
+    @Deprecated
     public static DefinedErrorInfo of(final ResponseStatus responseStatus, final String message) {
         final HttpStatus httpStatus = responseStatus.code() == HttpStatus.INTERNAL_SERVER_ERROR ?
             responseStatus.value() : responseStatus.code();
@@ -64,15 +66,18 @@ public class DefinedErrorInfo implements Comparable<DefinedErrorInfo> {
             httpStatus.getReasonPhrase());
     }
 
+    @Deprecated
     public static DefinedErrorInfo of(final HttpStatus httpStatus, final String message) {
         return new DefinedErrorInfo(httpStatus.name(), httpStatus.value(), message);
     }
 
+    @Deprecated
     public static DefinedErrorInfo of(final String error, final HttpStatus httpStatus) {
         return new DefinedErrorInfo(error, httpStatus.value(),
             httpStatus.getReasonPhrase());
     }
 
+    @Deprecated
     public static DefinedErrorInfo of(final DefinedErrorInfo errorInfo, final String message) {
         return new DefinedErrorInfo(errorInfo.error, errorInfo.status, message);
     }
