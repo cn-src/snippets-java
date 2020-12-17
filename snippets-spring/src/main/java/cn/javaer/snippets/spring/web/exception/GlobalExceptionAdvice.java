@@ -2,6 +2,7 @@ package cn.javaer.snippets.spring.web.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +62,7 @@ public class GlobalExceptionAdvice {
                          final Exception e) {
         runtimeErrorInfo.setPath(request.getServletPath());
         runtimeErrorInfo.setTimestamp(LocalDateTime.now());
-
+        runtimeErrorInfo.setRequestId(MDC.get("requestId"));
         // exception
         final String clazz = e.getClass().getName();
         if (this.errorProperties.isIncludeException()) {

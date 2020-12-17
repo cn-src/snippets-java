@@ -16,6 +16,7 @@ public class RuntimeErrorInfo {
     private final String message;
 
     private String path;
+    private String requestId;
     private String exception;
     private String trace;
     private String traceMessage;
