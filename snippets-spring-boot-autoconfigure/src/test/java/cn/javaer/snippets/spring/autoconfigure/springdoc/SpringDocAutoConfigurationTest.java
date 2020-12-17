@@ -1,6 +1,6 @@
 package cn.javaer.snippets.spring.autoconfigure.springdoc;
 
-import cn.javaer.snippets.spring.autoconfigure.exception.ExceptionAutoConfiguration;
+import cn.javaer.snippets.spring.autoconfigure.web.exception.ExceptionAutoConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springdoc.core.Constants;
 import org.springdoc.core.SpringDocConfigProperties;
@@ -37,32 +37,32 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SpringDocAutoConfigurationTest {
 
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
-            .withConfiguration(
-                    AutoConfigurations.of(
-                            SpringDocAutoConfiguration.class,
-                            ExceptionAutoConfiguration.class,
-                            SpringDocConfigProperties.class, SpringDocConfiguration.class,
-                            MultipleOpenApiSupportConfiguration.class,
-                            SpringDocWebMvcConfiguration.class, MockMvcAutoConfiguration.class,
-                            WebMvcAutoConfiguration.class, DispatcherServletAutoConfiguration.class,
-                            HttpMessageConvertersAutoConfiguration.class))
-            .withPropertyValues("server.error.include-message=always");
+        .withConfiguration(
+            AutoConfigurations.of(
+                SpringDocAutoConfiguration.class,
+                ExceptionAutoConfiguration.class,
+                SpringDocConfigProperties.class, SpringDocConfiguration.class,
+                MultipleOpenApiSupportConfiguration.class,
+                SpringDocWebMvcConfiguration.class, MockMvcAutoConfiguration.class,
+                WebMvcAutoConfiguration.class, DispatcherServletAutoConfiguration.class,
+                HttpMessageConvertersAutoConfiguration.class))
+        .withPropertyValues("server.error.include-message=always");
 
     @Test
     void generateDoc() {
         this.contextRunner.withUserConfiguration(DemoController.class)
-                .run(context -> {
-                    final MockMvc mockMvc = context.getBean(MockMvc.class);
+            .run(context -> {
+                final MockMvc mockMvc = context.getBean(MockMvc.class);
 
-                    final MvcResult mvcResult =
-                            mockMvc.perform(get(Constants.DEFAULT_API_DOCS_URL)).andExpect(status().isOk())
-                                    .andExpect(jsonPath("$.components.schemas.Pageable.properties" +
-                                            "._page" +
-                                            ".description", is("分页-页码"))).andReturn();
-                    final String content = mvcResult.getResponse().getContentAsString
-                            (StandardCharsets.UTF_8);
-                    System.out.println(content);
-                });
+                final MvcResult mvcResult =
+                    mockMvc.perform(get(Constants.DEFAULT_API_DOCS_URL)).andExpect(status().isOk())
+                        .andExpect(jsonPath("$.components.schemas.Pageable.properties" +
+                            "._page" +
+                            ".description", is("分页-页码"))).andReturn();
+                final String content = mvcResult.getResponse().getContentAsString
+                    (StandardCharsets.UTF_8);
+                System.out.println(content);
+            });
     }
 
     @RestController

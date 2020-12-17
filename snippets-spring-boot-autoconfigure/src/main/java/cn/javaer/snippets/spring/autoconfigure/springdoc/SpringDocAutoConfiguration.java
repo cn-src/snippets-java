@@ -1,6 +1,6 @@
 package cn.javaer.snippets.spring.autoconfigure.springdoc;
 
-import cn.javaer.snippets.spring.autoconfigure.exception.ExceptionAutoConfiguration;
+import cn.javaer.snippets.spring.autoconfigure.web.exception.ExceptionAutoConfiguration;
 import cn.javaer.snippets.spring.security.PrincipalId;
 import cn.javaer.snippets.spring.web.exception.ErrorInfoExtractor;
 import cn.javaer.snippets.springdoc.PageDoc;

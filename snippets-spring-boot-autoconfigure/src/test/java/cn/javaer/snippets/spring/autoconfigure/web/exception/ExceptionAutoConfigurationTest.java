@@ -1,4 +1,4 @@
-package cn.javaer.snippets.spring.autoconfigure.exception;
+package cn.javaer.snippets.spring.autoconfigure.web.exception;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -25,30 +25,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 class ExceptionAutoConfigurationTest {
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(ExceptionAutoConfiguration.class,
-                    MockMvcAutoConfiguration.class, WebMvcAutoConfiguration.class,
-                    DispatcherServletAutoConfiguration.class,
-                    HttpMessageConvertersAutoConfiguration.class,
-                    PropertyPlaceholderAutoConfiguration.class))
-            .withPropertyValues("snippets.exception.mapping.demo=400,demo-value",
-                    "server.error.include-message=always");
+        .withConfiguration(AutoConfigurations.of(ExceptionAutoConfiguration.class,
+            MockMvcAutoConfiguration.class, WebMvcAutoConfiguration.class,
+            DispatcherServletAutoConfiguration.class,
+            HttpMessageConvertersAutoConfiguration.class,
+            PropertyPlaceholderAutoConfiguration.class))
+        .withPropertyValues("snippets.exception.mapping.demo=400,demo-value",
+            "server.error.include-message=always");
 
     @Test
     void auto() {
         this.contextRunner.withUserConfiguration(Demo.class)
-                .run(context -> {
-                    final MockMvc mockMvc = context.getBean(MockMvc.class);
-                    final Object result = mockMvc.perform(get("/demo"))
-                            .andExpect(status().isBadRequest())
-                            .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+            .run(context -> {
+                final MockMvc mockMvc = context.getBean(MockMvc.class);
+                final Object result = mockMvc.perform(get("/demo"))
+                    .andExpect(status().isBadRequest())
+                    .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
 
-                    final Object errorInfos = mockMvc.perform(get("/error_infos"))
-                            .andExpect(status().isOk())
-                            .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+                final Object errorInfos = mockMvc.perform(get("/error_infos"))
+                    .andExpect(status().isOk())
+                    .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
 
-                    System.out.println(result);
-                    System.out.println(errorInfos);
-                });
+                System.out.println(result);
+                System.out.println(errorInfos);
+            });
     }
 
     @RestController

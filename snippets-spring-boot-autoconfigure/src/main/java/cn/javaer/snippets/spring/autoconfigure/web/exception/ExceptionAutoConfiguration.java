@@ -1,4 +1,4 @@
-package cn.javaer.snippets.spring.autoconfigure.exception;
+package cn.javaer.snippets.spring.autoconfigure.web.exception;
 
 import cn.javaer.snippets.spring.web.exception.DefinedErrorInfo;
 import cn.javaer.snippets.spring.web.exception.ErrorInfoController;
