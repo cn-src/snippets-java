@@ -1,7 +1,6 @@
 package cn.javaer.snippets.jooq;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
@@ -17,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * @author cn-src
@@ -148,7 +148,7 @@ public class CrudStep {
      * @return the update set more step
      */
     public <T, M extends TableMetaProvider<T>> UpdateConditionStep<?>
-    dynamicUpdateStep(@NotNull final T entity, final M meta) {
+    dynamicUpdateStep(@NotNull final T entity, final M meta, final Predicate<Object> include) {
         Objects.requireNonNull(entity);
         Objects.requireNonNull(meta);
 
@@ -157,7 +157,7 @@ public class CrudStep {
         final Map<Field<?>, Object> dynamic = new HashMap<>(10);
         for (final ColumnMeta cm : meta.saveColumnMetas()) {
             final Object value = methodAccess.invoke(entity, cm.getGetterName());
-            if (ObjectUtils.isNotEmpty(value)) {
+            if (include.test(value)) {
                 dynamic.put(cm.getColumn(), value);
             }
         }
@@ -171,8 +171,9 @@ public class CrudStep {
     }
 
     public <T, M extends TableMetaProvider<T>> UpdateConditionStep<?>
-    dynamicUpdateByCreatorStep(@NotNull final T entity, final M meta) {
-        final UpdateConditionStep<?> step = this.dynamicUpdateStep(entity, meta);
+    dynamicUpdateByCreatorStep(@NotNull final T entity, final M meta,
+                               final Predicate<Object> include) {
+        final UpdateConditionStep<?> step = this.dynamicUpdateStep(entity, meta, include);
         final Object createdByValue = MethodAccess.get(entity.getClass())
             .invoke(entity, meta.getCreatedBy().getGetterName());
         return step.and(meta.getCreatedBy().getColumn().eq(createdByValue));
