@@ -7,6 +7,7 @@ import org.jooq.Field;
 import org.jooq.InsertValuesStepN;
 import org.jooq.Record;
 import org.jooq.SelectConditionStep;
+import org.jooq.SelectJoinStep;
 import org.jooq.UpdateConditionStep;
 
 import java.time.LocalDateTime;
@@ -63,6 +64,21 @@ public class CrudStep {
             .from(meta.getTable())
             .where(meta.getId().getColumn().eq(id))
             .and(meta.getCreatedBy().getColumn().eq(this.auditorAware.requiredAuditor()));
+    }
+
+    public @NotNull <M extends TableMetaProvider<?>> SelectJoinStep<Record>
+    findAllStep(final M meta) {
+
+        return this.dsl.select(meta.selectFields())
+            .from(meta.getTable());
+    }
+
+    public @NotNull <M extends TableMetaProvider<?>> SelectConditionStep<Record>
+    findAllByCreatorStep(final M meta) {
+
+        return this.dsl.select(meta.selectFields())
+            .from(meta.getTable())
+            .where(meta.getCreatedBy().getColumn().eq(this.auditorAware.requiredAuditor()));
     }
 
     /**

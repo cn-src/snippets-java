@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jooq;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -14,12 +15,31 @@ public class JdbcCrud {
         this.crudStep = crudStep;
     }
 
-    <T, ID> Optional<T> findById(final ID id, final Class<T> clazz) {
+    public <T, ID> Optional<T> findById(final ID id, final Class<T> clazz) {
+        Objects.requireNonNull(clazz);
+
         return this.crudStep.findByIdStep(id, CrudReflection.getTableMeta(clazz))
             .fetchOptionalInto(clazz);
     }
 
-    <T> void insert(final T entity) {
+    public <T, ID> Optional<T> findByIdAndCreator(final ID id, final Class<T> clazz) {
+        Objects.requireNonNull(clazz);
+
+        return this.crudStep.findByIdAndCreatorStep(id, CrudReflection.getTableMeta(clazz))
+            .fetchOptionalInto(clazz);
+    }
+
+    public <T> List<T> findAll(final Class<T> clazz) {
+        final TableMetaProvider<T> meta = CrudReflection.getTableMeta(clazz);
+        return this.crudStep.findAllStep(meta).fetchInto(clazz);
+    }
+
+    public <T> List<T> findAllByCreator(final Class<T> clazz) {
+        final TableMetaProvider<T> meta = CrudReflection.getTableMeta(clazz);
+        return this.crudStep.findAllByCreatorStep(meta).fetchInto(clazz);
+    }
+
+    public <T> void insert(final T entity) {
         Objects.requireNonNull(entity);
 
         @SuppressWarnings("unchecked") final Class<T> clazz = (Class<T>) entity.getClass();
