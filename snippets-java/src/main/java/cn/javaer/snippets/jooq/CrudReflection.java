@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +26,14 @@ public class CrudReflection {
 
     @SuppressWarnings("unchecked")
     public static <T> TableMetaProvider<T> getTableMeta(final Class<T> entityClass) {
-        return META_CACHE.computeIfAbsent(entityClass, CrudReflection::initTableMeta);
+        return META_CACHE.computeIfAbsent(entityClass, it -> {
+            try {
+                return initTableMeta(it);
+            }
+            catch (final NoSuchFieldException | IllegalAccessException e) {
+                throw new IllegalStateException(e);
+            }
+        });
     }
 
     private static Table<?> getTable(final Class<?> clazz) {
@@ -37,7 +46,9 @@ public class CrudReflection {
     }
 
     @Nullable
-    private static <T> TableMeta<T> initTableMeta(final Class<T> entityClass) {
+    private static <T> TableMeta<T> initTableMeta(final Class<T> entityClass)
+        throws NoSuchFieldException, IllegalAccessException {
+
         final Field[] fields = entityClass.getDeclaredFields();
         if (fields == null || fields.length == 0) {
             return null;
@@ -73,10 +84,19 @@ public class CrudReflection {
 
             final Class<?> fieldType = field.getType();
             @SuppressWarnings("unchecked")
-            final org.jooq.Field<Object> column = (org.jooq.Field<Object>)
-                DSL.field(columnName, fieldType);
+            final org.jooq.Field<Object> column =
+                (org.jooq.Field<Object>) DSL.field(columnName, fieldType);
             selectColumns.add(column);
-            final ColumnMeta columnMeta = new ColumnMeta(field.getName(), getterName, column);
+            final MethodHandle handle = MethodHandles.lookup().findGetter(entityClass,
+                field.getName(), fieldType);
+            final ColumnMeta columnMeta = new ColumnMeta(field.getName(), o -> {
+                try {
+                    return handle.invoke(o);
+                }
+                catch (final Throwable t) {
+                    throw new IllegalStateException(t);
+                }
+            }, column);
             if (ReflectionUtils.isAnnotated(field,
                 "org.springframework.data.annotation.Id")) {
                 builder.id(columnMeta);

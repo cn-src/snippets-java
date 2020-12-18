@@ -1,6 +1,6 @@
 package cn.javaer.snippets.jooq;
 
-import com.esotericsoftware.reflectasm.MethodAccess;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
 import org.jooq.Field;
@@ -91,20 +91,22 @@ public class CrudStep {
      *
      * @return the insert values step n
      */
+    @SneakyThrows
     public <T, M extends TableMetaProvider<T>> InsertValuesStepN<?>
     insertStep(final @NotNull T entity, final M meta) {
+
         final List<Object> values = new ArrayList<>();
         final List<Field<?>> fields = new ArrayList<>();
-        final MethodAccess methodAccess = MethodAccess.get(entity.getClass());
         final Object auditor = this.auditorAware.getCurrentAuditor().orElse(null);
         final LocalDateTime now = LocalDateTime.now();
         meta.idGenerator().ifPresent(it -> {
             fields.add(it.getColumn());
-            values.add(methodAccess.invoke(entity, it.getGetterName()));
+            values.add(it.getReadMethod().apply(entity));
         });
+
         for (final ColumnMeta cm : meta.saveColumnMetas()) {
             fields.add(cm.getColumn());
-            values.add(methodAccess.invoke(entity, cm.getGetterName()));
+            values.add(cm.getReadMethod().apply(entity));
         }
         meta.updatedBy().ifPresent(it -> {
             fields.add(it.getColumn());
@@ -147,7 +149,6 @@ public class CrudStep {
         meta.createdBy().ifPresent(it -> fields.add(it.getColumn()));
         meta.createdDate().ifPresent(it -> fields.add(it.getColumn()));
 
-        final MethodAccess methodAccess = MethodAccess.get(meta.getEntityClass());
         final Object auditor = this.auditorAware.getCurrentAuditor().orElse(null);
         final LocalDateTime now = LocalDateTime.now();
 
@@ -156,9 +157,9 @@ public class CrudStep {
         for (final Object entity : entities) {
             final List<Object> rowValue = new ArrayList<>();
             meta.idGenerator().ifPresent(it ->
-                rowValue.add(methodAccess.invoke(entity, it.getGetterName())));
+                rowValue.add(it.getReadMethod().apply(entity)));
             meta.saveColumnMetas().forEach(it ->
-                rowValue.add(methodAccess.invoke(entity, it.getGetterName())));
+                rowValue.add(it.getReadMethod().apply(entity)));
             meta.updatedBy().ifPresent(it -> rowValue.add(auditor));
             meta.updatedDate().ifPresent(it -> rowValue.add(now));
             meta.createdBy().ifPresent(it -> rowValue.add(auditor));
@@ -182,11 +183,9 @@ public class CrudStep {
     public <T, M extends TableMetaProvider<T>> UpdateConditionStep<?>
     dynamicUpdateStep(@NotNull final T entity, final M meta, final Predicate<Object> include) {
 
-        final Class<?> clazz = entity.getClass();
-        final MethodAccess methodAccess = MethodAccess.get(clazz);
         final Map<Field<?>, Object> dynamic = new HashMap<>(10);
         for (final ColumnMeta cm : meta.saveColumnMetas()) {
-            final Object value = methodAccess.invoke(entity, cm.getGetterName());
+            final Object value = cm.getReadMethod().apply(entity);
             if (include.test(value)) {
                 dynamic.put(cm.getColumn(), value);
             }
@@ -195,7 +194,7 @@ public class CrudStep {
             dynamic.put(it.getColumn(), this.auditorAware.getCurrentAuditor().orElse(null)));
         meta.updatedDate().ifPresent(it -> dynamic.put(it.getColumn(), LocalDateTime.now()));
 
-        final Object idValue = methodAccess.invoke(entity, meta.getId().getGetterName());
+        final Object idValue = meta.getId().getReadMethod().apply(entity);
         return this.dsl.update(meta.getTable())
             .set(dynamic).where(meta.getId().getColumn().eq(idValue));
     }
@@ -215,8 +214,7 @@ public class CrudStep {
     dynamicUpdateByCreatorStep(@NotNull final T entity, final M meta,
                                final Predicate<Object> include) {
         final UpdateConditionStep<?> step = this.dynamicUpdateStep(entity, meta, include);
-        final Object createdByValue = MethodAccess.get(entity.getClass())
-            .invoke(entity, meta.getCreatedBy().getGetterName());
+        final Object createdByValue = meta.getCreatedBy().getReadMethod().apply(entity);
         return step.and(meta.getCreatedBy().getColumn().eq(createdByValue));
     }
 }
