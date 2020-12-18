@@ -89,7 +89,7 @@ public class CrudReflection {
             selectColumns.add(column);
             final MethodHandle handle = MethodHandles.lookup().findGetter(entityClass,
                 field.getName(), fieldType);
-            final ColumnMeta columnMeta = new ColumnMeta(field.getName(), o -> {
+            final ColumnMeta columnMeta = new ColumnMeta(o -> {
                 try {
                     return handle.invoke(o);
                 }

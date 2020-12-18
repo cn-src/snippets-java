@@ -10,7 +10,6 @@ import java.util.function.Function;
  */
 @Value
 public class ColumnMeta {
-    String fieldName;
     Function<Object, Object> readMethod;
     Field<Object> column;
 }
