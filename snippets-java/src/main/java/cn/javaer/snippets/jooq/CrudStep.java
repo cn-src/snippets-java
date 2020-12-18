@@ -71,14 +71,14 @@ public class CrudStep {
         final MethodAccess methodAccess = MethodAccess.get(entity.getClass());
         final Object auditor = this.auditorAware.getCurrentAuditor().orElse(null);
         final LocalDateTime now = LocalDateTime.now();
-        for (final ColumnMeta cm : meta.saveColumnMetas()) {
-            fields.add(cm.getColumn());
-            values.add(methodAccess.invoke(entity, cm.getGetterName()));
-        }
         meta.idGenerator().ifPresent(it -> {
             fields.add(it.getColumn());
             values.add(methodAccess.invoke(entity, it.getGetterName()));
         });
+        for (final ColumnMeta cm : meta.saveColumnMetas()) {
+            fields.add(cm.getColumn());
+            values.add(methodAccess.invoke(entity, cm.getGetterName()));
+        }
         meta.updatedBy().ifPresent(it -> {
             fields.add(it.getColumn());
             values.add(auditor);
