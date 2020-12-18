@@ -3,7 +3,6 @@ package cn.javaer.snippets.jooq;
 import cn.javaer.snippets.util.ReflectionUtils;
 import cn.javaer.snippets.util.StrUtils;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
 
@@ -14,84 +13,48 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
 
 /**
  * @author cn-src
  */
 public class CrudReflection {
-    private static final ConcurrentMap<Class<?>, List<ColumnMeta>> COLUMN_META_CACHE =
+    @SuppressWarnings("rawtypes")
+    private static final ConcurrentMap<Class, TableMetaProvider> META_CACHE =
         new ConcurrentHashMap<>();
 
-    private static final ConcurrentMap<Class<?>, ColumnMeta> ID_META_CACHE =
-        new ConcurrentHashMap<>();
-
-    private static final ConcurrentMap<Class<?>, ColumnMeta> CREATOR_META_CACHE =
-        new ConcurrentHashMap<>();
-
-    private static final ConcurrentMap<Class<?>, List<org.jooq.Field<?>>> FIELDS_CACHE =
-        new ConcurrentHashMap<>();
-
-    private static final ConcurrentMap<Class<?>, Table<?>> TABLE_CACHE =
-        new ConcurrentHashMap<>();
-
-    @Nullable
-    public static ColumnMeta getIdColumnMeta(final Class<?> entityClass) {
-        return ID_META_CACHE.computeIfAbsent(entityClass, it ->
-            getColumnMetas(it).stream().filter(ColumnMeta::isId).findFirst().orElse(null));
+    @SuppressWarnings("unchecked")
+    public static <T> TableMetaProvider<T> getTableMeta(final Class<T> entityClass) {
+        return META_CACHE.computeIfAbsent(entityClass, CrudReflection::initTableMeta);
     }
 
-    @Nullable
-    public static ColumnMeta getCreatorColumnMeta(final Class<?> entityClass) {
-        return CREATOR_META_CACHE.computeIfAbsent(entityClass, it ->
-            getColumnMetas(it).stream().filter(ColumnMeta::isCreator).findFirst().orElse(null));
-    }
-
-    @UnmodifiableView
-    public static List<org.jooq.Field<?>> getFields(final Class<?> entityClass) {
-        return FIELDS_CACHE.computeIfAbsent(entityClass, it ->
-            Collections.unmodifiableList(getColumnMetas(it)
-                .stream().map(ColumnMeta::getColumn).collect(Collectors.toList())
-            ));
-    }
-
-    public static Table<?> getTable(final Class<?> clazz) {
-        return TABLE_CACHE.computeIfAbsent(clazz, it -> ReflectionUtils.getAnnotationAttributeValue(
-            it, "org.springframework.data.relational.core.mapping.Table", "value")
+    private static Table<?> getTable(final Class<?> clazz) {
+        return ReflectionUtils
+            .getAnnotationAttributeValue(
+                clazz, "org.springframework.data.relational.core.mapping.Table", "value")
             .map(String.class::cast)
             .map(DSL::table)
-            .orElseGet(() -> DSL.table(StrUtils.toSnakeLower(it.getSimpleName()))));
+            .orElseGet(() -> DSL.table(StrUtils.toSnakeLower(clazz.getSimpleName())));
     }
 
-    @UnmodifiableView
-    public static List<ColumnMeta> getColumnMetas(final Class<?> clazz) {
-        return COLUMN_META_CACHE.computeIfAbsent(clazz, CrudReflection::initColumnMetas);
-    }
-
-    @UnmodifiableView
-    static List<ColumnMeta> initColumnMetas(final Class<?> clazz) {
-        final Field[] fields = clazz.getDeclaredFields();
+    @Nullable
+    private static <T> TableMeta<T> initTableMeta(final Class<T> entityClass) {
+        final Field[] fields = entityClass.getDeclaredFields();
         if (fields == null || fields.length == 0) {
-            return Collections.emptyList();
+            return null;
         }
-        final List<ColumnMeta> columnMetas = new ArrayList<>();
+        final TableMeta.TableMetaBuilder<T> builder = TableMeta.builder();
+        builder.table(getTable(entityClass))
+            .entityClass(entityClass);
+
+        final List<org.jooq.Field<Object>> selectColumns = new ArrayList<>();
+        final List<ColumnMeta> saveColumns = new ArrayList<>();
         for (final Field field : fields) {
             final String getterName = boolean.class.equals(field.getType()) ?
                 "is" + StrUtils.toFirstCharUpper(field.getName())
                 : "get" + StrUtils.toFirstCharUpper(field.getName());
-            if (!ReflectionUtils.hasMethod(clazz, getterName)) {
+            if (!ReflectionUtils.hasMethod(entityClass, getterName)) {
                 continue;
             }
-            final boolean isId = ReflectionUtils.isAnnotated(field,
-                "org.springframework.data.annotation.Id");
-            final boolean isCreator = ReflectionUtils.isAnnotated(field,
-                "org.springframework.data.annotation.CreatedBy");
-            final boolean isCreatedDate = ReflectionUtils.isAnnotated(field,
-                "org.springframework.data.annotation.CreatedDate");
-            final boolean isUpdater = ReflectionUtils.isAnnotated(field,
-                "org.springframework.data.annotation.LastModifiedBy");
-            final boolean isUpdateDate = ReflectionUtils.isAnnotated(field,
-                "org.springframework.data.annotation.LastModifiedDate");
 
             final Optional<String> columnOpt = ReflectionUtils.getAnnotationAttributeValue(
                 field, "org.springframework.data.relational.core.mapping.Column", "value")
@@ -99,16 +62,42 @@ public class CrudReflection {
             final Optional<String> columnSfmOpt = ReflectionUtils.getAnnotationAttributeValue(
                 field, "org.simpleflatmapper.map.annotation.Column", "value")
                 .map(String.class::cast);
+            final String columnName =
+                columnOpt.orElseGet(() -> columnSfmOpt.orElse(StrUtils.toSnakeLower
+                    (field.getName())));
 
-            final ColumnMeta columnMeta = ColumnMeta.builder().id(isId)
-                .creator(isCreator).createdDate(isCreatedDate)
-                .updater(isUpdater).updateDate(isUpdateDate)
-                .field(field.getName())
-                .getterName(getterName)
-                .column(columnOpt.orElseGet(() -> columnSfmOpt.orElse(StrUtils.toSnakeLower(field.getName()))))
-                .build();
-            columnMetas.add(columnMeta);
+            final Class<?> fieldType = field.getType();
+            @SuppressWarnings("unchecked")
+            final org.jooq.Field<Object> column = (org.jooq.Field<Object>)
+                DSL.field(columnName, fieldType);
+            selectColumns.add(column);
+            final ColumnMeta columnMeta = new ColumnMeta(field.getName(), getterName, column);
+            if (ReflectionUtils.isAnnotated(field,
+                "org.springframework.data.annotation.Id")) {
+                builder.id(columnMeta);
+            }
+            else if (ReflectionUtils.isAnnotated(field,
+                "org.springframework.data.annotation.CreatedBy")) {
+                builder.createdBy(columnMeta);
+            }
+            else if (ReflectionUtils.isAnnotated(field,
+                "org.springframework.data.annotation.CreatedDate")) {
+                builder.createdDate(columnMeta);
+            }
+            else if (ReflectionUtils.isAnnotated(field,
+                "org.springframework.data.annotation.LastModifiedBy")) {
+                builder.updatedBy(columnMeta);
+            }
+            else if (ReflectionUtils.isAnnotated(field,
+                "org.springframework.data.annotation.LastModifiedDate")) {
+                builder.updatedDate(columnMeta);
+            }
+            else {
+                saveColumns.add(columnMeta);
+            }
         }
-        return Collections.unmodifiableList(columnMetas);
+        return builder.selectFields(Collections.unmodifiableList(selectColumns))
+            .saveColumnMetas(Collections.unmodifiableList(saveColumns))
+            .build();
     }
 }

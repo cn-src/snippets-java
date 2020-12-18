@@ -2,26 +2,63 @@ package cn.javaer.snippets.jooq;
 
 import lombok.Builder;
 import lombok.Value;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Field;
+import org.jooq.Table;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author cn-src
  */
-@Value
 @Builder
-public class TableMeta implements ColumnsProvider {
-
-    Field<?>[] selectFields;
-
-    Field<?>[] saveFields;
+@Value
+public class TableMeta<T> implements TableMetaProvider<T> {
+    Table<?> table;
+    Class<T> entityClass;
+    ColumnMeta id;
+    ColumnMeta createdBy;
+    ColumnMeta createdDate;
+    ColumnMeta updatedBy;
+    ColumnMeta updatedDate;
+    @UnmodifiableView
+    List<Field<Object>> selectFields;
+    @UnmodifiableView
+    List<ColumnMeta> saveColumnMetas;
 
     @Override
-    public Field<?>[] selectColumns() {
+    public @UnmodifiableView List<Field<Object>> selectFields() {
         return this.selectFields;
     }
 
     @Override
-    public Field<?>[] saveColumns() {
-        return this.saveFields;
+    public @UnmodifiableView List<ColumnMeta> saveColumnMetas() {
+        return this.saveColumnMetas;
+    }
+
+    @Override
+    public Optional<ColumnMeta> id() {
+        return Optional.ofNullable(this.id);
+    }
+
+    @Override
+    public Optional<ColumnMeta> createdBy() {
+        return Optional.ofNullable(this.createdBy);
+    }
+
+    @Override
+    public Optional<ColumnMeta> createdDate() {
+        return Optional.ofNullable(this.createdDate);
+    }
+
+    @Override
+    public Optional<ColumnMeta> updatedBy() {
+        return Optional.ofNullable(this.updatedBy);
+    }
+
+    @Override
+    public Optional<ColumnMeta> updatedDate() {
+        return Optional.ofNullable(this.updatedDate);
     }
 }

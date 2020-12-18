@@ -1,27 +1,14 @@
 package cn.javaer.snippets.jooq;
 
-import lombok.Builder;
 import lombok.Value;
 import org.jooq.Field;
-import org.jooq.impl.DSL;
 
+/**
+ * @author cn-src
+ */
 @Value
-@Builder
 public class ColumnMeta {
-
-    String field;
+    String fieldName;
     String getterName;
     Field<Object> column;
-    boolean id;
-    boolean creator;
-    boolean createdDate;
-    boolean updater;
-    boolean updateDate;
-
-    public static class ColumnMetaBuilder {
-        public ColumnMetaBuilder column(final String column) {
-            this.column = DSL.field(column);
-            return this;
-        }
-    }
 }
