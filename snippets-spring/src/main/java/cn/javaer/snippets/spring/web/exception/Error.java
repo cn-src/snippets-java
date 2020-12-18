@@ -16,7 +16,7 @@ public @interface Error {
 
     String error();
 
-    int httpCode() default 400;
+    int status() default 500;
 
-    String message() default "";
+    String message() default "Internal Server Error";
 }

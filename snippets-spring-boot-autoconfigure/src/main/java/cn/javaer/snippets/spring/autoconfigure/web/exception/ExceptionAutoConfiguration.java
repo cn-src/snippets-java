@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -73,25 +72,15 @@ public class ExceptionAutoConfiguration implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        final Map<String, String> mapping = this.exceptionMappingProperties.getMapping();
+        final Map<String, ExceptionMappingProperties.Error> mapping =
+            this.exceptionMappingProperties.getMapping();
 
         if (!CollectionUtils.isEmpty(mapping)) {
             this.useMapping = new HashMap<>(mapping.size());
-            for (final Map.Entry<String, String> entry : mapping.entrySet()) {
-                final String value = entry.getValue();
-                if (value != null) {
-                    final int i = value.indexOf(',');
-                    if (i > 0) {
-                        final DefinedErrorInfo errorStatus =
-                            DefinedErrorInfo.of(value.substring(i + 1),
-                                Integer.parseInt(value.substring(0, i)));
-                        this.useMapping.put(entry.getKey(), errorStatus);
-                    }
-                    else {
-                        throw new InvalidConfigurationPropertyValueException(entry.getKey(),
-                            entry.getValue(), "Missing status or error");
-                    }
-                }
+            for (final Map.Entry<String, ExceptionMappingProperties.Error> entry :
+                mapping.entrySet()) {
+                this.useMapping.put(entry.getKey(),
+                    DefinedErrorInfo.of(entry.getValue().getError(), entry.getValue().getStatus()));
             }
         }
     }

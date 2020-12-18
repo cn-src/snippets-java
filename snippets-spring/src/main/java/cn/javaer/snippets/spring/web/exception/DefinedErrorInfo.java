@@ -26,12 +26,12 @@ public class DefinedErrorInfo implements Comparable<DefinedErrorInfo> {
     }
 
     public static DefinedErrorInfo of(final Error error) {
-        return new DefinedErrorInfo(error.error(), error.httpCode(), error.message());
+        return new DefinedErrorInfo(error.error(), error.status(), error.message());
     }
 
     @Deprecated
     public static DefinedErrorInfo of(final Error error, final String message) {
-        return new DefinedErrorInfo(error.error(), error.httpCode(), message);
+        return new DefinedErrorInfo(error.error(), error.status(), message);
     }
 
     public static DefinedErrorInfo of(final ResponseStatus responseStatus) {
