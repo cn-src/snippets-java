@@ -127,7 +127,8 @@ public class CrudStep {
 
         for (final Object entity : entities) {
             final List<Object> rowValue = new ArrayList<>();
-            meta.idGenerator().ifPresent(it -> methodAccess.invoke(entity, it.getGetterName()));
+            meta.idGenerator().ifPresent(it ->
+                rowValue.add(methodAccess.invoke(entity, it.getGetterName())));
             meta.saveColumnMetas().forEach(it ->
                 rowValue.add(methodAccess.invoke(entity, it.getGetterName())));
             meta.updatedBy().ifPresent(it -> rowValue.add(auditor));
