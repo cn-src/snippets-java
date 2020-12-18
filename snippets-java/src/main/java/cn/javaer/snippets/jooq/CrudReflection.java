@@ -49,6 +49,11 @@ public class CrudReflection {
         final List<org.jooq.Field<Object>> selectColumns = new ArrayList<>();
         final List<ColumnMeta> saveColumns = new ArrayList<>();
         for (final Field field : fields) {
+            if (ReflectionUtils.isAnnotated(field,
+                "org.springframework.data.annotation.Transient")) {
+                continue;
+            }
+
             final String getterName = boolean.class.equals(field.getType()) ?
                 "is" + StrUtils.toFirstCharUpper(field.getName())
                 : "get" + StrUtils.toFirstCharUpper(field.getName());
@@ -75,6 +80,10 @@ public class CrudReflection {
             if (ReflectionUtils.isAnnotated(field,
                 "org.springframework.data.annotation.Id")) {
                 builder.id(columnMeta);
+                if (!ReflectionUtils.isAnnotated(field,
+                    "org.springframework.data.annotation.ReadOnlyProperty")) {
+                    saveColumns.add(columnMeta);
+                }
             }
             else if (ReflectionUtils.isAnnotated(field,
                 "org.springframework.data.annotation.CreatedBy")) {
@@ -92,7 +101,8 @@ public class CrudReflection {
                 "org.springframework.data.annotation.LastModifiedDate")) {
                 builder.updatedDate(columnMeta);
             }
-            else {
+            else if (!ReflectionUtils.isAnnotated(field,
+                "org.springframework.data.annotation.ReadOnlyProperty")) {
                 saveColumns.add(columnMeta);
             }
         }
