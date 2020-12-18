@@ -12,6 +12,8 @@ import java.util.UUID;
 public class TestDataSource {
     @Bean
     public DataSource dataSource() {
-        return DataSourceBuilder.create().url("jdbc:h2:mem:" + UUID.randomUUID()).username("sa").build();
+        return DataSourceBuilder.create()
+            .url("jdbc:h2:mem:" + UUID.randomUUID() + ";DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1")
+            .username("sa").build();
     }
 }
