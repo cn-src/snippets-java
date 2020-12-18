@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 public class RuntimeErrorInfo {
     @NotNull
     private final String error;
-    private final Integer status;
-    private final String message;
+    private Integer status;
+    private String message;
 
     private String path;
     private String requestId;

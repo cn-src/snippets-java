@@ -50,14 +50,15 @@ public class ErrorInfoController implements ApplicationContextAware, Initializin
         // TreeSet 优先级
         final Collection<Object> controllers =
             this.applicationContext.getBeansWithAnnotation(Controller.class).values();
+
         final Map<String, DefinedErrorInfo> controllersErrorMapping =
-            this.errorInfoExtractor.getControllersErrorMapping(controllers, true);
+            this.errorInfoExtractor.getControllersErrorMapping(controllers);
         if (!controllersErrorMapping.isEmpty()) {
             this.errorInfos.addAll(controllersErrorMapping.values());
         }
 
         for (final DefinedErrorInfo info :
-            this.errorInfoExtractor.getConfiguredErrorInfos().values()) {
+            this.errorInfoExtractor.getConfiguredErrorMapping().values()) {
             final String message = accessor.getMessage(info.getError(), info.getMessage());
             this.errorInfos.add(info.withMessage(message));
         }

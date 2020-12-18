@@ -52,7 +52,7 @@ class ExceptionResponseBuilder extends GenericResponseService {
         final TreeSet<DefinedErrorInfo> errorInfos = new TreeSet<>();
         for (final Class<?> exceptionType : exceptionTypes) {
             @SuppressWarnings("unchecked")
-            final DefinedErrorInfo errorInfo = this.errorInfoExtractor.extract((Class<?
+            final DefinedErrorInfo errorInfo = this.errorInfoExtractor.getErrorInfo((Class<?
                 extends Throwable>) exceptionType, true);
             if (errorInfo != null) {
                 errorInfos.add(errorInfo);

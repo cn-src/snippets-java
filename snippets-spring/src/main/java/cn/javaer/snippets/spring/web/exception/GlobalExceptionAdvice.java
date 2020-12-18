@@ -4,7 +4,6 @@ import cn.javaer.snippets.spring.web.DefaultAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,26 +39,15 @@ public class GlobalExceptionAdvice {
     public ResponseEntity<RuntimeErrorInfo> handleBadRequestException(
         final HttpServletRequest request, final Exception e) {
         this.logger.error("", e);
-
-        final DefinedErrorInfo definedErrorInfo = this.errorInfoExtractor.extract(e,
-            this.includeMessage);
-
-        final RuntimeErrorInfo runtimeErrorInfo;
-        if (null != definedErrorInfo) {
-            runtimeErrorInfo = new RuntimeErrorInfo(definedErrorInfo);
-        }
-        else {
-            runtimeErrorInfo = new RuntimeErrorInfo(
-                DefinedErrorInfo.of(HttpStatus.INTERNAL_SERVER_ERROR));
-        }
-
-        this.fillInfo(runtimeErrorInfo, request, e);
-        return ResponseEntity.status(runtimeErrorInfo.getStatus()).body(runtimeErrorInfo);
+        final RuntimeErrorInfo errorInfo = this.errorInfoExtractor.getRuntimeErrorInfo(
+            e, this.includeMessage);
+        this.fillInfo(errorInfo, request, e);
+        return ResponseEntity.status(errorInfo.getStatus()).body(errorInfo);
     }
 
-    public void fillInfo(final RuntimeErrorInfo runtimeErrorInfo,
-                         final HttpServletRequest request,
-                         final Exception e) {
+    private void fillInfo(final RuntimeErrorInfo runtimeErrorInfo,
+                          final HttpServletRequest request,
+                          final Exception e) {
         runtimeErrorInfo.setPath(request.getServletPath());
         runtimeErrorInfo.setTimestamp(LocalDateTime.now());
         runtimeErrorInfo.setRequestId(DefaultAppContext.getRequestId());

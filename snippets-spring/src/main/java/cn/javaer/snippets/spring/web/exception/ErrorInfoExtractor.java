@@ -2,13 +2,15 @@ package cn.javaer.snippets.spring.web.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.lang.Nullable;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,18 +35,17 @@ public class ErrorInfoExtractor {
     private final Map<String, DefinedErrorInfo> internalErrorMapping;
     private final MessageSourceAccessor messageSourceAccessor;
 
-    public ErrorInfoExtractor(
-        final Map<String, DefinedErrorInfo> errorMapping,
-        final ResourceBundleMessageSource messageSource) {
+    public ErrorInfoExtractor(final Map<String, DefinedErrorInfo> errorMapping,
+                              final ResourceBundleMessageSource messageSource) {
 
+        this.internalErrorMapping = this.initInternalErrorMapping();
         this.messageSourceAccessor = new MessageSourceAccessor(messageSource, Locale.CHINESE);
         if (!CollectionUtils.isEmpty(errorMapping)) {
             this.configuredErrorMapping.putAll(errorMapping);
         }
-        this.internalErrorMapping = getInternalErrorMapping();
     }
 
-    public Map<String, DefinedErrorInfo> getControllersErrorMapping(final Collection<Object> controllers, final boolean isIncludeMessage) {
+    public Map<String, DefinedErrorInfo> getControllersErrorMapping(final Collection<Object> controllers) {
         final Map<String, DefinedErrorInfo> result = new HashMap<>(20);
         for (final Object ctr : controllers) {
             final Method[] methods = ctr.getClass().getDeclaredMethods();
@@ -55,10 +56,8 @@ public class ErrorInfoExtractor {
                         for (final Class<?> type : exceptionTypes) {
                             @SuppressWarnings("unchecked")
                             final Class<? extends Throwable> t = (Class<? extends Throwable>) type;
-                            final DefinedErrorInfo extract = this.extract(t, isIncludeMessage);
-                            if (null != extract) {
-                                result.put(t.getName(), extract);
-                            }
+                            final DefinedErrorInfo extract = this.getErrorInfoWithMessage(t);
+                            result.put(t.getName(), extract);
                         }
                     }
                 }
@@ -67,8 +66,46 @@ public class ErrorInfoExtractor {
         return result;
     }
 
+    public RuntimeErrorInfo getRuntimeErrorInfo(final Throwable t, final boolean includeMessage) {
+        final RuntimeErrorInfo errorInfo = new RuntimeErrorInfo(this.getErrorInfo(t));
+        if (includeMessage) {
+            final String msg = this.getMessage(t);
+            if (StringUtils.hasLength(msg)) {
+                errorInfo.setMessage(msg);
+            }
+            else {
+                final String message = this.messageSourceAccessor.getMessage(errorInfo.getError());
+                if (StringUtils.hasLength(message)) {
+                    errorInfo.setMessage(message);
+                }
+            }
+        }
+        else {
+            errorInfo.setMessage(null);
+        }
+        return errorInfo;
+    }
+
+    public DefinedErrorInfo getErrorInfoWithMessage(final Class<? extends Throwable> clazz) {
+        final DefinedErrorInfo errorInfo = this.getErrorInfo(clazz);
+        final String message = this.messageSourceAccessor.getMessage(errorInfo.getError());
+        if (StringUtils.hasLength(message)) {
+            return errorInfo.withMessage(message);
+        }
+        return errorInfo;
+    }
+
     @NotNull
-    public DefinedErrorInfo extract(final Class<? extends Throwable> clazz) {
+    public DefinedErrorInfo getErrorInfo(final Throwable t) {
+        Class<? extends Throwable> clazz = t.getClass();
+        if (t.getCause() instanceof InvalidFormatException) {
+            clazz = InvalidFormatException.class;
+        }
+        return this.getErrorInfo(clazz);
+    }
+
+    @NotNull
+    public DefinedErrorInfo getErrorInfo(final Class<? extends Throwable> clazz) {
         if (this.configuredErrorMapping.containsKey(clazz.getName())) {
             return this.configuredErrorMapping.get(clazz.getName());
         }
@@ -87,86 +124,17 @@ public class ErrorInfoExtractor {
         return DefinedErrorInfo.of(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-//    public Optional<DefinedErrorInfo> extract(final Class<? extends Throwable> clazz,
-//                                              final Map<String, DefinedErrorInfo> configured) {
-//        if (configured.containsKey(clazz.getName())) {
-//            return Optional.of(configured.get(clazz.getName()));
-//        }
-//    }
-
     @Nullable
-    @Deprecated
-    public DefinedErrorInfo extract(final Class<? extends Throwable> clazz,
-                                    final boolean isIncludeMessage) {
-        return this.extract(clazz, isIncludeMessage, this.configuredErrorMapping);
-    }
-
-    @Nullable
-    @Deprecated
-    public DefinedErrorInfo extract(final Class<? extends Throwable> clazz,
-                                    final boolean isIncludeMessage,
-                                    final Map<String, DefinedErrorInfo> configured) {
-
-        if (configured.containsKey(clazz.getName())) {
-            final DefinedErrorInfo errorInfo = configured.get(clazz.getName());
-            if (!isIncludeMessage) {
-                return errorInfo;
-            }
-            final String message = this.messageSourceAccessor.getMessage(errorInfo.getError());
-            if (message.isEmpty()) {
-                return errorInfo;
-            }
-            return errorInfo.withMessage(message);
-        }
-
-        final Error error = AnnotatedElementUtils.findMergedAnnotation(clazz,
-            Error.class);
-        if (null != error) {
-            if (!isIncludeMessage) {
-                return DefinedErrorInfo.of(error);
-            }
-            final String message = this.messageSourceAccessor.getMessage(
-                error.error(), error.message());
-            return DefinedErrorInfo.of(error, message);
-        }
-
-        final ResponseStatus responseStatus = AnnotationUtils.findAnnotation(
-            clazz, ResponseStatus.class);
-        if (null == responseStatus) {
-            return null;
-        }
-        if (!isIncludeMessage) {
-            return DefinedErrorInfo.of(responseStatus);
-        }
-        final HttpStatus httpStatus = responseStatus.code() == HttpStatus.INTERNAL_SERVER_ERROR ?
-            responseStatus.value() : responseStatus.code();
-        final String message = this.messageSourceAccessor.getMessage(httpStatus.name());
-        if (message.isEmpty()) {
-            return DefinedErrorInfo.of(responseStatus);
-        }
-        return DefinedErrorInfo.of(httpStatus, message);
-    }
-
-    public DefinedErrorInfo extract(final Exception e, final boolean isIncludeMessage) {
-        if (!isIncludeMessage) {
-            return this.extract(e.getClass(), false);
-        }
-        final DefinedErrorInfo info = this.extract(e.getClass(), false);
-        if (null == info) {
-            return null;
-        }
+    private String getMessage(final Throwable e) {
         if (e.getCause() instanceof InvalidFormatException) {
             final InvalidFormatException cause = (InvalidFormatException) e.getCause();
-            final Object value = cause.getValue();
-            final String message = this.messageSourceAccessor.getMessage(
-                "PARAM_INVALID_FORMAT", new Object[]{value});
-            return DefinedErrorInfo.of(info, message);
+            return this.messageSourceAccessor.getMessage(
+                "PARAM_INVALID_FORMAT", new Object[]{cause.getValue()});
         }
         if (e instanceof MethodArgumentTypeMismatchException) {
             final MethodArgumentTypeMismatchException ec = (MethodArgumentTypeMismatchException) e;
-            final String message = this.messageSourceAccessor.getMessage(
+            return this.messageSourceAccessor.getMessage(
                 "PARAM_INVALID_TYPE", new Object[]{ec.getName(), ec.getValue()});
-            return DefinedErrorInfo.of(info, message);
         }
         if (e instanceof MethodArgumentNotValidException) {
             final MethodArgumentNotValidException ec = (MethodArgumentNotValidException) e;
@@ -179,20 +147,27 @@ public class ErrorInfoExtractor {
                         fieldError.getDefaultMessage()});
                 sb.add(message);
             }
-            return DefinedErrorInfo.of(info, sb.toString());
+            return sb.toString();
         }
-        return info;
-    }
-
-    public Map<String, DefinedErrorInfo> getConfiguredErrorInfos() {
-        return Collections.unmodifiableMap(this.configuredErrorMapping);
+        return null;
     }
 
     public MessageSourceAccessor getMessageSourceAccessor() {
         return this.messageSourceAccessor;
     }
 
-    static Map<String, DefinedErrorInfo> getInternalErrorMapping() {
+    @UnmodifiableView
+    public Map<String, DefinedErrorInfo> getInternalErrorMapping() {
+        return this.internalErrorMapping;
+    }
+
+    @UnmodifiableView
+    public Map<String, DefinedErrorInfo> getConfiguredErrorMapping() {
+        return Collections.unmodifiableMap(this.configuredErrorMapping);
+    }
+
+    @UnmodifiableView
+    Map<String, DefinedErrorInfo> initInternalErrorMapping() {
         final Map<String, DefinedErrorInfo> internalErrorMapping = new HashMap<>(15);
         internalErrorMapping.put(
             "org.springframework.web.HttpRequestMethodNotSupportedException",
@@ -256,7 +231,7 @@ public class ErrorInfoExtractor {
             "org.springframework.web.method.annotation.MethodArgumentTypeMismatchException",
             DefinedErrorInfo.of(HttpStatus.BAD_REQUEST));
 
-        return internalErrorMapping;
+        return Collections.unmodifiableMap(internalErrorMapping);
     }
 }
 
