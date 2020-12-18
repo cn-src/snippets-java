@@ -33,6 +33,16 @@ public class CrudStep {
         this.auditorAware = auditorAware;
     }
 
+    /**
+     * 根据 id 查询.
+     *
+     * @param <M> 元数据泛型
+     * @param <ID> id 泛型
+     * @param id the id
+     * @param meta the meta
+     *
+     * @return the select step
+     */
     public <M extends TableMetaProvider<?>, ID> SelectConditionStep<Record>
     findByIdStep(final @NotNull ID id, final M meta) {
         Objects.requireNonNull(id);
@@ -43,6 +53,16 @@ public class CrudStep {
             .where(meta.getId().getColumn().eq(id));
     }
 
+    /**
+     * 根据 id 和创建者查询.
+     *
+     * @param <M> 元数据泛型
+     * @param <ID> id 泛型
+     * @param id the id
+     * @param meta the meta
+     *
+     * @return the select step
+     */
     public <M extends TableMetaProvider<?>, ID> SelectConditionStep<Record>
     findByIdAndCreatorStep(final @NotNull ID id, final M meta) {
         Objects.requireNonNull(id);
@@ -55,9 +75,12 @@ public class CrudStep {
     }
 
     /**
-     * jOOQ 实体插入.
+     * 插入实体.
      *
+     * @param <T> the type parameter
+     * @param <M> the type parameter
      * @param entity the entity
+     * @param meta the meta
      *
      * @return the insert values step n
      */
@@ -100,9 +123,12 @@ public class CrudStep {
     }
 
     /**
-     * jOOQ 实体批量插入.
+     * 批量插入实体.
      *
+     * @param <T> the type parameter
+     * @param <M> the type parameter
      * @param entities the entities
+     * @param meta the meta
      *
      * @return the insert values step n
      */
@@ -141,9 +167,13 @@ public class CrudStep {
     }
 
     /**
-     * jOOQ 实体动态更新.
+     * 根据 id 动态更新实体.
      *
+     * @param <T> the type parameter
+     * @param <M> the type parameter
      * @param entity the entity
+     * @param meta the meta
+     * @param include 是否持久化此值
      *
      * @return the update set more step
      */
@@ -170,6 +200,17 @@ public class CrudStep {
             .set(dynamic).where(meta.getId().getColumn().eq(idValue));
     }
 
+    /**
+     * 根据 id 和创建者动态更新实体.
+     *
+     * @param <T> the type parameter
+     * @param <M> the type parameter
+     * @param entity the entity
+     * @param meta the meta
+     * @param include 是否持久化此值
+     *
+     * @return the update set more step
+     */
     public <T, M extends TableMetaProvider<T>> UpdateConditionStep<?>
     dynamicUpdateByCreatorStep(@NotNull final T entity, final M meta,
                                final Predicate<Object> include) {
