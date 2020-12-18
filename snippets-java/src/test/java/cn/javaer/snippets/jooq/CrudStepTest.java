@@ -29,7 +29,7 @@ class CrudStepTest {
         final InsertValuesStepN<?> step = this.crudStep.insertStep(
             new Demo(1L, "name", 996L), CrudReflection.getTableMeta(Demo.class));
         assertThat(this.dsl.renderInlined(step))
-            .isEqualTo("insert into demo (id, name, created_by_id) values (1, 'name', 996)");
+            .isEqualTo("insert into demo (id, name, created_by_id) values (1, 'name', 999)");
     }
 
     @Test
