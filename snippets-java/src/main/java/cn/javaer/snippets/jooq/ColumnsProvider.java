@@ -8,22 +8,20 @@ import java.util.Optional;
 /**
  * @author cn-src
  */
-public interface FieldsProvider {
+public interface ColumnsProvider {
 
     /**
      * id 主键字段.
      *
      * @return Field
      */
-    default <ID> Optional<Field<ID>> idField() {
+    default <ID> Optional<Field<ID>> id() {
         return Optional.empty();
     }
 
-    ;
-
     default <ID> Field<ID> requiredId() {
         //noinspection unchecked
-        return (Field<ID>) idField().orElseThrow(
+        return (Field<ID>) this.id().orElseThrow(
             () -> new IllegalStateException("Id must bu not null"));
     }
 
@@ -32,27 +30,27 @@ public interface FieldsProvider {
      *
      * @return Field[]
      */
-    Field<?>[] selectFields();
+    Field<?>[] selectColumns();
 
     /**
      * 插入或者更新默认使用的字段, 不含审计相关的字段.
      *
      * @return Field[]
      */
-    Field<?>[] saveFields();
+    Field<?>[] saveColumns();
 
     /**
      * 创建者字段.
      *
      * @return Field
      */
-    default <ID> Optional<Field<ID>> createdByField() {
+    default <ID> Optional<Field<ID>> createdBy() {
         return Optional.empty();
     }
 
     default <ID> Field<ID> requiredCreatedBy() {
         //noinspection unchecked
-        return (Field<ID>) createdByField().orElseThrow(
+        return (Field<ID>) this.createdBy().orElseThrow(
             () -> new IllegalStateException("CreatedBy must bu not null"));
     }
 
@@ -61,12 +59,12 @@ public interface FieldsProvider {
      *
      * @return Field
      */
-    default Optional<Field<LocalDateTime>> createdDateField() {
+    default Optional<Field<LocalDateTime>> createdDate() {
         return Optional.empty();
     }
 
     default Field<LocalDateTime> requiredCreatedDate() {
-        return createdDateField().orElseThrow(
+        return this.createdDate().orElseThrow(
             () -> new IllegalStateException("CreatedDate must bu not null"));
     }
 
@@ -75,13 +73,13 @@ public interface FieldsProvider {
      *
      * @return Field
      */
-    default <ID> Optional<Field<ID>> updatedByField() {
+    default <ID> Optional<Field<ID>> updatedBy() {
         return Optional.empty();
     }
 
     default <ID> Field<ID> requiredUpdatedBy() {
         //noinspection unchecked
-        return (Field<ID>) updatedByField().orElseThrow(
+        return (Field<ID>) this.updatedBy().orElseThrow(
             () -> new IllegalStateException("UpdatedBy must bu not null"));
     }
 
@@ -90,12 +88,12 @@ public interface FieldsProvider {
      *
      * @return Field
      */
-    default Optional<Field<LocalDateTime>> updatedDateField() {
+    default Optional<Field<LocalDateTime>> updatedDate() {
         return Optional.empty();
     }
 
     default Field<LocalDateTime> requiredUpdatedDate() {
-        return updatedDateField().orElseThrow(
+        return this.updatedDate().orElseThrow(
             () -> new IllegalStateException("UpdatedDate must bu not null"));
     }
 }

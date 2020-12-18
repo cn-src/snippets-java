@@ -26,30 +26,30 @@ public class CrudStep {
     private final DSLContext dsl;
     private final AuditorAware<?> auditorAware;
 
-    public CrudStep(@NotNull final DSLContext dsl, AuditorAware<?> auditorAware) {
+    public CrudStep(@NotNull final DSLContext dsl, final AuditorAware<?> auditorAware) {
         Objects.requireNonNull(dsl);
 
         this.dsl = dsl;
         this.auditorAware = auditorAware;
     }
 
-    public <M extends TableRecord<?> & FieldsProvider, ID> SelectConditionStep<Record>
-    findByIdStep(final @NotNull ID id, M meta) {
+    public <M extends TableRecord<?> & ColumnsProvider, ID> SelectConditionStep<Record>
+    findByIdStep(final @NotNull ID id, final M meta) {
         Objects.requireNonNull(id);
 
-        return this.dsl.select(meta.selectFields())
+        return this.dsl.select(meta.selectColumns())
             .from(meta.getTable())
             .where(meta.requiredId().eq(id));
     }
 
-    public <M extends TableRecord<?> & FieldsProvider, ID> SelectConditionStep<Record>
-    findByIdAndCreatorStep(final @NotNull ID id, M meta) {
+    public <M extends TableRecord<?> & ColumnsProvider, ID> SelectConditionStep<Record>
+    findByIdAndCreatorStep(final @NotNull ID id, final M meta) {
         Objects.requireNonNull(id);
 
-        return this.dsl.select(meta.selectFields())
+        return this.dsl.select(meta.selectColumns())
             .from(meta.getTable())
             .where(meta.requiredId().eq(id))
-            .and(meta.requiredCreatedBy().eq(auditorAware.requiredAuditor()));
+            .and(meta.requiredCreatedBy().eq(this.auditorAware.requiredAuditor()));
     }
 
     public <T, ID> SelectConditionStep<Record> findByIdAndCreatorStep(
@@ -61,14 +61,14 @@ public class CrudStep {
             (Field<ID>) Objects.requireNonNull(CrudReflection.getIdColumnMeta(entityClass))
                 .getColumn();
 
-        Field<Object> creatorColumn =
+        final Field<Object> creatorColumn =
             Objects.requireNonNull(CrudReflection.getCreatorColumnMeta(entityClass))
                 .getColumn();
 
         return this.dsl.select(CrudReflection.getFields(entityClass))
             .from(CrudReflection.getTable(entityClass))
             .where(idColumn.eq(id))
-            .and(creatorColumn.eq(auditorAware.requiredAuditor()));
+            .and(creatorColumn.eq(this.auditorAware.requiredAuditor()));
     }
 
     /**
@@ -85,11 +85,11 @@ public class CrudStep {
         final List<Object> values = new ArrayList<>();
         final List<Field<?>> fields = new ArrayList<>();
         final MethodAccess methodAccess = MethodAccess.get(entity.getClass());
-        Object auditor = auditorAware.getCurrentAuditor().orElse(null);
-        LocalDateTime now = LocalDateTime.now();
+        final Object auditor = this.auditorAware.getCurrentAuditor().orElse(null);
+        final LocalDateTime now = LocalDateTime.now();
         for (final ColumnMeta cm : columnMetas) {
             fields.add(cm.getColumn());
-            insertValue(methodAccess, entity, values, cm, auditor, now);
+            this.insertValue(methodAccess, entity, values, cm, auditor, now);
         }
         return this.dsl.insertInto(CrudReflection.getTable(entity.getClass()))
             .columns(fields).values(values);
@@ -114,12 +114,12 @@ public class CrudStep {
         final InsertValuesStepN<?> step =
             this.dsl.insertInto(CrudReflection.getTable(clazz)).columns(fields);
         final MethodAccess methodAccess = MethodAccess.get(clazz);
-        Object auditor = auditorAware.getCurrentAuditor().orElse(null);
-        LocalDateTime now = LocalDateTime.now();
+        final Object auditor = this.auditorAware.getCurrentAuditor().orElse(null);
+        final LocalDateTime now = LocalDateTime.now();
         for (final Object entity : entities) {
             final List<Object> rowValue = new ArrayList<>();
             for (final ColumnMeta cm : columnMetas) {
-                insertValue(methodAccess, entity, rowValue, cm, auditor, now);
+                this.insertValue(methodAccess, entity, rowValue, cm, auditor, now);
             }
             step.values(rowValue.toArray());
         }
@@ -153,7 +153,7 @@ public class CrudStep {
                 continue;
             }
             if (cm.isUpdater()) {
-                dynamic.put(cm.getColumn(), auditorAware.requiredAuditor());
+                dynamic.put(cm.getColumn(), this.auditorAware.requiredAuditor());
                 continue;
             }
             if (cm.isUpdateDate()) {
@@ -179,7 +179,7 @@ public class CrudStep {
         Field<Object> idColumn = null;
         Object idValue = null;
         Field<Object> creatorColumn = null;
-        Object auditor = auditorAware.requiredAuditor();
+        final Object auditor = this.auditorAware.requiredAuditor();
         for (final ColumnMeta cm : columnMetas) {
             final Object value = methodAccess.invoke(entity, cm.getGetterName());
             if (cm.isId()) {
@@ -213,9 +213,9 @@ public class CrudStep {
             .and(Objects.requireNonNull(creatorColumn).eq(auditor));
     }
 
-    private void insertValue(MethodAccess methodAccess, Object entity,
-                             List<Object> rowValue, ColumnMeta cm,
-                             Object auditor, LocalDateTime updateDate) {
+    private void insertValue(final MethodAccess methodAccess, final Object entity,
+                             final List<Object> rowValue, final ColumnMeta cm,
+                             final Object auditor, final LocalDateTime updateDate) {
         if (cm.isCreator() || cm.isUpdater()) {
             rowValue.add(Objects.requireNonNull(auditor));
             return;

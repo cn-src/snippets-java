@@ -9,19 +9,19 @@ import org.jooq.Field;
  */
 @Value
 @Builder
-public class TableMeta implements FieldsProvider {
+public class TableMeta implements ColumnsProvider {
 
     Field<?>[] selectFields;
 
     Field<?>[] saveFields;
 
     @Override
-    public Field<?>[] selectFields() {
+    public Field<?>[] selectColumns() {
         return this.selectFields;
     }
 
     @Override
-    public Field<?>[] saveFields() {
+    public Field<?>[] saveColumns() {
         return this.saveFields;
     }
 }
