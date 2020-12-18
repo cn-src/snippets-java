@@ -45,7 +45,8 @@ public class JdbcCrud {
     public <T> int insert(final T entity) {
         Objects.requireNonNull(entity);
 
-        @SuppressWarnings("unchecked") final Class<T> clazz = (Class<T>) entity.getClass();
+        @SuppressWarnings("unchecked")
+        final Class<T> clazz = (Class<T>) entity.getClass();
         final TableMetaProvider<T> tableMeta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.insertStep(entity, tableMeta).execute();
     }
@@ -53,7 +54,8 @@ public class JdbcCrud {
     public <T> int batchInsert(final List<T> entities) {
         Validate.notEmpty(entities);
 
-        @SuppressWarnings("unchecked") final Class<T> clazz = (Class<T>) entities.get(0).getClass();
+        @SuppressWarnings("unchecked")
+        final Class<T> clazz = (Class<T>) entities.get(0).getClass();
         final TableMetaProvider<T> tableMeta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.batchInsertStep(entities, tableMeta).execute();
     }
@@ -61,7 +63,8 @@ public class JdbcCrud {
     public <T> int update(final T entity) {
         Objects.requireNonNull(entity);
 
-        @SuppressWarnings("unchecked") final Class<T> clazz = (Class<T>) entity.getClass();
+        @SuppressWarnings("unchecked")
+        final Class<T> clazz = (Class<T>) entity.getClass();
         final TableMetaProvider<T> meta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.dynamicUpdateStep(entity, meta, o -> true).execute();
     }
@@ -69,7 +72,8 @@ public class JdbcCrud {
     public <T> int dynamicUpdate(final T entity) {
         Objects.requireNonNull(entity);
 
-        @SuppressWarnings("unchecked") final Class<T> clazz = (Class<T>) entity.getClass();
+        @SuppressWarnings("unchecked")
+        final Class<T> clazz = (Class<T>) entity.getClass();
         final TableMetaProvider<T> meta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.dynamicUpdateStep(entity, meta, ObjectUtils::isNotEmpty).execute();
     }
@@ -77,7 +81,8 @@ public class JdbcCrud {
     public <T> int dynamicUpdateByCreator(final T entity) {
         Objects.requireNonNull(entity);
 
-        @SuppressWarnings("unchecked") final Class<T> clazz = (Class<T>) entity.getClass();
+        @SuppressWarnings("unchecked")
+        final Class<T> clazz = (Class<T>) entity.getClass();
         final TableMetaProvider<T> meta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.dynamicUpdateByCreatorStep(entity, meta, ObjectUtils::isNotEmpty)
             .execute();
