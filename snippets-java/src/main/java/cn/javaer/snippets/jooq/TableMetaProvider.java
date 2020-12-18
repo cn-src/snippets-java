@@ -40,6 +40,15 @@ public interface TableMetaProvider<T> {
     }
 
     /**
+     * Id generator optional.
+     *
+     * @return the optional
+     */
+    default Optional<ColumnMeta> idGenerator() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Gets id.
      *
      * @return the id

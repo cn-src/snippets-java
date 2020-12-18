@@ -75,6 +75,10 @@ public class CrudStep {
             fields.add(cm.getColumn());
             values.add(methodAccess.invoke(entity, cm.getGetterName()));
         }
+        meta.idGenerator().ifPresent(it -> {
+            fields.add(it.getColumn());
+            values.add(methodAccess.invoke(entity, it.getGetterName()));
+        });
         meta.updatedBy().ifPresent(it -> {
             fields.add(it.getColumn());
             values.add(auditor);
@@ -108,6 +112,7 @@ public class CrudStep {
         Objects.requireNonNull(meta);
 
         final List<Field<?>> fields = new ArrayList<>(meta.saveColumnMetas().size() + 4);
+        meta.idGenerator().ifPresent(it -> fields.add(it.getColumn()));
         meta.saveColumnMetas().forEach(it -> fields.add(it.getColumn()));
         meta.updatedBy().ifPresent(it -> fields.add(it.getColumn()));
         meta.updatedDate().ifPresent(it -> fields.add(it.getColumn()));
@@ -122,6 +127,7 @@ public class CrudStep {
 
         for (final Object entity : entities) {
             final List<Object> rowValue = new ArrayList<>();
+            meta.idGenerator().ifPresent(it -> methodAccess.invoke(entity, it.getGetterName()));
             meta.saveColumnMetas().forEach(it ->
                 rowValue.add(methodAccess.invoke(entity, it.getGetterName())));
             meta.updatedBy().ifPresent(it -> rowValue.add(auditor));

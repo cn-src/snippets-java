@@ -80,10 +80,8 @@ public class CrudReflection {
             if (ReflectionUtils.isAnnotated(field,
                 "org.springframework.data.annotation.Id")) {
                 builder.id(columnMeta);
-                if (!ReflectionUtils.isAnnotated(field,
-                    "org.springframework.data.annotation.ReadOnlyProperty")) {
-                    saveColumns.add(columnMeta);
-                }
+                builder.idReadOnly(ReflectionUtils.isAnnotated(field,
+                    "org.springframework.data.annotation.ReadOnlyProperty"));
             }
             else if (ReflectionUtils.isAnnotated(field,
                 "org.springframework.data.annotation.CreatedBy")) {

@@ -17,6 +17,7 @@ import java.util.Optional;
 public class TableMeta<T> implements TableMetaProvider<T> {
     Table<?> table;
     Class<T> entityClass;
+    boolean idReadOnly;
     ColumnMeta id;
     ColumnMeta createdBy;
     ColumnMeta createdDate;
@@ -40,6 +41,14 @@ public class TableMeta<T> implements TableMetaProvider<T> {
     @Override
     public Optional<ColumnMeta> id() {
         return Optional.ofNullable(this.id);
+    }
+
+    @Override
+    public Optional<ColumnMeta> idGenerator() {
+        if (!this.idReadOnly) {
+            return Optional.ofNullable(this.id);
+        }
+        return Optional.empty();
     }
 
     @Override
