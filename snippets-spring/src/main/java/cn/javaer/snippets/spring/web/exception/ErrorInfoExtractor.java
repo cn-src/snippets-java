@@ -1,6 +1,7 @@
 package cn.javaer.snippets.spring.web.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -21,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
@@ -29,7 +29,8 @@ import java.util.StringJoiner;
  */
 public class ErrorInfoExtractor {
 
-    private final Map<String, DefinedErrorInfo> configuredErrorMapping;
+    private final Map<String, DefinedErrorInfo> configuredErrorMapping = new HashMap<>();
+    private final Map<String, DefinedErrorInfo> internalErrorMapping;
     private final MessageSourceAccessor messageSourceAccessor;
 
     public ErrorInfoExtractor(
@@ -37,10 +38,10 @@ public class ErrorInfoExtractor {
         final ResourceBundleMessageSource messageSource) {
 
         this.messageSourceAccessor = new MessageSourceAccessor(messageSource, Locale.CHINESE);
-        this.configuredErrorMapping = getInternalErrorMapping();
         if (!CollectionUtils.isEmpty(errorMapping)) {
             this.configuredErrorMapping.putAll(errorMapping);
         }
+        this.internalErrorMapping = getInternalErrorMapping();
     }
 
     public Map<String, DefinedErrorInfo> getControllersErrorMapping(final Collection<Object> controllers, final boolean isIncludeMessage) {
@@ -66,17 +67,24 @@ public class ErrorInfoExtractor {
         return result;
     }
 
-    public Optional<DefinedErrorInfo> extract(final Class<? extends Throwable> clazz) {
+    @NotNull
+    public DefinedErrorInfo extract(final Class<? extends Throwable> clazz) {
+        if (this.configuredErrorMapping.containsKey(clazz.getName())) {
+            return this.configuredErrorMapping.get(clazz.getName());
+        }
         final Error error = AnnotatedElementUtils.findMergedAnnotation(clazz, Error.class);
         if (error != null) {
-            return Optional.of(DefinedErrorInfo.of(error));
+            return DefinedErrorInfo.of(error);
         }
         final ResponseStatus responseStatus = AnnotationUtils.findAnnotation(
             clazz, ResponseStatus.class);
         if (null != responseStatus) {
-            return Optional.of(DefinedErrorInfo.of(responseStatus));
+            return DefinedErrorInfo.of(responseStatus);
         }
-        return Optional.empty();
+        if (this.internalErrorMapping.containsKey(clazz.getName())) {
+            return this.internalErrorMapping.get(clazz.getName());
+        }
+        return DefinedErrorInfo.of(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 //    public Optional<DefinedErrorInfo> extract(final Class<? extends Throwable> clazz,
