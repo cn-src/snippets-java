@@ -9,7 +9,7 @@ import java.util.function.Function;
  * @author cn-src
  */
 @Value
-public class ColumnMeta {
-    Function<Object, Object> readMethod;
+public class ColumnMeta<T> {
+    Function<T, Object> readMethod;
     Field<Object> column;
 }

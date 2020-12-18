@@ -45,6 +45,7 @@ public class CrudReflection {
             .orElseGet(() -> DSL.table(StrUtils.toSnakeLower(clazz.getSimpleName())));
     }
 
+    @SuppressWarnings("AlibabaMethodTooLong")
     @Nullable
     private static <T> TableMeta<T> initTableMeta(final Class<T> entityClass)
         throws NoSuchFieldException, IllegalAccessException {
@@ -58,7 +59,7 @@ public class CrudReflection {
             .entityClass(entityClass);
 
         final List<org.jooq.Field<Object>> selectColumns = new ArrayList<>();
-        final List<ColumnMeta> saveColumns = new ArrayList<>();
+        final List<ColumnMeta<T>> saveColumns = new ArrayList<>();
         for (final Field field : fields) {
             if (ReflectionUtils.isAnnotated(field,
                 "org.springframework.data.annotation.Transient")) {
@@ -89,7 +90,7 @@ public class CrudReflection {
             selectColumns.add(column);
             final MethodHandle handle = MethodHandles.lookup().findGetter(entityClass,
                 field.getName(), fieldType);
-            final ColumnMeta columnMeta = new ColumnMeta(o -> {
+            final ColumnMeta<T> columnMeta = new ColumnMeta<>(o -> {
                 try {
                     return handle.invoke(o);
                 }

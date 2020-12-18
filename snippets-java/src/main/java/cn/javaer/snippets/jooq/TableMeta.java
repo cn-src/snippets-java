@@ -18,15 +18,15 @@ public class TableMeta<T> implements TableMetaProvider<T> {
     Table<?> table;
     Class<T> entityClass;
     boolean idReadOnly;
-    ColumnMeta id;
-    ColumnMeta createdBy;
-    ColumnMeta createdDate;
-    ColumnMeta updatedBy;
-    ColumnMeta updatedDate;
+    ColumnMeta<T> id;
+    ColumnMeta<T> createdBy;
+    ColumnMeta<T> createdDate;
+    ColumnMeta<T> updatedBy;
+    ColumnMeta<T> updatedDate;
     @UnmodifiableView
     List<Field<Object>> selectFields;
     @UnmodifiableView
-    List<ColumnMeta> saveColumnMetas;
+    List<ColumnMeta<T>> saveColumnMetas;
 
     @Override
     public @UnmodifiableView List<Field<Object>> selectFields() {
@@ -34,17 +34,17 @@ public class TableMeta<T> implements TableMetaProvider<T> {
     }
 
     @Override
-    public @UnmodifiableView List<ColumnMeta> saveColumnMetas() {
+    public @UnmodifiableView List<ColumnMeta<T>> saveColumnMetas() {
         return this.saveColumnMetas;
     }
 
     @Override
-    public Optional<ColumnMeta> id() {
+    public Optional<ColumnMeta<T>> id() {
         return Optional.ofNullable(this.id);
     }
 
     @Override
-    public Optional<ColumnMeta> idGenerator() {
+    public Optional<ColumnMeta<T>> idGenerator() {
         if (!this.idReadOnly) {
             return Optional.ofNullable(this.id);
         }
@@ -52,22 +52,22 @@ public class TableMeta<T> implements TableMetaProvider<T> {
     }
 
     @Override
-    public Optional<ColumnMeta> createdBy() {
+    public Optional<ColumnMeta<T>> createdBy() {
         return Optional.ofNullable(this.createdBy);
     }
 
     @Override
-    public Optional<ColumnMeta> createdDate() {
+    public Optional<ColumnMeta<T>> createdDate() {
         return Optional.ofNullable(this.createdDate);
     }
 
     @Override
-    public Optional<ColumnMeta> updatedBy() {
+    public Optional<ColumnMeta<T>> updatedBy() {
         return Optional.ofNullable(this.updatedBy);
     }
 
     @Override
-    public Optional<ColumnMeta> updatedDate() {
+    public Optional<ColumnMeta<T>> updatedDate() {
         return Optional.ofNullable(this.updatedDate);
     }
 }
