@@ -1,7 +1,6 @@
 package cn.javaer.snippets.jooq;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
-import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
 import org.jooq.Field;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -26,9 +24,6 @@ public class CrudStep {
     private final AuditorAware<?> auditorAware;
 
     public CrudStep(@NotNull final DSLContext dsl, final AuditorAware<?> auditorAware) {
-        Objects.requireNonNull(dsl);
-        Objects.requireNonNull(auditorAware);
-
         this.dsl = dsl;
         this.auditorAware = auditorAware;
     }
@@ -45,8 +40,6 @@ public class CrudStep {
      */
     public <M extends TableMetaProvider<?>, ID> SelectConditionStep<Record>
     findByIdStep(final @NotNull ID id, final M meta) {
-        Objects.requireNonNull(id);
-        Objects.requireNonNull(meta);
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
@@ -65,8 +58,6 @@ public class CrudStep {
      */
     public <M extends TableMetaProvider<?>, ID> SelectConditionStep<Record>
     findByIdAndCreatorStep(final @NotNull ID id, final M meta) {
-        Objects.requireNonNull(id);
-        Objects.requireNonNull(meta);
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
@@ -86,9 +77,6 @@ public class CrudStep {
      */
     public <T, M extends TableMetaProvider<T>> InsertValuesStepN<?>
     insertStep(final @NotNull T entity, final M meta) {
-        Objects.requireNonNull(entity);
-        Objects.requireNonNull(meta);
-
         final List<Object> values = new ArrayList<>();
         final List<Field<?>> fields = new ArrayList<>();
         final MethodAccess methodAccess = MethodAccess.get(entity.getClass());
@@ -134,8 +122,6 @@ public class CrudStep {
      */
     public <T, M extends TableMetaProvider<T>> InsertValuesStepN<?>
     batchInsertStep(@NotNull final List<?> entities, final M meta) {
-        Validate.notEmpty(entities);
-        Objects.requireNonNull(meta);
 
         final List<Field<?>> fields = new ArrayList<>(meta.saveColumnMetas().size() + 4);
         meta.idGenerator().ifPresent(it -> fields.add(it.getColumn()));
@@ -179,8 +165,6 @@ public class CrudStep {
      */
     public <T, M extends TableMetaProvider<T>> UpdateConditionStep<?>
     dynamicUpdateStep(@NotNull final T entity, final M meta, final Predicate<Object> include) {
-        Objects.requireNonNull(entity);
-        Objects.requireNonNull(meta);
 
         final Class<?> clazz = entity.getClass();
         final MethodAccess methodAccess = MethodAccess.get(clazz);
