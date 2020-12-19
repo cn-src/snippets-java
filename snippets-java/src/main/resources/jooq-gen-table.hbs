@@ -87,13 +87,13 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
     public Class getEntityClass() {
         return {{entityName}}.class;
     }
-{{#if idColumnMeta}}
+{{#if idColumnMeta~}}
 {{#if idColumnMeta.readOnly}}{{else}}
     @Override
     public Optional<ColumnMeta<{{entityName}}, {{idColumnMeta.fieldType}}>> idGenerator() {
         return Optional.of(this.__idMeta);
     }
-{{/if~}}
+{{/if}}
     @Override
     public Optional<ColumnMeta<{{entityName}}, {{idColumnMeta.fieldType}}>> getId() {
         return Optional.of(this.__idMeta);
