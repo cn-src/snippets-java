@@ -2,6 +2,7 @@ package cn.javaer.snippets.jooq.codegen.withentity;
 
 import lombok.Value;
 import org.jooq.JSONB;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
@@ -20,5 +21,6 @@ public class Demo {
 
     JSONB jsonb;
 
+    @CreatedDate
     LocalDateTime createdDate;
 }
