@@ -55,7 +55,7 @@ public class TableMeta {
             .collect(Collectors.toList());
 
         this.saveColumnMetas = this.columnMetas.stream()
-            .filter(it -> !it.isId())
+            .filter(it -> !it.isReadOnly())
             .filter(it -> !it.isUpdatedBy())
             .filter(it -> !it.isUpdatedDate())
             .filter(it -> !it.isCreatedBy())
