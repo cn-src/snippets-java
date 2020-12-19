@@ -144,13 +144,13 @@ public class TCity extends TableImpl<Record> implements TableMetaProvider<City, 
 
     @Override
     public Optional<ColumnMeta<City, Integer>> idGenerator() {
-        return Optional.empty();
+        return Optional.of(this.__idMeta);
     }
 
-//    @Override
-//    public ColumnMeta<City, Integer> getId() {
-//        return this.__idMeta;
-//    }
+    @Override
+    public Optional<ColumnMeta<City, Integer>> getId() {
+        return Optional.of(this.__idMeta);
+    }
 
     @Override
     public @UnmodifiableView List<Field<?>> selectFields() {

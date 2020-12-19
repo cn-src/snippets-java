@@ -31,6 +31,8 @@ class CrudStepWithH2Test {
         this.dsl = DSL.using(dataSource, SQLDialect.H2);
         //language=H2
         this.dsl.execute("CREATE TABLE demo (id bigint, name varchar)");
+        //language=H2
+        this.dsl.execute("CREATE TABLE CITY (id bigint, name varchar)");
         this.crudStep = new CrudStep(this.dsl, (AuditorAware<Long>) () -> Optional.of(999L));
 
         this.dsl.meta().getTables().forEach(System.out::println);
