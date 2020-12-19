@@ -33,12 +33,12 @@ public class JdbcCrud {
     }
 
     public <T> List<T> findAll(final Class<T> clazz) {
-        final TableMetaProvider<T> meta = CrudReflection.getTableMeta(clazz);
+        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.findAllStep(meta).fetchInto(clazz);
     }
 
     public <T> List<T> findAllByCreator(final Class<T> clazz) {
-        final TableMetaProvider<T> meta = CrudReflection.getTableMeta(clazz);
+        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.findAllByCreatorStep(meta).fetchInto(clazz);
     }
 
@@ -47,7 +47,7 @@ public class JdbcCrud {
 
         @SuppressWarnings("unchecked")
         final Class<T> clazz = (Class<T>) entity.getClass();
-        final TableMetaProvider<T> tableMeta = CrudReflection.getTableMeta(clazz);
+        final TableMetaProvider<T, ?, ?> tableMeta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.insertStep(entity, tableMeta).execute();
     }
 
@@ -56,7 +56,7 @@ public class JdbcCrud {
 
         @SuppressWarnings("unchecked")
         final Class<T> clazz = (Class<T>) entities.get(0).getClass();
-        final TableMetaProvider<T> tableMeta = CrudReflection.getTableMeta(clazz);
+        final TableMetaProvider<T, ?, ?> tableMeta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.batchInsertStep(entities, tableMeta).execute();
     }
 
@@ -65,7 +65,7 @@ public class JdbcCrud {
 
         @SuppressWarnings("unchecked")
         final Class<T> clazz = (Class<T>) entity.getClass();
-        final TableMetaProvider<T> meta = CrudReflection.getTableMeta(clazz);
+        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.dynamicUpdateStep(entity, meta, o -> true).execute();
     }
 
@@ -74,7 +74,7 @@ public class JdbcCrud {
 
         @SuppressWarnings("unchecked")
         final Class<T> clazz = (Class<T>) entity.getClass();
-        final TableMetaProvider<T> meta = CrudReflection.getTableMeta(clazz);
+        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.dynamicUpdateStep(entity, meta, ObjectUtils::isNotEmpty).execute();
     }
 
@@ -83,7 +83,7 @@ public class JdbcCrud {
 
         @SuppressWarnings("unchecked")
         final Class<T> clazz = (Class<T>) entity.getClass();
-        final TableMetaProvider<T> meta = CrudReflection.getTableMeta(clazz);
+        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.dynamicUpdateByCreatorStep(entity, meta, ObjectUtils::isNotEmpty)
             .execute();
     }
