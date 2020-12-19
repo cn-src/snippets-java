@@ -11,6 +11,7 @@ import lombok.Value;
 @Value
 public class ColumnMeta {
     String fieldName;
+    String getterName;
     String fieldType;
     boolean enumType;
     boolean customField;
@@ -30,6 +31,9 @@ public class ColumnMeta {
                       final boolean id, final boolean updatedBy, final boolean updatedDate,
                       final boolean createdBy, final boolean createdDate) {
         this.fieldName = fieldName;
+        this.getterName = boolean.class.getName().equals(fieldType) ?
+            "is" + StrUtils.toFirstCharUpper(fieldName) :
+            "get" + StrUtils.toFirstCharUpper(fieldName);
         this.fieldType = type(fieldType);
         this.enumType = CodeGenTool.enums.containsName(this.fieldType);
         this.sqlType = this.enumType ? "org.jooq.impl.SQLDataType.VARCHAR" :
