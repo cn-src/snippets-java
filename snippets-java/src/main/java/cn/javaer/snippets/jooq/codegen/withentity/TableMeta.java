@@ -27,6 +27,7 @@ public class TableMeta {
     ColumnMeta updatedDateColumnMeta;
     ColumnMeta createdByColumnMeta;
     ColumnMeta createdDateColumnMeta;
+    boolean hasAuditor;
     List<ColumnMeta> columnMetas;
     List<ColumnMeta> declaredColumnMetas;
     List<ColumnMeta> allColumnMetas;
@@ -61,7 +62,8 @@ public class TableMeta {
             .filter(ColumnMeta::isCreatedBy).findFirst().orElse(null);
         this.createdDateColumnMeta = this.columnMetas.stream()
             .filter(ColumnMeta::isCreatedDate).findFirst().orElse(null);
-
+        this.hasAuditor = (updatedByColumnMeta != null) || (createdByColumnMeta != null);
+        
         this.declaredColumnMetas = classInfo.getDeclaredFieldInfo().stream()
             .filter(it -> !it.isStatic())
             .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
