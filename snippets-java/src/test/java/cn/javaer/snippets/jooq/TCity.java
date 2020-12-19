@@ -34,11 +34,6 @@ public class TCity extends TableImpl<Record> implements TableMetaProvider<City, 
 
     private static final long serialVersionUID = -484834304;
 
-    private final Table<?> __table = DSL.table(getUnqualifiedName());
-    private final List<Field<?>> __selectFields = Arrays.asList(this.ID, this.NAME);
-    private final List<ColumnMeta<City, ?>> __columnMeta =
-        Arrays.asList(new ColumnMeta((Function<City, String>) City::getName, this.NAME));
-    private final ColumnMeta<City, Integer> __idMeta = new ColumnMeta<>(City::getId, this.ID);
     /**
      * The reference instance of <code>PUBLIC.CITY</code>
      */
@@ -64,6 +59,12 @@ public class TCity extends TableImpl<Record> implements TableMetaProvider<City, 
     public final TableField<Record, String> NAME = createField(DSL.name("NAME"),
         org.jooq.impl.SQLDataType.VARCHAR(30), this, "");
 
+    private final Table<?> __table = DSL.table(getUnqualifiedName());
+    private final List<Field<?>> __selectFields = Arrays.asList(this.ID, this.NAME);
+    private final List<ColumnMeta<City, ?>> __columnMeta =
+        Arrays.asList(new ColumnMeta((Function<City, String>) City::getName, this.NAME));
+    private final ColumnMeta<City, Integer> __idMeta = new ColumnMeta<>(City::getId, this.ID);
+    
     /**
      * Create a <code>PUBLIC.CITY</code> table reference
      */

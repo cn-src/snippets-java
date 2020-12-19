@@ -32,7 +32,7 @@ class CrudStepWithH2Test {
         //language=H2
         this.dsl.execute("CREATE TABLE demo (id bigint, name varchar)");
         //language=H2
-        this.dsl.execute("CREATE TABLE CITY (id bigint, name varchar)");
+        this.dsl.execute("CREATE TABLE CITY (ID bigint, NAME varchar)");
         this.crudStep = new CrudStep(this.dsl, (AuditorAware<Long>) () -> Optional.of(999L));
 
         this.dsl.meta().getTables().forEach(System.out::println);
@@ -60,8 +60,8 @@ class CrudStepWithH2Test {
         this.crudStep.insertStep(new City(1, "name"), TCity.CITY)
             .execute();
         final City city = this.crudStep.findByIdStep(1, TCity.CITY).fetchOneInto(City.class);
-//        assertThat(demo).extracting(Demo::getId).isEqualTo(1L);
-//        assertThat(demo).extracting(Demo::getName).isEqualTo("name");
+        assertThat(city).extracting(City::getId).isEqualTo(1);
+        assertThat(city).extracting(City::getName).isEqualTo("name");
     }
 
     @Value
