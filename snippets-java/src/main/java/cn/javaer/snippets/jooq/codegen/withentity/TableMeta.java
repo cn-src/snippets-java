@@ -21,6 +21,11 @@ public class TableMeta {
     String tableName;
     String entityName;
     String staticFieldName;
+    ColumnMeta idColumnMeta;
+    ColumnMeta updatedByColumnMeta;
+    ColumnMeta updatedDateColumnMeta;
+    ColumnMeta createdByColumnMeta;
+    ColumnMeta createdDateColumnMeta;
     List<ColumnMeta> columnMetas;
     List<ColumnMeta> declaredColumnMetas;
     List<ColumnMeta> allColumnMetas;
@@ -29,17 +34,34 @@ public class TableMeta {
 
     public TableMeta(final ClassInfo classInfo, final String generatedPackage) {
         this.generatedPackage = generatedPackage;
+
         this.entityName = classInfo.getSimpleName();
+
         this.staticFieldName = StrUtils.toSnakeUpper(classInfo.getSimpleName());
+
         final String tableValue = NameUtils.tableValue(classInfo);
         this.tableName = tableValue.isEmpty() ?
             StrUtils.toSnakeLower(classInfo.getSimpleName()) : tableValue;
+
         this.tableClassName = "T" + this.entityName;
+
         this.columnMetas = classInfo.getDeclaredFieldInfo().stream()
             .filter(it -> !it.isStatic())
             .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
             .map(ColumnMeta::new)
             .collect(Collectors.toList());
+
+        this.idColumnMeta = this.columnMetas.stream()
+            .filter(ColumnMeta::isId).findFirst().orElse(null);
+        this.updatedByColumnMeta = this.columnMetas.stream()
+            .filter(ColumnMeta::isUpdatedBy).findFirst().orElse(null);
+        this.updatedDateColumnMeta = this.columnMetas.stream()
+            .filter(ColumnMeta::isUpdatedDate).findFirst().orElse(null);
+        this.createdByColumnMeta = this.columnMetas.stream()
+            .filter(ColumnMeta::isCreatedBy).findFirst().orElse(null);
+        this.createdDateColumnMeta = this.columnMetas.stream()
+            .filter(ColumnMeta::isCreatedDate).findFirst().orElse(null);
+
         this.declaredColumnMetas = classInfo.getDeclaredFieldInfo().stream()
             .filter(it -> !it.isStatic())
             .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
