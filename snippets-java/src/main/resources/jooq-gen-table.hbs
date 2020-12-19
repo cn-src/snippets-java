@@ -20,7 +20,7 @@ import {{entityClassName}};
  */
 @SuppressWarnings({"ALL"})
 @javax.annotation.Generated("cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool")
-public class {{tableClassName}} extends TableImpl<Record> implements TableMetaProvider<{{entityName}}, {{#if idColumnMeta}}{{idColumnMeta.fieldType}}{{else}}Void{{/if}}, {{#if updatedByColumnMeta}}{{updatedByColumnMeta.fieldType}}{{else}}Void{{/if}}> {
+public class {{tableClassName}} extends TableImpl<Record> implements TableMetaProvider<{{entityName}}, {{#if idColumnMeta}}{{idColumnMeta.fieldType}}{{else}}Void{{/if}}, {{#if hasAuditor}}{{auditorType}}{{else}}Void{{/if}}> {
 
     public static final {{tableClassName}} {{staticFieldName}} = new {{tableClassName}}();
 {{~#if hasAttachColumn}}
