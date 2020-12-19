@@ -48,6 +48,18 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
 {{#if idColumnMeta}}
     private final ColumnMeta<{{entityName}}, {{idColumnMeta.fieldType}}> __idMeta = new ColumnMeta<>({{entityName}}::{{idColumnMeta.getterName}}, this.{{idColumnMeta.tableFieldName}});
 {{/if}}
+{{#if updatedByColumnMeta}}
+    private final ColumnMeta<{{entityName}}, {{updatedByColumnMeta.fieldType}}> __updatedByMeta = new ColumnMeta<>({{entityName}}::{{updatedByColumnMeta.getterName}}, this.{{updatedByColumnMeta.tableFieldName}});
+{{/if}}
+{{#if updatedDateColumnMeta}}
+    private final ColumnMeta<{{entityName}}, {{updatedDateColumnMeta.fieldType}}> __updatedDateMeta = new ColumnMeta<>({{entityName}}::{{updatedDateColumnMeta.getterName}}, this.{{updatedDateColumnMeta.tableFieldName}});
+{{/if}}
+{{#if createdByColumnMeta}}
+    private final ColumnMeta<{{entityName}}, {{createdByColumnMeta.fieldType}}> __createdByMeta = new ColumnMeta<>({{entityName}}::{{createdByColumnMeta.getterName}}, this.{{createdByColumnMeta.tableFieldName}});
+{{/if}}
+{{#if createdDateColumnMeta}}
+    private final ColumnMeta<{{entityName}}, {{createdDateColumnMeta.fieldType}}> __createdDateMeta = new ColumnMeta<>({{entityName}}::{{createdDateColumnMeta.getterName}}, this.{{createdDateColumnMeta.tableFieldName}});
+{{/if}}
     public {{tableClassName}}() {
         this(DSL.name("{{tableName}}"), null);
     }
