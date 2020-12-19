@@ -30,6 +30,7 @@ public class TableMeta {
     boolean hasAuditor;
     String auditorType;
     List<ColumnMeta> columnMetas;
+    List<ColumnMeta> saveColumnMetas;
     List<ColumnMeta> declaredColumnMetas;
     List<ColumnMeta> allColumnMetas;
     boolean hasAttachColumn;
@@ -51,6 +52,14 @@ public class TableMeta {
             .filter(it -> !it.isStatic())
             .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
             .map(ColumnMeta::new)
+            .collect(Collectors.toList());
+
+        this.saveColumnMetas = this.columnMetas.stream()
+            .filter(it -> !it.isId())
+            .filter(it -> !it.isUpdatedBy())
+            .filter(it -> !it.isUpdatedDate())
+            .filter(it -> !it.isCreatedBy())
+            .filter(it -> !it.isCreatedDate())
             .collect(Collectors.toList());
 
         this.idColumnMeta = this.columnMetas.stream()

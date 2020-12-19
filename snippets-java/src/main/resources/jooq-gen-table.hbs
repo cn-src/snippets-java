@@ -2,6 +2,12 @@
 // @formatter:off
 package {{generatedPackage}};
 
+import javax.annotation.Generated;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Field;
 import org.jooq.Name;
@@ -13,13 +19,14 @@ import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
 import cn.javaer.snippets.jooq.TableMetaProvider;
+import cn.javaer.snippets.jooq.ColumnMeta;
 import {{entityClassName}};
 
 /**
  * This class is automatic generated.
  */
 @SuppressWarnings({"ALL"})
-@javax.annotation.Generated("cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool")
+@Generated("cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool")
 public class {{tableClassName}} extends TableImpl<Record> implements TableMetaProvider<{{entityName}}, {{#if idColumnMeta}}{{idColumnMeta.fieldType}}{{else}}Void{{/if}}, {{#if hasAuditor}}{{auditorType}}{{else}}Void{{/if}}> {
 
     public static final {{tableClassName}} {{staticFieldName}} = new {{tableClassName}}();
@@ -37,6 +44,7 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
 
     private final List<Field<?>> __selectFields = Arrays.asList({{#each declaredColumnMetas}}this.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}});
 
+    private final List<ColumnMeta<City, ?>> __columnMeta = Arrays.asList({{#each saveColumnMetas}}new ColumnMeta((Function<{{entityName}}, {{fieldType}}>) {{entityName}}::getName, this.{{tableFieldName}}){{#unless @last}},{{/unless}}{{/each}});
     public {{tableClassName}}() {
         this(DSL.name("{{tableName}}"), null);
     }
