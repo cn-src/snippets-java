@@ -72,7 +72,7 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
         return {{entityName}}.class;
     }
 {{#if idColumnMeta}}
-{{#if not idColumnMeta.readOnly}}
+{{#if idColumnMeta.readOnly}}{{else}}
     @Override
     public Optional<ColumnMeta<City, Integer>> idGenerator() {
         return Optional.of(this.__idMeta);
