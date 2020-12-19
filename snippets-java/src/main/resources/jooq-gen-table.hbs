@@ -44,7 +44,7 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
 
     private final List<Field<?>> __selectFields = Arrays.asList({{#each declaredColumnMetas}}this.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}});
 
-    private final List<ColumnMeta<City, ?>> __columnMeta = Arrays.asList({{#each saveColumnMetas}}new ColumnMeta((Function<{{entityName}}, {{fieldType}}>) {{entityName}}::getName, this.{{tableFieldName}}){{#unless @last}},{{/unless}}{{/each}});
+    private final List<ColumnMeta<{{entityName}}, ?>> __columnMeta = Arrays.asList({{#each saveColumnMetas}}new ColumnMeta((Function<{{entityName}}, {{fieldType}}>) {{entityName}}::getName, this.{{tableFieldName}}){{#unless @last}},{{/unless}}{{/each}});
     public {{tableClassName}}() {
         this(DSL.name("{{tableName}}"), null);
     }
