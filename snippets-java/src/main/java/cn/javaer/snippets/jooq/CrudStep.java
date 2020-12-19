@@ -1,6 +1,5 @@
 package cn.javaer.snippets.jooq;
 
-import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
 import org.jooq.Field;
@@ -39,7 +38,7 @@ public class CrudStep {
      *
      * @return the select step
      */
-    public <M extends TableMetaProvider<?>, ID> SelectConditionStep<Record>
+    public <M extends TableMetaProvider<?, ID, ?>, ID> SelectConditionStep<Record>
     findByIdStep(final @NotNull ID id, final M meta) {
 
         return this.dsl.select(meta.selectFields())
@@ -57,28 +56,32 @@ public class CrudStep {
      *
      * @return the select step
      */
-    public <M extends TableMetaProvider<?>, ID> SelectConditionStep<Record>
+    public <M extends TableMetaProvider<?, ID, A>, ID, A> SelectConditionStep<Record>
     findByIdAndCreatorStep(final @NotNull ID id, final M meta) {
 
+        @SuppressWarnings("unchecked")
+        final A auditor = (A) this.auditorAware.requiredAuditor();
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
             .where(meta.getId().getColumn().eq(id))
-            .and(meta.getCreatedBy().getColumn().eq(this.auditorAware.requiredAuditor()));
+            .and(meta.getCreatedBy().getColumn().eq(auditor));
     }
 
-    public @NotNull <M extends TableMetaProvider<?>> SelectJoinStep<Record>
+    public @NotNull <M extends TableMetaProvider<?, ?, ?>> SelectJoinStep<Record>
     findAllStep(final M meta) {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable());
     }
 
-    public @NotNull <M extends TableMetaProvider<?>> SelectConditionStep<Record>
+    public @NotNull <M extends TableMetaProvider<?, ?, A>, A> SelectConditionStep<Record>
     findAllByCreatorStep(final M meta) {
 
+        @SuppressWarnings("unchecked")
+        final A auditor = (A) this.auditorAware.requiredAuditor();
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
-            .where(meta.getCreatedBy().getColumn().eq(this.auditorAware.requiredAuditor()));
+            .where(meta.getCreatedBy().getColumn().eq(auditor));
     }
 
     /**
@@ -91,8 +94,7 @@ public class CrudStep {
      *
      * @return the insert values step n
      */
-    @SneakyThrows
-    public <T, M extends TableMetaProvider<T>> InsertValuesStepN<?>
+    public <M extends TableMetaProvider<T, ID, A>, T, ID, A> InsertValuesStepN<?>
     insertStep(final @NotNull T entity, final M meta) {
 
         final List<Object> values = new ArrayList<>();
@@ -104,7 +106,7 @@ public class CrudStep {
             values.add(it.getReadMethod().apply(entity));
         });
 
-        for (final ColumnMeta cm : meta.saveColumnMetas()) {
+        for (final ColumnMeta<T, ?> cm : meta.saveColumnMetas()) {
             fields.add(cm.getColumn());
             values.add(cm.getReadMethod().apply(entity));
         }
@@ -138,8 +140,8 @@ public class CrudStep {
      *
      * @return the insert values step n
      */
-    public <T, M extends TableMetaProvider<T>> InsertValuesStepN<?>
-    batchInsertStep(@NotNull final List<?> entities, final M meta) {
+    public <M extends TableMetaProvider<T, ID, A>, T, ID, A> InsertValuesStepN<?>
+    batchInsertStep(@NotNull final List<T> entities, final M meta) {
 
         final List<Field<?>> fields = new ArrayList<>(meta.saveColumnMetas().size() + 4);
         meta.idGenerator().ifPresent(it -> fields.add(it.getColumn()));
@@ -154,7 +156,7 @@ public class CrudStep {
 
         final InsertValuesStepN<?> step = this.dsl.insertInto(meta.getTable()).columns(fields);
 
-        for (final Object entity : entities) {
+        for (final T entity : entities) {
             final List<Object> rowValue = new ArrayList<>();
             meta.idGenerator().ifPresent(it ->
                 rowValue.add(it.getReadMethod().apply(entity)));
@@ -180,11 +182,11 @@ public class CrudStep {
      *
      * @return the update set more step
      */
-    public <T, M extends TableMetaProvider<T>> UpdateConditionStep<?>
+    public <M extends TableMetaProvider<T, ID, A>, T, ID, A> UpdateConditionStep<?>
     dynamicUpdateStep(@NotNull final T entity, final M meta, final Predicate<Object> include) {
 
         final Map<Field<?>, Object> dynamic = new HashMap<>(10);
-        for (final ColumnMeta cm : meta.saveColumnMetas()) {
+        for (final ColumnMeta<T, ?> cm : meta.saveColumnMetas()) {
             final Object value = cm.getReadMethod().apply(entity);
             if (include.test(value)) {
                 dynamic.put(cm.getColumn(), value);
@@ -194,7 +196,7 @@ public class CrudStep {
             dynamic.put(it.getColumn(), this.auditorAware.getCurrentAuditor().orElse(null)));
         meta.updatedDate().ifPresent(it -> dynamic.put(it.getColumn(), LocalDateTime.now()));
 
-        final Object idValue = meta.getId().getReadMethod().apply(entity);
+        final ID idValue = meta.getId().getReadMethod().apply(entity);
         return this.dsl.update(meta.getTable())
             .set(dynamic).where(meta.getId().getColumn().eq(idValue));
     }
@@ -210,11 +212,12 @@ public class CrudStep {
      *
      * @return the update set more step
      */
-    public <T, M extends TableMetaProvider<T>> UpdateConditionStep<?>
+    public <M extends TableMetaProvider<T, ID, A>, T, ID, A> UpdateConditionStep<?>
     dynamicUpdateByCreatorStep(@NotNull final T entity, final M meta,
                                final Predicate<Object> include) {
         final UpdateConditionStep<?> step = this.dynamicUpdateStep(entity, meta, include);
-        final Object createdByValue = meta.getCreatedBy().getReadMethod().apply(entity);
-        return step.and(meta.getCreatedBy().getColumn().eq(createdByValue));
+        @SuppressWarnings("unchecked")
+        final A auditor = (A) this.auditorAware.requiredAuditor();
+        return step.and(meta.getCreatedBy().getColumn().eq(auditor));
     }
 }

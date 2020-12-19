@@ -4,6 +4,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Field;
 import org.jooq.Table;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +15,7 @@ import java.util.Optional;
  *
  * @author cn -src
  */
-public interface TableMetaProvider<T> {
+public interface TableMetaProvider<T, ID, A> {
 
     /**
      * Gets table.
@@ -35,7 +36,7 @@ public interface TableMetaProvider<T> {
      *
      * @return Field optional
      */
-    default Optional<ColumnMeta<T>> id() {
+    default Optional<ColumnMeta<T, ID>> id() {
         throw new UnsupportedOperationException();
     }
 
@@ -44,7 +45,7 @@ public interface TableMetaProvider<T> {
      *
      * @return the optional
      */
-    default Optional<ColumnMeta<T>> idGenerator() {
+    default Optional<ColumnMeta<T, ID>> idGenerator() {
         throw new UnsupportedOperationException();
     }
 
@@ -53,7 +54,7 @@ public interface TableMetaProvider<T> {
      *
      * @return the id
      */
-    default ColumnMeta<T> getId() {
+    default ColumnMeta<T, ID> getId() {
         throw new UnsupportedOperationException();
     }
 
@@ -63,7 +64,7 @@ public interface TableMetaProvider<T> {
      * @return Field[] list
      */
     @UnmodifiableView
-    List<Field<Object>> selectFields();
+    List<Field<?>> selectFields();
 
     /**
      * 插入或者更新默认使用的字段, 不含审计相关的字段.
@@ -71,14 +72,14 @@ public interface TableMetaProvider<T> {
      * @return Field[] list
      */
     @UnmodifiableView
-    List<ColumnMeta<T>> saveColumnMetas();
+    List<ColumnMeta<T, ?>> saveColumnMetas();
 
     /**
      * 创建者字段.
      *
      * @return Field optional
      */
-    default Optional<ColumnMeta<T>> createdBy() {
+    default Optional<ColumnMeta<T, A>> createdBy() {
         throw new UnsupportedOperationException();
     }
 
@@ -87,7 +88,7 @@ public interface TableMetaProvider<T> {
      *
      * @return the created by
      */
-    default ColumnMeta<T> getCreatedBy() {
+    default ColumnMeta<T, A> getCreatedBy() {
         throw new UnsupportedOperationException();
     }
 
@@ -96,7 +97,7 @@ public interface TableMetaProvider<T> {
      *
      * @return Field optional
      */
-    default Optional<ColumnMeta<T>> createdDate() {
+    default Optional<ColumnMeta<T, LocalDateTime>> createdDate() {
         throw new UnsupportedOperationException();
     }
 
@@ -105,7 +106,7 @@ public interface TableMetaProvider<T> {
      *
      * @return the created date
      */
-    default ColumnMeta<T> getCreatedDate() {
+    default ColumnMeta<T, LocalDateTime> getCreatedDate() {
         throw new UnsupportedOperationException();
     }
 
@@ -114,7 +115,7 @@ public interface TableMetaProvider<T> {
      *
      * @return Field optional
      */
-    default Optional<ColumnMeta<T>> updatedBy() {
+    default Optional<ColumnMeta<T, A>> updatedBy() {
         throw new UnsupportedOperationException();
     }
 
@@ -123,7 +124,7 @@ public interface TableMetaProvider<T> {
      *
      * @return the updated by
      */
-    default ColumnMeta<T> getUpdatedBy() {
+    default ColumnMeta<T, A> getUpdatedBy() {
         throw new UnsupportedOperationException();
     }
 
@@ -132,7 +133,7 @@ public interface TableMetaProvider<T> {
      *
      * @return Field optional
      */
-    default Optional<ColumnMeta<T>> updatedDate() {
+    default Optional<ColumnMeta<T, LocalDateTime>> updatedDate() {
         throw new UnsupportedOperationException();
     }
 
@@ -141,7 +142,7 @@ public interface TableMetaProvider<T> {
      *
      * @return the updated date
      */
-    default ColumnMeta<T> getUpdatedDate() {
+    default ColumnMeta<T, LocalDateTime> getUpdatedDate() {
         throw new UnsupportedOperationException();
     }
 }
