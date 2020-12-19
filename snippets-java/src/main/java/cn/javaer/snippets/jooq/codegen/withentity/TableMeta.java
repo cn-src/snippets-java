@@ -64,8 +64,15 @@ public class TableMeta {
         this.createdDateColumnMeta = this.columnMetas.stream()
             .filter(ColumnMeta::isCreatedDate).findFirst().orElse(null);
         this.hasAuditor = (this.updatedByColumnMeta != null) || (this.createdByColumnMeta != null);
-        this.auditorType = this.updatedByColumnMeta != null ?
-            this.updatedByColumnMeta.getFieldType() : this.createdByColumnMeta.getFieldType();
+        if (this.updatedByColumnMeta != null) {
+            this.auditorType = this.updatedByColumnMeta.getFieldType();
+        }
+        else if (this.createdByColumnMeta != null) {
+            this.auditorType = this.createdByColumnMeta.getFieldType();
+        }
+        else {
+            this.auditorType = null;
+        }
 
         this.declaredColumnMetas = classInfo.getDeclaredFieldInfo().stream()
             .filter(it -> !it.isStatic())
