@@ -40,6 +40,7 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
     public final TableField<Record, {{fieldType}}> {{tableFieldName}} = createField(DSL.name("{{columnName}}"), {{sqlType}}, this, ""{{#if enumType}}, {{{enumConverter}}}{{/if}});
 {{~/if~}}
 {{/each}}
+
     private final Table<?> __table = DSL.table(getUnqualifiedName());
 
     private final List<Field<?>> __selectFields = Arrays.asList({{#each declaredColumnMetas}}this.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}});
@@ -47,16 +48,16 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
     private final List<ColumnMeta<{{entityName}}, ?>> __columnMeta = Arrays.asList({{#each saveColumnMetas}}new ColumnMeta((Function<{{entityName}}, {{fieldType}}>) {{entityName}}::{{getterName}}, this.{{tableFieldName}}){{#unless @last}},{{/unless}}{{/each}});
 {{#if idColumnMeta}}
     private final ColumnMeta<{{entityName}}, {{idColumnMeta.fieldType}}> __idMeta = new ColumnMeta<>({{entityName}}::{{idColumnMeta.getterName}}, this.{{idColumnMeta.tableFieldName}});
-{{/if}}
+{{/if~}}
 {{#if updatedByColumnMeta}}
     private final ColumnMeta<{{entityName}}, {{updatedByColumnMeta.fieldType}}> __updatedByMeta = new ColumnMeta<>({{entityName}}::{{updatedByColumnMeta.getterName}}, this.{{updatedByColumnMeta.tableFieldName}});
-{{/if}}
+{{/if~}}
 {{#if updatedDateColumnMeta}}
     private final ColumnMeta<{{entityName}}, {{updatedDateColumnMeta.fieldType}}> __updatedDateMeta = new ColumnMeta<>({{entityName}}::{{updatedDateColumnMeta.getterName}}, this.{{updatedDateColumnMeta.tableFieldName}});
-{{/if}}
+{{/if~}}
 {{#if createdByColumnMeta}}
     private final ColumnMeta<{{entityName}}, {{createdByColumnMeta.fieldType}}> __createdByMeta = new ColumnMeta<>({{entityName}}::{{createdByColumnMeta.getterName}}, this.{{createdByColumnMeta.tableFieldName}});
-{{/if}}
+{{/if~}}
 {{#if createdDateColumnMeta}}
     private final ColumnMeta<{{entityName}}, {{createdDateColumnMeta.fieldType}}> __createdDateMeta = new ColumnMeta<>({{entityName}}::{{createdDateColumnMeta.getterName}}, this.{{createdDateColumnMeta.tableFieldName}});
 {{/if}}
@@ -92,24 +93,24 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
     public Optional<ColumnMeta<{{entityName}}, {{idColumnMeta.fieldType}}>> idGenerator() {
         return Optional.of(this.__idMeta);
     }
-{{/if}}
+{{/if~}}
     @Override
     public Optional<ColumnMeta<{{entityName}}, {{idColumnMeta.fieldType}}>> getId() {
         return Optional.of(this.__idMeta);
     }
-{{/if}}
+{{/if~}}
 {{#if updatedByColumnMeta}}
     @Override
     public Optional<ColumnMeta<{{entityName}}, {{updatedByColumnMeta.fieldType}}>> getUpdatedBy() {
         return Optional.of(this.__updatedByMeta);
     }
-{{/if}}
+{{/if~}}
 {{#if updatedDateColumnMeta}}
     @Override
     public Optional<ColumnMeta<{{entityName}}, {{updatedDateColumnMeta.fieldType}}>> getUpdatedDate() {
         return Optional.of(this.__updatedDateMeta);
     }
-{{/if}}
+{{/if~}}
 {{#if createdByColumnMeta}}
     @Override
     public Optional<ColumnMeta<{{entityName}}, {{createdByColumnMeta.fieldType}}>> getCreatedBy() {
