@@ -73,6 +73,16 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
     }
 
     @Override
+    public Optional<ColumnMeta<City, Integer>> idGenerator() {
+        return Optional.of(this.__idMeta);
+    }
+
+    @Override
+    public Optional<ColumnMeta<City, Integer>> getId() {
+        return Optional.of(this.__idMeta);
+    }
+
+    @Override
     public @UnmodifiableView List<Field<?>> selectFields() {
         return __selectFields;
     }

@@ -13,6 +13,7 @@ public class ColumnMeta {
     String fieldName;
     String getterName;
     String fieldType;
+    boolean readOnly;
     boolean enumType;
     boolean customField;
     boolean id;
@@ -29,7 +30,7 @@ public class ColumnMeta {
 
     public ColumnMeta(final String fieldName, final String fieldType, final String columnName,
                       final boolean id, final boolean updatedBy, final boolean updatedDate,
-                      final boolean createdBy, final boolean createdDate) {
+                      final boolean createdBy, final boolean createdDate, final boolean readOnly) {
         this.fieldName = fieldName;
         this.getterName = boolean.class.getName().equals(fieldType) ?
             "is" + StrUtils.toFirstCharUpper(fieldName) :
@@ -48,10 +49,11 @@ public class ColumnMeta {
         this.updatedDate = updatedDate;
         this.createdBy = createdBy;
         this.createdDate = createdDate;
+        this.readOnly = readOnly;
     }
 
     public ColumnMeta(final String fieldName, final String fieldType, final String columnName) {
-        this(fieldName, fieldType, columnName, false, false, false, false, false);
+        this(fieldName, fieldType, columnName, false, false, false, false, false, false);
     }
 
     public ColumnMeta(final FieldInfo fieldInfo) {
@@ -62,7 +64,8 @@ public class ColumnMeta {
             fieldInfo.hasAnnotation("org.springframework.data.annotation.LastModifiedBy"),
             fieldInfo.hasAnnotation("org.springframework.data.annotation.LastModifiedDate"),
             fieldInfo.hasAnnotation("org.springframework.data.annotation.CreatedBy"),
-            fieldInfo.hasAnnotation("org.springframework.data.annotation.CreatedDate")
+            fieldInfo.hasAnnotation("org.springframework.data.annotation.CreatedDate"),
+            fieldInfo.hasAnnotation("org.springframework.data.annotation.ReadOnlyProperty")
         );
     }
 
@@ -70,7 +73,7 @@ public class ColumnMeta {
         this(genColumn.field(), genColumn.fieldType().getName(),
             StrUtils.defaultEmpty(genColumn.column(),
                 StrUtils.toSnakeLower(genColumn.field())),
-            false, false, false, false, false);
+            false, false, false, false, false, false);
     }
 
     static String enumConverter(final String fieldType) {
