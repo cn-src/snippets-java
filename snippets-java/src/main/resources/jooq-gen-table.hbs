@@ -12,14 +12,15 @@ import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
-cn.javaer.snippets.jooq.TableMetaProvider;
+import cn.javaer.snippets.jooq.TableMetaProvider;
+import {{entityClassName}};
 
 /**
  * This class is automatic generated.
  */
 @SuppressWarnings({"ALL"})
 @javax.annotation.Generated("cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool")
-public class {{tableClassName}} extends TableImpl<Record> implements TableMetaProvider<{{entityClassName}}, {{#if idColumnMeta}}{{idColumnMeta.fieldType}}{{else}}Void{{/if}}, {{#if updatedByColumnMeta}}{{updatedByColumnMeta.fieldType}}{{else}}Void{{/if}}> {
+public class {{tableClassName}} extends TableImpl<Record> implements TableMetaProvider<{{entityName}}, {{#if idColumnMeta}}{{idColumnMeta.fieldType}}{{else}}Void{{/if}}, {{#if updatedByColumnMeta}}{{updatedByColumnMeta.fieldType}}{{else}}Void{{/if}}> {
 
     public static final {{tableClassName}} {{staticFieldName}} = new {{tableClassName}}();
 {{~#if hasAttachColumn}}
