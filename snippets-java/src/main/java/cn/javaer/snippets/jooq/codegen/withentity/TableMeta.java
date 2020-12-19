@@ -20,6 +20,7 @@ public class TableMeta {
     String generatedPackage;
     String tableName;
     String entityName;
+    String entityClassName;
     String staticFieldName;
     ColumnMeta idColumnMeta;
     ColumnMeta updatedByColumnMeta;
@@ -34,9 +35,8 @@ public class TableMeta {
 
     public TableMeta(final ClassInfo classInfo, final String generatedPackage) {
         this.generatedPackage = generatedPackage;
-
         this.entityName = classInfo.getSimpleName();
-
+        this.entityClassName = classInfo.getName();
         this.staticFieldName = StrUtils.toSnakeUpper(classInfo.getSimpleName());
 
         final String tableValue = NameUtils.tableValue(classInfo);
