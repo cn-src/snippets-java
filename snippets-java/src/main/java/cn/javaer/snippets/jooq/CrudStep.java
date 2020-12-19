@@ -43,7 +43,7 @@ public class CrudStep {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
-            .where(meta.getId().getColumn().eq(id));
+            .where(meta.id().getColumn().eq(id));
     }
 
     /**
@@ -63,8 +63,8 @@ public class CrudStep {
         final A auditor = (A) this.auditorAware.requiredAuditor();
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
-            .where(meta.getId().getColumn().eq(id))
-            .and(meta.getCreatedBy().getColumn().eq(auditor));
+            .where(meta.id().getColumn().eq(id))
+            .and(meta.createdBy().getColumn().eq(auditor));
     }
 
     public @NotNull <M extends TableMetaProvider<?, ?, ?>> SelectJoinStep<Record>
@@ -81,7 +81,7 @@ public class CrudStep {
         final A auditor = (A) this.auditorAware.requiredAuditor();
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
-            .where(meta.getCreatedBy().getColumn().eq(auditor));
+            .where(meta.createdBy().getColumn().eq(auditor));
     }
 
     /**
@@ -110,19 +110,19 @@ public class CrudStep {
             fields.add(cm.getColumn());
             values.add(cm.getReadMethod().apply(entity));
         }
-        meta.updatedBy().ifPresent(it -> {
+        meta.getUpdatedBy().ifPresent(it -> {
             fields.add(it.getColumn());
             values.add(auditor);
         });
-        meta.updatedDate().ifPresent(it -> {
+        meta.getUpdatedDate().ifPresent(it -> {
             fields.add(it.getColumn());
             values.add(now);
         });
-        meta.createdBy().ifPresent(it -> {
+        meta.getCreatedBy().ifPresent(it -> {
             fields.add(it.getColumn());
             values.add(auditor);
         });
-        meta.createdDate().ifPresent(it -> {
+        meta.getCreatedDate().ifPresent(it -> {
             fields.add(it.getColumn());
             values.add(now);
         });
@@ -146,10 +146,10 @@ public class CrudStep {
         final List<Field<?>> fields = new ArrayList<>(meta.saveColumnMetas().size() + 4);
         meta.idGenerator().ifPresent(it -> fields.add(it.getColumn()));
         meta.saveColumnMetas().forEach(it -> fields.add(it.getColumn()));
-        meta.updatedBy().ifPresent(it -> fields.add(it.getColumn()));
-        meta.updatedDate().ifPresent(it -> fields.add(it.getColumn()));
-        meta.createdBy().ifPresent(it -> fields.add(it.getColumn()));
-        meta.createdDate().ifPresent(it -> fields.add(it.getColumn()));
+        meta.getUpdatedBy().ifPresent(it -> fields.add(it.getColumn()));
+        meta.getUpdatedDate().ifPresent(it -> fields.add(it.getColumn()));
+        meta.getCreatedBy().ifPresent(it -> fields.add(it.getColumn()));
+        meta.getCreatedDate().ifPresent(it -> fields.add(it.getColumn()));
 
         final Object auditor = this.auditorAware.getCurrentAuditor().orElse(null);
         final LocalDateTime now = LocalDateTime.now();
@@ -162,10 +162,10 @@ public class CrudStep {
                 rowValue.add(it.getReadMethod().apply(entity)));
             meta.saveColumnMetas().forEach(it ->
                 rowValue.add(it.getReadMethod().apply(entity)));
-            meta.updatedBy().ifPresent(it -> rowValue.add(auditor));
-            meta.updatedDate().ifPresent(it -> rowValue.add(now));
-            meta.createdBy().ifPresent(it -> rowValue.add(auditor));
-            meta.createdDate().ifPresent(it -> rowValue.add(now));
+            meta.getUpdatedBy().ifPresent(it -> rowValue.add(auditor));
+            meta.getUpdatedDate().ifPresent(it -> rowValue.add(now));
+            meta.getCreatedBy().ifPresent(it -> rowValue.add(auditor));
+            meta.getCreatedDate().ifPresent(it -> rowValue.add(now));
             step.values(rowValue.toArray());
         }
         return step;
@@ -192,13 +192,13 @@ public class CrudStep {
                 dynamic.put(cm.getColumn(), value);
             }
         }
-        meta.updatedBy().ifPresent(it ->
+        meta.getUpdatedBy().ifPresent(it ->
             dynamic.put(it.getColumn(), this.auditorAware.getCurrentAuditor().orElse(null)));
-        meta.updatedDate().ifPresent(it -> dynamic.put(it.getColumn(), LocalDateTime.now()));
+        meta.getUpdatedDate().ifPresent(it -> dynamic.put(it.getColumn(), LocalDateTime.now()));
 
-        final ID idValue = meta.getId().getReadMethod().apply(entity);
+        final ID idValue = meta.id().getReadMethod().apply(entity);
         return this.dsl.update(meta.getTable())
-            .set(dynamic).where(meta.getId().getColumn().eq(idValue));
+            .set(dynamic).where(meta.id().getColumn().eq(idValue));
     }
 
     /**
@@ -218,6 +218,6 @@ public class CrudStep {
         final UpdateConditionStep<?> step = this.dynamicUpdateStep(entity, meta, include);
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
-        return step.and(meta.getCreatedBy().getColumn().eq(auditor));
+        return step.and(meta.createdBy().getColumn().eq(auditor));
     }
 }

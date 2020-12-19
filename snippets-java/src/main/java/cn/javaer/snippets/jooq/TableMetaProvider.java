@@ -32,33 +32,6 @@ public interface TableMetaProvider<T, ID, A> {
     Class<T> getEntityClass();
 
     /**
-     * id 主键字段.
-     *
-     * @return Field optional
-     */
-    default Optional<ColumnMeta<T, ID>> id() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Id generator optional.
-     *
-     * @return the optional
-     */
-    default Optional<ColumnMeta<T, ID>> idGenerator() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    default ColumnMeta<T, ID> getId() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * 查询默认使用的字段.
      *
      * @return Field[] list
@@ -75,12 +48,39 @@ public interface TableMetaProvider<T, ID, A> {
     List<ColumnMeta<T, ?>> saveColumnMetas();
 
     /**
+     * id 主键字段.
+     *
+     * @return Field optional
+     */
+    default ColumnMeta<T, ID> id() {
+        return this.getId().orElseThrow(UnsupportedOperationException::new);
+    }
+
+    /**
+     * Id generator optional.
+     *
+     * @return the optional
+     */
+    default Optional<ColumnMeta<T, ID>> idGenerator() {
+        return Optional.empty();
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    default Optional<ColumnMeta<T, ID>> getId() {
+        return Optional.empty();
+    }
+
+    /**
      * 创建者字段.
      *
      * @return Field optional
      */
-    default Optional<ColumnMeta<T, A>> createdBy() {
-        throw new UnsupportedOperationException();
+    default ColumnMeta<T, A> createdBy() {
+        return this.getCreatedBy().orElseThrow(UnsupportedOperationException::new);
     }
 
     /**
@@ -88,8 +88,8 @@ public interface TableMetaProvider<T, ID, A> {
      *
      * @return the created by
      */
-    default ColumnMeta<T, A> getCreatedBy() {
-        throw new UnsupportedOperationException();
+    default Optional<ColumnMeta<T, A>> getCreatedBy() {
+        return Optional.empty();
     }
 
     /**
@@ -97,8 +97,8 @@ public interface TableMetaProvider<T, ID, A> {
      *
      * @return Field optional
      */
-    default Optional<ColumnMeta<T, LocalDateTime>> createdDate() {
-        throw new UnsupportedOperationException();
+    default ColumnMeta<T, LocalDateTime> createdDate() {
+        return this.getCreatedDate().orElseThrow(UnsupportedOperationException::new);
     }
 
     /**
@@ -106,8 +106,8 @@ public interface TableMetaProvider<T, ID, A> {
      *
      * @return the created date
      */
-    default ColumnMeta<T, LocalDateTime> getCreatedDate() {
-        throw new UnsupportedOperationException();
+    default Optional<ColumnMeta<T, LocalDateTime>> getCreatedDate() {
+        return Optional.empty();
     }
 
     /**
@@ -115,8 +115,8 @@ public interface TableMetaProvider<T, ID, A> {
      *
      * @return Field optional
      */
-    default Optional<ColumnMeta<T, A>> updatedBy() {
-        throw new UnsupportedOperationException();
+    default ColumnMeta<T, A> updatedBy() {
+        return this.getUpdatedBy().orElseThrow(UnsupportedOperationException::new);
     }
 
     /**
@@ -124,8 +124,8 @@ public interface TableMetaProvider<T, ID, A> {
      *
      * @return the updated by
      */
-    default ColumnMeta<T, A> getUpdatedBy() {
-        throw new UnsupportedOperationException();
+    default Optional<ColumnMeta<T, A>> getUpdatedBy() {
+        return Optional.empty();
     }
 
     /**
@@ -133,8 +133,8 @@ public interface TableMetaProvider<T, ID, A> {
      *
      * @return Field optional
      */
-    default Optional<ColumnMeta<T, LocalDateTime>> updatedDate() {
-        throw new UnsupportedOperationException();
+    default ColumnMeta<T, LocalDateTime> updatedDate() {
+        return this.getUpdatedDate().orElseThrow(UnsupportedOperationException::new);
     }
 
     /**
@@ -142,7 +142,7 @@ public interface TableMetaProvider<T, ID, A> {
      *
      * @return the updated date
      */
-    default ColumnMeta<T, LocalDateTime> getUpdatedDate() {
-        throw new UnsupportedOperationException();
+    default Optional<ColumnMeta<T, LocalDateTime>> getUpdatedDate() {
+        return Optional.empty();
     }
 }

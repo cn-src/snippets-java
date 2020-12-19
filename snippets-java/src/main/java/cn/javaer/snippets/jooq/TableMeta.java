@@ -40,11 +40,6 @@ public class TableMeta<T, ID, A> implements TableMetaProvider<T, ID, A> {
     }
 
     @Override
-    public Optional<ColumnMeta<T, ID>> id() {
-        return Optional.ofNullable(this.id);
-    }
-
-    @Override
     public Optional<ColumnMeta<T, ID>> idGenerator() {
         if (!this.idReadOnly) {
             return Optional.ofNullable(this.id);
@@ -53,22 +48,27 @@ public class TableMeta<T, ID, A> implements TableMetaProvider<T, ID, A> {
     }
 
     @Override
-    public Optional<ColumnMeta<T, A>> createdBy() {
+    public Optional<ColumnMeta<T, ID>> getId() {
+        return Optional.ofNullable(this.id);
+    }
+
+    @Override
+    public Optional<ColumnMeta<T, A>> getCreatedBy() {
         return Optional.ofNullable(this.createdBy);
     }
 
     @Override
-    public Optional<ColumnMeta<T, LocalDateTime>> createdDate() {
+    public Optional<ColumnMeta<T, LocalDateTime>> getCreatedDate() {
         return Optional.ofNullable(this.createdDate);
     }
 
     @Override
-    public Optional<ColumnMeta<T, A>> updatedBy() {
+    public Optional<ColumnMeta<T, A>> getUpdatedBy() {
         return Optional.ofNullable(this.updatedBy);
     }
 
     @Override
-    public Optional<ColumnMeta<T, LocalDateTime>> updatedDate() {
+    public Optional<ColumnMeta<T, LocalDateTime>> getUpdatedDate() {
         return Optional.ofNullable(this.updatedDate);
     }
 }

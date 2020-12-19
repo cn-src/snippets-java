@@ -53,6 +53,15 @@ class CrudStepWithH2Test {
             meta).execute();
     }
 
+    @Test
+    void oneMetaStep() {
+        this.crudStep.insertStep(new City(1, "name"), TCity.CITY)
+            .execute();
+        final City city = this.crudStep.findByIdStep(1, TCity.CITY).fetchOneInto(City.class);
+//        assertThat(demo).extracting(Demo::getId).isEqualTo(1L);
+//        assertThat(demo).extracting(Demo::getName).isEqualTo("name");
+    }
+
     @Value
     static class Demo {
         @Id
