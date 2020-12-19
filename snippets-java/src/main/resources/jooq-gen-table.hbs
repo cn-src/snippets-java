@@ -33,11 +33,6 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
     public final TableField<Record, {{fieldType}}> {{tableFieldName}} = createField(DSL.name("{{columnName}}"), {{sqlType}}, this, ""{{#if enumType}}, {{{enumConverter}}}{{/if}});
 {{~/if~}}
 {{/each}}
-{{#if hasAttachColumn}}
-    public final Field<?>[] declaredFields() {
-        return new Field[]{ {{#each declaredColumnMetas}}this.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}} };
-    }
-{{/if}}
     public {{tableClassName}}() {
         this(DSL.name("{{tableName}}"), null);
     }
@@ -54,4 +49,9 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
     public {{tableClassName}} as(String alias) {
         return new {{tableClassName}}(DSL.name(alias), this);
     }
+{{#if hasAttachColumn}}
+    public final Field<?>[] declaredFields() {
+        return new Field[]{ {{#each declaredColumnMetas}}this.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}} };
+    }
+{{/if}}
 }
