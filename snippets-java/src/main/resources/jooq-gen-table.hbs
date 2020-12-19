@@ -71,17 +71,18 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
     public Class getEntityClass() {
         return {{entityName}}.class;
     }
-
+{{#if idColumnMeta}}
+{{#if not idColumnMeta.readOnly}}
     @Override
     public Optional<ColumnMeta<City, Integer>> idGenerator() {
         return Optional.of(this.__idMeta);
     }
-
+{{/if}}
     @Override
     public Optional<ColumnMeta<City, Integer>> getId() {
         return Optional.of(this.__idMeta);
     }
-
+{{/if}}
     @Override
     public @UnmodifiableView List<Field<?>> selectFields() {
         return __selectFields;
