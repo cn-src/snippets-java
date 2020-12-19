@@ -86,6 +86,30 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
         return Optional.of(this.__idMeta);
     }
 {{/if}}
+{{#if updatedByColumnMeta}}
+    @Override
+    public Optional<ColumnMeta<{{entityName}}, {{updatedByColumnMeta.fieldType}}>> getUpdatedBy() {
+        return Optional.of(this.__updatedByMeta);
+    }
+{{/if}}
+{{#if updatedDateColumnMeta}}
+    @Override
+    public Optional<ColumnMeta<{{entityName}}, {{updatedDateColumnMeta.fieldType}}>> getUpdatedDate() {
+        return Optional.of(this.__updatedDateMeta);
+    }
+{{/if}}
+{{#if createdByColumnMeta}}
+    @Override
+    public Optional<ColumnMeta<{{entityName}}, {{createdByColumnMeta.fieldType}}>> getCreatedBy() {
+        return Optional.of(this.__createdByMeta);
+    }
+{{/if}}
+{{#if createdDateColumnMeta}}
+    @Override
+    public Optional<ColumnMeta<{{entityName}}, {{createdDateColumnMeta.fieldType}}>> getCreatedDate() {
+        return Optional.of(this.__createdDateMeta);
+    }
+{{/if}}
     @Override
     public @UnmodifiableView List<Field<?>> selectFields() {
         return __selectFields;
