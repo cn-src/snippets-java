@@ -2,6 +2,7 @@
 // @formatter:off
 package {{generatedPackage}};
 
+import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Field;
 import org.jooq.Name;
 import org.jooq.Record;
@@ -11,12 +12,14 @@ import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
+cn.javaer.snippets.jooq.TableMetaProvider;
+
 /**
  * This class is automatic generated.
  */
 @SuppressWarnings({"ALL"})
 @javax.annotation.Generated("cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool")
-public class {{tableClassName}} extends TableImpl<Record> {
+public class {{tableClassName}} extends TableImpl<Record> implements TableMetaProvider<{{entityClassName}}, {{#if idColumnMeta}}{{idColumnMeta.fieldType}}{{else}}Void{{/if}}, {{#if updatedByColumnMeta}}{{updatedByColumnMeta.fieldType}}{{else}}Void{{/if}}> {
 
     public static final {{tableClassName}} {{staticFieldName}} = new {{tableClassName}}();
 {{~#if hasAttachColumn}}
