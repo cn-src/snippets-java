@@ -54,11 +54,11 @@ public class ColumnMeta {
         this(fieldInfo.getName(), fieldInfo.getTypeDescriptor().toString(),
             StrUtils.defaultEmpty(NameUtils.columnValue(fieldInfo),
                 StrUtils.toSnakeLower(fieldInfo.getName())),
-            fieldInfo.hasAnnotation(""),
-            fieldInfo.hasAnnotation(""),
-            fieldInfo.hasAnnotation(""),
-            fieldInfo.hasAnnotation(""),
-            fieldInfo.hasAnnotation("")
+            fieldInfo.hasAnnotation("org.springframework.data.annotation.Id"),
+            fieldInfo.hasAnnotation("org.springframework.data.annotation.LastModifiedBy"),
+            fieldInfo.hasAnnotation("org.springframework.data.annotation.LastModifiedDate"),
+            fieldInfo.hasAnnotation("org.springframework.data.annotation.CreatedBy"),
+            fieldInfo.hasAnnotation("org.springframework.data.annotation.CreatedDate")
         );
     }
 
