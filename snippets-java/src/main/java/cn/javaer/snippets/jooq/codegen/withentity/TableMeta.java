@@ -48,9 +48,8 @@ public class TableMeta {
             .collect(Collectors.toList());
 
         final List<ColumnMeta> allColumnMetas = new ArrayList<>(this.columnMetas);
-
-        final AnnotationInfoList annotationInfoList = classInfo.getAnnotationInfo()
-            .filter(it -> GenColumn.class.getName().equals(it.getName()));
+        final AnnotationInfoList annotationInfoList =
+            classInfo.getAnnotationInfoRepeatable(GenColumn.class.getName());
         for (final AnnotationInfo annotationInfo : annotationInfoList) {
             final AnnotationParameterValueList parameterValues =
                 annotationInfo.getParameterValues();

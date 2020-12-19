@@ -14,6 +14,11 @@ public class ColumnMeta {
     String fieldType;
     boolean enumType;
     boolean customField;
+    boolean id;
+    boolean updatedBy;
+    boolean updatedDate;
+    boolean createdBy;
+    boolean createdDate;
     String enumConverter;
     String sqlType;
     String columnName;
@@ -21,7 +26,9 @@ public class ColumnMeta {
     String customFieldType;
     String tableFieldName;
 
-    public ColumnMeta(final String fieldName, final String fieldType, final String columnName) {
+    public ColumnMeta(final String fieldName, final String fieldType, final String columnName,
+                      final boolean id, final boolean updatedBy, final boolean updatedDate,
+                      final boolean createdBy, final boolean createdDate) {
         this.fieldName = fieldName;
         this.fieldType = type(fieldType);
         this.enumType = CodeGenTool.enums.containsName(this.fieldType);
@@ -32,19 +39,34 @@ public class ColumnMeta {
         this.tableFieldName = StrUtils.toSnakeUpper(this.fieldName);
         this.customField = isCustomField(fieldType);
         this.customFieldType = customFieldType(fieldType);
+        this.id = id;
+        this.updatedBy = updatedBy;
+        this.updatedDate = updatedDate;
+        this.createdBy = createdBy;
+        this.createdDate = createdDate;
+    }
+
+    public ColumnMeta(final String fieldName, final String fieldType, final String columnName) {
+        this(fieldName, fieldType, columnName, false, false, false, false, false);
     }
 
     public ColumnMeta(final FieldInfo fieldInfo) {
         this(fieldInfo.getName(), fieldInfo.getTypeDescriptor().toString(),
             StrUtils.defaultEmpty(NameUtils.columnValue(fieldInfo),
-                StrUtils.toSnakeLower(fieldInfo.getName()))
+                StrUtils.toSnakeLower(fieldInfo.getName())),
+            fieldInfo.hasAnnotation(""),
+            fieldInfo.hasAnnotation(""),
+            fieldInfo.hasAnnotation(""),
+            fieldInfo.hasAnnotation(""),
+            fieldInfo.hasAnnotation("")
         );
     }
 
     public ColumnMeta(final GenColumn genColumn) {
         this(genColumn.field(), genColumn.fieldType().getName(),
             StrUtils.defaultEmpty(genColumn.column(),
-                StrUtils.toSnakeLower(genColumn.field())));
+                StrUtils.toSnakeLower(genColumn.field())),
+            false, false, false, false, false);
     }
 
     static String enumConverter(final String fieldType) {
