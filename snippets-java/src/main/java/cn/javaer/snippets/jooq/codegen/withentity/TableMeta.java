@@ -101,7 +101,7 @@ public class TableMeta {
                 ((AnnotationClassRef) parameterValues.getValue("fieldType")).getName();
             final String columnName = (String) parameterValues.getValue("column");
             if (allColumnMetas.stream().noneMatch(it -> it.getFieldName().equals(fieldName))) {
-                final String s = StrUtils.defaultEmpty(columnName,
+                final String s = StrUtils.defaultIfEmpty(columnName,
                     StrUtils.toSnakeLower(fieldName));
                 allColumnMetas.add(new ColumnMeta(fieldName, fieldType, s));
             }

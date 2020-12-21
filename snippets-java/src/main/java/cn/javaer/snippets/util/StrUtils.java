@@ -99,7 +99,7 @@ public interface StrUtils {
      *
      * @return String
      */
-    static String defaultEmpty(final String value, final String defaultValue) {
+    static String defaultIfEmpty(final String value, final String defaultValue) {
         return value == null || value.isEmpty() ? defaultValue : value;
     }
 }

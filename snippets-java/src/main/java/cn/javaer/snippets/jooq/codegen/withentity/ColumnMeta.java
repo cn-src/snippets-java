@@ -58,7 +58,7 @@ public class ColumnMeta {
 
     public ColumnMeta(final FieldInfo fieldInfo) {
         this(fieldInfo.getName(), fieldInfo.getTypeDescriptor().toString(),
-            StrUtils.defaultEmpty(NameUtils.columnValue(fieldInfo),
+            StrUtils.defaultIfEmpty(NameUtils.columnValue(fieldInfo),
                 StrUtils.toSnakeLower(fieldInfo.getName())),
             fieldInfo.hasAnnotation("org.springframework.data.annotation.Id"),
             fieldInfo.hasAnnotation("org.springframework.data.annotation.LastModifiedBy"),
@@ -71,7 +71,7 @@ public class ColumnMeta {
 
     public ColumnMeta(final GenColumn genColumn) {
         this(genColumn.field(), genColumn.fieldType().getName(),
-            StrUtils.defaultEmpty(genColumn.column(),
+            StrUtils.defaultIfEmpty(genColumn.column(),
                 StrUtils.toSnakeLower(genColumn.field())),
             false, false, false, false, false, false);
     }
