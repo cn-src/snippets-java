@@ -7,6 +7,11 @@
         <regex>\w+\.printStackTrace\(\)</regex>
         <severity>Warning</severity>
       </element>
+      <element id="1">
+        <comment>请使用日志记录</comment>
+        <regex>System\.out.print(\w|\(|\))*</regex>
+        <severity>Warning</severity>
+      </element>
     </filetypeContainer>
   </component>
 </project>
