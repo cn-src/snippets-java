@@ -31,4 +31,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
       - name: codecov
+        env:
+          CODECOV_TOKEN: ${{CODECOV_TOKEN}}
         run: bash <(curl -s https://codecov.io/bash)
