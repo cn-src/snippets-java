@@ -31,7 +31,7 @@ public class TableMeta {
     String auditorType;
     List<ColumnMeta> columnMetas;
     List<ColumnMeta> savedColumnMetas;
-    List<ColumnMeta> declaredColumnMetas;
+    List<ColumnMeta> selectColumnMetas;
     List<ColumnMeta> allColumnMetas;
     boolean hasAttachColumn;
     String tableClassName;
@@ -83,7 +83,7 @@ public class TableMeta {
             this.auditorType = null;
         }
 
-        this.declaredColumnMetas = classInfo.getDeclaredFieldInfo().stream()
+        this.selectColumnMetas = classInfo.getDeclaredFieldInfo().stream()
             .filter(it -> !it.isStatic())
             .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
             .filter(it -> !it.hasAnnotation(ExcludeDeclared.class.getName()))
