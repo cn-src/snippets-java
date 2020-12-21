@@ -3,6 +3,9 @@ package cn.javaer.snippets.util;
 import org.apache.commons.lang3.Validate;
 
 import java.lang.annotation.Annotation;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -18,6 +21,29 @@ import java.util.Optional;
 public interface ReflectionUtils {
 
     /**
+     * 查找字段对应的 Getter 方法.
+     *
+     * @param clazz the clazz
+     * @param fieldName the field name
+     * @param fieldType the field type
+     *
+     * @return the method handle
+     */
+    static MethodHandle findGetterByField(final Class<?> clazz, final String fieldName,
+                                          final Class<?> fieldType) {
+        final String getterName = boolean.class.equals(fieldType) ?
+            "is" + StrUtils.toFirstCharUpper(fieldName) :
+            "get" + StrUtils.toFirstCharUpper(fieldName);
+        try {
+            return MethodHandles.lookup()
+                .findVirtual(clazz, getterName, MethodType.methodType(fieldType));
+        }
+        catch (final NoSuchMethodException | IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /**
      * 判断指定方法是否存在.
      *
      * @param clazz the clazz
@@ -26,8 +52,8 @@ public interface ReflectionUtils {
      *
      * @return the boolean
      */
-    static boolean hasMethod(final Class<?> clazz, final String methodName,
-                             final Class<?>... parameterTypes) {
+    static boolean hasDeclaredMethod(final Class<?> clazz, final String methodName,
+                                     final Class<?>... parameterTypes) {
         Objects.requireNonNull(clazz);
         Objects.requireNonNull(methodName);
         try {

@@ -70,7 +70,7 @@ public class CrudReflection {
             final String getterName = boolean.class.equals(field.getType()) ?
                 "is" + StrUtils.toFirstCharUpper(field.getName())
                 : "get" + StrUtils.toFirstCharUpper(field.getName());
-            if (!ReflectionUtils.hasMethod(entityClass, getterName)) {
+            if (!ReflectionUtils.hasDeclaredMethod(entityClass, getterName)) {
                 continue;
             }
 
