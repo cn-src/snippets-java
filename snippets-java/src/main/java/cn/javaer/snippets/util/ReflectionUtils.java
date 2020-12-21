@@ -36,6 +36,21 @@ public interface ReflectionUtils {
     }
 
     /**
+     * 获取字段对应的 Getter 方法名称.
+     *
+     * @param fieldName the field name
+     * @param fieldType the field type
+     *
+     * @return string
+     */
+    static String toGetterName(final String fieldName,
+                               final String fieldType) {
+        return boolean.class.getName().equals(fieldType) ?
+            "is" + StrUtils.toFirstCharUpper(fieldName) :
+            "get" + StrUtils.toFirstCharUpper(fieldName);
+    }
+
+    /**
      * 查找字段对应的 Getter 方法.
      *
      * @param clazz the clazz
