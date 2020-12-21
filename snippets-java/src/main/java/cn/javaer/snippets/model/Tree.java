@@ -126,7 +126,9 @@ public interface Tree {
                 else //noinspection AlibabaAvoidComplexCondition
                     if (!(ignoreEmpty && (cell == null || cell.isEmpty()))) {
                         final TreeNode treeNode = TreeNode.of(cell);
-                        handler.apply(treeNode, row, depth, current.getChildren().size());
+                        final int size = current.getChildren() == null ?
+                            0 : current.getChildren().size();
+                        handler.apply(treeNode, row, depth, size);
                         current.addChildren(treeNode);
                         current = treeNode;
                     }
