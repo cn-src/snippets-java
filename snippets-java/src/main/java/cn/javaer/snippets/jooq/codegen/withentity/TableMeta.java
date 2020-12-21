@@ -86,7 +86,7 @@ public class TableMeta {
         this.selectColumnMetas = classInfo.getDeclaredFieldInfo().stream()
             .filter(it -> !it.isStatic())
             .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
-            .filter(it -> !it.hasAnnotation(ExcludeDeclared.class.getName()))
+            .filter(it -> !it.hasAnnotation(ExcludeSelect.class.getName()))
             .map(ColumnMeta::new)
             .collect(Collectors.toList());
 
