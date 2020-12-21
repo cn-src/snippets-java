@@ -45,8 +45,8 @@ class TreeTest {
         final List<TreeNode> treeNodes = Tree.of(
             Arrays.asList(areas1, areas2, areas3, areas4),
             (treeNode, entity, depth, index) -> {
-                treeNode.getDynamic().put("depth", depth);
-                treeNode.getDynamic().put("index", index);
+                treeNode.putDynamic("depth", depth);
+                treeNode.putDynamic("index", index);
             },
             Areas::getArea1, Areas::getArea2, Areas::getArea3);
         assertThat(treeNodes).hasSize(2);
