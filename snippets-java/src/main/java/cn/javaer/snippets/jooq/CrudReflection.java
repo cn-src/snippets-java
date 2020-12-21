@@ -7,7 +7,6 @@ import org.jooq.Table;
 import org.jooq.impl.DSL;
 
 import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -67,8 +66,9 @@ public class CrudReflection {
                 continue;
             }
 
-            if (!ReflectionUtils.findGetterByField(entityClass, field.getName(), field.getType())
-                .isPresent()) {
+            final Optional<MethodHandle> getterMethodOpt =
+                ReflectionUtils.findGetterByField(entityClass, field.getName(), field.getType());
+            if (!getterMethodOpt.isPresent()) {
                 continue;
             }
 
@@ -86,8 +86,7 @@ public class CrudReflection {
             final org.jooq.Field<Object> column =
                 (org.jooq.Field<Object>) DSL.field(columnName, fieldType);
             selectColumns.add(column);
-            final MethodHandle handle = MethodHandles.lookup().findGetter(entityClass,
-                field.getName(), fieldType);
+            final MethodHandle handle = getterMethodOpt.get();
             final ColumnMeta<T, ?> columnMeta = new ColumnMeta<>(o -> {
                 try {
                     return handle.invoke(o);
