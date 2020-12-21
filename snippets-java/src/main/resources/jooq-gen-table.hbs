@@ -132,10 +132,4 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
     public @UnmodifiableView List<ColumnMeta<{{entityName}}, ?>> saveColumnMetas() {
         return this.__savedColumnMetas;
     }
-
-{{#if hasAttachColumn}}
-    public final Field<?>[] declaredFields() {
-        return new Field[]{ {{#each declaredColumnMetas}}this.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}} };
-    }
-{{/if}}
 }
