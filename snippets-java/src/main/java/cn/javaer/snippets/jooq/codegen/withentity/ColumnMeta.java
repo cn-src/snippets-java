@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
+import cn.javaer.snippets.util.ReflectionUtils;
 import cn.javaer.snippets.util.StrUtils;
 import io.github.classgraph.FieldInfo;
 import lombok.Value;
@@ -32,9 +33,7 @@ public class ColumnMeta {
                       final boolean id, final boolean updatedBy, final boolean updatedDate,
                       final boolean createdBy, final boolean createdDate, final boolean readOnly) {
         this.fieldName = fieldName;
-        this.getterName = boolean.class.getName().equals(fieldType) ?
-            "is" + StrUtils.toFirstCharUpper(fieldName) :
-            "get" + StrUtils.toFirstCharUpper(fieldName);
+        this.getterName = ReflectionUtils.toGetterName(fieldName, fieldType);
         this.fieldType = type(fieldType);
         this.enumType = CodeGenTool.enums.containsName(this.fieldType);
         this.sqlType = this.enumType ? "org.jooq.impl.SQLDataType.VARCHAR" :
