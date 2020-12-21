@@ -33,5 +33,5 @@ jobs:
         run: ./gradlew build
       - name: codecov
         env:
-          CODECOV_TOKEN: ${{CODECOV_TOKEN}}
+          CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
         run: bash <(curl -s https://codecov.io/bash)
