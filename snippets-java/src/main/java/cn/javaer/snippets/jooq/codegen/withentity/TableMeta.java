@@ -30,7 +30,7 @@ public class TableMeta {
     boolean hasAuditor;
     String auditorType;
     List<ColumnMeta> columnMetas;
-    List<ColumnMeta> saveColumnMetas;
+    List<ColumnMeta> savedColumnMetas;
     List<ColumnMeta> declaredColumnMetas;
     List<ColumnMeta> allColumnMetas;
     boolean hasAttachColumn;
@@ -54,7 +54,7 @@ public class TableMeta {
             .map(ColumnMeta::new)
             .collect(Collectors.toList());
 
-        this.saveColumnMetas = this.columnMetas.stream()
+        this.savedColumnMetas = this.columnMetas.stream()
             .filter(it -> !it.isReadOnly())
             .filter(it -> !it.isUpdatedBy())
             .filter(it -> !it.isUpdatedDate())

@@ -27,7 +27,7 @@ public class TableMeta<T, ID, A> implements TableMetaProvider<T, ID, A> {
     @UnmodifiableView
     List<Field<?>> selectFields;
     @UnmodifiableView
-    List<ColumnMeta<T, ?>> saveColumnMetas;
+    List<ColumnMeta<T, ?>> savedColumnMetas;
 
     @Override
     public @UnmodifiableView List<Field<?>> selectFields() {
@@ -36,7 +36,7 @@ public class TableMeta<T, ID, A> implements TableMetaProvider<T, ID, A> {
 
     @Override
     public @UnmodifiableView List<ColumnMeta<T, ?>> saveColumnMetas() {
-        return this.saveColumnMetas;
+        return this.savedColumnMetas;
     }
 
     @Override

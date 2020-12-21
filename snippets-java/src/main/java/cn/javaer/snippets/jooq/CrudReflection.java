@@ -126,7 +126,7 @@ public class CrudReflection {
             }
         }
         return builder.selectFields(Collections.unmodifiableList(selectColumns))
-            .saveColumnMetas(Collections.unmodifiableList(saveColumns))
+            .savedColumnMetas(Collections.unmodifiableList(saveColumns))
             .build();
     }
 }
