@@ -21,6 +21,21 @@ import java.util.Optional;
 public interface ReflectionUtils {
 
     /**
+     * 获取字段对应的 Getter 方法名称.
+     *
+     * @param fieldName the field name
+     * @param fieldType the field type
+     *
+     * @return string
+     */
+    static String toGetterName(final String fieldName,
+                               final Class<?> fieldType) {
+        return boolean.class.equals(fieldType) ?
+            "is" + StrUtils.toFirstCharUpper(fieldName) :
+            "get" + StrUtils.toFirstCharUpper(fieldName);
+    }
+
+    /**
      * 查找字段对应的 Getter 方法.
      *
      * @param clazz the clazz
@@ -29,16 +44,19 @@ public interface ReflectionUtils {
      *
      * @return the method handle
      */
-    static MethodHandle findGetterByField(final Class<?> clazz, final String fieldName,
-                                          final Class<?> fieldType) {
+    static Optional<MethodHandle> findGetterByField(final Class<?> clazz, final String fieldName,
+                                                    final Class<?> fieldType) {
         final String getterName = boolean.class.equals(fieldType) ?
             "is" + StrUtils.toFirstCharUpper(fieldName) :
             "get" + StrUtils.toFirstCharUpper(fieldName);
         try {
-            return MethodHandles.lookup()
-                .findVirtual(clazz, getterName, MethodType.methodType(fieldType));
+            return Optional.of(MethodHandles.lookup()
+                .findVirtual(clazz, getterName, MethodType.methodType(fieldType)));
         }
-        catch (final NoSuchMethodException | IllegalAccessException e) {
+        catch (final NoSuchMethodException e) {
+            return Optional.empty();
+        }
+        catch (final IllegalAccessException e) {
             throw new IllegalStateException(e);
         }
     }
