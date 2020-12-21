@@ -65,7 +65,7 @@ class CrudStepWithH2Test {
     }
 
     @Value
-    static class Demo {
+    public static class Demo {
         @Id
         Long id;
 
