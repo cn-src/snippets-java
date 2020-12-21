@@ -31,7 +31,7 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
 
     public static final {{tableClassName}} {{staticFieldName}} = new {{tableClassName}}();
 {{~#if hasAttachColumn}}
-    public static final Field<?>[] {{staticFieldName}}_FIELDS = new Field[]{ {{#each declaredColumnMetas}}{{staticFieldName}}.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}} };
+    public static final Field<?>[] {{staticFieldName}}_FIELDS = new Field[]{ {{#each selectColumnMetas}}{{staticFieldName}}.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}} };
 {{~/if~}}
 {{#each allColumnMetas}}
 {{#if customField}}
