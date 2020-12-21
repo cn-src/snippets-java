@@ -67,10 +67,8 @@ public class CrudReflection {
                 continue;
             }
 
-            final String getterName = boolean.class.equals(field.getType()) ?
-                "is" + StrUtils.toFirstCharUpper(field.getName())
-                : "get" + StrUtils.toFirstCharUpper(field.getName());
-            if (!ReflectionUtils.hasDeclaredMethod(entityClass, getterName)) {
+            if (!ReflectionUtils.findGetterByField(entityClass, field.getName(), field.getType())
+                .isPresent()) {
                 continue;
             }
 
