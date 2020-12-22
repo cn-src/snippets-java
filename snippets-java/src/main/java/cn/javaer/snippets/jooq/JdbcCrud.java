@@ -1,9 +1,15 @@
 package cn.javaer.snippets.jooq;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
+import org.jooq.tools.jdbc.JDBCUtils;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -11,12 +17,24 @@ import java.util.Optional;
 /**
  * @author cn-src
  */
+@Slf4j
 public class JdbcCrud {
     private final CrudStep crudStep;
 
     public JdbcCrud(final CrudStep crudStep) {
         Objects.requireNonNull(crudStep);
         this.crudStep = crudStep;
+    }
+
+    public JdbcCrud(final DataSource dataSource) {
+        Objects.requireNonNull(dataSource);
+        try (final Connection conn = dataSource.getConnection()) {
+            final DSLContext dsl = DSL.using(dataSource, JDBCUtils.dialect(conn));
+            this.crudStep = new CrudStep(dsl, Optional::empty);
+        }
+        catch (final SQLException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     public JdbcCrud(final DSLContext dsl) {
