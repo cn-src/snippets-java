@@ -1,0 +1,33 @@
+package cn.javaer.snippets.easybatch;
+
+import cn.javaer.snippets.jooq.JdbcCrud;
+import org.jeasy.batch.core.record.Batch;
+import org.jeasy.batch.core.record.Record;
+import org.jeasy.batch.core.writer.RecordWriter;
+
+import javax.sql.DataSource;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+/**
+ * @author cn-src
+ */
+public class JooqRecordWriter<P> implements RecordWriter<P> {
+    private final JdbcCrud crud;
+
+    public JooqRecordWriter(final JdbcCrud crud) {
+        this.crud = crud;
+    }
+
+    public JooqRecordWriter(final DataSource dataSource) {
+        this.crud = new JdbcCrud(dataSource);
+    }
+
+    @Override
+    public void writeRecords(final Batch<P> batch) throws Exception {
+        final List<P> collect = StreamSupport.stream(batch.spliterator(), false)
+            .map(Record::getPayload).collect(Collectors.toList());
+        this.crud.batchInsert(collect);
+    }
+}
