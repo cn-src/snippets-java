@@ -2,11 +2,11 @@ plugins {
     id 'snippets-conventions'
 }
 dependencies {
-    implementation 'org.apache.commons:commons-lang3'
     api platform(project(':snippets-platform'))
     api platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+    api "org.apache.commons:commons-lang3:${commonsLang3Version}"
 
     optionalApi 'org.springframework:spring-jdbc'
     optionalApi 'org.springframework.data:spring-data-commons'
