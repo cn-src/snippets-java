@@ -2,6 +2,7 @@ package cn.javaer.snippets.jooq;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
+import org.jooq.DSLContext;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +17,12 @@ public class JdbcCrud {
     public JdbcCrud(final CrudStep crudStep) {
         Objects.requireNonNull(crudStep);
         this.crudStep = crudStep;
+    }
+
+    public JdbcCrud(final DSLContext dsl, final AuditorAware<?> auditorAware) {
+        Objects.requireNonNull(dsl);
+        Objects.requireNonNull(auditorAware);
+        this.crudStep = new CrudStep(dsl, auditorAware);
     }
 
     public <T, ID> Optional<T> findById(final ID id, final Class<T> clazz) {
