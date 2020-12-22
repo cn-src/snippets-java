@@ -3,6 +3,7 @@ package cn.javaer.snippets.easybatch;
 import cn.javaer.snippets.jooq.JdbcCrud;
 import org.jeasy.batch.core.record.Batch;
 import org.jeasy.batch.core.record.Record;
+import org.jeasy.batch.core.util.Utils;
 import org.jeasy.batch.core.writer.RecordWriter;
 
 import javax.sql.DataSource;
@@ -17,10 +18,12 @@ public class JooqRecordWriter<P> implements RecordWriter<P> {
     private final JdbcCrud crud;
 
     public JooqRecordWriter(final JdbcCrud crud) {
+        Utils.checkNotNull(crud, "JdbcCrud");
         this.crud = crud;
     }
 
     public JooqRecordWriter(final DataSource dataSource) {
+        Utils.checkNotNull(dataSource, "DataSource");
         this.crud = new JdbcCrud(dataSource);
     }
 
