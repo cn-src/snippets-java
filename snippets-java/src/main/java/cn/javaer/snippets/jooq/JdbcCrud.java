@@ -19,6 +19,11 @@ public class JdbcCrud {
         this.crudStep = crudStep;
     }
 
+    public JdbcCrud(final DSLContext dsl) {
+        Objects.requireNonNull(dsl);
+        this.crudStep = new CrudStep(dsl, Optional::empty);
+    }
+
     public JdbcCrud(final DSLContext dsl, final AuditorAware<?> auditorAware) {
         Objects.requireNonNull(dsl);
         Objects.requireNonNull(auditorAware);
