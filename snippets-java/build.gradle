@@ -9,7 +9,7 @@ dependencies {
     api "org.apache.commons:commons-lang3:${commonsLang3Version}"
 
     optionalApi 'org.springframework:spring-jdbc'
-    optionalApi 'org.springframework.data:spring-data-commons'
+    optionalApi 'org.springframework.data:spring-data-jdbc'
 
     optionalApi 'org.jooq:jooq-codegen'
     optionalApi 'org.simpleflatmapper:sfm-jooq'
