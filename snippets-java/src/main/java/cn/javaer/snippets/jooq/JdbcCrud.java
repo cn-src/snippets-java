@@ -79,6 +79,11 @@ public class JdbcCrud {
         return this.crudStep.findAllStep(meta).fetchInto(clazz);
     }
 
+    public <T> List<T> findAll(final Condition condition, final Class<T> clazz) {
+        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
+        return this.crudStep.findAllStep(meta).where(condition).fetchInto(clazz);
+    }
+
     public <T> List<T> findAllByCreator(final Class<T> clazz) {
         final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.findAllByCreatorStep(meta).fetchInto(clazz);
