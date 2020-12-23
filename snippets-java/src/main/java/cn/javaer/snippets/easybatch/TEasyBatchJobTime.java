@@ -13,16 +13,14 @@ import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
-import javax.annotation.Generated;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
 /**
- * This class is automatic generated.
+ * This class is automatic generated form {@link cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool}.
  */
 @SuppressWarnings({"ALL"})
-@Generated("cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool")
 public class TEasyBatchJobTime extends TableImpl<Record> implements TableMetaProvider<EasyBatchJobTime, Void, Void> {
 
     public static final TEasyBatchJobTime EASY_BATCH_JOB_TIME = new TEasyBatchJobTime();
