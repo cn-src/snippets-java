@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /**
  * 基于 jackson 的工具类，与常规的纯静态方法的工具类设计的不同之处在于，可传入不同的 ObjectMapper
@@ -86,6 +87,7 @@ public class Json {
      * @param objectMapper ObjectMapper
      */
     public Json(final ObjectMapper objectMapper) {
+        Objects.requireNonNull(objectMapper);
         this.objectMapper = objectMapper;
     }
 
