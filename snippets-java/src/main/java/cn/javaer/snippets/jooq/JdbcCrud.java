@@ -3,6 +3,7 @@ package cn.javaer.snippets.jooq;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.jooq.tools.jdbc.JDBCUtils;
@@ -59,6 +60,13 @@ public class JdbcCrud {
         Objects.requireNonNull(clazz);
 
         return this.crudStep.findByIdAndCreatorStep(id, CrudReflection.getTableMeta(clazz))
+            .fetchOptionalInto(clazz);
+    }
+
+    public <T> Optional<T> findOne(final Condition condition, final Class<T> clazz) {
+        Objects.requireNonNull(clazz);
+
+        return this.crudStep.findOneStep(condition, CrudReflection.getTableMeta(clazz))
             .fetchOptionalInto(clazz);
     }
 

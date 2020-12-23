@@ -1,6 +1,7 @@
 package cn.javaer.snippets.jooq;
 
 import org.jetbrains.annotations.NotNull;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.InsertValuesStepN;
@@ -65,6 +66,24 @@ public class CrudStep {
             .from(meta.getTable())
             .where(meta.id().getColumn().eq(id))
             .and(meta.createdBy().getColumn().eq(auditor));
+    }
+
+    /**
+     * 根据 Condition 条件查询单条数据.
+     *
+     * @param <M> 元数据泛型
+     * @param <ID> id 泛型
+     * @param condition the condition
+     * @param meta the meta
+     *
+     * @return the select step
+     */
+    public <M extends TableMetaProvider<?, ID, ?>, ID> SelectConditionStep<Record>
+    findOneStep(final Condition condition, final M meta) {
+
+        return this.dsl.select(meta.selectFields())
+            .from(meta.getTable())
+            .where(condition);
     }
 
     public @NotNull <M extends TableMetaProvider<?, ?, ?>> SelectJoinStep<Record>
