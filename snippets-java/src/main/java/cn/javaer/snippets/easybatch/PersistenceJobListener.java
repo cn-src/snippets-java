@@ -16,11 +16,11 @@ import java.util.WeakHashMap;
  */
 public class PersistenceJobListener implements JobListener, BatchListener<Object> {
     private final JdbcTemplate jdbcTemplate;
-    private final PersistenceJobRecord jobRecord;
+    private final EasyBatchJobRecord jobRecord;
     private final WeakHashMap<String, JobReport> monitor;
 
     public PersistenceJobListener(final JdbcTemplate jdbcTemplate,
-                                  final PersistenceJobRecord jobRecord,
+                                  final EasyBatchJobRecord jobRecord,
                                   final WeakHashMap<String, JobReport> monitor) {
         Objects.requireNonNull(jdbcTemplate, "'jdbcTemplate' must be not null");
         Objects.requireNonNull(jobRecord, "'jobRecord' must be not null");
@@ -31,7 +31,7 @@ public class PersistenceJobListener implements JobListener, BatchListener<Object
     }
 
     public PersistenceJobListener(final JdbcTemplate jdbcTemplate,
-                                  final PersistenceJobRecord jobRecord) {
+                                  final EasyBatchJobRecord jobRecord) {
         this(jdbcTemplate, jobRecord, null);
     }
 
