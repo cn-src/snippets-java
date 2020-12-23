@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
+import cn.javaer.snippets.util.ReflectionUtils;
 import cn.javaer.snippets.util.StrUtils;
 import io.github.classgraph.AnnotationClassRef;
 import io.github.classgraph.AnnotationInfo;
@@ -36,7 +37,10 @@ public class TableMeta {
     boolean hasAttachColumn;
     String tableClassName;
 
+    boolean hasGeneratedAnnotation;
+
     public TableMeta(final ClassInfo classInfo, final String generatedPackage) {
+        this.hasGeneratedAnnotation = ReflectionUtils.isPresent("javax.annotation.Generated");
         this.generatedPackage = generatedPackage;
         this.entityName = classInfo.getSimpleName();
         this.entityClassName = classInfo.getName();
