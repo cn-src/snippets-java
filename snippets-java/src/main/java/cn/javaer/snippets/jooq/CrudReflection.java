@@ -8,6 +8,7 @@ import org.jooq.impl.DSL;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +62,7 @@ public class CrudReflection {
         final List<org.jooq.Field<Object>> selectColumns = new ArrayList<>();
         final List<ColumnMeta<T, ?>> saveColumns = new ArrayList<>();
         for (final Field field : fields) {
-            if (ReflectionUtils.isAnnotated(field,
+            if (Modifier.isTransient(field.getModifiers()) || ReflectionUtils.isAnnotated(field,
                 "org.springframework.data.annotation.Transient")) {
                 continue;
             }
