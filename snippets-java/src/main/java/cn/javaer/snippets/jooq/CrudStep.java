@@ -29,6 +29,10 @@ public class CrudStep {
         this.auditorAware = auditorAware;
     }
 
+    public DSLContext dsl() {
+        return this.dsl;
+    }
+
     /**
      * 根据 id 查询.
      *

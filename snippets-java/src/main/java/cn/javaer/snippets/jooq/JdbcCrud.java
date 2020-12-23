@@ -49,6 +49,10 @@ public class JdbcCrud {
         this.crudStep = new CrudStep(dsl, auditorAware);
     }
 
+    public DSLContext dsl() {
+        return this.crudStep.dsl();
+    }
+
     public <T, ID> Optional<T> findById(final ID id, final Class<T> clazz) {
         Objects.requireNonNull(clazz);
 

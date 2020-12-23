@@ -76,7 +76,7 @@ public class CodeGenTool {
             .acceptPackages(packageNames)
             .scan()) {
             final ClassInfoList tableClass =
-                scanResult.getClassesWithFieldAnnotation(
+                scanResult.getClassesWithAnnotation(
                     "org.springframework.data.relational.core.mapping.Table");
             final ClassInfoList idClass =
                 scanResult.getClassesWithFieldAnnotation("org.springframework.data.annotation.Id");
