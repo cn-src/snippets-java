@@ -3,6 +3,7 @@ package cn.javaer.snippets.jooq;
 import cn.javaer.snippets.type.Geometry;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.Converter;
+import org.jooq.exception.DataAccessException;
 import org.postgresql.util.PGobject;
 
 import java.sql.SQLException;
@@ -36,7 +37,7 @@ public enum PostGISGeometryConverter implements Converter<PGobject, Geometry> {
             pg.setValue(userObject.data());
         }
         catch (final SQLException e) {
-            throw new IllegalStateException(e);
+            throw new DataAccessException(e.getMessage(), e);
         }
         return pg;
     }
