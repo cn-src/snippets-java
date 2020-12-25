@@ -86,7 +86,6 @@ public class CrudReflection {
             final Class<?> fieldType = field.getType();
             final org.jooq.Field<Object> column =
                 (org.jooq.Field<Object>) DSL.field(columnName, fieldType);
-            selectColumns.add(column);
             final MethodHandle handle = getterMethodOpt.get();
             final ColumnMeta<T, ?> columnMeta = new ColumnMeta<>(o -> {
                 try {
@@ -96,6 +95,9 @@ public class CrudReflection {
                     throw new IllegalStateException(t);
                 }
             }, column);
+            if (!ReflectionUtils.isAnnotated(field, "cn.javaer.snippets.jooq.ExcludeSelect")) {
+                selectColumns.add(column);
+            }
             if (ReflectionUtils.isAnnotated(field,
                 "org.springframework.data.annotation.Id")) {
                 builder.id((ColumnMeta<T, ID>) columnMeta);
