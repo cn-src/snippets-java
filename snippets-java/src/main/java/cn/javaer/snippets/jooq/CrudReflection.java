@@ -95,7 +95,7 @@ public class CrudReflection {
                     throw new IllegalStateException(t);
                 }
             }, column);
-            if (!ReflectionUtils.isAnnotated(field, "cn.javaer.snippets.jooq.ExcludeSelect")) {
+            if (!field.isAnnotationPresent(ExcludeSelect.class)) {
                 selectColumns.add(column);
             }
             if (ReflectionUtils.isAnnotated(field,
@@ -122,7 +122,7 @@ public class CrudReflection {
             }
             else if (!ReflectionUtils.isAnnotated(field,
                 "org.springframework.data.annotation.ReadOnlyProperty") ||
-                !ReflectionUtils.isAnnotated(field, "cn.javaer.snippets.jooq.ExcludeSaved")) {
+                !field.isAnnotationPresent(ExcludeSaved.class)) {
                 saveColumns.add(columnMeta);
             }
         }
