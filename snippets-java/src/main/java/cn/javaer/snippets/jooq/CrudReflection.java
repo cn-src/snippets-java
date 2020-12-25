@@ -121,7 +121,8 @@ public class CrudReflection {
                 builder.updatedDate((ColumnMeta<T, LocalDateTime>) columnMeta);
             }
             else if (!ReflectionUtils.isAnnotated(field,
-                "org.springframework.data.annotation.ReadOnlyProperty")) {
+                "org.springframework.data.annotation.ReadOnlyProperty") ||
+                !ReflectionUtils.isAnnotated(field, "cn.javaer.snippets.jooq.ExcludeSaved")) {
                 saveColumns.add(columnMeta);
             }
         }
