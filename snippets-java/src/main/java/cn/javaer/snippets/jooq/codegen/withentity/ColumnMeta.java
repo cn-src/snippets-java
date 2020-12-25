@@ -1,6 +1,5 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
-import cn.javaer.snippets.jooq.ExcludeSelect;
 import cn.javaer.snippets.util.ReflectionUtils;
 import cn.javaer.snippets.util.StrUtils;
 import io.github.classgraph.FieldInfo;
@@ -65,9 +64,7 @@ public class ColumnMeta {
             fieldInfo.hasAnnotation("org.springframework.data.annotation.LastModifiedDate"),
             fieldInfo.hasAnnotation("org.springframework.data.annotation.CreatedBy"),
             fieldInfo.hasAnnotation("org.springframework.data.annotation.CreatedDate"),
-            fieldInfo.hasAnnotation("org.springframework.data.annotation.ReadOnlyProperty") ||
-                // TODO
-                fieldInfo.hasAnnotation(ExcludeSelect.class.getName())
+            fieldInfo.hasAnnotation("org.springframework.data.annotation.ReadOnlyProperty")
         );
     }
 

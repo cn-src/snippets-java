@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
+import cn.javaer.snippets.jooq.ExcludeSaved;
 import cn.javaer.snippets.jooq.ExcludeSelect;
 import cn.javaer.snippets.util.ReflectionUtils;
 import cn.javaer.snippets.util.StrUtils;
@@ -59,7 +60,11 @@ public class TableMeta {
             .map(ColumnMeta::new)
             .collect(Collectors.toList());
 
-        this.savedColumnMetas = this.columnMetas.stream()
+        this.savedColumnMetas = classInfo.getDeclaredFieldInfo().stream()
+            .filter(it -> !it.isStatic())
+            .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
+            .filter(it -> !it.hasAnnotation(ExcludeSaved.class.getName()))
+            .map(ColumnMeta::new)
             .filter(it -> !it.isReadOnly())
             .filter(it -> !it.isUpdatedBy())
             .filter(it -> !it.isUpdatedDate())
