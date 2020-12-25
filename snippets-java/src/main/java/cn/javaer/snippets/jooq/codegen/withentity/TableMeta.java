@@ -54,23 +54,9 @@ public class TableMeta {
 
         this.tableClassName = "T" + this.entityName;
 
-        this.columnMetas = classInfo.getDeclaredFieldInfo().stream()
-            .filter(it -> !it.isStatic())
-            .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
-            .map(ColumnMeta::new)
-            .collect(Collectors.toList());
+        this.columnMetas = getColumnMetas(classInfo);
 
-        this.savedColumnMetas = classInfo.getDeclaredFieldInfo().stream()
-            .filter(it -> !it.isStatic())
-            .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
-            .filter(it -> !it.hasAnnotation(ExcludeSaved.class.getName()))
-            .map(ColumnMeta::new)
-            .filter(it -> !it.isReadOnly())
-            .filter(it -> !it.isUpdatedBy())
-            .filter(it -> !it.isUpdatedDate())
-            .filter(it -> !it.isCreatedBy())
-            .filter(it -> !it.isCreatedDate())
-            .collect(Collectors.toList());
+        this.savedColumnMetas = getSavedColumnMetas(classInfo);
 
         this.idColumnMeta = this.columnMetas.stream()
             .filter(ColumnMeta::isId).findFirst().orElse(null);
@@ -118,5 +104,27 @@ public class TableMeta {
         }
         this.hasAttachColumn = allColumnMetas.size() > this.columnMetas.size();
         this.allColumnMetas = allColumnMetas;
+    }
+
+    static List<ColumnMeta> getColumnMetas(final ClassInfo classInfo) {
+        return classInfo.getDeclaredFieldInfo().stream()
+            .filter(it -> !it.isStatic())
+            .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
+            .map(ColumnMeta::new)
+            .collect(Collectors.toList());
+    }
+
+    static List<ColumnMeta> getSavedColumnMetas(final ClassInfo classInfo) {
+        return classInfo.getDeclaredFieldInfo().stream()
+            .filter(it -> !it.isStatic())
+            .filter(it -> !it.hasAnnotation("org.springframework.data.annotation.Transient"))
+            .filter(it -> !it.hasAnnotation(ExcludeSaved.class.getName()))
+            .map(ColumnMeta::new)
+            .filter(it -> !it.isReadOnly())
+            .filter(it -> !it.isUpdatedBy())
+            .filter(it -> !it.isUpdatedDate())
+            .filter(it -> !it.isCreatedBy())
+            .filter(it -> !it.isCreatedDate())
+            .collect(Collectors.toList());
     }
 }
