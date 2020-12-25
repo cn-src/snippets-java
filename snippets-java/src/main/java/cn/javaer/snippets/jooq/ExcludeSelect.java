@@ -1,4 +1,4 @@
-package cn.javaer.snippets.jooq.codegen.withentity;
+package cn.javaer.snippets.jooq;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
