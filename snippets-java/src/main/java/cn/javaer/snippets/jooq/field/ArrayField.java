@@ -22,6 +22,7 @@ public class ArrayField<R extends Record, T> extends CustomField<T> implements T
     public ArrayField(final String name, final DataType<T> type, final Table<R> table) {
         super(name, type);
         this.table = table;
+        CustomFieldUtils.addToFields(table, this);
     }
 
     @Override

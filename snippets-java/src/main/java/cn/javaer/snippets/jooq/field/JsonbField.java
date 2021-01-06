@@ -34,6 +34,7 @@ public class JsonbField<R extends Record, T> extends CustomField<T> implements T
         super(name, type);
         this.arguments = null;
         this.table = table;
+        CustomFieldUtils.addToFields(table, this);
     }
 
     @Override
