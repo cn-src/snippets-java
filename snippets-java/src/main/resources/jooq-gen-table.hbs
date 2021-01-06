@@ -32,9 +32,8 @@ import {{entityClassName}};
 public class {{tableClassName}} extends TableImpl<Record> implements TableMetaProvider<{{entityName}}, {{#if idColumnMeta}}{{idColumnMeta.fieldType}}{{else}}Void{{/if}}, {{#if hasAuditor}}{{auditorType}}{{else}}Void{{/if}}> {
 
     public static final {{tableClassName}} {{staticFieldName}} = new {{tableClassName}}();
-{{~#if hasAttachColumn}}
+
     public static final Field<?>[] {{staticFieldName}}_FIELDS = new Field[]{ {{#each selectColumnMetas}}{{staticFieldName}}.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}} };
-{{~/if~}}
 {{#each allColumnMetas}}
 {{#if customField}}
     public final {{customFieldType}}<Record, {{fieldType}}> {{tableFieldName}} = new {{customFieldType}}("{{columnName}}", {{sqlType}}, this);
