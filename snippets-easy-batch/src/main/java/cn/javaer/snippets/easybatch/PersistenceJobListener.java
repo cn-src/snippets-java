@@ -1,38 +1,40 @@
 package cn.javaer.snippets.easybatch;
 
+import cn.javaer.snippets.jooq.JdbcCrud;
 import org.jeasy.batch.core.job.JobParameters;
 import org.jeasy.batch.core.job.JobReport;
 import org.jeasy.batch.core.listener.BatchListener;
 import org.jeasy.batch.core.listener.JobListener;
 import org.jeasy.batch.core.record.Batch;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.WeakHashMap;
 
+import static cn.javaer.snippets.easybatch.TEasyBatchJobTime.EASY_BATCH_JOB_TIME;
+
 /**
  * @author cn-src
  */
 public class PersistenceJobListener implements JobListener, BatchListener<Object> {
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcCrud crud;
     private final EasyBatchJobRecord jobRecord;
     private final WeakHashMap<String, JobReport> monitor;
 
-    public PersistenceJobListener(final JdbcTemplate jdbcTemplate,
+    public PersistenceJobListener(final JdbcCrud crud,
                                   final EasyBatchJobRecord jobRecord,
                                   final WeakHashMap<String, JobReport> monitor) {
-        Objects.requireNonNull(jdbcTemplate, "'jdbcTemplate' must be not null");
+        Objects.requireNonNull(crud, "'jdbcCrud' must be not null");
         Objects.requireNonNull(jobRecord, "'jobRecord' must be not null");
 
-        this.jdbcTemplate = jdbcTemplate;
+        this.crud = crud;
         this.jobRecord = jobRecord;
         this.monitor = monitor;
     }
 
-    public PersistenceJobListener(final JdbcTemplate jdbcTemplate,
+    public PersistenceJobListener(final JdbcCrud crud,
                                   final EasyBatchJobRecord jobRecord) {
-        this(jdbcTemplate, jobRecord, null);
+        this(crud, jobRecord, null);
     }
 
     @Override
@@ -42,27 +44,20 @@ public class PersistenceJobListener implements JobListener, BatchListener<Object
         }
 
         if (this.jobRecord.getDataStartTime() == null) {
-            final LocalDateTime dataStartTime = this.jdbcTemplate.queryForObject(
-                "SELECT data_start_time FROM easybatch_job_time WHERE job_name=?",
-                LocalDateTime.class, this.jobRecord.getJobName());
+
+            final LocalDateTime dataStartTime = this.crud.dsl()
+                .select(EASY_BATCH_JOB_TIME.DATA_START_TIME)
+                .from(EASY_BATCH_JOB_TIME)
+                .where(EASY_BATCH_JOB_TIME.JOB_NAME.eq(this.jobRecord.getJobName()))
+                .fetchOneInto(LocalDateTime.class);
             this.jobRecord.setDataStartTime(dataStartTime);
-            this.jdbcTemplate.update("UPDATE easybatch_job_time SET data_start_time=? WHERE " +
-                    "job_name=?"
-                , this.jobRecord.getDataEndTime(), this.jobRecord.getJobName());
+
+            this.crud.dsl().update(EASY_BATCH_JOB_TIME)
+                .set(EASY_BATCH_JOB_TIME.DATA_START_TIME, this.jobRecord.getDataEndTime())
+                .where(EASY_BATCH_JOB_TIME.JOB_NAME.eq(this.jobRecord.getJobName()))
+                .execute();
         }
-        this.jdbcTemplate.update("INSERT INTO easybatch_job_record (id, job_name, " +
-                "job_start_time, job_end_time, job_status, batch_id, " +
-                "data_start_time, data_end_time, " +
-                "read_count, write_count, filter_count, error_count, " +
-                "job_parameters, last_error, created_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            this.jobRecord.getId(), this.jobRecord.getJobName(),
-            this.jobRecord.getJobStartTime(), this.jobRecord.getJobEndTime(),
-            this.jobRecord.getJobStatus(), this.jobRecord.getBatchId(),
-            this.jobRecord.getDataStartTime(), this.jobRecord.getDataEndTime(),
-            this.jobRecord.getReadCount(), this.jobRecord.getWriteCount(),
-            this.jobRecord.getFilterCount(), this.jobRecord.getErrorCount(),
-            this.jobRecord.getJobParameters(), this.jobRecord.getLastError(),
-            this.jobRecord.getCreatedDate());
+        this.crud.insert(this.jobRecord);
     }
 
     @Override
@@ -81,18 +76,6 @@ public class PersistenceJobListener implements JobListener, BatchListener<Object
     }
 
     void saveJobReport() {
-        this.jdbcTemplate.update("UPDATE easybatch_job_record SET  job_name = ?, " +
-                "job_start_time = ?, job_end_time = ?, job_status = ?, batch_id = ?," +
-                " data_start_time = ?, data_end_time = ?, read_count = ?, write_count = ?, " +
-                "filter_count = ?, error_count = ?, job_parameters = ?, " +
-                "last_error = ?, created_date = ? WHERE id = ? ",
-            this.jobRecord.getJobName(),
-            this.jobRecord.getJobStartTime(), this.jobRecord.getJobEndTime(),
-            this.jobRecord.getJobStatus(), this.jobRecord.getBatchId(),
-            this.jobRecord.getDataStartTime(), this.jobRecord.getDataEndTime(),
-            this.jobRecord.getReadCount(), this.jobRecord.getWriteCount(),
-            this.jobRecord.getFilterCount(), this.jobRecord.getErrorCount(),
-            this.jobRecord.getJobParameters(), this.jobRecord.getLastError(),
-            this.jobRecord.getCreatedDate(), this.jobRecord.getId());
+        this.crud.update(this.jobRecord);
     }
 }
