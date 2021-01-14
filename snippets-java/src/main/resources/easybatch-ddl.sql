@@ -1,4 +1,4 @@
-CREATE TABLE easybatch_job_record
+CREATE TABLE easy_batch_job_record
 (
     id              varchar(36)
         CONSTRAINT easybatch_job_record_pk
@@ -19,7 +19,7 @@ CREATE TABLE easybatch_job_record
     created_date    timestamp
 );
 
-CREATE TABLE easybatch_job_time
+CREATE TABLE easy_batch_job_time
 (
     job_name        varchar(50) NOT NULL
         CONSTRAINT easybatch_job_time_pk
