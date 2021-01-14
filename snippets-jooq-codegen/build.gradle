@@ -8,9 +8,9 @@ dependencies {
     testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
 
     api project(':snippets-jooq')
-    api 'org.jooq:jooq-codegen'
-    api 'com.github.jknack:handlebars'
-    api 'io.github.classgraph:classgraph'
+    api "org.jooq:jooq-codegen:${jooqVersion}"
+    api "com.github.jknack:handlebars:${handlebarsVersion}"
+    api "io.github.classgraph:classgraph:${classgraphVersion}"
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

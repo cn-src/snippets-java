@@ -8,8 +8,8 @@ dependencies {
     testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
 
     api(project(':snippets-jooq'))
-    api 'org.simpleflatmapper:sfm-jdbc'
-    api 'com.github.cn-src.easy-batch:easy-batch-jdbc'
+    api "org.simpleflatmapper:sfm-jdbc:${simpleflatmapperVersion}"
+    api "com.github.cn-src.easy-batch:easy-batch-jdbc:${easyBatchVersion}"
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

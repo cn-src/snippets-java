@@ -8,7 +8,7 @@ dependencies {
     testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
 
     api(project(':snippets-java'))
-    api "org.jooq:jooq"
+    api "org.jooq:jooq:${jooqVersion}"
 
     optionalApi "org.springframework:spring-beans"
     optionalApi 'org.postgresql:postgresql'
