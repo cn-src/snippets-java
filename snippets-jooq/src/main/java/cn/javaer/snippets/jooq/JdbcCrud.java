@@ -1,6 +1,5 @@
 package cn.javaer.snippets.jooq;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
 import org.jooq.Condition;
@@ -18,7 +17,6 @@ import java.util.Optional;
 /**
  * @author cn-src
  */
-@Slf4j
 public class JdbcCrud {
     private final CrudStep crudStep;
 
