@@ -5,16 +5,6 @@ dependencies {
     api "org.apache.commons:commons-lang3:${commonsLang3Version}"
     api "org.apache.commons:commons-collections4:${commonsCollections4Version}"
 
-//    optionalApi 'org.springframework:spring-jdbc'
-//    optionalApi 'org.springframework.data:spring-data-jdbc'
-
-//    optionalApi 'org.jooq:jooq-codegen'
-//    optionalApi 'org.simpleflatmapper:sfm-jooq'
-//    optionalApi 'org.simpleflatmapper:sfm-jdbc'
-//    optionalApi 'org.simpleflatmapper:sfm-springjdbc'
-//    optionalApi 'com.github.cn-src.easy-batch:easy-batch-jdbc'
-//    optionalApi 'org.eclipse.collections:eclipse-collections'
-//    optionalApi 'com.esotericsoftware:kryo'
     optionalApi 'org.springdoc:springdoc-openapi-webmvc-core'
     optionalApi 'p6spy:p6spy'
 
