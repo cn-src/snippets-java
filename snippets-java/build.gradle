@@ -2,38 +2,22 @@ plugins {
     id 'snippets-conventions'
 }
 dependencies {
-    api platform(project(':snippets-platform'))
-    api platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-    annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-    testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-
-    api "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
     api "org.apache.commons:commons-lang3:${commonsLang3Version}"
     api "org.apache.commons:commons-collections4:${commonsCollections4Version}"
 
-    optionalApi 'org.springframework:spring-jdbc'
-    optionalApi 'org.springframework.data:spring-data-jdbc'
+//    optionalApi 'org.springframework:spring-jdbc'
+//    optionalApi 'org.springframework.data:spring-data-jdbc'
 
-    optionalApi 'org.jooq:jooq-codegen'
-    optionalApi 'org.simpleflatmapper:sfm-jooq'
-    optionalApi 'org.simpleflatmapper:sfm-jdbc'
-    optionalApi 'org.simpleflatmapper:sfm-springjdbc'
-    optionalApi 'com.github.cn-src.easy-batch:easy-batch-jdbc'
+//    optionalApi 'org.jooq:jooq-codegen'
+//    optionalApi 'org.simpleflatmapper:sfm-jooq'
+//    optionalApi 'org.simpleflatmapper:sfm-jdbc'
+//    optionalApi 'org.simpleflatmapper:sfm-springjdbc'
+//    optionalApi 'com.github.cn-src.easy-batch:easy-batch-jdbc'
     optionalApi 'org.eclipse.collections:eclipse-collections'
     optionalApi 'com.esotericsoftware:kryo'
-    optionalApi 'com.github.jknack:handlebars'
-    optionalApi 'io.github.classgraph:classgraph'
     optionalApi 'org.springdoc:springdoc-openapi-webmvc-core'
     optionalApi 'p6spy:p6spy'
 
-    optionalApi 'org.postgresql:postgresql'
-    compileOnly 'org.projectlombok:lombok'
-    compileOnly 'com.google.code.findbugs:jsr305'
-    annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'com.h2database:h2'
     testImplementation 'org.testcontainers:postgresql'
     testImplementation 'org.testcontainers:junit-jupiter'
