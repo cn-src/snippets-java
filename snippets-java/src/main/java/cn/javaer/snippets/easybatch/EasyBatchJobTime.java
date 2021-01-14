@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * @author cn-src
+ */
 @Data
 @Setter(AccessLevel.PROTECTED)
 public class EasyBatchJobTime {
