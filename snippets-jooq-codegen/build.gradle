@@ -2,25 +2,14 @@ plugins {
     id 'snippets-conventions'
 }
 dependencies {
-    api platform(project(':snippets-platform'))
-    api platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-    annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-    testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-
     api project(':snippets-jooq')
     api "org.jooq:jooq-codegen:${jooqVersion}"
     api "com.github.jknack:handlebars:${handlebarsVersion}"
     api "io.github.classgraph:classgraph:${classgraphVersion}"
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'com.h2database:h2'
     testImplementation 'org.postgresql:postgresql'
     testImplementation 'org.springframework.data:spring-data-jdbc'
     testImplementation 'org.testcontainers:postgresql'
     testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
