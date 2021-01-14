@@ -1,0 +1,9 @@
+plugins {
+    id 'snippets-conventions'
+}
+dependencies {
+    api "com.esotericsoftware:kryo:${kryoVersion}"
+
+    optionalApi 'org.jooq:jooq'
+    optionalApi 'org.eclipse.collections:eclipse-collections'
+}

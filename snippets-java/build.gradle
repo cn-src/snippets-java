@@ -13,8 +13,8 @@ dependencies {
 //    optionalApi 'org.simpleflatmapper:sfm-jdbc'
 //    optionalApi 'org.simpleflatmapper:sfm-springjdbc'
 //    optionalApi 'com.github.cn-src.easy-batch:easy-batch-jdbc'
-    optionalApi 'org.eclipse.collections:eclipse-collections'
-    optionalApi 'com.esotericsoftware:kryo'
+//    optionalApi 'org.eclipse.collections:eclipse-collections'
+//    optionalApi 'com.esotericsoftware:kryo'
     optionalApi 'org.springdoc:springdoc-openapi-webmvc-core'
     optionalApi 'p6spy:p6spy'
 
