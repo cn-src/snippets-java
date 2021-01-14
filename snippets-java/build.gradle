@@ -10,6 +10,7 @@ dependencies {
     api 'org.jetbrains:annotations'
     api 'org.apache.commons:commons-lang3'
     api 'org.apache.commons:commons-collections4'
+    api 'com.fasterxml.jackson.core:jackson-databind'
 
     optionalApi 'org.springframework:spring-jdbc'
     optionalApi 'org.springframework.data:spring-data-jdbc'
