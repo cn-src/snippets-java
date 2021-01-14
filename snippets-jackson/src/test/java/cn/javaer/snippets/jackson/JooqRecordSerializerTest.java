@@ -35,6 +35,6 @@ class JooqRecordSerializerTest {
     @Test
     void serialize() {
         final String json = Json.DEFAULT.write(this.dsl.selectFrom(this.table).fetch());
-        Assertions.assertThat(json).isEqualTo("[{\"colC1\":\"v1\",\"colC2\":\"v2\"}]");
+        assertThat(json).isEqualTo("[{\"colC1\":\"v1\",\"colC2\":\"v2\"}]");
     }
 }
