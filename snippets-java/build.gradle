@@ -7,10 +7,10 @@ dependencies {
     annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
 
-    api 'org.jetbrains:annotations'
-    api 'org.apache.commons:commons-lang3'
-    api 'org.apache.commons:commons-collections4'
-    api 'com.fasterxml.jackson.core:jackson-databind'
+    api "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
+    api "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    api "org.apache.commons:commons-collections4:${commonsCollections4Version}"
+    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
     optionalApi 'org.springframework:spring-jdbc'
     optionalApi 'org.springframework.data:spring-data-jdbc'
