@@ -5,6 +5,8 @@ import cn.javaer.snippets.jooq.condition.annotation.ConditionIgnore;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionTree;
 import cn.javaer.snippets.model.TreeNode;
 import lombok.Data;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Condition;
@@ -15,8 +17,6 @@ import org.jooq.impl.SQLDataType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.beans.PropertyDescriptor;
@@ -118,6 +118,7 @@ public class ConditionCreator {
         if (query == null) {
             return null;
         }
+
         final PropertyDescriptor[] pds = BeanUtils.getPropertyDescriptors(query.getClass());
         final List<Condition> conditions = new ArrayList<>(pds.length);
 

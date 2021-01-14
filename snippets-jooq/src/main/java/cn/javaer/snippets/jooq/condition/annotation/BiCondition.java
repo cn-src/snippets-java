@@ -39,11 +39,11 @@ public @interface BiCondition {
 
         private final Function3<Field<Object>, Object, Object, Condition> function;
 
-        Operator(final Function3<Field<Object>, Object, Object, org.jooq.Condition> function) {
+        Operator(final Function3<Field<Object>, Object, Object, Condition> function) {
             this.function = function;
         }
 
-        public Function3<Field<Object>, Object, Object, org.jooq.Condition> getFunction() {
+        public Function3<Field<Object>, Object, Object, Condition> getFunction() {
             return this.function;
         }
     }

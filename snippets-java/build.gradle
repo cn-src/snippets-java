@@ -6,7 +6,10 @@ dependencies {
     api platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-    api "org.apache.commons:commons-lang3:${commonsLang3Version}"
+
+    api 'org.jetbrains:annotations'
+    api 'org.apache.commons:commons-lang3'
+    api 'org.apache.commons:commons-collections4'
 
     optionalApi 'org.springframework:spring-jdbc'
     optionalApi 'org.springframework.data:spring-data-jdbc'
@@ -23,7 +26,6 @@ dependencies {
     optionalApi 'org.springdoc:springdoc-openapi-webmvc-core'
     optionalApi 'p6spy:p6spy'
 
-    optionalApi 'org.jetbrains:annotations'
     optionalApi 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'
     compileOnly 'com.google.code.findbugs:jsr305'

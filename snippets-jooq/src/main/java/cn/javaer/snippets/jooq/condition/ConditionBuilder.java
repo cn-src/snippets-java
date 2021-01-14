@@ -1,12 +1,12 @@
 package cn.javaer.snippets.jooq.condition;
 
 import cn.javaer.snippets.model.TreeNode;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Condition;
 import org.jooq.Field;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
