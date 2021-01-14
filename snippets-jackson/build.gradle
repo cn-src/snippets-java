@@ -1,0 +1,15 @@
+plugins {
+    id 'snippets-conventions'
+}
+dependencies {
+    api platform(project(':snippets-platform'))
+    api platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+    annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+    testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+
+    api(project(':snippets-java'))
+    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    api "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+
+    optionalApi 'org.jooq:jooq'
+}
