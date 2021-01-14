@@ -25,9 +25,9 @@ class DateTimeFormatDeserializerTest {
         //language=JSON
         final Demo demo = objectMapper.readValue("{\"dateTime\": \"2020-05-05\",\"dateMinTime\": " +
             "\"2020/02/05\",\"dateMaxTime\": \"2020/03/05\"}", Demo.class);
-        assertThat(demo.dateTime).isEqualTo(LocalDate.parse("2020-05-04").atTime(LocalTime.MIN));
-        assertThat(demo.dateMinTime).isEqualTo(LocalDate.parse("2020-02-05").atTime(LocalTime.MIN));
-        assertThat(demo.dateMaxTime).isEqualTo(LocalDate.parse("2020-03-05").atTime(LocalTime.MAX));
+        Assertions.assertThat(demo.dateTime).isEqualTo(LocalDate.parse("2020-05-04").atTime(LocalTime.MIN));
+        Assertions.assertThat(demo.dateMinTime).isEqualTo(LocalDate.parse("2020-02-05").atTime(LocalTime.MIN));
+        Assertions.assertThat(demo.dateMaxTime).isEqualTo(LocalDate.parse("2020-03-05").atTime(LocalTime.MAX));
     }
 
     @Data

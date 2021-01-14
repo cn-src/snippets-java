@@ -3,13 +3,29 @@ plugins {
     id 'jacoco'
     id "com.github.ben-manes.versions"
 }
-
 sourceCompatibility = '1.8'
 java {
     registerFeature('optional') {
         usingSourceSet(sourceSets.main)
     }
     withSourcesJar()
+}
+
+dependencies {
+    api platform(project(':snippets-platform'))
+    api platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+    annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+    testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+
+    compileOnly 'org.projectlombok:lombok'
+    compileOnly 'com.google.code.findbugs:jsr305'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.assertj:assertj-core'
 }
 
 test {
