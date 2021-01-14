@@ -1,7 +1,5 @@
 package cn.javaer.snippets.jooq.codegen;
 
-import cn.javaer.snippets.DataSourceInfo;
-import cn.javaer.snippets.TestContainer;
 import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.Configuration;
 import org.jooq.meta.jaxb.Database;
