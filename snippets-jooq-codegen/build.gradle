@@ -18,6 +18,7 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'com.h2database:h2'
+    testImplementation 'org.postgresql:postgresql'
     testImplementation 'org.springframework.data:spring-data-jdbc'
     testImplementation 'org.testcontainers:postgresql'
     testImplementation 'org.testcontainers:junit-jupiter'
