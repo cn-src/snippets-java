@@ -2,13 +2,11 @@ package cn.javaer.snippets.model;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Value;
-import org.springframework.data.annotation.Immutable;
 
 /**
  * @author cn-src
  */
 @Value
-@Immutable
 public class Auditor<T, U> {
     @JsonUnwrapped
     T unwrapped;
