@@ -3,26 +3,15 @@ plugins {
 }
 
 dependencies {
-    api platform(project(':snippets-platform'))
-    api platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-    annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-    testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     api(project(':snippets-java'))
+    api(project(':snippets-jackson'))
 
     optionalApi 'org.springframework.boot:spring-boot-starter-web'
     optionalApi 'org.springframework.boot:spring-boot-starter-data-jdbc'
     optionalApi 'org.springframework.boot:spring-boot-starter-jooq'
     optionalApi 'org.springframework.boot:spring-boot-starter-security'
 
-    optionalApi 'org.jetbrains:annotations'
     optionalApi 'org.postgresql:postgresql'
-    compileOnly 'org.projectlombok:lombok'
-    compileOnly 'com.google.code.findbugs:jsr305'
-    annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'com.h2database:h2'
     testImplementation 'org.testcontainers:postgresql'
     testImplementation 'org.testcontainers:junit-jupiter'
