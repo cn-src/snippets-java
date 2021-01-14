@@ -10,13 +10,13 @@ mavenPlugin {
     dependencies = configurations.deps
 }
 dependencies {
-    implementation(project(':snippets-java'))
+    implementation(project(':snippets-jooq-codegen'))
     implementation 'org.apache.maven:maven-plugin-api:3.6.3'
     implementation 'org.apache.maven:maven-core:3.6.3'
     implementation "io.github.classgraph:classgraph:${classgraphVersion}"
     implementation "com.github.jknack:handlebars:${handlebarsVersion}"
     compileOnly 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.6.0'
-    deps(project(':snippets-java'))
+    deps(project(':snippets-jooq-codegen'))
     deps 'io.github.classgraph:classgraph'
     deps 'com.github.jknack:handlebars'
 }
