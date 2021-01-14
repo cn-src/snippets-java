@@ -1,7 +1,5 @@
 package cn.javaer.snippets.format;
 
-import cn.javaer.snippets.jackson.SnippetsJacksonIntrospector;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,7 +10,6 @@ import java.lang.annotation.Target;
  * 适用于输入的时间只有日期没有时间，但需要填补时间部分的场景，填充最小时间。
  *
  * @author cn-src
- * @see SnippetsJacksonIntrospector
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
