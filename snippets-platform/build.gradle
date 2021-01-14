@@ -5,6 +5,7 @@ plugins {
 dependencies {
     constraints {
         api project(':snippets-java')
+        api project(':snippets-jooq')
         api project(':snippets-spring')
         api project(':snippets-spring-boot-autoconfigure')
         api project(':snippets-spring-boot-starter')
