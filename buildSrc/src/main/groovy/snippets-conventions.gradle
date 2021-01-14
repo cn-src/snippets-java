@@ -17,6 +17,7 @@ dependencies {
     annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
 
+    compileOnly 'org.jetbrains:annotations'
     compileOnly 'org.projectlombok:lombok'
     compileOnly 'com.google.code.findbugs:jsr305'
     annotationProcessor 'org.projectlombok:lombok'
