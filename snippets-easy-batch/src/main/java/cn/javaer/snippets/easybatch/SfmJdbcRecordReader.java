@@ -2,6 +2,7 @@ package cn.javaer.snippets.easybatch;
 
 import org.jeasy.batch.core.reader.RecordReader;
 import org.jeasy.batch.core.record.Header;
+import org.jeasy.batch.core.util.Utils;
 import org.jeasy.batch.jdbc.JdbcRecord;
 import org.simpleflatmapper.jdbc.JdbcMapperFactory;
 import org.simpleflatmapper.jdbc.QueryPreparer;
@@ -15,9 +16,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-
-import static org.jeasy.batch.core.util.Utils.checkArgument;
-import static org.jeasy.batch.core.util.Utils.checkNotNull;
 
 /**
  * @author cn-src
@@ -43,9 +41,9 @@ public class SfmJdbcRecordReader implements RecordReader<ResultSet> {
 
     public SfmJdbcRecordReader(final DataSource dataSource, final String query,
                                final EasyBatchJobRecord jobRecord) {
-        checkNotNull(dataSource, "dataSource");
-        checkNotNull(query, "query");
-        checkNotNull(jobRecord, "jobRecord");
+        Utils.checkNotNull(dataSource, "dataSource");
+        Utils.checkNotNull(query, "query");
+        Utils.checkNotNull(jobRecord, "jobRecord");
         this.dataSource = dataSource;
         this.query = query;
         this.jobRecord = jobRecord;
@@ -132,7 +130,7 @@ public class SfmJdbcRecordReader implements RecordReader<ResultSet> {
      * @param maxRows the maximum number of rows to fetch
      */
     public void setMaxRows(final int maxRows) {
-        checkArgument(maxRows >= 1, "max rows parameter must be greater than or equal to 1");
+        Utils.checkArgument(maxRows >= 1, "max rows parameter must be greater than or equal to 1");
         this.maxRows = maxRows;
     }
 
@@ -142,7 +140,8 @@ public class SfmJdbcRecordReader implements RecordReader<ResultSet> {
      * @param fetchSize the fetch size to set
      */
     public void setFetchSize(final int fetchSize) {
-        checkArgument(fetchSize >= 1, "fetch size parameter must be greater than or equal to 1");
+        Utils.checkArgument(fetchSize >= 1, "fetch size parameter must be greater than or equal " +
+            "to 1");
         this.fetchSize = fetchSize;
     }
 
@@ -152,7 +151,7 @@ public class SfmJdbcRecordReader implements RecordReader<ResultSet> {
      * @param queryTimeout the query timeout in seconds
      */
     public void setQueryTimeout(final int queryTimeout) {
-        checkArgument(queryTimeout >= 1,
+        Utils.checkArgument(queryTimeout >= 1,
             "query timeout parameter must be greater than or equal to 1");
         this.queryTimeout = queryTimeout;
     }

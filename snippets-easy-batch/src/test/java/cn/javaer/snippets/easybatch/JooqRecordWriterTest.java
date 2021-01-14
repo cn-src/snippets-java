@@ -1,6 +1,5 @@
 package cn.javaer.snippets.easybatch;
 
-import cn.javaer.snippets.TestDataSource;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jeasy.batch.core.job.Job;
