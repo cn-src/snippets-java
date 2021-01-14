@@ -28,8 +28,8 @@ class JooqJsonbDeserializerTest {
         final Demo demo = this.mapper.readValue(
             "{\"str\": \"str1\", \"jsonb\": {\"data\": \"demo1\"}}",
             Demo.class);
-        Assertions.assertThat(demo).extracting(Demo::getStr).isEqualTo("str1");
-        Assertions.assertThat(demo.jsonb.data()).isEqualTo("{\"data\":\"demo1\"}");
+        assertThat(demo).extracting(Demo::getStr).isEqualTo("str1");
+        assertThat(demo.jsonb.data()).isEqualTo("{\"data\":\"demo1\"}");
     }
 
     @Test
@@ -38,8 +38,8 @@ class JooqJsonbDeserializerTest {
         final Demo demo = this.mapper.readValue(
             "{\"str\": \"str1\"}",
             Demo.class);
-        Assertions.assertThat(demo).extracting(Demo::getStr).isEqualTo("str1");
-        Assertions.assertThat(demo.jsonb).isNull();
+        assertThat(demo).extracting(Demo::getStr).isEqualTo("str1");
+        assertThat(demo.jsonb).isNull();
     }
 
     @Data
