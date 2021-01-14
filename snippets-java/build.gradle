@@ -11,6 +11,7 @@ dependencies {
     api "org.apache.commons:commons-lang3:${commonsLang3Version}"
     api "org.apache.commons:commons-collections4:${commonsCollections4Version}"
     api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    api "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
 
     optionalApi 'org.springframework:spring-jdbc'
     optionalApi 'org.springframework.data:spring-data-jdbc'
