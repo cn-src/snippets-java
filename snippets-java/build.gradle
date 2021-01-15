@@ -8,6 +8,7 @@ dependencies {
     optionalApi 'org.springdoc:springdoc-openapi-webmvc-core'
     optionalApi 'p6spy:p6spy'
 
+    testImplementation project(':snippets-jackson')
     testImplementation 'com.h2database:h2'
     testImplementation 'org.testcontainers:postgresql'
     testImplementation 'org.testcontainers:junit-jupiter'

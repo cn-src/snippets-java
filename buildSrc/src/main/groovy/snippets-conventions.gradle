@@ -24,6 +24,7 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     testCompileOnly 'org.projectlombok:lombok'
+    testCompileOnly 'org.jetbrains:annotations'
     testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.assertj:assertj-core'
