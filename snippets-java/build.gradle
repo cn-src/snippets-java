@@ -7,6 +7,7 @@ dependencies {
 
     optionalApi 'org.springframework:spring-core'
     optionalApi 'p6spy:p6spy'
+    compileOnly 'com.fasterxml.jackson.core:jackson-annotations'
 
     testImplementation project(':snippets-jackson')
     testImplementation 'com.h2database:h2'
