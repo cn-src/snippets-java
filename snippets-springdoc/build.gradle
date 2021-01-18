@@ -1,0 +1,6 @@
+plugins {
+    id 'snippets-conventions'
+}
+dependencies {
+    api "org.springdoc:springdoc-openapi-webmvc-core:${springdocVersion}"
+}

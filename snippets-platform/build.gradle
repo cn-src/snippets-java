@@ -11,6 +11,7 @@ dependencies {
         api project(':snippets-easy-batch')
         api project(':snippets-jackson')
         api project(':snippets-kryo')
+        api project(':snippets-springdoc')
         api project(':snippets-spring')
         api project(':snippets-spring-boot-autoconfigure')
         api project(':snippets-spring-boot-starter')
