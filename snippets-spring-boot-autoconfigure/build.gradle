@@ -3,8 +3,10 @@ plugins {
 }
 
 dependencies {
-    api(project(':snippets-java'))
-    api(project(':snippets-spring'))
+    api project(':snippets-java')
+    api project(':snippets-jooq')
+    api project(':snippets-springdoc')
+    api project(':snippets-spring')
 
     optionalApi 'org.springframework.boot:spring-boot-starter-web'
     optionalApi 'org.springframework.boot:spring-boot-starter-data-jdbc'
@@ -12,16 +14,12 @@ dependencies {
     optionalApi 'org.springframework.boot:spring-boot-starter-validation'
     optionalApi 'org.springframework.boot:spring-boot-starter-security'
     optionalApi 'org.springframework.boot:spring-boot-starter-test'
-
     optionalApi 'org.jooq:jooq-codegen'
 
-    optionalApi 'org.simpleflatmapper:sfm-jooq'
     optionalApi 'org.eclipse.collections:eclipse-collections'
-    optionalApi 'com.esotericsoftware:kryo'
     optionalApi 'com.github.jknack:handlebars'
-    optionalApi 'io.github.classgraph:classgraph'
-    optionalApi 'org.springdoc:springdoc-openapi-webmvc-core'
     optionalApi 'p6spy:p6spy'
+    optionalApi 'org.simpleflatmapper:sfm-jooq'
 
     optionalApi 'org.postgresql:postgresql'
 
