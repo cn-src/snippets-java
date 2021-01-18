@@ -5,7 +5,7 @@ dependencies {
     api "org.apache.commons:commons-lang3:${commonsLang3Version}"
     api "org.apache.commons:commons-collections4:${commonsCollections4Version}"
 
-    optionalApi 'org.springdoc:springdoc-openapi-webmvc-core'
+    optionalApi 'org.springframework:spring-core'
     optionalApi 'p6spy:p6spy'
 
     testImplementation project(':snippets-jackson')
