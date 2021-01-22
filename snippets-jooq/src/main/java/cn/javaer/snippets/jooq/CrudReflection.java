@@ -69,7 +69,7 @@ public class CrudReflection {
             }
 
             final Optional<MethodHandle> getterMethodOpt =
-                ReflectionUtils.findGetterByField(entityClass, field.getName(), field.getType());
+                ReflectionUtils.findGetterByField(entityClass, field);
             if (!getterMethodOpt.isPresent()) {
                 continue;
             }

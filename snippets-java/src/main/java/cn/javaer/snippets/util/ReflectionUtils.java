@@ -7,6 +7,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -23,16 +24,14 @@ public interface ReflectionUtils {
     /**
      * 获取字段对应的 Getter 方法名称.
      *
-     * @param fieldName the field name
-     * @param fieldType the field type
+     * @param field the field
      *
      * @return string
      */
-    static String toGetterName(final String fieldName,
-                               final Class<?> fieldType) {
-        return boolean.class.equals(fieldType) ?
-            "is" + StrUtils.toFirstCharUpper(fieldName) :
-            "get" + StrUtils.toFirstCharUpper(fieldName);
+    static String toGetterName(final Field field) {
+        return boolean.class.equals(field.getType()) ?
+            "is" + StrUtils.toFirstCharUpper(field.getName()) :
+            "get" + StrUtils.toFirstCharUpper(field.getName());
     }
 
     /**
@@ -54,47 +53,21 @@ public interface ReflectionUtils {
      * 查找字段对应的 Getter 方法.
      *
      * @param clazz the clazz
-     * @param fieldName the field name
-     * @param fieldType the field type
+     * @param field the field
      *
      * @return the method handle
      */
-    static Optional<MethodHandle> findGetterByField(final Class<?> clazz, final String fieldName,
-                                                    final Class<?> fieldType) {
-        final String getterName = boolean.class.equals(fieldType) ?
-            "is" + StrUtils.toFirstCharUpper(fieldName) :
-            "get" + StrUtils.toFirstCharUpper(fieldName);
+    static Optional<MethodHandle> findGetterByField(final Class<?> clazz, final Field field) {
+
         try {
             return Optional.of(MethodHandles.lookup()
-                .findVirtual(clazz, getterName, MethodType.methodType(fieldType)));
+                .findVirtual(clazz, toGetterName(field), MethodType.methodType(field.getType())));
         }
         catch (final NoSuchMethodException e) {
             return Optional.empty();
         }
         catch (final IllegalAccessException e) {
             throw new IllegalStateException(e);
-        }
-    }
-
-    /**
-     * 判断指定方法是否存在.
-     *
-     * @param clazz the clazz
-     * @param methodName the method name
-     * @param parameterTypes the parameter types
-     *
-     * @return the boolean
-     */
-    static boolean hasDeclaredMethod(final Class<?> clazz, final String methodName,
-                                     final Class<?>... parameterTypes) {
-        Objects.requireNonNull(clazz);
-        Objects.requireNonNull(methodName);
-        try {
-            clazz.getDeclaredMethod(methodName, parameterTypes);
-            return true;
-        }
-        catch (final NoSuchMethodException e) {
-            return false;
         }
     }
 
