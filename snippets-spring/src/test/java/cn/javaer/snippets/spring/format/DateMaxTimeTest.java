@@ -24,11 +24,10 @@ public class DateMaxTimeTest {
             DateTimeFormat.class);
         assertThat(Objects.requireNonNull(annotation).time())
             .isEqualTo(DateTimeFormat.Time.MAX);
-        assertThat(annotation.datePattern()).isEqualTo("yyyy/MM/dd");
     }
 
     static class Demo {
-        @DateMaxTime(datePattern = "yyyy/MM/dd")
+        @DateMaxTime
         LocalDateTime dateTime;
     }
 }
