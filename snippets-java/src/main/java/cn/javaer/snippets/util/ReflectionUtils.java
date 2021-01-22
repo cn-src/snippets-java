@@ -108,6 +108,9 @@ public interface ReflectionUtils {
             return null;
         }
         for (final Annotation annotation : annotations) {
+            if (annotation == null) {
+                continue;
+            }
             final T ann = getAnnotation(clazz, annotation);
             if (null != ann) {
                 return ann;
