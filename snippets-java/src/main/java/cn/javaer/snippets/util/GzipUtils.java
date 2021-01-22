@@ -1,6 +1,6 @@
 package cn.javaer.snippets.util;
 
-import org.springframework.lang.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,7 +23,6 @@ public interface GzipUtils {
      *
      * @return byte[]
      */
-    @Nullable
     static byte[] compress(final String str) {
         return compress(str, StandardCharsets.UTF_8);
     }
@@ -36,7 +35,6 @@ public interface GzipUtils {
      *
      * @return byte[]
      */
-    @Nullable
     static byte[] compress(final String str, final Charset encoding) {
         return compress(str.getBytes(encoding));
     }
@@ -48,7 +46,6 @@ public interface GzipUtils {
      *
      * @return byte[]
      */
-    @Nullable
     static byte[] compress(final byte[] bytes) {
         if (bytes == null || bytes.length == 0) {
             return null;
@@ -73,7 +70,6 @@ public interface GzipUtils {
      *
      * @return data
      */
-    @Nullable
     static byte[] unCompress(final byte[] bytes) {
         if (bytes == null || bytes.length == 0) {
             return null;

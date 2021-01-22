@@ -1,7 +1,5 @@
 package cn.javaer.snippets.util;
 
-import org.springframework.core.io.Resource;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -77,43 +75,43 @@ public interface IoUtils {
         }
     }
 
-    /**
-     * 将文件读取为 String.
-     *
-     * @param resource 文件
-     *
-     * @return String
-     */
-    static String readToString(final Resource resource) {
-        Objects.requireNonNull(resource);
-        try {
-            final byte[] bytes = Files.readAllBytes(resource.getFile().toPath());
-            return new String(bytes, StandardCharsets.UTF_8);
-        }
-        catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
+//    /**
+//     * 将文件读取为 String.
+//     *
+//     * @param resource 文件
+//     *
+//     * @return String
+//     */
+//    static String readToString(final Resource resource) {
+//        Objects.requireNonNull(resource);
+//        try {
+//            final byte[] bytes = Files.readAllBytes(resource.getFile().toPath());
+//            return new String(bytes, StandardCharsets.UTF_8);
+//        }
+//        catch (final IOException e) {
+//            throw new UncheckedIOException(e);
+//        }
+//    }
 
-    /**
-     * 将文件读取为 String.
-     *
-     * @param resource 文件
-     * @param charset 文件编码
-     *
-     * @return String
-     */
-    static String readToString(final Resource resource, final Charset charset) {
-        Objects.requireNonNull(resource);
-        Objects.requireNonNull(charset);
-        try {
-            final byte[] bytes = Files.readAllBytes(resource.getFile().toPath());
-            return new String(bytes, charset);
-        }
-        catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
+//    /**
+//     * 将文件读取为 String.
+//     *
+//     * @param resource 文件
+//     * @param charset 文件编码
+//     *
+//     * @return String
+//     */
+//    static String readToString(final Resource resource, final Charset charset) {
+//        Objects.requireNonNull(resource);
+//        Objects.requireNonNull(charset);
+//        try {
+//            final byte[] bytes = Files.readAllBytes(resource.getFile().toPath());
+//            return new String(bytes, charset);
+//        }
+//        catch (final IOException e) {
+//            throw new UncheckedIOException(e);
+//        }
+//    }
 
     /**
      * 创建多级目录
