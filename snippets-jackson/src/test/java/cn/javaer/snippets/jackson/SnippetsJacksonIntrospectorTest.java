@@ -29,7 +29,7 @@ class SnippetsJacksonIntrospectorTest {
         final Demo demo = objectMapper.readValue("{\"dateTime\": \"2020-05-05\",\"dateMinTime\": " +
             "\"2020-02-05\",\"dateMaxTime\": \"2020-03-05\"}", Demo.class);
         assertThat(demo.dateTime)
-            .isEqualTo(LocalDate.parse("2020-04-05").atTime(LocalTime.MIN));
+            .isEqualTo(LocalDate.parse("2020-05-05").atTime(LocalTime.MIN));
         assertThat(demo.dateMinTime)
             .isEqualTo(LocalDate.parse("2020-02-05").atTime(LocalTime.MIN));
         assertThat(demo.dateMaxTime)
@@ -43,12 +43,12 @@ class SnippetsJacksonIntrospectorTest {
         objectMapper.setAnnotationIntrospector(jacksonIntrospector);
         //language=JSON
         final Demo1 demo = objectMapper.readValue("{\"dateTime\": \"2020-05-05\"}", Demo1.class);
-        assertThat(demo.dateTime).isEqualTo(LocalDate.parse("2020-03-05").atTime(LocalTime.MIN));
+        assertThat(demo.dateTime).isEqualTo(LocalDate.parse("2020-05-05").atTime(LocalTime.MIN));
     }
 
     @Data
     static class Demo {
-        @DateTimeFormat(time = DateTimeFormat.Time.MIN, months = -1)
+        @DateTimeFormat(time = DateTimeFormat.Time.MIN)
         LocalDateTime dateTime;
 
         @DateMinTime
@@ -64,7 +64,7 @@ class SnippetsJacksonIntrospectorTest {
 
         @JsonCreator
         @ConstructorProperties("dateTime")
-        public Demo1(@DateTimeFormat(time = DateTimeFormat.Time.MIN, months = -2) final LocalDateTime dateTime) {
+        public Demo1(@DateTimeFormat(time = DateTimeFormat.Time.MIN) final LocalDateTime dateTime) {
             this.dateTime = dateTime;
         }
     }
