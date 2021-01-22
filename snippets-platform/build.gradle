@@ -21,6 +21,7 @@ dependencies {
         api project(':snippets-spring-boot-starter-sfm-jooq')
         api project(':snippets-spring-boot-starter-springdoc')
 
+        api "org.jodd:jodd-util:${joddUtilVersion}"
         api "com.google.guava:guava:${guavaVersion}"
         api "com.google.code.findbugs:jsr305:${jsr305Version}"
         api "org.eclipse.collections:eclipse-collections:${eclipseCollectionsVersion}"
