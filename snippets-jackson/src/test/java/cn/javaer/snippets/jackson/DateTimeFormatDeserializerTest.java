@@ -24,23 +24,23 @@ class DateTimeFormatDeserializerTest {
         final ObjectMapper objectMapper = new ObjectMapper();
         //language=JSON
         final Demo demo = objectMapper.readValue("{\"dateTime\": \"2020-05-05\",\"dateMinTime\": " +
-            "\"2020/02/05\",\"dateMaxTime\": \"2020/03/05\"}", Demo.class);
-        assertThat(demo.dateTime).isEqualTo(LocalDate.parse("2020-05-04").atTime(LocalTime.MIN));
+            "\"2020-02-05\",\"dateMaxTime\": \"2020-03-05\"}", Demo.class);
+        assertThat(demo.dateTime).isEqualTo(LocalDate.parse("2020-05-05").atTime(LocalTime.MIN));
         assertThat(demo.dateMinTime).isEqualTo(LocalDate.parse("2020-02-05").atTime(LocalTime.MIN));
         assertThat(demo.dateMaxTime).isEqualTo(LocalDate.parse("2020-03-05").atTime(LocalTime.MAX));
     }
 
     @Data
     static class Demo {
-        @DateTimeFormat(time = DateTimeFormat.Time.MIN, days = -1)
+        @DateTimeFormat(time = DateTimeFormat.Time.MIN)
         @JsonDeserialize(using = DateTimeFormatDeserializer.class)
         LocalDateTime dateTime;
 
-        @DateMinTime(datePattern = "yyyy/MM/dd")
+        @DateMinTime
         @JsonDeserialize(using = DateTimeFormatDeserializer.class)
         LocalDateTime dateMinTime;
 
-        @DateMaxTime(datePattern = "yyyy/MM/dd")
+        @DateMaxTime
         @JsonDeserialize(using = DateTimeFormatDeserializer.class)
         LocalDateTime dateMaxTime;
     }
