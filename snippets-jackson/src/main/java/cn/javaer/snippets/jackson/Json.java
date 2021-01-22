@@ -45,8 +45,6 @@ public class Json {
     public static final Json NON_EMPTY;
 
     static {
-        final ObjectMapper defaultX = new ObjectMapper();
-        defaultX.setAnnotationIntrospector(SnippetsJacksonIntrospector.INSTANCE);
         final SimpleModule module = new SimpleModule();
 
         final DateTimeFormatter dataTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -69,8 +67,10 @@ public class Json {
             module.addSerializer((Class) it, JooqRecordSerializer.INSTANCE);
         });
 
-        defaultX.registerModule(module);
-        DEFAULT = new Json(defaultX);
+        final ObjectMapper aDefault = new ObjectMapper();
+        aDefault.setAnnotationIntrospector(SnippetsJacksonIntrospector.INSTANCE);
+        aDefault.registerModule(module);
+        DEFAULT = new Json(aDefault);
 
         final ObjectMapper nonEmpty = new ObjectMapper();
         nonEmpty.setAnnotationIntrospector(SnippetsJacksonIntrospector.INSTANCE);
