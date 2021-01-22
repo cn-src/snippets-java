@@ -1,6 +1,7 @@
 package cn.javaer.snippets.spring.format;
 
 import cn.javaer.snippets.format.DateTimeFormat;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.format.Parser;
 import org.springframework.lang.NonNull;
 
@@ -20,14 +21,13 @@ public final class DateTimeParser implements Parser<LocalDateTime> {
     }
 
     @Override
-    public LocalDateTime parse(final String text, @NonNull final Locale locale) {
+    public @NotNull LocalDateTime parse(final String text, @NonNull final Locale locale) {
         if (this.annotation.datePattern().length() == text.length()) {
             final LocalDate date = LocalDate.parse(text,
                 DateTimeFormatter.ofPattern(this.annotation.datePattern(), locale));
             return DateTimeFormat.Conversion.conversion(date, this.annotation);
         }
-        final LocalDateTime dateTime = LocalDateTime.parse(text,
+        return LocalDateTime.parse(text,
             DateTimeFormatter.ofPattern(this.annotation.dateTimePattern(), locale));
-        return DateTimeFormat.Conversion.conversion(dateTime, this.annotation);
     }
 }
