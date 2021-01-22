@@ -3,7 +3,7 @@ package cn.javaer.snippets.jackson;
 import cn.javaer.snippets.format.DateMaxTime;
 import cn.javaer.snippets.format.DateMinTime;
 import cn.javaer.snippets.format.DateTimeFormat;
-import cn.javaer.snippets.util.AnnotationUtils;
+import cn.javaer.snippets.util.ReflectionUtils;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author cn-src
@@ -42,19 +43,18 @@ public class DateTimeFormatDeserializer extends JsonDeserializer<LocalDateTime> 
                 DateTimeFormatter.ofPattern(this.dateTimeFormat.datePattern()));
             return DateTimeFormat.Conversion.conversion(date, this.dateTimeFormat);
         }
-        final LocalDateTime dateTime = LocalDateTime.parse(parser.getText(),
+        return LocalDateTime.parse(parser.getText(),
             DateTimeFormatter.ofPattern(this.dateTimeFormat.dateTimePattern()));
-        return DateTimeFormat.Conversion.conversion(dateTime, this.dateTimeFormat);
     }
 
     @Override
     public JsonDeserializer<?> createContextual(final DeserializationContext context,
                                                 final BeanProperty property) {
-
-        return AnnotationUtils.mergeAnnotations(DateTimeFormat.class,
-            () -> property.getAnnotation(DateTimeFormat.class),
-            () -> property.getAnnotation(DateMinTime.class),
-            () -> property.getAnnotation(DateMaxTime.class)
-        ).map(DateTimeFormatDeserializer::new).orElse(null);
+        final DateTimeFormat format = ReflectionUtils.getAnnotation(DateTimeFormat.class,
+            property.getAnnotation(DateTimeFormat.class),
+            property.getAnnotation(DateMinTime.class),
+            property.getAnnotation(DateMaxTime.class)
+        );
+        return Optional.ofNullable(format).map(DateTimeFormatDeserializer::new).orElse(null);
     }
 }

@@ -1,5 +1,7 @@
 package cn.javaer.snippets.util;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
@@ -81,7 +83,7 @@ public interface ReflectionUtils {
      */
     static boolean isAnnotated(final AnnotatedElement element, final String annotation) {
         Objects.requireNonNull(element);
-        ObjectUtils.notEmpty(annotation);
+        Validate.notEmpty(annotation);
 
         //noinspection unchecked
         return getClass(annotation).map(it -> element.getAnnotation((Class<Annotation>) it))
@@ -90,7 +92,7 @@ public interface ReflectionUtils {
 
     @Nullable
     static <T extends Annotation>
-    T getAnnotation(final Annotation ann, final Class<T> clazz) {
+    T getAnnotation(final Class<T> clazz, final Annotation ann) {
         if (clazz.equals(ann.annotationType())) {
             @SuppressWarnings("unchecked")
             final T t = (T) ann;
@@ -101,10 +103,25 @@ public interface ReflectionUtils {
 
     @Nullable
     static <T extends Annotation>
-    T getAnnotation(final AnnotatedElement element, final Class<T> clazz) {
+    T getAnnotation(final Class<T> clazz, final Annotation... annotations) {
+        if (ArrayUtils.isEmpty(annotations)) {
+            return null;
+        }
+        for (final Annotation annotation : annotations) {
+            final T ann = getAnnotation(clazz, annotation);
+            if (null != ann) {
+                return ann;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    static <T extends Annotation>
+    T getAnnotation(final Class<T> clazz, final AnnotatedElement element) {
         final Annotation[] annotations = element.getAnnotations();
         for (final Annotation annotation : annotations) {
-            final T ann = getAnnotation(annotation, clazz);
+            final T ann = getAnnotation(clazz, annotation);
             if (null != ann) {
                 return ann;
             }
@@ -125,8 +142,8 @@ public interface ReflectionUtils {
                                                         final String annotation,
                                                         final String attributeName) {
         Objects.requireNonNull(element);
-        ObjectUtils.notEmpty(annotation);
-        ObjectUtils.notEmpty(attributeName);
+        Validate.notEmpty(annotation);
+        Validate.notEmpty(attributeName);
         //noinspection unchecked
         return getClass(annotation)
             .map(it -> element.getAnnotation((Class<Annotation>) it))
@@ -148,7 +165,7 @@ public interface ReflectionUtils {
      * @return 返回 true 如果存在
      */
     static boolean isPresent(final String className) {
-        ObjectUtils.notEmpty(className);
+        Validate.notEmpty(className);
         try {
             Class.forName(className);
             return true;
@@ -166,7 +183,7 @@ public interface ReflectionUtils {
      * @return the class
      */
     static Optional<Class<?>> getClass(final String className) {
-        ObjectUtils.notEmpty(className);
+        Validate.notEmpty(className);
         try {
             return Optional.of(Class.forName(className));
         }
