@@ -1,6 +1,6 @@
 package cn.javaer.snippets.util;
 
-import org.apache.commons.lang3.Validate;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
@@ -81,11 +81,35 @@ public interface ReflectionUtils {
      */
     static boolean isAnnotated(final AnnotatedElement element, final String annotation) {
         Objects.requireNonNull(element);
-        Validate.notEmpty(annotation);
+        ObjectUtils.notEmpty(annotation);
 
         //noinspection unchecked
         return getClass(annotation).map(it -> element.getAnnotation((Class<Annotation>) it))
             .isPresent();
+    }
+
+    @Nullable
+    static <T extends Annotation>
+    T getAnnotation(final Annotation ann, final Class<T> clazz) {
+        if (clazz.equals(ann.annotationType())) {
+            @SuppressWarnings("unchecked")
+            final T t = (T) ann;
+            return t;
+        }
+        return ann.annotationType().getAnnotation(clazz);
+    }
+
+    @Nullable
+    static <T extends Annotation>
+    T getAnnotation(final AnnotatedElement element, final Class<T> clazz) {
+        final Annotation[] annotations = element.getAnnotations();
+        for (final Annotation annotation : annotations) {
+            final T ann = getAnnotation(annotation, clazz);
+            if (null != ann) {
+                return ann;
+            }
+        }
+        return null;
     }
 
     /**
@@ -101,8 +125,8 @@ public interface ReflectionUtils {
                                                         final String annotation,
                                                         final String attributeName) {
         Objects.requireNonNull(element);
-        Validate.notEmpty(annotation);
-        Validate.notEmpty(attributeName);
+        ObjectUtils.notEmpty(annotation);
+        ObjectUtils.notEmpty(attributeName);
         //noinspection unchecked
         return getClass(annotation)
             .map(it -> element.getAnnotation((Class<Annotation>) it))
@@ -124,7 +148,7 @@ public interface ReflectionUtils {
      * @return 返回 true 如果存在
      */
     static boolean isPresent(final String className) {
-        Validate.notEmpty(className);
+        ObjectUtils.notEmpty(className);
         try {
             Class.forName(className);
             return true;
@@ -142,7 +166,7 @@ public interface ReflectionUtils {
      * @return the class
      */
     static Optional<Class<?>> getClass(final String className) {
-        Validate.notEmpty(className);
+        ObjectUtils.notEmpty(className);
         try {
             return Optional.of(Class.forName(className));
         }

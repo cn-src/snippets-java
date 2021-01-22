@@ -10,11 +10,12 @@ import java.time.format.DateTimeFormatter;
  */
 public interface TimeUtils {
 
-    DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-    DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-    DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
+    String TIME_PATTERN = "HH:mm:ss";
+    String DATE_PATTERN = "yyyy-MM-dd";
+    String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+    DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN);
+    DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_PATTERN);
 
     /**
      * 当月的开始时间，例如：2020-06-01 00:00:00.

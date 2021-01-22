@@ -1,6 +1,6 @@
 package cn.javaer.snippets.model;
 
-import org.springframework.util.CollectionUtils;
+import cn.javaer.snippets.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -165,7 +165,7 @@ public interface Tree {
         // 从根节点，遍历到叶子节点，为数据库一条记录，同时移除此叶子节点
         // 当前迭代的节点往根节点方向，以及同级的下级节点移动
         while (null != current) {
-            if (!CollectionUtils.isEmpty(current.getChildren())) {
+            if (ObjectUtils.isNotEmpty(current.getChildren())) {
                 current = current.getChildren().get(0);
                 stack.push(current.clone());
             }

@@ -2,10 +2,6 @@ plugins {
     id 'snippets-conventions'
 }
 dependencies {
-    api "org.apache.commons:commons-lang3:${commonsLang3Version}"
-    api "org.apache.commons:commons-collections4:${commonsCollections4Version}"
-
-    optionalApi 'org.springframework:spring-core'
     optionalApi 'p6spy:p6spy'
     compileOnly 'com.fasterxml.jackson.core:jackson-annotations'
 

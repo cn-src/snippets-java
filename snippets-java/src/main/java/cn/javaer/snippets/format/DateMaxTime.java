@@ -7,8 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 适用于输入的时间只有日期没有时间，但需要填补时间部分的场景，填充最大时间。
- *
  * @author cn-src
  */
 @Documented
@@ -16,14 +14,4 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @DateTimeFormat(time = DateTimeFormat.Time.MAX)
 public @interface DateMaxTime {
-
-    /**
-     * 日期的格式，输入。
-     */
-    String datePattern() default "yyyy-MM-dd";
-
-    /**
-     * 日期时间的格式，输出。
-     */
-    String dateTimePattern() default "yyyy-MM-dd HH:mm:ss";
 }
