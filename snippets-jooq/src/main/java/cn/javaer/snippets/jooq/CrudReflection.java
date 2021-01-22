@@ -2,6 +2,7 @@ package cn.javaer.snippets.jooq;
 
 import cn.javaer.snippets.util.ReflectionUtils;
 import cn.javaer.snippets.util.StrUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -51,7 +52,7 @@ public class CrudReflection {
     private static <T, ID, A> TableMeta<T, ID, A> initTableMeta(final Class<T> entityClass)
         throws NoSuchFieldException, IllegalAccessException {
 
-        final Field[] fields = entityClass.getDeclaredFields();
+        final Field[] fields = FieldUtils.getAllFields(entityClass);
         if (fields == null || fields.length == 0) {
             return null;
         }
