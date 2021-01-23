@@ -3,7 +3,6 @@ package cn.javaer.snippets.spring.autoconfigure.task;
 import org.springframework.boot.autoconfigure.task.TaskExecutionProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import org.springframework.core.task.TaskDecorator;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,14 +24,5 @@ public class SnippetsTaskExecutionProperties {
     }
 
     static class TaskProperties extends TaskExecutionProperties {
-        private TaskDecorator taskDecorator;
-
-        public TaskDecorator getTaskDecorator() {
-            return this.taskDecorator;
-        }
-
-        public void setTaskDecorator(final TaskDecorator taskDecorator) {
-            this.taskDecorator = taskDecorator;
-        }
     }
 }

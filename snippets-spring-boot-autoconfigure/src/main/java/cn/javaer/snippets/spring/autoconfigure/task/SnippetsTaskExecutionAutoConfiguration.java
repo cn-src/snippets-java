@@ -1,15 +1,18 @@
 package cn.javaer.snippets.spring.autoconfigure.task;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.task.TaskExecutionProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.task.TaskExecutorBuilder;
+import org.springframework.boot.task.TaskExecutorCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskDecorator;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.CollectionUtils;
 
@@ -27,6 +30,10 @@ public class SnippetsTaskExecutionAutoConfiguration implements ApplicationContex
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         final SnippetsTaskExecutionProperties properties =
             applicationContext.getBean(SnippetsTaskExecutionProperties.class);
+        final ObjectProvider<TaskExecutorCustomizer> customizers =
+            applicationContext.getBeanProvider(TaskExecutorCustomizer.class);
+        final ObjectProvider<TaskDecorator> decorators =
+            applicationContext.getBeanProvider(TaskDecorator.class);
         final DefaultListableBeanFactory beanFactory =
             (DefaultListableBeanFactory) applicationContext
                 .getAutowireCapableBeanFactory();
@@ -48,7 +55,8 @@ public class SnippetsTaskExecutionAutoConfiguration implements ApplicationContex
                 builder = builder.awaitTermination(shutdown.isAwaitTermination());
                 builder = builder.awaitTerminationPeriod(shutdown.getAwaitTerminationPeriod());
                 builder = builder.threadNamePrefix(taskProp.getThreadNamePrefix());
-                builder = builder.taskDecorator(taskProp.getTaskDecorator());
+                builder = builder.customizers(customizers.orderedStream()::iterator);
+                builder = builder.taskDecorator(decorators.getIfUnique());
 
                 final GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
                 beanDefinition.setBeanClass(ThreadPoolTaskExecutor.class);
