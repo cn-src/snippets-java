@@ -31,7 +31,7 @@ import java.util.List;
  * @author cn-src
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass(org.springdoc.core.converters.models.Pageable.class)
+@ConditionalOnClass(org.springframework.data.domain.Pageable.class)
 @AutoConfigureAfter({ExceptionAutoConfiguration.class})
 @AutoConfigureBefore({SpringDocConfiguration.class, SpringDocConfigProperties.class})
 @ConditionalOnProperty(prefix = "snippets.springdoc", name = "enabled", havingValue = "true",
