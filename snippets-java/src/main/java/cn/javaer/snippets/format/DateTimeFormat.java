@@ -1,5 +1,7 @@
 package cn.javaer.snippets.format;
 
+import cn.javaer.snippets.util.TimeUtils;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -22,12 +24,12 @@ public @interface DateTimeFormat {
     /**
      * 日期的格式
      */
-    String datePattern() default "yyyy-MM-dd";
+    String datePattern() default TimeUtils.DATE_PATTERN;
 
     /**
      * 日期时间的格式
      */
-    String dateTimePattern() default "yyyy-MM-dd HH:mm:ss";
+    String dateTimePattern() default TimeUtils.DATE_TIME_PATTERN;
 
     /**
      * 在只有日期的时候, 填充时间的方式
