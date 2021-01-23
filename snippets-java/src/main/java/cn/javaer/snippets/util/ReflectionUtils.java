@@ -81,11 +81,11 @@ public interface ReflectionUtils {
      *
      * @return 有指定的注解返回 true.
      */
+    @SuppressWarnings("unchecked")
     static boolean isAnnotated(final AnnotatedElement element, final String annotation) {
         Objects.requireNonNull(element);
         Validate.notEmpty(annotation);
 
-        //noinspection unchecked
         return getClass(annotation).map(it -> element.getAnnotation((Class<Annotation>) it))
             .isPresent();
     }
@@ -141,13 +141,13 @@ public interface ReflectionUtils {
      *
      * @return 注解的属性值
      */
+    @SuppressWarnings("unchecked")
     static Optional<Object> getAnnotationAttributeValue(final AnnotatedElement element,
                                                         final String annotation,
                                                         final String attributeName) {
         Objects.requireNonNull(element);
         Validate.notEmpty(annotation);
         Validate.notEmpty(attributeName);
-        //noinspection unchecked
         return getClass(annotation)
             .map(it -> element.getAnnotation((Class<Annotation>) it))
             .map(it -> {
