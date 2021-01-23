@@ -1,6 +1,7 @@
 package cn.javaer.snippets.jackson;
 
 import cn.javaer.snippets.util.ReflectionUtils;
+import cn.javaer.snippets.util.TimeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -18,7 +19,6 @@ import java.io.UncheckedIOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -45,19 +45,16 @@ public class Json {
     public static final Json NON_EMPTY;
 
     static {
+        // @formatter:off
         final SimpleModule module = new SimpleModule();
+        module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(TimeUtils.DATE_TIME_FORMATTER));
+        module.addSerializer(LocalDate.class, new LocalDateSerializer(TimeUtils.DATE_FORMATTER));
+        module.addSerializer(LocalTime.class, new LocalTimeSerializer(TimeUtils.TIME_FORMATTER));
 
-        final DateTimeFormatter dataTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        final DateTimeFormatter dataFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
-
-        module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dataTimeFormat));
-        module.addSerializer(LocalDate.class, new LocalDateSerializer(dataFormat));
-        module.addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormat));
-
-        module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dataTimeFormat));
-        module.addDeserializer(LocalDate.class, new LocalDateDeserializer(dataFormat));
-        module.addDeserializer(LocalTime.class, new LocalTimeDeserializer(timeFormat));
+        module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(TimeUtils.DATE_TIME_FORMATTER));
+        module.addDeserializer(LocalDate.class, new LocalDateDeserializer(TimeUtils.DATE_FORMATTER));
+        module.addDeserializer(LocalTime.class, new LocalTimeDeserializer(TimeUtils.TIME_FORMATTER));
+        // @formatter:on
 
         ReflectionUtils.getClass("org.jooq.JSONB").ifPresent(it -> {
             module.addSerializer((Class) it, JooqJsonbSerializer.INSTANCE);
