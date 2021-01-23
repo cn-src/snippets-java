@@ -53,7 +53,18 @@ public class SchedulersAutoConfiguration implements ApplicationContextAware {
                 beanDefinition.setBeanClass(ThreadPoolTaskExecutor.class);
                 beanDefinition.setLazyInit(true);
                 final TaskSchedulerBuilder fb = builder;
-                beanDefinition.setInstanceSupplier(fb::build);
+                beanDefinition.setInstanceSupplier(() -> {
+                    final ThreadPoolTaskScheduler scheduler = fb.build();
+                    if (properties.getRejectedExecutionHandler() != null) {
+                        try {
+                            scheduler.setRejectedExecutionHandler(properties.getRejectedExecutionHandler().newInstance());
+                        }
+                        catch (final InstantiationException | IllegalAccessException e) {
+                            throw new IllegalStateException(e);
+                        }
+                    }
+                    return scheduler;
+                });
                 beanFactory.registerBeanDefinition(entry.getKey(), beanDefinition);
             }
         }

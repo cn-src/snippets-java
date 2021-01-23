@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.RejectedExecutionHandler;
 
 /**
  * @author cn-src
@@ -24,5 +25,14 @@ public class SchedulersProperties {
     }
 
     static class TaskProperties extends TaskSchedulingProperties {
+        private Class<? extends RejectedExecutionHandler> rejectedExecutionHandler;
+
+        public Class<? extends RejectedExecutionHandler> getRejectedExecutionHandler() {
+            return this.rejectedExecutionHandler;
+        }
+
+        public void setRejectedExecutionHandler(final Class<? extends RejectedExecutionHandler> rejectedExecutionHandler) {
+            this.rejectedExecutionHandler = rejectedExecutionHandler;
+        }
     }
 }
