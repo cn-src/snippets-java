@@ -23,13 +23,13 @@ import java.util.Map;
  */
 @ConditionalOnClass(ThreadPoolTaskExecutor.class)
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(SnippetsTaskExecutionProperties.class)
-public class SnippetsTaskExecutionAutoConfiguration implements ApplicationContextAware {
+@EnableConfigurationProperties(ExecutorsProperties.class)
+public class ExecutorsAutoConfiguration implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        final SnippetsTaskExecutionProperties properties =
-            applicationContext.getBean(SnippetsTaskExecutionProperties.class);
+        final ExecutorsProperties properties =
+            applicationContext.getBean(ExecutorsProperties.class);
         final ObjectProvider<TaskExecutorCustomizer> customizers =
             applicationContext.getBeanProvider(TaskExecutorCustomizer.class);
         final ObjectProvider<TaskDecorator> decorators =
@@ -39,9 +39,9 @@ public class SnippetsTaskExecutionAutoConfiguration implements ApplicationContex
                 .getAutowireCapableBeanFactory();
 
         if (!CollectionUtils.isEmpty(properties.getExecutions())) {
-            for (final Map.Entry<String, SnippetsTaskExecutionProperties.TaskProperties> entry :
+            for (final Map.Entry<String, ExecutorsProperties.TaskProperties> entry :
                 properties.getExecutions().entrySet()) {
-                final SnippetsTaskExecutionProperties.TaskProperties taskProp =
+                final ExecutorsProperties.TaskProperties taskProp =
                     entry.getValue();
                 final TaskExecutionProperties.Pool pool = taskProp.getPool();
                 TaskExecutorBuilder builder = new TaskExecutorBuilder();

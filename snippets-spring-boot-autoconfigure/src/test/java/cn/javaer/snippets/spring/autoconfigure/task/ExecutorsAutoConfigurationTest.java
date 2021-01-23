@@ -10,10 +10,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author cn-src
  */
-class SnippetsTaskExecutionAutoConfigurationTest {
+class ExecutorsAutoConfigurationTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
         .withConfiguration(AutoConfigurations.of(
-            SnippetsTaskExecutionAutoConfiguration.class))
+            ExecutorsAutoConfiguration.class))
         .withPropertyValues(
             "snippets.execution.executors.demoExecutor1.threadNamePrefix=demo1-",
             "snippets.execution.executors.demoExecutor2.threadNamePrefix=demo2-"

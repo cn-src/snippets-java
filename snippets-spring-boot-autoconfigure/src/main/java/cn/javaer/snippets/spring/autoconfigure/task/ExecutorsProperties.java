@@ -11,7 +11,7 @@ import java.util.Map;
  * @author cn-src
  */
 @ConfigurationProperties(prefix = "snippets.execution")
-public class SnippetsTaskExecutionProperties {
+public class ExecutorsProperties {
     @NestedConfigurationProperty
     private Map<String, TaskProperties> executors = new LinkedHashMap<>();
 
