@@ -12,12 +12,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class SnippetsTaskExecutionAutoConfigurationTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(
-                    SnippetsTaskExecutionAutoConfiguration.class))
-            .withPropertyValues(
-                    "snippets.task.executors.demoExecutor1.threadNamePrefix=demo1-",
-                    "snippets.task.executors.demoExecutor2.threadNamePrefix=demo2-"
-            );
+        .withConfiguration(AutoConfigurations.of(
+            SnippetsTaskExecutionAutoConfiguration.class))
+        .withPropertyValues(
+            "snippets.task.execution.demoExecutor1.threadNamePrefix=demo1-",
+            "snippets.task.execution.demoExecutor2.threadNamePrefix=demo2-"
+        );
 
     @Test
     void postProcessBeanFactory() {
@@ -27,11 +27,11 @@ class SnippetsTaskExecutionAutoConfigurationTest {
             assertThat(context).hasBean("demoExecutor2");
 
             final ThreadPoolTaskExecutor demoExecutor1 = context.getBean("demoExecutor1",
-                    ThreadPoolTaskExecutor.class);
+                ThreadPoolTaskExecutor.class);
             assertThat(demoExecutor1.getThreadNamePrefix()).isEqualTo("demo1-");
 
             final ThreadPoolTaskExecutor demoExecutor2 = context.getBean("demoExecutor2",
-                    ThreadPoolTaskExecutor.class);
+                ThreadPoolTaskExecutor.class);
             assertThat(demoExecutor2.getThreadNamePrefix()).isEqualTo("demo2-");
         });
     }
