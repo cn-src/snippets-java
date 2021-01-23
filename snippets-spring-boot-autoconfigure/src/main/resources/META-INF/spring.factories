@@ -6,7 +6,6 @@ cn.javaer.snippets.spring.autoconfigure.data.jooq.jdbc.JooqJdbcRepositoriesAutoC
 cn.javaer.snippets.spring.autoconfigure.jackson.SnippetsJacksonAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.web.exception.ExceptionAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.springdoc.SpringDocAutoConfiguration,\
-cn.javaer.snippets.spring.autoconfigure.data.domain.PageableAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.handlebars.HandlebarsAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.web.WebAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.task.SchedulersAutoConfiguration\
