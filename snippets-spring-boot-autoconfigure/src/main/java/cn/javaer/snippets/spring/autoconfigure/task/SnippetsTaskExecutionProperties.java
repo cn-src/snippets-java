@@ -10,17 +10,17 @@ import java.util.Map;
 /**
  * @author cn-src
  */
-@ConfigurationProperties(prefix = "snippets.task")
+@ConfigurationProperties(prefix = "snippets.execution")
 public class SnippetsTaskExecutionProperties {
     @NestedConfigurationProperty
-    private Map<String, TaskProperties> execution = new LinkedHashMap<>();
+    private Map<String, TaskProperties> executors = new LinkedHashMap<>();
 
     public Map<String, TaskProperties> getExecutions() {
-        return this.execution;
+        return this.executors;
     }
 
-    public void setExecution(final Map<String, TaskProperties> executions) {
-        this.execution = executions;
+    public void setExecutors(final Map<String, TaskProperties> executions) {
+        this.executors = executions;
     }
 
     static class TaskProperties extends TaskExecutionProperties {
