@@ -46,10 +46,6 @@ public interface StrUtils {
                 sb.append('_').append(chars[i]);
                 continue;
             }
-            if ('_' != chars[i] && !Character.isLetter(chars[i]) && Character.isLetter(chars[i - 1])) {
-                sb.append('_').append(chars[i]);
-                continue;
-            }
 
             sb.append(Character.toUpperCase(chars[i]));
         }
@@ -79,10 +75,6 @@ public interface StrUtils {
 
             if (isUpAndPrevNotLine && isPrevLowOrNotLetter) {
                 sb.append('_').append(Character.toLowerCase(chars[i]));
-                continue;
-            }
-            if ('_' != chars[i] && !Character.isLetter(chars[i]) && Character.isLetter(chars[i - 1])) {
-                sb.append('_').append(chars[i]);
                 continue;
             }
 
