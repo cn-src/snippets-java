@@ -8,7 +8,7 @@ cn.javaer.snippets.spring.autoconfigure.web.exception.ExceptionAutoConfiguration
 cn.javaer.snippets.spring.autoconfigure.springdoc.SpringDocAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.handlebars.HandlebarsAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.web.WebAutoConfiguration,\
-cn.javaer.snippets.spring.autoconfigure.task.SchedulersAutoConfiguration\
+cn.javaer.snippets.spring.autoconfigure.task.SchedulersAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.task.ExecutorsAutoConfiguration
 # AutoConfigureDataJooqJdbc auto-configuration imports
 cn.javaer.snippets.test.spring.autoconfigure.data.jooq.jdbc.AutoConfigureDataJooqJdbc=\
