@@ -20,8 +20,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -52,10 +52,8 @@ public class SpringDocAutoConfiguration implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        SpringDocUtils.getConfig().replaceWithClass(Pageable.class,
-            PageableDoc.class);
-        SpringDocUtils.getConfig().replaceWithClass(Page.class,
-            PageDoc.class);
+        SpringDocUtils.getConfig().replaceWithClass(PageRequest.class, PageableDoc.class);
+        SpringDocUtils.getConfig().replaceWithClass(PageImpl.class, PageDoc.class);
 
         SpringDocUtils.getConfig().addAnnotationsToIgnore(PrincipalId.class);
     }
