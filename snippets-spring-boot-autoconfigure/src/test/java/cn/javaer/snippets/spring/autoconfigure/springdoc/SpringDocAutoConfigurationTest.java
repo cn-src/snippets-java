@@ -57,7 +57,7 @@ class SpringDocAutoConfigurationTest {
                 final MvcResult mvcResult =
                     mockMvc.perform(get(Constants.DEFAULT_API_DOCS_URL)).andExpect(status().isOk())
                         .andExpect(jsonPath("$.components.schemas.Pageable.properties" +
-                            ".page" +
+                            "._page" +
                             ".description", is("分页-页码"))).andReturn();
                 final String content = mvcResult.getResponse().getContentAsString
                     (StandardCharsets.UTF_8);
