@@ -3,7 +3,9 @@ package cn.javaer.snippets.model;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Value;
+import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -20,8 +22,9 @@ public class DynamicAssembler<T1, T2> {
         this.dynamic = dynamic;
     }
 
+    @UnmodifiableView
     @JsonAnyGetter
     public Map<String, T2> getDynamic() {
-        return this.dynamic;
+        return Collections.unmodifiableMap(this.dynamic);
     }
 }
