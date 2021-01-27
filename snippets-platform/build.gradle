@@ -48,6 +48,9 @@ dependencies {
 
         api "com.baomidou:dynamic-datasource-spring-boot-starter:${dynamicDatasourceVersion}"
 
+        api "org.apache.shardingsphere:shardingsphere-jdbc-core:${shardingsphereVersion}"
+        api "org.apache.shardingsphere.elasticjob:elasticjob-lite-core:${elasticjobVersion}"
+
         api "com.github.gavlyukovskiy:p6spy-spring-boot-starter:${datasourceDecoratorVersion}"
         api "com.github.gavlyukovskiy:flexy-pool-spring-boot-starter:${datasourceDecoratorVersion}"
 
