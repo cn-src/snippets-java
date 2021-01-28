@@ -1,4 +1,4 @@
-rootProject.name = 'snippets-java-build'
+rootProject.name = 'snippets-java'
 include 'snippets-platform'
 include 'snippets-core'
 include 'snippets-jooq'
