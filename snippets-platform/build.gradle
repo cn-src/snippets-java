@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     constraints {
-        api project(':snippets-java')
+        api project(':snippets-core')
         api project(':snippets-jooq')
         api project(':snippets-jooq-codegen')
         api project(':snippets-jooq-codegen-maven-plugin')

@@ -2,7 +2,7 @@ plugins {
     id 'snippets-conventions'
 }
 dependencies {
-    api(project(':snippets-java'))
+    api(project(':snippets-core'))
     api(project(':snippets-jackson'))
     api "org.jooq:jooq:${jooqVersion}"
 

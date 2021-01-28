@@ -1,6 +1,6 @@
 rootProject.name = 'snippets-java-build'
 include 'snippets-platform'
-include 'snippets-java'
+include 'snippets-core'
 include 'snippets-jooq'
 include 'snippets-jooq-codegen'
 include 'snippets-jooq-codegen-maven-plugin'

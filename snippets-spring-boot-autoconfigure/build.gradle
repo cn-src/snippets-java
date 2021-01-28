@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api project(':snippets-java')
+    api project(':snippets-core')
     api project(':snippets-jooq')
     api project(':snippets-springdoc')
     api project(':snippets-spring')

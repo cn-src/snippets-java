@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api(project(':snippets-java'))
+    api(project(':snippets-core'))
     api(project(':snippets-jackson'))
 
     optionalApi 'org.springframework.boot:spring-boot-starter-web'
