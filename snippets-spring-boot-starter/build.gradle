@@ -3,7 +3,6 @@ plugins {
 }
 dependencies {
     api project(':snippets-spring-boot-autoconfigure')
-
 }
 publishing {
     publications {
