@@ -62,7 +62,7 @@ public class P6spyAutoConfiguration implements InitializingBean {
             System.setProperty("p6spy.config.logMessageFormat",
                 BeautifulFormat.class.getName());
             System.setProperty("p6spy.config.customLogMessageFormat",
-                "time %(executionTime) ms\n%(sql)");
+                "time %(executionTime) ms | url %(url)\n%(sql)");
         }
     }
 }
