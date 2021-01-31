@@ -19,7 +19,6 @@ dependencies {
 
     optionalApi 'org.eclipse.collections:eclipse-collections'
     optionalApi 'com.github.jknack:handlebars'
-    optionalApi 'p6spy:p6spy'
     optionalApi 'org.simpleflatmapper:sfm-jooq'
 
     optionalApi 'org.postgresql:postgresql'
