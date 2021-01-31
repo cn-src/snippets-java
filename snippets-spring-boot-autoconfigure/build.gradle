@@ -4,9 +4,10 @@ plugins {
 
 dependencies {
     api project(':snippets-core')
-    api project(':snippets-jooq')
-    api project(':snippets-springdoc')
     api project(':snippets-spring')
+    optionalApi project(':snippets-jooq')
+    optionalApi project(':snippets-p6spy')
+    optionalApi project(':snippets-springdoc')
 
     optionalApi 'org.springframework.boot:spring-boot-starter-web'
     optionalApi 'org.springframework.boot:spring-boot-starter-data-jdbc'
