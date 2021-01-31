@@ -46,6 +46,7 @@ dependencies {
         api "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringBootVersion}"
         api "org.mybatis.spring.boot:mybatis-spring-boot-starter-test:${mybatisSpringBootVersion}"
 
+        runtime "com.taobao.arthas:arthas-spring-boot-starter:${arthasSpringBootStarter}"
         api "com.baomidou:dynamic-datasource-spring-boot-starter:${dynamicDatasourceVersion}"
 
         api "org.apache.shardingsphere:shardingsphere-jdbc-core:${shardingsphereVersion}"
