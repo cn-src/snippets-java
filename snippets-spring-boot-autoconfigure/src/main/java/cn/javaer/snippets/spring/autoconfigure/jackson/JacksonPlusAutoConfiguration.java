@@ -35,7 +35,7 @@ import java.time.format.DateTimeFormatter;
  * @author cn-src
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass({ObjectMapper.class})
+@ConditionalOnClass({ObjectMapper.class, Json.class})
 @AutoConfigureBefore(JacksonAutoConfiguration.class)
 @ConditionalOnProperty(prefix = "snippets.jackson", name = "enabled", havingValue = "true",
     matchIfMissing = true)
@@ -70,16 +70,12 @@ public class JacksonPlusAutoConfiguration {
         };
     }
 
-    @Configuration(proxyBeanMethods = false)
-    @ConditionalOnClass({Json.class})
-    public static class JsonConfiguration {
-        @Bean
-        @Primary
-        @ConditionalOnBean(ObjectMapper.class)
-        @ConditionalOnMissingBean(Json.class)
-        public Json json(final ObjectMapper objectMapper) {
-            return new Json(objectMapper);
-        }
+    @Bean
+    @Primary
+    @ConditionalOnBean(ObjectMapper.class)
+    @ConditionalOnMissingBean(Json.class)
+    public Json json(final ObjectMapper objectMapper) {
+        return new Json(objectMapper);
     }
 
     @Configuration(proxyBeanMethods = false)
