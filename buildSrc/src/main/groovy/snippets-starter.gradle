@@ -1,7 +1,9 @@
 plugins {
     id 'java-library'
 }
-
+dependencies {
+    api project(':snippets-platform')
+}
 publishing {
     publications {
         mavenJava(MavenPublication) {
