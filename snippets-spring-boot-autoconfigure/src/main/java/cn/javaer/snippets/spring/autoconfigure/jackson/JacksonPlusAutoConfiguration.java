@@ -70,18 +70,21 @@ public class JacksonPlusAutoConfiguration {
         };
     }
 
-    @Bean
-    @Primary
-    @ConditionalOnClass({JSONB.class, Json.class})
-    @ConditionalOnBean(ObjectMapper.class)
-    @ConditionalOnMissingBean(Json.class)
-    public Json json(final ObjectMapper objectMapper) {
-        return new Json(objectMapper);
+    @Configuration(proxyBeanMethods = false)
+    @ConditionalOnClass({Json.class})
+    public static class JsonConfiguration {
+        @Bean
+        @Primary
+        @ConditionalOnBean(ObjectMapper.class)
+        @ConditionalOnMissingBean(Json.class)
+        public Json json(final ObjectMapper objectMapper) {
+            return new Json(objectMapper);
+        }
     }
 
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass({JSONB.class, Json.class})
-    public static class JooqJacksonAutoConfiguration {
+    public static class JooqJacksonConfiguration {
         @Bean
         public Jackson2ObjectMapperBuilderCustomizer snippetsJooqJacksonCustomizer() {
             return it -> {
