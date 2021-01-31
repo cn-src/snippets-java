@@ -1,7 +1,14 @@
 plugins {
-    id 'snippets-starter'
+    id 'java-library'
 }
-
 dependencies {
     api project(':snippets-spring-boot-autoconfigure')
+
+}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 }
