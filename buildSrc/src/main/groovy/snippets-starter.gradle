@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 dependencies {
-    api project(':snippets-platform')
+    api project(':snippets-spring-boot-starter')
 }
 publishing {
     publications {

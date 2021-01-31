@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    api project(':snippets-spring-boot-starter')
+    api project(':snippets-spring-boot-autoconfigure')
 }
