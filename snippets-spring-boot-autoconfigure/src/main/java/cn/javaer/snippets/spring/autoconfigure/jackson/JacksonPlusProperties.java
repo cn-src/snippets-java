@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(prefix = "snippets.jackson")
-public class SnippetsJacksonProperties {
+public class JacksonPlusProperties {
 
     private Format format = new Format();
 

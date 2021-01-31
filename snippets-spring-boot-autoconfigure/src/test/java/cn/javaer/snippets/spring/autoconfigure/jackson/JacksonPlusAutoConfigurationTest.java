@@ -19,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author cn-src
  */
-class SnippetsJacksonAutoConfigurationTest {
+class JacksonPlusAutoConfigurationTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
         .withConfiguration(AutoConfigurations.of(
-            SnippetsJacksonAutoConfiguration.class, JacksonAutoConfiguration.class));
+            JacksonPlusAutoConfiguration.class, JacksonAutoConfiguration.class));
 
     @Test
     void auto() throws Exception {

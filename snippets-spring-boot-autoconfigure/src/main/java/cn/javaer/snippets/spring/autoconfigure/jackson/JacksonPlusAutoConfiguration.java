@@ -39,20 +39,20 @@ import java.time.format.DateTimeFormatter;
 @AutoConfigureBefore(JacksonAutoConfiguration.class)
 @ConditionalOnProperty(prefix = "snippets.jackson", name = "enabled", havingValue = "true",
     matchIfMissing = true)
-@EnableConfigurationProperties(SnippetsJacksonProperties.class)
-public class SnippetsJacksonAutoConfiguration {
+@EnableConfigurationProperties(JacksonPlusProperties.class)
+public class JacksonPlusAutoConfiguration {
 
     @Bean
-    public Jackson2ObjectMapperBuilderCustomizer snippetsJacksonCustomizer(final SnippetsJacksonProperties snippetsJacksonProperties) {
+    public Jackson2ObjectMapperBuilderCustomizer snippetsJacksonCustomizer(final JacksonPlusProperties jacksonPlusProperties) {
         return it -> {
             it.annotationIntrospector(SnippetsJacksonIntrospector.INSTANCE);
 
             final DateTimeFormatter dateTimeFormatter =
-                DateTimeFormatter.ofPattern(snippetsJacksonProperties.getFormat().getDateTime());
+                DateTimeFormatter.ofPattern(jacksonPlusProperties.getFormat().getDateTime());
             final DateTimeFormatter dateFormatter =
-                DateTimeFormatter.ofPattern(snippetsJacksonProperties.getFormat().getDate());
+                DateTimeFormatter.ofPattern(jacksonPlusProperties.getFormat().getDate());
             final DateTimeFormatter timeFormatter =
-                DateTimeFormatter.ofPattern(snippetsJacksonProperties.getFormat().getTime());
+                DateTimeFormatter.ofPattern(jacksonPlusProperties.getFormat().getTime());
 
             it.deserializerByType(LocalDateTime.class,
                 new LocalDateTimeDeserializer(dateTimeFormatter));
@@ -72,15 +72,15 @@ public class SnippetsJacksonAutoConfiguration {
 
     @Bean
     @Primary
+    @ConditionalOnClass({JSONB.class, Json.class})
     @ConditionalOnBean(ObjectMapper.class)
     @ConditionalOnMissingBean(Json.class)
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public Json json(final ObjectMapper objectMapper) {
         return new Json(objectMapper);
     }
 
     @Configuration(proxyBeanMethods = false)
-    @ConditionalOnClass({JSONB.class})
+    @ConditionalOnClass({JSONB.class, Json.class})
     public static class JooqJacksonAutoConfiguration {
         @Bean
         public Jackson2ObjectMapperBuilderCustomizer snippetsJooqJacksonCustomizer() {

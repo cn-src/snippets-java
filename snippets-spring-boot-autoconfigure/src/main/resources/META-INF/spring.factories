@@ -3,7 +3,7 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 cn.javaer.snippets.spring.autoconfigure.simpleflatmapper.jooq.SfmJooqAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.eclipse.collections.EclipseCollectionsAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.data.jooq.jdbc.JooqJdbcRepositoriesAutoConfiguration,\
-cn.javaer.snippets.spring.autoconfigure.jackson.SnippetsJacksonAutoConfiguration,\
+cn.javaer.snippets.spring.autoconfigure.jackson.JacksonPlusAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.web.exception.ExceptionAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.springdoc.SpringDocAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.handlebars.HandlebarsAutoConfiguration,\
