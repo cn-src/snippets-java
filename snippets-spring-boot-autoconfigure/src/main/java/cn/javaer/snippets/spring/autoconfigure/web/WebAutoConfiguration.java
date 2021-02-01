@@ -9,11 +9,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.context.request.WebRequestInterceptor;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author cn-src
@@ -35,18 +37,22 @@ public class WebAutoConfiguration {
 
         @Override
         public void addInterceptors(final InterceptorRegistry registry) {
-            registry.addWebRequestInterceptor(new WebRequestInterceptor() {
+            registry.addInterceptor(new HandlerInterceptor() {
                 @Override
-                public void preHandle(final @NotNull WebRequest request) {
+                public boolean preHandle(final @NotNull HttpServletRequest request,
+                                         final @NotNull HttpServletResponse response,
+                                         final @NotNull Object handler) {
                     DefaultAppContext.setRequestId();
+                    return true;
                 }
 
                 @Override
-                public void postHandle(final @NotNull WebRequest request, final ModelMap model) {
-                }
-
-                @Override
-                public void afterCompletion(final @NotNull WebRequest request, final Exception ex) {
+                public void postHandle(@NotNull final HttpServletRequest request,
+                                       @NotNull final HttpServletResponse response,
+                                       @NotNull final Object handler,
+                                       final ModelAndView modelAndView) throws Exception {
+                    response.addHeader(DefaultAppContext.REQUEST_ID_PARAM,
+                        DefaultAppContext.getRequestId());
                 }
             });
         }
