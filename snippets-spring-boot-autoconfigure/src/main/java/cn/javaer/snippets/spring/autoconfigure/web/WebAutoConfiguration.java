@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguratio
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -43,16 +42,9 @@ public class WebAutoConfiguration {
                                          final @NotNull HttpServletResponse response,
                                          final @NotNull Object handler) {
                     DefaultAppContext.setRequestId();
-                    return true;
-                }
-
-                @Override
-                public void postHandle(@NotNull final HttpServletRequest request,
-                                       @NotNull final HttpServletResponse response,
-                                       @NotNull final Object handler,
-                                       final ModelAndView modelAndView) throws Exception {
                     response.addHeader(DefaultAppContext.REQUEST_ID_PARAM,
                         DefaultAppContext.getRequestId());
+                    return true;
                 }
             });
         }
