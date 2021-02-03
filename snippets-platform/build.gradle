@@ -5,21 +5,23 @@ plugins {
 dependencies {
     constraints {
         api project(':snippets-core')
+        api project(':snippets-easy-batch')
+        api project(':snippets-jackson')
         api project(':snippets-jooq')
         api project(':snippets-jooq-codegen')
         api project(':snippets-jooq-codegen-maven-plugin')
-        api project(':snippets-easy-batch')
-        api project(':snippets-jackson')
         api project(':snippets-kryo')
-        api project(':snippets-springdoc')
+        api project(':snippets-p6spy')
         api project(':snippets-spring')
         api project(':snippets-spring-boot-autoconfigure')
         api project(':snippets-spring-boot-starter')
-        api project(':snippets-spring-boot-starter-handlebars')
         api project(':snippets-spring-boot-starter-data-jooq-jdbc')
         api project(':snippets-spring-boot-starter-eclipse-collections')
+        api project(':snippets-spring-boot-starter-handlebars')
+        api project(':snippets-spring-boot-starter-p6spy')
         api project(':snippets-spring-boot-starter-sfm-jooq')
         api project(':snippets-spring-boot-starter-springdoc')
+        api project(':snippets-springdoc')
 
         api "org.jodd:jodd-util:${joddUtilVersion}"
         api "com.google.guava:guava:${guavaVersion}"
