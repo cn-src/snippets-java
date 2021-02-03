@@ -2,6 +2,7 @@ package cn.javaer.snippets.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -9,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.Properties;
 
 /**
  * @author cn-src
@@ -173,5 +175,23 @@ public interface IoUtils {
             throw new UncheckedIOException(e);
         }
         return true;
+    }
+
+    /**
+     * 读取 properties 文件，并关闭流.
+     *
+     * @param input the input
+     *
+     * @return the properties
+     */
+    static Properties readProperties(final InputStream input) {
+        final Properties props = new Properties();
+        try (final InputStream in = input) {
+            props.load(in);
+        }
+        catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
+        return props;
     }
 }
