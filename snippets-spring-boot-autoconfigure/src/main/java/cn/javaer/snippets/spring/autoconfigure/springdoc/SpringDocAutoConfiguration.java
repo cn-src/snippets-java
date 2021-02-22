@@ -12,6 +12,7 @@ import org.springdoc.core.ReturnTypeParser;
 import org.springdoc.core.SpringDocConfigProperties;
 import org.springdoc.core.SpringDocConfiguration;
 import org.springdoc.core.SpringDocUtils;
+import org.springdoc.data.rest.SpringDocDataRestConfiguration;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -31,13 +32,12 @@ import java.util.List;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({org.springframework.data.domain.Pageable.class, SpringDocConfiguration.class})
-@AutoConfigureAfter({ExceptionAutoConfiguration.class})
+@AutoConfigureAfter({ExceptionAutoConfiguration.class, SpringDocDataRestConfiguration.class})
 @AutoConfigureBefore({SpringDocConfiguration.class, SpringDocConfigProperties.class})
 @ConditionalOnProperty(prefix = "snippets.springdoc", name = "enabled", havingValue = "true",
     matchIfMissing = true)
 public class SpringDocAutoConfiguration implements InitializingBean {
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @ConditionalOnMissingBean
     GenericResponseService responseBuilder(final OperationService operationBuilder,
