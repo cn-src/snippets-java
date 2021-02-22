@@ -12,13 +12,13 @@ import java.util.List;
 @Schema(name = "Pageable")
 public class PageableDoc {
 
-    @Schema(name = "_page",
+    @Schema(name = "page",
         description = "分页-页码",
         minimum = "1",
         defaultValue = "1")
     Integer page;
 
-    @Schema(name = "_size",
+    @Schema(name = "size",
         description = "分页-大小",
         minimum = "1",
         defaultValue = "20")
