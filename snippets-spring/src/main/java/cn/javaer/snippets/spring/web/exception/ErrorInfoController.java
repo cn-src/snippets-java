@@ -1,5 +1,7 @@
 package cn.javaer.snippets.spring.web.exception;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -19,6 +21,7 @@ import java.util.TreeSet;
 /**
  * @author cn-src
  */
+@Tag(name = "错误码")
 @RestController
 @RequestMapping
 public class ErrorInfoController implements ApplicationContextAware, InitializingBean {
@@ -32,6 +35,7 @@ public class ErrorInfoController implements ApplicationContextAware, Initializin
         this.errorInfoExtractor = errorInfoExtractor;
     }
 
+    @Operation(summary = "错误码列表")
     @GetMapping("error_infos")
     public Set<DefinedErrorInfo> errorInfos() {
         return this.errorInfos;
