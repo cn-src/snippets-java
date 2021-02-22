@@ -53,6 +53,8 @@ public class SpringDocAutoConfiguration implements InitializingBean {
     public void afterPropertiesSet() {
         SpringDocUtils.getConfig().replaceWithClass(org.springframework.data.domain.Pageable.class,
             PageableDoc.class);
+        SpringDocUtils.getConfig().replaceWithClass(org.springframework.data.domain.PageRequest.class,
+            PageableDoc.class);
         SpringDocUtils.getConfig().replaceWithClass(Page.class, PageDoc.class);
 
         SpringDocUtils.getConfig().addAnnotationsToIgnore(PrincipalId.class);
