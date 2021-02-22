@@ -5,6 +5,5 @@ plugins {
 dependencies {
     api project(':snippets-springdoc')
     api "org.springdoc:springdoc-openapi-webmvc-core:${springdocVersion}"
-    api "org.springdoc:springdoc-openapi-security:${springdocVersion}"
 }
 
