@@ -28,7 +28,7 @@ dependencies {
         api "com.google.code.findbugs:jsr305:${jsr305Version}"
         api "org.eclipse.collections:eclipse-collections:${eclipseCollectionsVersion}"
         api "org.ehcache:ehcache:${ehcacheVersion}"
-        api "com.fasterxml.jackson.datatype:jackson-datatype-eclipse-collections:${jacksonDatatypeEclipseCollectionsVersion}"
+        api "com.fasterxml.jackson.datatype:jackson-datatype-eclipse-collections:${jacksonDatatypesCollectionsVersion}"
         api "com.github.jknack:handlebars:${handlebarsVersion}"
         api "io.github.classgraph:classgraph:${classgraphVersion}"
         api "com.esotericsoftware:kryo:${kryoVersion}"
