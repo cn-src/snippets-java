@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -123,16 +124,15 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
             final byte[] data = wrapper.getContentAsByteArray();
             if (data.length > 0) {
                 wrapper.copyBodyToResponse();
-                if (wrapper.getHeader("Content-Type").contains(MediaType.APPLICATION_JSON_VALUE)) {
+                if (wrapper.getHeader(HttpHeaders.CONTENT_TYPE).contains(MediaType.APPLICATION_JSON_VALUE)) {
                     this.logger.debug("Response\n" + this.jsonFormat(new String(data,
                         StandardCharsets.UTF_8)));
-                    return;
                 }
                 else {
                     this.logger.debug("Response Content:\n" +
                         new String(data, StandardCharsets.UTF_8));
-                    return;
                 }
+                return;
             }
         }
         this.logger.debug("Response nothing");
