@@ -2,6 +2,7 @@ package cn.javaer.snippets.springdoc;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.springdoc.api.annotations.ParameterObject;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  */
 @Data
 @Schema(name = "Pageable")
+@ParameterObject
 public class PageableDoc {
 
     @Schema(name = "page",
