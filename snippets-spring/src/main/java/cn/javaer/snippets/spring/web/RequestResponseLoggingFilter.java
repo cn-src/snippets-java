@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
@@ -112,16 +113,29 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
     }
 
     protected void afterResponse(final HttpServletResponse response) throws IOException {
-        final ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response,
-            ContentCachingResponseWrapper.class);
+        final ContentCachingResponseWrapper wrapper =
+            WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
         if (null != wrapper) {
+            if (wrapper.getContentSize() > 10 * 1024 * 1024) {
+                this.logger.debug("Response Content Size: " + wrapper.getContentSize());
+                return;
+            }
             final byte[] data = wrapper.getContentAsByteArray();
             if (data.length > 0) {
                 wrapper.copyBodyToResponse();
-                this.logger.debug("Response\n" + this.jsonFormat(new String(data,
-                    StandardCharsets.UTF_8)));
+                if (wrapper.getHeader("Content-Type").contains(MediaType.APPLICATION_JSON_VALUE)) {
+                    this.logger.debug("Response\n" + this.jsonFormat(new String(data,
+                        StandardCharsets.UTF_8)));
+                    return;
+                }
+                else {
+                    this.logger.debug("Response Content:\n" +
+                        new String(data, StandardCharsets.UTF_8));
+                    return;
+                }
             }
         }
+        this.logger.debug("Response nothing");
     }
 
     private String jsonFormat(final String jsonStr) throws JsonProcessingException {
