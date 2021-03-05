@@ -40,6 +40,7 @@ dependencies {
         api "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
         api "com.googlecode.cqengine:cqengine:${cqengineVersion}"
         api "com.esotericsoftware:reflectasm:${reflectasmVersion}"
+        api "io.minio:minio:${minioVersion}"
 
         api "org.mybatis:mybatis:${mybatisVersion}"
         api "org.mybatis:mybatis-spring:${mybatisSpringVersion}"

@@ -18,6 +18,7 @@ dependencies {
     optionalApi "com.github.gavlyukovskiy:p6spy-spring-boot-starter"
     optionalApi "org.springdoc:springdoc-openapi-data-rest"
 
+    optionalApi 'io.minio:minio'
     optionalApi 'org.eclipse.collections:eclipse-collections'
     optionalApi 'com.github.jknack:handlebars'
     optionalApi 'org.simpleflatmapper:sfm-jooq'
