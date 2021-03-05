@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    api "io.minio:minio:${springdocVersion}"
+    api "io.minio:minio:${minioVersion}"
 }
 
