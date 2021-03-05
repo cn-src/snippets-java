@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,9 +56,8 @@ class SpringDocAutoConfigurationTest {
 
                 final MvcResult mvcResult =
                     mockMvc.perform(get(Constants.DEFAULT_API_DOCS_URL)).andExpect(status().isOk())
-                        .andExpect(jsonPath("$.components.schemas.Pageable.properties" +
-                            ".page" +
-                            ".description", is("分页-页码"))).andReturn();
+                        .andExpect(jsonPath("$.paths.['/test'].get.parameters[?(@.name=='page')]" +
+                            ".schema.description", contains("分页-页码"))).andReturn();
                 final String content = mvcResult.getResponse().getContentAsString
                     (StandardCharsets.UTF_8);
                 System.out.println(content);
