@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/cn-src/snippets-java/branch/master/graph/badge.svg)](https://codecov.io/gh/cn-src/snippets-java)
 [![](https://jitpack.io/v/cn-src/snippets-java.svg)](https://jitpack.io/#cn-src/snippets-java)
 ![Lines of code](https://img.shields.io/tokei/lines/github/cn-src/snippets-java)
-[![Java Version](https://img.shields.io/badge/Java-8%20|%2011%20|%2015-blue)](#java)
+[![Java Version](https://img.shields.io/badge/Java-8%20|%2011%20|%2015-blue)](https://adoptopenjdk.net/)
 
 ***
 
