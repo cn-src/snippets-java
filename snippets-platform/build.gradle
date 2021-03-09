@@ -23,23 +23,60 @@ dependencies {
         api project(':snippets-spring-boot-starter-springdoc')
         api project(':snippets-springdoc')
 
+        // 工具库
         api "org.jodd:jodd-util:${joddUtilVersion}"
         api "com.google.guava:guava:${guavaVersion}"
-        api "com.google.code.findbugs:jsr305:${jsr305Version}"
         api "org.eclipse.collections:eclipse-collections:${eclipseCollectionsVersion}"
-        api "org.ehcache:ehcache:${ehcacheVersion}"
-        api "com.fasterxml.jackson.datatype:jackson-datatype-eclipse-collections:${jacksonDatatypesCollectionsVersion}"
-        api "com.github.jknack:handlebars:${handlebarsVersion}"
-        api "io.github.classgraph:classgraph:${classgraphVersion}"
-        api "com.esotericsoftware:kryo:${kryoVersion}"
-        api "commons-io:commons-io:${commonsIoVersion}"
         api "org.apache.commons:commons-collections4:${commonsCollections4Version}"
+        api "commons-io:commons-io:${commonsIoVersion}"
         api "org.apache.commons:commons-lang3:${commonsLang3Version}"
-        api "com.alibaba:easyexcel:${easyexcelVersion}"
-        api "p6spy:p6spy:${p6spyVersion}"
-        api "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
-        api "com.googlecode.cqengine:cqengine:${cqengineVersion}"
         api "com.esotericsoftware:reflectasm:${reflectasmVersion}"
+
+        api "cn.hutool:hutool-core:${hutoolVersion}"
+        api "cn.hutool:hutool-aop:${hutoolVersion}"
+        api "cn.hutool:hutool-bloomFilter:${hutoolVersion}"
+        api "cn.hutool:hutool-cache:${hutoolVersion}"
+        api "cn.hutool:hutool-crypto:${hutoolVersion}"
+        api "cn.hutool:hutool-db:${hutoolVersion}"
+        api "cn.hutool:hutool-dfa:${hutoolVersion}"
+        api "cn.hutool:hutool-extra:${hutoolVersion}"
+        api "cn.hutool:hutool-http:${hutoolVersion}"
+        api "cn.hutool:hutool-log:${hutoolVersion}"
+        api "cn.hutool:hutool-script:${hutoolVersion}"
+        api "cn.hutool:hutool-setting:${hutoolVersion}"
+        api "cn.hutool:hutool-system:${hutoolVersion}"
+        api "cn.hutool:hutool-cron:${hutoolVersion}"
+        api "cn.hutool:hutool-json:${hutoolVersion}"
+        api "cn.hutool:hutool-poi:${hutoolVersion}"
+        api "cn.hutool:hutool-captcha:${hutoolVersion}"
+        api "cn.hutool:hutool-socket:${hutoolVersion}"
+
+        // 注解库
+        api "com.google.code.findbugs:jsr305:${jsr305Version}"
+        api "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
+
+        // 缓存库
+        api "org.ehcache:ehcache:${ehcacheVersion}"
+
+        // 序列化
+        api "com.fasterxml.jackson.datatype:jackson-datatype-eclipse-collections:${jacksonDatatypesCollectionsVersion}"
+        api "com.esotericsoftware:kryo:${kryoVersion}"
+
+        // 模板引擎
+        api "com.github.jknack:handlebars:${handlebarsVersion}"
+
+        // 类信息扫描工具
+        api "io.github.classgraph:classgraph:${classgraphVersion}"
+
+        api "com.alibaba:easyexcel:${easyexcelVersion}"
+
+        // SQL 日志统一输出工具
+        api "p6spy:p6spy:${p6spyVersion}"
+
+        // 集合查询引擎
+        api "com.googlecode.cqengine:cqengine:${cqengineVersion}"
+
+        // 文件对象存储服务-客户端
         api "io.minio:minio:${minioVersion}"
 
         api "org.mybatis:mybatis:${mybatisVersion}"
@@ -48,6 +85,10 @@ dependencies {
         api "org.mybatis.caches:mybatis-ehcache:${mybatisEhcacheVersion}"
         api "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringBootVersion}"
         api "org.mybatis.spring.boot:mybatis-spring-boot-starter-test:${mybatisSpringBootVersion}"
+
+        // web 反向代理
+        api "com.github.mkopylec:charon-spring-webmvc:${charonVersion}"
+        api "com.github.mkopylec:charon-spring-webflux:${charonVersion}"
 
         runtime "com.taobao.arthas:arthas-spring-boot-starter:${arthasSpringBootVersion}"
         api "com.baomidou:dynamic-datasource-spring-boot-starter:${dynamicDatasourceVersion}"
@@ -75,25 +116,6 @@ dependencies {
         api "de.codecentric:spring-boot-admin-starter-client:${springBootAdminVerison}"
         api "de.codecentric:spring-boot-admin-starter-server:${springBootAdminVerison}"
         api "de.codecentric:spring-boot-admin-server-cloud:${springBootAdminVerison}"
-
-        api "cn.hutool:hutool-core:${hutoolVersion}"
-        api "cn.hutool:hutool-aop:${hutoolVersion}"
-        api "cn.hutool:hutool-bloomFilter:${hutoolVersion}"
-        api "cn.hutool:hutool-cache:${hutoolVersion}"
-        api "cn.hutool:hutool-crypto:${hutoolVersion}"
-        api "cn.hutool:hutool-db:${hutoolVersion}"
-        api "cn.hutool:hutool-dfa:${hutoolVersion}"
-        api "cn.hutool:hutool-extra:${hutoolVersion}"
-        api "cn.hutool:hutool-http:${hutoolVersion}"
-        api "cn.hutool:hutool-log:${hutoolVersion}"
-        api "cn.hutool:hutool-script:${hutoolVersion}"
-        api "cn.hutool:hutool-setting:${hutoolVersion}"
-        api "cn.hutool:hutool-system:${hutoolVersion}"
-        api "cn.hutool:hutool-cron:${hutoolVersion}"
-        api "cn.hutool:hutool-json:${hutoolVersion}"
-        api "cn.hutool:hutool-poi:${hutoolVersion}"
-        api "cn.hutool:hutool-captcha:${hutoolVersion}"
-        api "cn.hutool:hutool-socket:${hutoolVersion}"
 
         api "com.github.cn-src.easy-batch:easy-batch-core:${easyBatchVersion}"
         api "com.github.cn-src.easy-batch:easy-batch-validation:${easyBatchVersion}"
