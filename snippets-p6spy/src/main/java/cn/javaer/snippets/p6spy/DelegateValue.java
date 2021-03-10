@@ -17,6 +17,13 @@ class DelegateValue extends Value {
         this.url = url;
     }
 
+    /**
+     * 替换默认 SQL 语句中时间格式直接使用字符串格式的值，使用数据库对应的时间函数来处理.
+     *
+     * @param value value
+     *
+     * @return value
+     */
     @SuppressWarnings("AlibabaUndefineMagicConstant")
     @Override
     public String convertToString(final Object value) {
