@@ -3,11 +3,13 @@ package cn.javaer.snippets.spring.autoconfigure.web.exception;
 import cn.javaer.snippets.spring.web.exception.DefinedErrorInfo;
 import cn.javaer.snippets.spring.web.exception.ErrorInfoController;
 import cn.javaer.snippets.spring.web.exception.ErrorInfoExtractor;
-import cn.javaer.snippets.spring.web.exception.GlobalExceptionAdvice;
+import cn.javaer.snippets.spring.web.exception.GlobalErrorAttributes;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,18 +28,17 @@ import java.util.ResourceBundle;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({ExceptionMappingProperties.class, ServerProperties.class})
 @ConditionalOnWebApplication
+@AutoConfigureBefore({ErrorMvcAutoConfiguration.class})
 @ConditionalOnProperty(prefix = "snippets.web.exception", name = "enabled", havingValue = "true",
     matchIfMissing = true)
 public class ExceptionAutoConfiguration implements InitializingBean {
     private final ExceptionMappingProperties exceptionMappingProperties;
-    private final ServerProperties serverProperties;
     private Map<String, DefinedErrorInfo> useMapping;
 
     public ExceptionAutoConfiguration(
         final ExceptionMappingProperties exceptionMappingProperties,
         final ServerProperties serverProperties) {
         this.exceptionMappingProperties = exceptionMappingProperties;
-        this.serverProperties = serverProperties;
     }
 
     @Bean
@@ -66,8 +67,8 @@ public class ExceptionAutoConfiguration implements InitializingBean {
     }
 
     @Bean
-    GlobalExceptionAdvice globalExceptionAdvice(final ErrorInfoExtractor errorInfoExtractor) {
-        return new GlobalExceptionAdvice(this.serverProperties.getError(), errorInfoExtractor);
+    GlobalErrorAttributes globalErrorAttributes(final ErrorInfoExtractor errorInfoExtractor) {
+        return new GlobalErrorAttributes(errorInfoExtractor);
     }
 
     @Override
