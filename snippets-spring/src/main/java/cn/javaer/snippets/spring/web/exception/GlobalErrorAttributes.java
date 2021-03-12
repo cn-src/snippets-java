@@ -17,6 +17,7 @@
 package cn.javaer.snippets.spring.web.exception;
 
 import cn.javaer.snippets.spring.web.DefaultAppContext;
+import cn.javaer.snippets.util.TimeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.error.ErrorAttributeOptions.Include;
@@ -128,7 +129,7 @@ public class GlobalErrorAttributes implements ErrorAttributes, HandlerExceptionR
             this.errorInfoExtractor.getRuntimeErrorInfo(error, true);
 
         final Map<String, Object> errorAttributes = new LinkedHashMap<>();
-        errorAttributes.put("timestamp", LocalDateTime.now());
+        errorAttributes.put("timestamp", LocalDateTime.now().format(TimeUtils.DATE_TIME_FORMATTER));
         this.addStatus(errorAttributes, webRequest, errorInfo);
         this.addErrorDetails(errorAttributes, webRequest, includeStackTrace, errorInfo);
         this.addPath(errorAttributes, webRequest);
