@@ -48,16 +48,15 @@ class ErrorView implements View {
                 "<body style=\"padding-left: 10px\"><h1>")
             .append(this.htmlEscape(model.get("status"))).append(' ')
             .append(this.htmlEscape(message))
-            .append("</h1><ul style=\"list-style: none;padding: 0;\"><li>路径：")
+            .append("</h1><ul style=\"list-style: none;padding: 0;\"><li>请求路径：")
             .append(this.htmlEscape(model.get("path")))
-            .append("</li><li>错误码：")
-            .append(this.htmlEscape(model.get("error")))
-            .append("</li><li>时间：")
+            .append("</li><li>请求时间：")
             .append(this.htmlEscape(timestamp))
+            .append("</li><li>错误代码：")
+            .append(this.htmlEscape(model.get("error")));
 
-        ;
         if (requestId != null) {
-            builder.append("</li><li>请求标示：")
+            builder.append("</li><li>唯一标示：")
                 .append(this.htmlEscape(requestId));
         }
         builder.append("</li></ul>");
