@@ -132,7 +132,7 @@ public class GlobalErrorAttributes implements ErrorAttributes, HandlerExceptionR
         this.addStatus(errorAttributes, webRequest, errorInfo);
         this.addErrorDetails(errorAttributes, webRequest, includeStackTrace, errorInfo);
         this.addPath(errorAttributes, webRequest);
-        errorAttributes.put("requestId", DefaultAppContext.getRequestId());
+        errorAttributes.put(DefaultAppContext.REQUEST_ID_PARAM, DefaultAppContext.getRequestId());
         return errorAttributes;
     }
 
