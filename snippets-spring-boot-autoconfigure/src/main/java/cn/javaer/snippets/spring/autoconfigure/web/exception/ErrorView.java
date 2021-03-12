@@ -56,7 +56,7 @@ class ErrorView implements View {
             .append(this.htmlEscape(model.get("error")));
 
         if (requestId != null) {
-            builder.append("</li><li>唯一标示：")
+            builder.append("</li><li>唯一标识：")
                 .append(this.htmlEscape(requestId));
         }
         builder.append("</li></ul>");
