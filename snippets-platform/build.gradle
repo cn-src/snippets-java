@@ -79,6 +79,8 @@ dependencies {
         // 文件对象存储服务-客户端
         api "io.minio:minio:${minioVersion}"
 
+        api "com.deepoove:poi-tl:${poiTlVersion}"
+
         api "org.mybatis:mybatis:${mybatisVersion}"
         api "org.mybatis:mybatis-spring:${mybatisSpringVersion}"
         api "org.mybatis.dynamic-sql:mybatis-dynamic-sql:${mybatisDynamicSqlVersion}"
