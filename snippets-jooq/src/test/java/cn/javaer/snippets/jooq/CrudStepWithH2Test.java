@@ -41,9 +41,9 @@ class CrudStepWithH2Test {
     @Test
     void oneStep() {
         final TableMetaProvider<Demo, Long, Void> meta = CrudReflection.getTableMeta(Demo.class);
-        this.crudStep.insertStep(new Demo(1L, "name"), meta)
+        this.crudStep.insertStep(meta, new Demo(1L, "name"))
             .execute();
-        final Demo demo = this.crudStep.findByIdStep(1L, meta).fetchOneInto(Demo.class);
+        final Demo demo = this.crudStep.findByIdStep(meta, 1L).fetchOneInto(Demo.class);
         assertThat(demo).extracting(Demo::getId).isEqualTo(1L);
         assertThat(demo).extracting(Demo::getName).isEqualTo("name");
     }
@@ -57,9 +57,9 @@ class CrudStepWithH2Test {
 
     @Test
     void oneMetaStep() {
-        this.crudStep.insertStep(new City(1, "name"), TCity.CITY)
+        this.crudStep.insertStep(TCity.CITY, new City(1, "name"))
             .execute();
-        final City city = this.crudStep.findByIdStep(1, TCity.CITY).fetchOneInto(City.class);
+        final City city = this.crudStep.findByIdStep(TCity.CITY, 1).fetchOneInto(City.class);
         assertThat(city).extracting(City::getId).isEqualTo(1);
         assertThat(city).extracting(City::getName).isEqualTo("name");
     }
