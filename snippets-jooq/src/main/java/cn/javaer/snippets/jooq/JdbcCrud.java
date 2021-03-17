@@ -108,13 +108,31 @@ public class JdbcCrud {
         return this.crudStep.findAllByCreatorStep(meta).fetchInto(meta.getEntityClass());
     }
 
-    public <T, A, M extends TableMetaProvider<T, ?, A>>
-    List<T> findAllByCreator(final M meta, final Condition condition) {
+    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
+    Page<T> findAllByCreator(final M meta, final PageParam pageParam) {
         Objects.requireNonNull(meta);
 
-        return this.crudStep.findAllByCreatorStep(meta)
-            .and(condition)
+        final List<T> content = this.crudStep.findAllByCreatorStep(meta)
+            .offset(pageParam.getOffset()).limit(pageParam.getSize())
             .fetchInto(meta.getEntityClass());
+        final int total = this.crudStep.dsl().fetchCount(meta.getTable(),
+            this.crudStep.creatorCondition(meta));
+
+        return Page.of(content, total);
+    }
+
+    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
+    Page<T> findAllByCreator(final M meta, final Condition condition, final PageParam pageParam) {
+        Objects.requireNonNull(meta);
+
+        final List<T> content = this.crudStep.findAllByCreatorStep(meta)
+            .and(condition)
+            .offset(pageParam.getOffset()).limit(pageParam.getSize())
+            .fetchInto(meta.getEntityClass());
+        final int total = this.crudStep.dsl().fetchCount(meta.getTable(),
+            this.crudStep.creatorCondition(meta).and(condition));
+
+        return Page.of(content, total);
     }
 
     public <T, ID, A, M extends TableMetaProvider<T, ID, A>>

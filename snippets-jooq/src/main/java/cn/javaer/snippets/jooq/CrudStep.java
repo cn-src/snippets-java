@@ -264,4 +264,10 @@ public class CrudStep {
         final A auditor = (A) this.auditorAware.requiredAuditor();
         return step.and(meta.createdBy().getColumn().eq(auditor));
     }
+
+    public <M extends TableMetaProvider<T, ID, A>, T, ID, A> Condition creatorCondition(final M meta) {
+        @SuppressWarnings("unchecked")
+        final A auditor = (A) this.auditorAware.requiredAuditor();
+        return meta.createdBy().getColumn().eq(auditor);
+    }
 }
