@@ -29,11 +29,21 @@ public class BatchConsumer<T> implements Consumer<T>, Runnable {
     private final List<T> data;
 
     public BatchConsumer(@NotNull final JdbcCrud crud) {
-        this(crud::batchInsert, 100);
+        this(value -> {
+            @SuppressWarnings("unchecked")
+            final Class<T> clazz = (Class<T>) value.get(0).getClass();
+            final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
+            return crud.batchInsert(meta, value);
+        }, 100);
     }
 
     public BatchConsumer(@NotNull final JdbcCrud crud, final int batchSize) {
-        this(crud::batchInsert, batchSize);
+        this(value -> {
+            @SuppressWarnings("unchecked")
+            final Class<T> clazz = (Class<T>) value.get(0).getClass();
+            final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
+            return crud.batchInsert(meta, value);
+        }, batchSize);
     }
 
     public BatchConsumer(@NotNull final ToIntFunction<List<T>> fn) {

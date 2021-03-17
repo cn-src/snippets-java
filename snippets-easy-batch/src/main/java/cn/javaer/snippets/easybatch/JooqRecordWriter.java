@@ -1,6 +1,8 @@
 package cn.javaer.snippets.easybatch;
 
+import cn.javaer.snippets.jooq.CrudReflection;
 import cn.javaer.snippets.jooq.JdbcCrud;
+import cn.javaer.snippets.jooq.TableMetaProvider;
 import org.jeasy.batch.core.record.Batch;
 import org.jeasy.batch.core.record.Record;
 import org.jeasy.batch.core.util.Utils;
@@ -31,6 +33,9 @@ public class JooqRecordWriter<P> implements RecordWriter<P> {
     public void writeRecords(final Batch<P> batch) {
         final List<P> collect = StreamSupport.stream(batch.spliterator(), false)
             .map(Record::getPayload).collect(Collectors.toList());
-        this.crud.batchInsert(collect);
+        @SuppressWarnings("unchecked")
+        final Class<P> clazz = (Class<P>) collect.get(0).getClass();
+        final TableMetaProvider<P, ?, ?> meta = CrudReflection.getTableMeta(clazz);
+        this.crud.batchInsert(meta, collect);
     }
 }

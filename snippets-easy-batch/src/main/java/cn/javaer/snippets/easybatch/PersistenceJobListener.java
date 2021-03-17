@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.WeakHashMap;
 
+import static cn.javaer.snippets.easybatch.TEasyBatchJobRecord.EASY_BATCH_JOB_RECORD;
 import static cn.javaer.snippets.easybatch.TEasyBatchJobTime.EASY_BATCH_JOB_TIME;
 
 /**
@@ -57,7 +58,7 @@ public class PersistenceJobListener implements JobListener, BatchListener<Object
                 .where(EASY_BATCH_JOB_TIME.JOB_NAME.eq(this.jobRecord.getJobName()))
                 .execute();
         }
-        this.crud.insert(this.jobRecord);
+        this.crud.insert(EASY_BATCH_JOB_RECORD, this.jobRecord);
     }
 
     @Override
@@ -76,6 +77,6 @@ public class PersistenceJobListener implements JobListener, BatchListener<Object
     }
 
     void saveJobReport() {
-        this.crud.update(this.jobRecord);
+        this.crud.update(EASY_BATCH_JOB_RECORD, this.jobRecord);
     }
 }

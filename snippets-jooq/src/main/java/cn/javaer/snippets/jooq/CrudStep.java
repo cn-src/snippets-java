@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jooq;
 
+import cn.javaer.snippets.model.PageParam;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
@@ -8,6 +9,7 @@ import org.jooq.InsertValuesStepN;
 import org.jooq.Record;
 import org.jooq.SelectConditionStep;
 import org.jooq.SelectJoinStep;
+import org.jooq.SelectWithTiesAfterOffsetStep;
 import org.jooq.UpdateConditionStep;
 
 import java.time.LocalDateTime;
@@ -44,7 +46,7 @@ public class CrudStep {
      * @return the select step
      */
     public <M extends TableMetaProvider<?, ID, ?>, ID> SelectConditionStep<Record>
-    findByIdStep(final @NotNull ID id, final M meta) {
+    findByIdStep(final M meta, final @NotNull ID id) {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
@@ -62,7 +64,7 @@ public class CrudStep {
      * @return the select step
      */
     public <M extends TableMetaProvider<?, ID, A>, ID, A> SelectConditionStep<Record>
-    findByIdAndCreatorStep(final @NotNull ID id, final M meta) {
+    findByIdAndCreatorStep(final M meta, final @NotNull ID id) {
 
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
@@ -83,7 +85,7 @@ public class CrudStep {
      * @return the select step
      */
     public <M extends TableMetaProvider<?, ID, ?>, ID> SelectConditionStep<Record>
-    findOneStep(final Condition condition, final M meta) {
+    findOneStep(final M meta, final Condition condition) {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
@@ -95,6 +97,25 @@ public class CrudStep {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable());
+    }
+
+    public @NotNull <M extends TableMetaProvider<?, ?, ?>> SelectWithTiesAfterOffsetStep<Record>
+    findAllStep(final M meta, final PageParam pageParam) {
+
+        return this.dsl.select(meta.selectFields())
+            .from(meta.getTable())
+            .offset(pageParam.getOffset())
+            .limit(pageParam.getSize());
+    }
+
+    public @NotNull <M extends TableMetaProvider<?, ?, ?>> SelectWithTiesAfterOffsetStep<Record>
+    findAllStep(final M meta, final Condition condition, final PageParam pageParam) {
+
+        return this.dsl.select(meta.selectFields())
+            .from(meta.getTable())
+            .where(condition)
+            .offset(pageParam.getOffset())
+            .limit(pageParam.getSize());
     }
 
     public @NotNull <M extends TableMetaProvider<?, ?, A>, A> SelectConditionStep<Record>
@@ -118,7 +139,7 @@ public class CrudStep {
      * @return the insert values step n
      */
     public <M extends TableMetaProvider<T, ID, A>, T, ID, A> InsertValuesStepN<?>
-    insertStep(final @NotNull T entity, final M meta) {
+    insertStep(final M meta, final @NotNull T entity) {
 
         final List<Object> values = new ArrayList<>();
         final List<Field<?>> fields = new ArrayList<>();

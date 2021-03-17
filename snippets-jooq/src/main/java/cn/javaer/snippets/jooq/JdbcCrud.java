@@ -1,5 +1,7 @@
 package cn.javaer.snippets.jooq;
 
+import cn.javaer.snippets.model.Page;
+import cn.javaer.snippets.model.PageParam;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
 import org.jooq.Condition;
@@ -51,89 +53,105 @@ public class JdbcCrud {
         return this.crudStep.dsl();
     }
 
-    public <T, ID> Optional<T> findById(final ID id, final Class<T> clazz) {
-        Objects.requireNonNull(clazz);
-
-        return this.crudStep.findByIdStep(id, CrudReflection.getTableMeta(clazz))
-            .fetchOptionalInto(clazz);
+    public <T, ID, M extends TableMetaProvider<T, ID, ?>>
+    Optional<T> findById(final M meta, final ID id) {
+        Objects.requireNonNull(meta);
+        return this.crudStep.findByIdStep(meta, id).fetchOptionalInto(meta.getEntityClass());
     }
 
-    public <T, ID> Optional<T> findByIdAndCreator(final ID id, final Class<T> clazz) {
-        Objects.requireNonNull(clazz);
-
-        return this.crudStep.findByIdAndCreatorStep(id, CrudReflection.getTableMeta(clazz))
-            .fetchOptionalInto(clazz);
+    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
+    Optional<T> findByIdAndCreator(final M meta, final ID id) {
+        Objects.requireNonNull(meta);
+        return this.crudStep.findByIdAndCreatorStep(meta, id)
+            .fetchOptionalInto(meta.getEntityClass());
     }
 
-    public <T> Optional<T> findOne(final Condition condition, final Class<T> clazz) {
-        Objects.requireNonNull(clazz);
-
-        return this.crudStep.findOneStep(condition, CrudReflection.getTableMeta(clazz))
-            .fetchOptionalInto(clazz);
+    public <T, ID, M extends TableMetaProvider<T, ID, ?>>
+    Optional<T> findOne(final M meta, final Condition condition) {
+        Objects.requireNonNull(meta);
+        return this.crudStep.findOneStep(meta, condition)
+            .fetchOptionalInto(meta.getEntityClass());
     }
 
-    public <T> List<T> findAll(final Class<T> clazz) {
-        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
-        return this.crudStep.findAllStep(meta).fetchInto(clazz);
+    public <T, M extends TableMetaProvider<T, ?, ?>>
+    List<T> findAll(final M meta) {
+        Objects.requireNonNull(meta);
+        return this.crudStep.findAllStep(meta).fetchInto(meta.getEntityClass());
     }
 
-    public <T> List<T> findAll(final Condition condition, final Class<T> clazz) {
-        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
-        return this.crudStep.findAllStep(meta).where(condition).fetchInto(clazz);
+    public <T, M extends TableMetaProvider<T, ?, ?>>
+    Page<T> findAll(final M meta, final PageParam pageParam) {
+        Objects.requireNonNull(meta);
+        final List<T> content = this.crudStep.findAllStep(meta, pageParam)
+            .fetchInto(meta.getEntityClass());
+        return Page.of(content, this.crudStep.dsl().fetchCount(meta.getTable()));
     }
 
-    public <T> List<T> findAllByCreator(final Class<T> clazz) {
-        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
-        return this.crudStep.findAllByCreatorStep(meta).fetchInto(clazz);
+    public <T, M extends TableMetaProvider<T, ?, ?>>
+    Page<T> findAll(final M meta, final Condition condition, final PageParam pageParam) {
+        Objects.requireNonNull(meta);
+        final List<T> content = this.crudStep.findAllStep(meta, condition, pageParam)
+            .fetchInto(meta.getEntityClass());
+        final int total = this.crudStep.dsl().fetchCount(meta.getTable(), condition);
+        return Page.of(content, total);
     }
 
-    public <T> List<T> findAllByCreator(final Condition condition, final Class<T> clazz) {
-        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
-        return this.crudStep.findAllByCreatorStep(meta).and(condition).fetchInto(clazz);
+    public <T, M extends TableMetaProvider<T, ?, ?>>
+    List<T> findAll(final M meta, final Condition condition) {
+        Objects.requireNonNull(meta);
+        return this.crudStep.findAllStep(meta).where(condition).fetchInto(meta.getEntityClass());
     }
 
-    public <T> int insert(final T entity) {
+    public <T, A, M extends TableMetaProvider<T, ?, A>>
+    List<T> findAllByCreator(final M meta) {
+        Objects.requireNonNull(meta);
+        return this.crudStep.findAllByCreatorStep(meta).fetchInto(meta.getEntityClass());
+    }
+
+    public <T, A, M extends TableMetaProvider<T, ?, A>>
+    List<T> findAllByCreator(final M meta, final Condition condition) {
+        Objects.requireNonNull(meta);
+
+        return this.crudStep.findAllByCreatorStep(meta)
+            .and(condition)
+            .fetchInto(meta.getEntityClass());
+    }
+
+    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
+    int insert(final M meta, final T entity) {
+        Objects.requireNonNull(meta);
         Objects.requireNonNull(entity);
-
-        @SuppressWarnings("unchecked")
-        final Class<T> clazz = (Class<T>) entity.getClass();
-        final TableMetaProvider<T, ?, ?> tableMeta = CrudReflection.getTableMeta(clazz);
-        return this.crudStep.insertStep(entity, tableMeta).execute();
+        return this.crudStep.insertStep(meta, entity).execute();
     }
 
-    public <T> int batchInsert(final List<T> entities) {
+    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
+    int batchInsert(final M meta, final List<T> entities) {
+        Objects.requireNonNull(meta);
         Validate.notEmpty(entities);
-
-        @SuppressWarnings("unchecked")
-        final Class<T> clazz = (Class<T>) entities.get(0).getClass();
-        final TableMetaProvider<T, ?, ?> tableMeta = CrudReflection.getTableMeta(clazz);
-        return this.crudStep.batchInsertStep(entities, tableMeta).execute();
+        return this.crudStep.batchInsertStep(entities, meta).execute();
     }
 
-    public <T> int update(final T entity) {
+    @SuppressWarnings("UnusedReturnValue")
+    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
+    int update(final M meta, final T entity) {
+        Objects.requireNonNull(meta);
         Objects.requireNonNull(entity);
 
-        @SuppressWarnings("unchecked")
-        final Class<T> clazz = (Class<T>) entity.getClass();
-        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.dynamicUpdateStep(entity, meta, o -> true).execute();
     }
 
-    public <T> int dynamicUpdate(final T entity) {
+    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
+    int dynamicUpdate(final M meta, final T entity) {
+        Objects.requireNonNull(meta);
         Objects.requireNonNull(entity);
-
-        @SuppressWarnings("unchecked")
-        final Class<T> clazz = (Class<T>) entity.getClass();
-        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.dynamicUpdateStep(entity, meta, ObjectUtils::isNotEmpty).execute();
     }
 
-    public <T> int dynamicUpdateByCreator(final T entity) {
+    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
+    int dynamicUpdateByCreator(final M meta, final T entity) {
+        Objects.requireNonNull(meta);
         Objects.requireNonNull(entity);
 
-        @SuppressWarnings("unchecked")
-        final Class<T> clazz = (Class<T>) entity.getClass();
-        final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
         return this.crudStep.dynamicUpdateByCreatorStep(entity, meta, ObjectUtils::isNotEmpty)
             .execute();
     }
