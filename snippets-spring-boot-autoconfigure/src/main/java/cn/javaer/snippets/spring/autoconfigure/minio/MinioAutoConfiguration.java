@@ -22,7 +22,7 @@ public class MinioAutoConfiguration {
     @Bean
     @Primary
     @ConditionalOnMissingBean(MinioClient.class)
-    public MinioClient json(final MinioProperties minioProperties) {
+    public MinioClient minioClient(final MinioProperties minioProperties) {
         return MinioClient.builder()
             .endpoint(minioProperties.getEndpoint())
             .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
