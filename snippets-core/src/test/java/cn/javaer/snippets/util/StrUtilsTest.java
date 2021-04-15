@@ -11,8 +11,8 @@ class StrUtilsTest {
 
     @Test
     void toSnakeUpper() {
-        assertThat(StrUtils.toSnakeUpper(null)).isEqualTo(null);
-        assertThat(StrUtils.toSnakeUpper("")).isEqualTo("");
+        assertThat(StrUtils.toSnakeUpper(null)).isNull();
+        assertThat(StrUtils.toSnakeUpper("")).isEmpty();
         assertThat(StrUtils.toSnakeUpper("s")).isEqualTo("S");
         assertThat(StrUtils.toSnakeUpper("S")).isEqualTo("S");
         assertThat(StrUtils.toSnakeUpper("_")).isEqualTo("_");
@@ -28,8 +28,8 @@ class StrUtilsTest {
 
     @Test
     void toSnakeLower() {
-        assertThat(StrUtils.toSnakeLower(null)).isEqualTo(null);
-        assertThat(StrUtils.toSnakeLower("")).isEqualTo("");
+        assertThat(StrUtils.toSnakeLower(null)).isNull();
+        assertThat(StrUtils.toSnakeLower("")).isEmpty();
         assertThat(StrUtils.toSnakeLower("s")).isEqualTo("s");
         assertThat(StrUtils.toSnakeLower("S")).isEqualTo("s");
         assertThat(StrUtils.toSnakeLower("_")).isEqualTo("_");
