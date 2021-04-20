@@ -12,6 +12,11 @@ cn.javaer.snippets.spring.autoconfigure.web.WebAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.minio.MinioAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.task.SchedulersAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.task.ExecutorsAutoConfiguration
+
+# Failure Analyzers
+org.springframework.boot.diagnostics.FailureAnalyzer=\
+cn.javaer.snippets.spring.boot.diagnostics.analyzer.ZhPortInUseFailureAnalyzer
+
 # AutoConfigureDataJooqJdbc auto-configuration imports
 cn.javaer.snippets.test.spring.autoconfigure.data.jooq.jdbc.AutoConfigureDataJooqJdbc=\
 cn.javaer.snippets.spring.autoconfigure.data.jooq.jdbc.JooqJdbcRepositoriesAutoConfiguration,\
