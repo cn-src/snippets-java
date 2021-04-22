@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 public class CodeGenTool {
     private static final Logger logger = Logger.getLogger(CodeGenTool.class.getName());
     static ClassInfoList enums = null;
+    static ClassLoader classLoader;
 
     /**
      * 生成代码.
@@ -69,9 +70,11 @@ public class CodeGenTool {
     }
 
     static List<TableMeta> scan(final String genPackage, final String... packageNames) {
+        final ClassLoader classLoader = CodeGenTool.classLoader == null ?
+            Thread.currentThread().getContextClassLoader() : CodeGenTool.classLoader;
 
         try (final ScanResult scanResult = new ClassGraph()
-            .addClassLoader(Thread.currentThread().getContextClassLoader())
+            .addClassLoader(classLoader)
             .enableAllInfo()
             .acceptPackages(packageNames)
             .scan()) {
@@ -87,5 +90,9 @@ public class CodeGenTool {
             return tableMetas.stream().distinct().map(it -> new TableMeta(it, genPackage))
                 .collect(Collectors.toList());
         }
+    }
+
+    public static void setClassLoader(final ClassLoader classLoader) {
+        CodeGenTool.classLoader = classLoader;
     }
 }
