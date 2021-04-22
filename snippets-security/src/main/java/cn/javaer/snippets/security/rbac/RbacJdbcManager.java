@@ -27,23 +27,23 @@ public class RbacJdbcManager {
         this.auditor = auditor;
     }
 
-    public <T extends com.example.bootdemo.user.DefaultUserDetails> List<T> findAllUsers(final Class<T> clazz) {
+    public <T extends DefaultUserDetails> List<T> findAllUsers(final Class<T> clazz) {
         return this.dsl.selectFrom(this.t_user).fetchInto(clazz);
     }
 
-    public <T extends com.example.bootdemo.user.DefaultUserDetails> List<T> findUserByEmail(final Class<T> clazz) {
+    public <T extends DefaultUserDetails> List<T> findUserByEmail(final Class<T> clazz) {
         return this.dsl.selectFrom(this.t_user).fetchInto(clazz);
     }
 
-    public List<com.example.bootdemo.user.Permission> findAllPermission() {
-        return this.dsl.selectFrom(this.t_permission).fetchInto(com.example.bootdemo.user.Permission.class);
+    public List<Permission> findAllPermission() {
+        return this.dsl.selectFrom(this.t_permission).fetchInto(Permission.class);
     }
 
-    public List<com.example.bootdemo.user.Role> findAllRole() {
-        return this.dsl.selectFrom(this.t_role).fetchInto(com.example.bootdemo.user.Role.class);
+    public List<Role> findAllRole() {
+        return this.dsl.selectFrom(this.t_role).fetchInto(Role.class);
     }
 
-    public void createRole(final com.example.bootdemo.user.Role role) {
+    public void createRole(final Role role) {
         final LocalDateTime now = LocalDateTime.now();
         final Long roleId = Objects.requireNonNull(this.dsl.insertInto(this.t_role)
             .set(DSL.field("name"), role.getName())
@@ -62,7 +62,7 @@ public class RbacJdbcManager {
             .execute();
     }
 
-    public void updateRole(final com.example.bootdemo.user.Role role) {
+    public void updateRole(final Role role) {
         this.dsl.update(this.t_role)
             .set(DSL.field("name"), role.getName())
             .set(DSL.field("description"), role.getDescription())
@@ -73,7 +73,7 @@ public class RbacJdbcManager {
         this.savePermissions(role, LocalDateTime.now(), role.getId());
     }
 
-    private void savePermissions(final com.example.bootdemo.user.Role role,
+    private void savePermissions(final Role role,
                                  final LocalDateTime now, final Long roleId) {
         if (role.getPermissions() != null && !role.getPermissions().isEmpty()) {
             final InsertValuesStepN<?> step =
@@ -82,7 +82,7 @@ public class RbacJdbcManager {
                     DSL.field("permission_id"),
                     DSL.field("created_date"),
                     DSL.field("created_by_id")));
-            for (final com.example.bootdemo.user.Permission permission : role.getPermissions()) {
+            for (final Permission permission : role.getPermissions()) {
                 step.values(roleId, permission.getId(), now, this.auditor.get());
             }
         }
