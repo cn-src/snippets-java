@@ -1,0 +1,12 @@
+plugins {
+    id 'snippets-conventions'
+}
+
+dependencies {
+    api(project(':snippets-core'))
+    api "org.jooq:jooq:${jooqVersion}"
+
+    compileOnly 'com.fasterxml.jackson.core:jackson-annotations'
+    compileOnly "org.springdoc:springdoc-openapi-webmvc-core:${springdocVersion}"
+    optionalApi 'org.springframework.boot:spring-boot-starter-security'
+}
