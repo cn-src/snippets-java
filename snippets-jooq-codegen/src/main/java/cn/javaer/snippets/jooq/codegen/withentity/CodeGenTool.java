@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 public class CodeGenTool {
     private static final Logger logger = Logger.getLogger(CodeGenTool.class.getName());
     static ClassInfoList enums = null;
-    static ClassLoader classLoader;
 
     /**
      * 生成代码.
@@ -38,23 +36,21 @@ public class CodeGenTool {
      * @param genPackage 生成代码的 package
      * @param packageNamesToScan 要扫面的实体类或者相关的枚举类等的 package
      */
-    public static void generate(final String dir, final String genPackage,
-                                final String... packageNamesToScan) {
-        logger.info("Code generation with packages:" + Arrays.toString(packageNamesToScan));
+    public static void generate(final CodeGenConfig config) {
+        logger.info("Code generation with packages:" + config);
         final TemplateLoader loader = new ClassPathTemplateLoader();
         loader.setSuffix(".hbs");
         final Handlebars handlebars = new Handlebars(loader);
-        final Path genDir = getFilePath(dir, genPackage);
+        final Path generatedDir = config.generatedDir();
         try {
-            IoUtils.recreateDirectories(genDir);
+            IoUtils.recreateDirectories(generatedDir);
             final Template template = handlebars.compile("jooq-gen-table");
-            final List<TableMeta> tableMetas = scan(genPackage, packageNamesToScan);
+            final List<TableMeta> tableMetas = scan(config);
             logger.info("Scan entities total:" + tableMetas.size());
             for (final TableMeta tableMeta : tableMetas) {
                 logger.info("Generate:" + tableMeta.getEntityName());
                 try (final FileWriter writer = new FileWriter(
-                    Paths.get(genDir.toString(), tableMeta.getTableClassName() + ".java").toFile())) {
-
+                    Paths.get(generatedDir.toString(), tableMeta.getTableClassName() + ".java").toFile())) {
                     template.apply(tableMeta, writer);
                 }
             }
@@ -64,19 +60,12 @@ public class CodeGenTool {
         }
     }
 
-    static Path getFilePath(final String dir, final String genPackage) {
-        final String packageToPath = genPackage.replaceAll("\\.", "/");
-        return Paths.get(dir, packageToPath);
-    }
-
-    static List<TableMeta> scan(final String genPackage, final String... packageNames) {
-        final ClassLoader classLoader = CodeGenTool.classLoader == null ?
-            Thread.currentThread().getContextClassLoader() : CodeGenTool.classLoader;
-
+    static List<TableMeta> scan(final CodeGenConfig config) {
         try (final ScanResult scanResult = new ClassGraph()
-            .addClassLoader(classLoader)
+            .addClassLoader(config.classLoader())
             .enableAllInfo()
-            .acceptPackages(packageNames)
+            .acceptPackages(config.scanPackageNames())
+            .acceptClasses(config.scanClassNames())
             .scan()) {
             final ClassInfoList tableClass =
                 scanResult.getClassesWithAnnotation(
@@ -87,12 +76,9 @@ public class CodeGenTool {
             final ClassInfoList tableMetas = new ClassInfoList();
             tableMetas.addAll(tableClass);
             tableMetas.addAll(idClass);
-            return tableMetas.stream().distinct().map(it -> new TableMeta(it, genPackage))
+            return tableMetas.stream().distinct()
+                .map(it -> new TableMeta(it, config.getGeneratedSrcPackage()))
                 .collect(Collectors.toList());
         }
-    }
-
-    public static void setClassLoader(final ClassLoader classLoader) {
-        CodeGenTool.classLoader = classLoader;
     }
 }

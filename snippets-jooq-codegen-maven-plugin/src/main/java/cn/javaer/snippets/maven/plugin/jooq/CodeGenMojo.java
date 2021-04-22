@@ -1,5 +1,6 @@
 package cn.javaer.snippets.maven.plugin.jooq;
 
+import cn.javaer.snippets.jooq.codegen.withentity.CodeGenConfig;
 import cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -62,38 +63,44 @@ public class CodeGenMojo extends AbstractMojo {
     )
     private List<String> includePackages;
 
+    @Parameter(
+        property = "jooq.codegen.includeClass"
+    )
+    private String includeClass;
+
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    @Parameter(
+        property = "jooq.codegen.includeClasses"
+    )
+    private List<String> includeClasses;
+
     @Override
     public void execute() throws MojoExecutionException {
         if (this.skip) {
             this.getLog().info("Skipping jOOQ code generation");
             return;
         }
-        final ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
-        final URLClassLoader pluginClassLoader = this.getClassLoader();
+        final String actualBasedir = this.basedir == null ?
+            Paths.get(this.project.getBasedir().getAbsolutePath(), "src/main/java").toString() :
+            this.basedir;
+
+        final CodeGenConfig config = CodeGenConfig.builder()
+            .classLoader(this.getClassLoader())
+            .generatedSrcPackage(this.packageName)
+            .generatedSrcRootDir(actualBasedir)
+            .scanClassName(this.includeClass)
+            .scanPackageName(this.includePackage)
+            .scanPackageNames(this.includePackages)
+            .scanClassNames(this.includeClasses)
+            .build();
+        if (config.isNotScan()) {
+            return;
+        }
         try {
-            Thread.currentThread().setContextClassLoader(pluginClassLoader);
-            final String actualBasedir = this.basedir == null ?
-                Paths.get(this.project.getBasedir().getAbsolutePath(), "src/main/java").toString() :
-                this.basedir;
-            if (null != this.includePackages && !this.includePackages.isEmpty()) {
-                CodeGenTool.generate(actualBasedir, this.packageName,
-                    this.includePackages.toArray(new String[0]));
-            }
-            else {
-                CodeGenTool.generate(actualBasedir, this.packageName, this.includePackage);
-            }
+            CodeGenTool.generate(config);
         }
         catch (final Exception ex) {
             throw new MojoExecutionException("Error running jOOQ code generation tool", ex);
-        }
-        finally {
-            Thread.currentThread().setContextClassLoader(oldLoader);
-            try {
-                pluginClassLoader.close();
-            }
-            catch (final Throwable e) {
-                this.getLog().error("Couldn't close the classloader.", e);
-            }
         }
     }
 
