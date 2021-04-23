@@ -41,7 +41,7 @@ public class TRolePermission extends TableImpl<Record> implements TableMetaProvi
 
     private final Table<?> _table = DSL.table(getUnqualifiedName());
 
-    private final List<Field<?>> _selectFields = Arrays.asList();
+    private final List<Field<?>> _selectFields = Arrays.asList(this.ROLE_ID,this.PERMISSION_ID);
 
     private final List<ColumnMeta<RolePermission, ?>> _savedColumnMetas = Arrays.asList(new ColumnMeta((Function<RolePermission, java.lang.Long>) RolePermission::getRoleId, this.ROLE_ID),new ColumnMeta((Function<RolePermission, java.lang.Long>) RolePermission::getPermissionId, this.PERMISSION_ID));
 

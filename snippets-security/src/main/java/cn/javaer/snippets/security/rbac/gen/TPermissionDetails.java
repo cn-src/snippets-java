@@ -49,7 +49,7 @@ public class TPermissionDetails extends TableImpl<Record> implements TableMetaPr
 
     private final Table<?> _table = DSL.table(getUnqualifiedName());
 
-    private final List<Field<?>> _selectFields = Arrays.asList();
+    private final List<Field<?>> _selectFields = Arrays.asList(this.ID,this.NAME,this.AUTHORITY,this.DESCRIPTION,this.CREATED_DATE,this.CREATED_BY_ID);
 
     private final List<ColumnMeta<PermissionDetails, ?>> _savedColumnMetas = Arrays.asList(new ColumnMeta((Function<PermissionDetails, java.lang.Long>) PermissionDetails::getId, this.ID),new ColumnMeta((Function<PermissionDetails, java.lang.String>) PermissionDetails::getName, this.NAME),new ColumnMeta((Function<PermissionDetails, java.lang.String>) PermissionDetails::getAuthority, this.AUTHORITY),new ColumnMeta((Function<PermissionDetails, java.lang.String>) PermissionDetails::getDescription, this.DESCRIPTION));
 

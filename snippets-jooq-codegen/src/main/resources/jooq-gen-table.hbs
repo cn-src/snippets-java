@@ -44,7 +44,7 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMetaPr
 
     private final Table<?> _table = DSL.table(getUnqualifiedName());
 
-    private final List<Field<?>> _selectFields = Arrays.asList({{#each declaredColumnMetas}}this.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}});
+    private final List<Field<?>> _selectFields = Arrays.asList({{#each selectColumnMetas}}this.{{tableFieldName}}{{#unless @last}},{{/unless}}{{/each}});
 
     private final List<ColumnMeta<{{entityName}}, ?>> _savedColumnMetas = Arrays.asList({{#each savedColumnMetas}}new ColumnMeta((Function<{{entityName}}, {{fieldType}}>) {{entityName}}::{{getterName}}, this.{{tableFieldName}}){{#unless @last}},{{/unless}}{{/each}});
 {{#if idColumnMeta}}

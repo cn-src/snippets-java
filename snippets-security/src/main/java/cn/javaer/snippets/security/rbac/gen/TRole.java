@@ -41,7 +41,7 @@ public class TRole extends TableImpl<Record> implements TableMetaProvider<Role, 
 
     private final Table<?> _table = DSL.table(getUnqualifiedName());
 
-    private final List<Field<?>> _selectFields = Arrays.asList();
+    private final List<Field<?>> _selectFields = Arrays.asList(this.ID,this.NAME);
 
     private final List<ColumnMeta<Role, ?>> _savedColumnMetas = Arrays.asList(new ColumnMeta((Function<Role, java.lang.Long>) Role::getId, this.ID),new ColumnMeta((Function<Role, java.lang.String>) Role::getName, this.NAME));
 
