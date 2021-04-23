@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @Data
 @Schema(name = "角色详情")
+@Table("role")
 public class RoleDetails implements Serializable {
     private static final long serialVersionUID = -388063889316870772L;
 

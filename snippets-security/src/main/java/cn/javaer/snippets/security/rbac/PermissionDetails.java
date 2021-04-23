@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Schema(name = "权限详情")
+@Table("permission")
 public class PermissionDetails implements Serializable {
     private static final long serialVersionUID = -219244584579949608L;
     @Id

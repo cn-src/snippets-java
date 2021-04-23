@@ -8,7 +8,6 @@ import org.jooq.impl.DSL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import static cn.javaer.snippets.security.rbac.gen.TPermission.PERMISSION;
 import static cn.javaer.snippets.security.rbac.gen.TPermission.PERMISSION_FIELDS;
@@ -25,7 +24,7 @@ public class RbacJdbcManager {
     private final JdbcCrud crud;
     private final Table<?> t_user = DSL.table("users");
 
-    public RbacJdbcManager(final JdbcCrud crud, final Supplier<Long> auditor) {
+    public RbacJdbcManager(final JdbcCrud crud) {
         this.crud = crud;
     }
 

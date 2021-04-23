@@ -60,7 +60,7 @@ public class TPermissionDetails extends TableImpl<Record> implements TableMetaPr
     private final ColumnMeta<PermissionDetails, java.time.LocalDateTime> _createdDateMeta = new ColumnMeta<>(PermissionDetails::getCreatedDate, this.CREATED_DATE);
 
     public TPermissionDetails() {
-        this(DSL.name("permission_details"), null);
+        this(DSL.name("permission"), null);
     }
 
     private TPermissionDetails(Name alias, Table<Record> aliased) {

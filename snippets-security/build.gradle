@@ -1,5 +1,7 @@
 //import cn.javaer.snippets.jooq.codegen.withentity.CodeGenConfig
 //import cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool
+//
+//import java.nio.file.Paths
 
 buildscript {
     dependencies {
@@ -15,16 +17,19 @@ dependencies {
     api "org.jooq:jooq:${jooqVersion}"
 
     compileOnly 'com.fasterxml.jackson.core:jackson-annotations'
-    compileOnly 'org.springframework.data:spring-data-commons'
+    compileOnly 'org.springframework.data:spring-data-jdbc'
+
     compileOnly "org.springdoc:springdoc-openapi-webmvc-core:${springdocVersion}"
     optionalApi 'org.springframework.boot:spring-boot-starter-security'
+
+    testImplementation 'org.postgresql:postgresql'
+    testImplementation 'com.playtika.testcontainers:embedded-postgresql'
 }
 
 task("jooq-generate") {
     dependsOn compileJava
     doLast {
 //        def dir = Paths.get(System.getProperty("user.dir"), 'snippets-security/src/main/java').toString()
-
 //        def classLoader = new URLClassLoader(sourceSets.main.runtimeClasspath.files.collect { it.toURI().toURL() } as URL[])
 //        def config = CodeGenConfig.builder().classLoader(classLoader)
 //                .generatedSrcRootDir(dir)

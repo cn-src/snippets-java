@@ -58,7 +58,7 @@ public class TRoleDetails extends TableImpl<Record> implements TableMetaProvider
     private final ColumnMeta<RoleDetails, java.time.LocalDateTime> _createdDateMeta = new ColumnMeta<>(RoleDetails::getCreatedDate, this.CREATED_DATE);
 
     public TRoleDetails() {
-        this(DSL.name("role_details"), null);
+        this(DSL.name("role"), null);
     }
 
     private TRoleDetails(Name alias, Table<Record> aliased) {
