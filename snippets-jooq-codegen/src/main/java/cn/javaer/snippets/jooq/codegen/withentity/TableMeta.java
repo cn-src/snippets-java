@@ -10,6 +10,7 @@ import io.github.classgraph.AnnotationInfoList;
 import io.github.classgraph.AnnotationParameterValueList;
 import io.github.classgraph.ClassInfo;
 import lombok.Value;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +26,15 @@ public class TableMeta {
     String entityName;
     String entityClassName;
     String staticFieldName;
+    @Nullable
     ColumnMeta idColumnMeta;
+    @Nullable
     ColumnMeta updatedByColumnMeta;
+    @Nullable
     ColumnMeta updatedDateColumnMeta;
+    @Nullable
     ColumnMeta createdByColumnMeta;
+    @Nullable
     ColumnMeta createdDateColumnMeta;
     boolean hasAuditor;
     String auditorType;
@@ -55,11 +61,13 @@ public class TableMeta {
         this.tableClassName = "T" + this.entityName;
 
         this.columnMetas = getColumnMetas(classInfo);
-
         this.savedColumnMetas = getSavedColumnMetas(classInfo);
 
-        this.idColumnMeta = this.columnMetas.stream()
-            .filter(ColumnMeta::isId).findFirst().orElse(null);
+        // TODO 考虑联合主键处理
+        final List<ColumnMeta> idColumnMetas = this.columnMetas.stream()
+            .filter(ColumnMeta::isId).collect(Collectors.toList());
+        this.idColumnMeta = idColumnMetas.size() == 1 ? idColumnMetas.get(0) : null;
+
         this.updatedByColumnMeta = this.columnMetas.stream()
             .filter(ColumnMeta::isUpdatedBy).findFirst().orElse(null);
         this.updatedDateColumnMeta = this.columnMetas.stream()
