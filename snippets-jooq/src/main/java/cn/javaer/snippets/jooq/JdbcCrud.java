@@ -136,10 +136,12 @@ public class JdbcCrud {
     }
 
     public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
-    int insert(final M meta, final T entity) {
+    ID insert(final M meta, final T entity) {
         Objects.requireNonNull(meta);
         Objects.requireNonNull(entity);
-        return this.crudStep.insertStep(meta, entity).execute();
+        return Objects.requireNonNull(this.crudStep.insertStep(meta, entity)
+            .returningResult(meta.id().getColumn())
+            .fetchOne()).value1();
     }
 
     public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
@@ -171,6 +173,14 @@ public class JdbcCrud {
         Objects.requireNonNull(entity);
 
         return this.crudStep.dynamicUpdateByCreatorStep(entity, meta, ObjectUtils::isNotEmpty)
+            .execute();
+    }
+
+    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
+    int deleteById(final M meta, final ID id) {
+        Objects.requireNonNull(meta);
+        return this.crudStep.dsl().deleteFrom(meta.getTable())
+            .where(meta.id().getColumn().eq(id))
             .execute();
     }
 }

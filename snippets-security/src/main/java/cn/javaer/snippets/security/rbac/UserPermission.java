@@ -1,6 +1,7 @@
 package cn.javaer.snippets.security.rbac;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 
@@ -12,6 +13,10 @@ import java.io.Serializable;
 @Data
 public class UserPermission implements Serializable {
     private static final long serialVersionUID = 6904897919616486183L;
+
+    @Id
     private Long userId;
-    private String authority;
+
+    @Id
+    private Long permissionId;
 }

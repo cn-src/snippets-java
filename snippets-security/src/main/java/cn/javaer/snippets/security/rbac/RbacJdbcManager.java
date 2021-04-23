@@ -1,90 +1,91 @@
 package cn.javaer.snippets.security.rbac;
 
-import org.jooq.DSLContext;
-import org.jooq.InsertValuesStepN;
+import cn.javaer.snippets.jooq.JdbcCrud;
+import org.apache.commons.collections4.CollectionUtils;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Supplier;
+
+import static cn.javaer.snippets.security.rbac.gen.TRole.ROLE;
+import static cn.javaer.snippets.security.rbac.gen.TRoleDetails.ROLE_DETAILS;
+import static cn.javaer.snippets.security.rbac.gen.TRolePermission.ROLE_PERMISSION;
 
 /**
  * @author cn-src
  */
 public class RbacJdbcManager {
-    private final DSLContext dsl;
+    private final JdbcCrud crud;
     private final Table<?> t_user = DSL.table("users");
-    private final Table<?> t_role = DSL.table("role");
-    private final Table<?> t_permission = DSL.table("permission");
-    private final Table<?> t_role_permission = DSL.table("role_permission");
-    private final Supplier<Long> auditor;
 
-    public RbacJdbcManager(final DSLContext dsl, final Supplier<Long> auditor) {
-        this.dsl = dsl;
-        this.auditor = auditor;
+    public RbacJdbcManager(final JdbcCrud crud, final Supplier<Long> auditor) {
+        this.crud = crud;
     }
 
-    public <T extends DefaultUserDetails> List<T> findAllUsers(final Class<T> clazz) {
-        return this.dsl.selectFrom(this.t_user).fetchInto(clazz);
+    public <T extends PersistableUser> List<T> findAllUsers(final Class<T> clazz) {
+//        final List<T> users = this.dsl.selectFrom(this.t_user).fetchInto(clazz);
+//        final Set<String> authorityValues = new HashSet<>();
+//        this.dsl.selectFrom(this.t_user_permission).
+        return null;
+    }
+
+    public List<Permission> findPermissionByUser(final PersistableUser user) {
+//        this.dsl.select(
+//            this.t_permission.field("id"),
+//            this.t_permission.field("name"),
+//            this.t_permission.field("authority")
+//        ).from(this.t_permission, this.t_user_permission, this.t_role_permission)
+//            .where(this.t_user_permission.field("user_id").eq(user.getId()))
+
+//        this.dsl.selectFrom(this.t_user_permission)
+        return null;
     }
 
     public <T extends DefaultUserDetails> List<T> findUserByEmail(final Class<T> clazz) {
-        return this.dsl.selectFrom(this.t_user).fetchInto(clazz);
+        return null;//this.dsl.selectFrom(this.t_user).fetchInto(clazz);
     }
 
-    public List<Permission> findAllPermission() {
-        return this.dsl.selectFrom(this.t_permission).fetchInto(Permission.class);
+    public List<PermissionDetails> findAllPermissionDetails() {
+        return null;//this.dsl.selectFrom(PERMISSION_DETAILS).fetchInto(PermissionDetails.class);
     }
 
-    public List<Role> findAllRole() {
-        return this.dsl.selectFrom(this.t_role).fetchInto(Role.class);
+    public List<RoleDetails> findAllRoleDetails() {
+        return null;//this.dsl.selectFrom(ROLE_DETAILS).fetchInto(RoleDetails.class);
     }
 
-    public void createRole(final Role role) {
-        final LocalDateTime now = LocalDateTime.now();
-        final Long roleId = Objects.requireNonNull(this.dsl.insertInto(this.t_role)
-            .set(DSL.field("name"), role.getName())
-            .set(DSL.field("description"), role.getDescription())
-            .set(DSL.field("created_date"), now)
-            .set(DSL.field("created_by_id"), this.auditor.get())
-            .returningResult(DSL.field("id", Long.class))
-            .fetchOne()).value1();
-        this.savePermissions(role, now, roleId);
+    public void createRole(final RoleDetails roleDetails) {
+        final Long id = this.crud.insert(ROLE_DETAILS, roleDetails);
+        if (CollectionUtils.isNotEmpty(roleDetails.getPermissions())) {
+            final List<RolePermission> rps = new ArrayList<>(roleDetails.getPermissions().size());
+            for (final Permission permission : roleDetails.getPermissions()) {
+                rps.add(new RolePermission(id, permission.getId()));
+            }
+            this.crud.batchInsert(ROLE_PERMISSION, rps);
+        }
     }
 
     public void deleteRole(final Long id) {
-        this.dsl.deleteFrom(this.t_role_permission).where(DSL.field("role_id").eq(id))
+        this.crud.dsl().deleteFrom(ROLE_PERMISSION)
+            .where(ROLE_PERMISSION.ROLE_ID.eq(id))
             .execute();
-        this.dsl.deleteFrom(this.t_role).where(DSL.field("id").eq(id))
+        this.crud.dsl().deleteFrom(ROLE)
+            .where(ROLE.ID.eq(id))
             .execute();
     }
 
-    public void updateRole(final Role role) {
-        this.dsl.update(this.t_role)
-            .set(DSL.field("name"), role.getName())
-            .set(DSL.field("description"), role.getDescription())
-            .where(DSL.field("id").eq(role.getId()))
+    public void updateRole(final RoleDetails roleDetails) {
+        this.crud.update(ROLE_DETAILS, roleDetails);
+        this.crud.dsl().deleteFrom(ROLE_PERMISSION)
+            .where(ROLE_PERMISSION.ROLE_ID.eq(roleDetails.getId()))
             .execute();
-        this.dsl.deleteFrom(this.t_role_permission).where(DSL.field("role_id").eq(role.getId()))
-            .execute();
-        this.savePermissions(role, LocalDateTime.now(), role.getId());
-    }
-
-    private void savePermissions(final Role role,
-                                 final LocalDateTime now, final Long roleId) {
-        if (role.getPermissions() != null && !role.getPermissions().isEmpty()) {
-            final InsertValuesStepN<?> step =
-                this.dsl.insertInto(this.t_role_permission).columns(Arrays.asList(
-                    DSL.field("role_id"),
-                    DSL.field("permission_id"),
-                    DSL.field("created_date"),
-                    DSL.field("created_by_id")));
-            for (final Permission permission : role.getPermissions()) {
-                step.values(roleId, permission.getId(), now, this.auditor.get());
+        if (CollectionUtils.isNotEmpty(roleDetails.getPermissions())) {
+            final List<RolePermission> rps = new ArrayList<>(roleDetails.getPermissions().size());
+            for (final Permission permission : roleDetails.getPermissions()) {
+                rps.add(new RolePermission(roleDetails.getId(), permission.getId()));
             }
+            this.crud.batchInsert(ROLE_PERMISSION, rps);
         }
     }
 }
