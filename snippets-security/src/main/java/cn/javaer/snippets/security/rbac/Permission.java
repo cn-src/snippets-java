@@ -1,6 +1,7 @@
 package cn.javaer.snippets.security.rbac;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @author cn-src
  */
 @Data
+@Builder
 @Schema(name = "权限")
 public class Permission implements Serializable {
     private static final long serialVersionUID = 7277469717673633139L;

@@ -1,6 +1,7 @@
 package cn.javaer.snippets.security.rbac;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
  * @author cn-src
  */
 @Data
+@Builder
 @Schema(name = "权限详情")
 @Table("permission")
 public class PermissionDetails implements Serializable {

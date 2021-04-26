@@ -1,7 +1,9 @@
 package cn.javaer.snippets.security.rbac;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Singular;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -18,6 +20,7 @@ import java.util.List;
  * @author cn-src
  */
 @Data
+@Builder
 @Schema(name = "角色详情")
 @Table("role")
 public class RoleDetails implements Serializable {
@@ -33,6 +36,7 @@ public class RoleDetails implements Serializable {
     private String description;
 
     @Transient
+    @Singular
     @Schema(name = "权限列表")
     private List<Permission> permissions;
 
