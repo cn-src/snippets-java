@@ -64,6 +64,7 @@ dependencies {
 
         // 模板引擎
         api "com.github.jknack:handlebars:${handlebarsVersion}"
+        api "com.deepoove:poi-tl:${poiTlVersion}"
 
         // 类信息扫描工具
         api "io.github.classgraph:classgraph:${classgraphVersion}"
@@ -76,10 +77,11 @@ dependencies {
         // 集合查询引擎
         api "com.googlecode.cqengine:cqengine:${cqengineVersion}"
 
-        // 文件对象存储服务-客户端
+        // 对象存储服务-客户端
         api "io.minio:minio:${minioVersion}"
 
-        api "com.deepoove:poi-tl:${poiTlVersion}"
+        // Java 架构检测框架
+        api "com.tngtech.archunit:archunit-junit5:${archunitVersion}"
 
         api "org.mybatis:mybatis:${mybatisVersion}"
         api "org.mybatis:mybatis-spring:${mybatisSpringVersion}"
