@@ -11,17 +11,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * 检测类的字段是否是另一个类字段的子集.
+ *
  * @author cn-src
  */
-public class PersistentFieldsCondition extends ArchCondition<JavaClass> {
+public class SubFieldsCondition extends ArchCondition<JavaClass> {
 
     public static final String TRANSIENT = "org.springframework.data.annotation.Transient";
     public static final String PERSISTENT_FIELDS =
-        "cn.javaer.snippets.test.archunit.PersistentFields";
+        "cn.javaer.snippets.test.archunit.SubFields";
 
     private Iterable<JavaClass> allObjectsToTest;
 
-    public PersistentFieldsCondition(final String description, final Object... args) {
+    public SubFieldsCondition(final String description, final Object... args) {
         super(description, args);
     }
 
@@ -46,7 +48,7 @@ public class PersistentFieldsCondition extends ArchCondition<JavaClass> {
             .filter(it -> !it.isAnnotatedWith(TRANSIENT))
             .map(it -> new EqualField(it.getName(), it.getRawType().getName()))
             .collect(Collectors.toSet());
-        
+
         boolean isOk = false;
         for (final JavaClass entityClass : this.allObjectsToTest) {
             if (entityClass.getName().equals(entityClassName)) {
