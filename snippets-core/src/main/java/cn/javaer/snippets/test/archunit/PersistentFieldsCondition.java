@@ -41,16 +41,15 @@ public class PersistentFieldsCondition extends ArchCondition<JavaClass> {
         final String entityClassName = sunAnn.get("value")
             .transform(JavaClass.class::cast)
             .transform(JavaClass::getName).orNull();
-
+        final Set<EqualField> projectionFields = projectionClass.getAllFields().stream()
+            .filter(it -> !it.getModifiers().contains(JavaModifier.STATIC))
+            .filter(it -> !it.isAnnotatedWith(TRANSIENT))
+            .map(it -> new EqualField(it.getName(), it.getRawType().getName()))
+            .collect(Collectors.toSet());
+        
         boolean isOk = false;
         for (final JavaClass entityClass : this.allObjectsToTest) {
             if (entityClass.getName().equals(entityClassName)) {
-                final Set<EqualField> projectionFields = projectionClass.getAllFields().stream()
-                    .filter(it -> !it.getModifiers().contains(JavaModifier.STATIC))
-                    .filter(it -> !it.isAnnotatedWith(TRANSIENT))
-                    .map(it -> new EqualField(it.getName(), it.getRawType().getName()))
-                    .collect(Collectors.toSet());
-
                 final Set<EqualField> entityFields = entityClass.getAllFields().stream()
                     .filter(it -> !it.getModifiers().contains(JavaModifier.STATIC))
                     .filter(it -> !it.isAnnotatedWith(TRANSIENT))
