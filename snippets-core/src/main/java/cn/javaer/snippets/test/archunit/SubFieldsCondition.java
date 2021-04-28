@@ -64,9 +64,9 @@ public class SubFieldsCondition extends ArchCondition<JavaClass> {
             }
         }
         if (!isOk) {
-            // TODO 更好的消息描述
             final String message = String.format(
-                "Class %s fields error", projectionClass.getName());
+                "The fields of class %s are not a subset of the fields of class %s",
+                projectionClass.getName(), entityClassName);
             events.add(SimpleConditionEvent.violated(projectionClass, message));
         }
     }
