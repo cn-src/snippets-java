@@ -5,6 +5,7 @@ import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,20 +37,12 @@ public class SubFieldsCondition extends ArchCondition<JavaClass> {
         final String entityClassName = projectionClass.getAnnotationOfType(SubFields.class)
             .value().getName();
 
-        final Set<EqualField> projectionFields = projectionClass.getAllFields().stream()
-            .filter(it -> !it.getModifiers().contains(JavaModifier.STATIC))
-            .filter(it -> !it.isAnnotatedWith(TRANSIENT))
-            .map(it -> new EqualField(it.getName(), it.getRawType().getName()))
-            .collect(Collectors.toSet());
+        final Set<EqualField> projectionFields = this.getFields(projectionClass);
 
         boolean isOk = false;
         for (final JavaClass entityClass : this.allObjectsToTest) {
             if (entityClass.getName().equals(entityClassName)) {
-                final Set<EqualField> entityFields = entityClass.getAllFields().stream()
-                    .filter(it -> !it.getModifiers().contains(JavaModifier.STATIC))
-                    .filter(it -> !it.isAnnotatedWith(TRANSIENT))
-                    .map(it -> new EqualField(it.getName(), it.getRawType().getName()))
-                    .collect(Collectors.toSet());
+                final Set<EqualField> entityFields = this.getFields(entityClass);
                 if (entityFields.containsAll(projectionFields)) {
                     isOk = true;
                     break;
@@ -62,5 +55,14 @@ public class SubFieldsCondition extends ArchCondition<JavaClass> {
                 projectionClass.getName(), entityClassName);
             events.add(SimpleConditionEvent.violated(projectionClass, message));
         }
+    }
+
+    @NotNull
+    private Set<EqualField> getFields(final JavaClass projectionClass) {
+        return projectionClass.getAllFields().stream()
+            .filter(it -> !it.getModifiers().contains(JavaModifier.STATIC))
+            .filter(it -> !it.isAnnotatedWith(TRANSIENT))
+            .map(it -> new EqualField(it.getName(), it.getRawType().getName()))
+            .collect(Collectors.toSet());
     }
 }
