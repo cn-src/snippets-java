@@ -1,6 +1,5 @@
 package cn.javaer.snippets.test.archunit;
 
-import com.tngtech.archunit.core.domain.JavaAnnotation;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchCondition;
@@ -18,9 +17,6 @@ import java.util.stream.Collectors;
 public class SubFieldsCondition extends ArchCondition<JavaClass> {
 
     public static final String TRANSIENT = "org.springframework.data.annotation.Transient";
-    public static final String PERSISTENT_FIELDS =
-        "cn.javaer.snippets.test.archunit.SubFields";
-
     private Iterable<JavaClass> allObjectsToTest;
 
     public SubFieldsCondition(final String description, final Object... args) {
@@ -34,15 +30,12 @@ public class SubFieldsCondition extends ArchCondition<JavaClass> {
 
     @Override
     public void check(final JavaClass projectionClass, final ConditionEvents events) {
-        if (!projectionClass.isAnnotatedWith(PERSISTENT_FIELDS)) {
+        if (!projectionClass.isAnnotatedWith(SubFields.class)) {
             return;
         }
-        final JavaAnnotation<JavaClass> sunAnn =
-            projectionClass.getAnnotationOfType(PERSISTENT_FIELDS);
+        final String entityClassName = projectionClass.getAnnotationOfType(SubFields.class)
+            .value().getName();
 
-        final String entityClassName = sunAnn.get("value")
-            .transform(JavaClass.class::cast)
-            .transform(JavaClass::getName).orNull();
         final Set<EqualField> projectionFields = projectionClass.getAllFields().stream()
             .filter(it -> !it.getModifiers().contains(JavaModifier.STATIC))
             .filter(it -> !it.isAnnotatedWith(TRANSIENT))
