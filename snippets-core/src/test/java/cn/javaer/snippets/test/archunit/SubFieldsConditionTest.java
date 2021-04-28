@@ -31,9 +31,8 @@ class SubFieldsConditionTest {
                 cn.javaer.snippets.test.archunit.case2.Pojo.class,
                 cn.javaer.snippets.test.archunit.case2.SubPojo.class);
         assertThatExceptionOfType(AssertionError.class)
-            .isThrownBy(() -> {
-                classes().should(new SubFieldsCondition("demo test"))
-                    .check(importedClasses);
-            });
+            .isThrownBy(() ->
+                classes().should(new SubFieldsCondition("demo test")).check(importedClasses)
+            );
     }
 }
