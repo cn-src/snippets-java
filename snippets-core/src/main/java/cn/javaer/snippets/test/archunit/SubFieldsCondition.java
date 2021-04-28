@@ -51,7 +51,8 @@ public class SubFieldsCondition extends ArchCondition<JavaClass> {
         }
         if (!isOk) {
             final String message = String.format(
-                "The fields of class %s are not a subset of the fields of class %s",
+                "The fields of class %s are not a subset of the fields of class %s, " +
+                    "Please check the field name and type.",
                 projectionClass.getName(), entityClassName);
             events.add(SimpleConditionEvent.violated(projectionClass, message));
         }
