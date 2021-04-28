@@ -64,6 +64,7 @@ public class SubFieldsCondition extends ArchCondition<JavaClass> {
             }
         }
         if (!isOk) {
+            // TODO 更好的消息描述
             final String message = String.format(
                 "Class %s fields error", projectionClass.getName());
             events.add(SimpleConditionEvent.violated(projectionClass, message));
