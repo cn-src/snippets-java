@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
  * @author cn-src
  */
 class SubFieldsConditionTest {
+
     @Test
     @DisplayName("测试正常子集")
     void testCheck() {
@@ -24,12 +25,25 @@ class SubFieldsConditionTest {
     }
 
     @Test
-    @DisplayName("测试不是子集")
+    @DisplayName("测试不是子集，字段名称不一致")
     void testCheck2() {
         final JavaClasses importedClasses = new ClassFileImporter()
             .importClasses(
                 cn.javaer.snippets.test.archunit.case2.Pojo.class,
                 cn.javaer.snippets.test.archunit.case2.SubPojo.class);
+        assertThatExceptionOfType(AssertionError.class)
+            .isThrownBy(() ->
+                classes().should(new SubFieldsCondition("demo test")).check(importedClasses)
+            );
+    }
+
+    @Test
+    @DisplayName("测试不是子集，字段名一样，但是字段类型不一样")
+    void testCheck3() {
+        final JavaClasses importedClasses = new ClassFileImporter()
+            .importClasses(
+                cn.javaer.snippets.test.archunit.case3.Pojo.class,
+                cn.javaer.snippets.test.archunit.case3.SubPojo.class);
         assertThatExceptionOfType(AssertionError.class)
             .isThrownBy(() ->
                 classes().should(new SubFieldsCondition("demo test")).check(importedClasses)
