@@ -38,15 +38,14 @@ public class CrudStep {
     /**
      * 根据 id 查询.
      *
-     * @param <M> 元数据泛型
      * @param <ID> id 泛型
      * @param id the id
      * @param meta the meta
      *
      * @return the select step
      */
-    public <M extends TableMetaProvider<?, ID, ?>, ID> SelectConditionStep<Record>
-    findByIdStep(final M meta, final @NotNull ID id) {
+    public <ID> SelectConditionStep<Record>
+    findByIdStep(final TableMetaProvider<?, ID, ?> meta, final @NotNull ID id) {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
@@ -56,15 +55,14 @@ public class CrudStep {
     /**
      * 根据 id 和创建者查询.
      *
-     * @param <M> 元数据泛型
      * @param <ID> id 泛型
      * @param id the id
      * @param meta the meta
      *
      * @return the select step
      */
-    public <M extends TableMetaProvider<?, ID, A>, ID, A> SelectConditionStep<Record>
-    findByIdAndCreatorStep(final M meta, final @NotNull ID id) {
+    public <ID, A> SelectConditionStep<Record>
+    findByIdAndCreatorStep(final TableMetaProvider<?, ID, A> meta, final @NotNull ID id) {
 
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
@@ -77,30 +75,28 @@ public class CrudStep {
     /**
      * 根据 Condition 条件查询单条数据.
      *
-     * @param <M> 元数据泛型
-     * @param <ID> id 泛型
      * @param condition the condition
      * @param meta the meta
      *
      * @return the select step
      */
-    public <M extends TableMetaProvider<?, ID, ?>, ID> SelectConditionStep<Record>
-    findOneStep(final M meta, final Condition condition) {
+    public SelectConditionStep<Record>
+    findOneStep(final TableMetaProvider<?, ?, ?> meta, final Condition condition) {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
             .where(condition);
     }
 
-    public @NotNull <M extends TableMetaProvider<?, ?, ?>> SelectJoinStep<Record>
-    findAllStep(final M meta) {
+    public @NotNull SelectJoinStep<Record>
+    findAllStep(final TableMetaProvider<?, ?, ?> meta) {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable());
     }
 
-    public @NotNull <M extends TableMetaProvider<?, ?, ?>> SelectWithTiesAfterOffsetStep<Record>
-    findAllStep(final M meta, final PageParam pageParam) {
+    public @NotNull SelectWithTiesAfterOffsetStep<Record>
+    findAllStep(final TableMetaProvider<?, ?, ?> meta, final PageParam pageParam) {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
@@ -108,8 +104,9 @@ public class CrudStep {
             .limit(pageParam.getSize());
     }
 
-    public @NotNull <M extends TableMetaProvider<?, ?, ?>> SelectWithTiesAfterOffsetStep<Record>
-    findAllStep(final M meta, final Condition condition, final PageParam pageParam) {
+    public @NotNull SelectWithTiesAfterOffsetStep<Record>
+    findAllStep(final TableMetaProvider<?, ?, ?> meta,
+                final Condition condition, final PageParam pageParam) {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
@@ -118,8 +115,8 @@ public class CrudStep {
             .limit(pageParam.getSize());
     }
 
-    public @NotNull <M extends TableMetaProvider<?, ?, A>, A> SelectConditionStep<Record>
-    findAllByCreatorStep(final M meta) {
+    public @NotNull <A> SelectConditionStep<Record>
+    findAllByCreatorStep(final TableMetaProvider<?, ?, A> meta) {
 
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
@@ -132,14 +129,13 @@ public class CrudStep {
      * 插入实体.
      *
      * @param <T> the type parameter
-     * @param <M> the type parameter
      * @param entity the entity
      * @param meta the meta
      *
      * @return the insert values step n
      */
-    public <M extends TableMetaProvider<T, ID, A>, T, ID, A> InsertValuesStepN<?>
-    insertStep(final M meta, final @NotNull T entity) {
+    public <T> InsertValuesStepN<?>
+    insertStep(final TableMetaProvider<T, ?, ?> meta, final @NotNull T entity) {
 
         final List<Object> values = new ArrayList<>();
         final List<Field<?>> fields = new ArrayList<>();
@@ -178,14 +174,13 @@ public class CrudStep {
      * 批量插入实体.
      *
      * @param <T> the type parameter
-     * @param <M> the type parameter
      * @param entities the entities
      * @param meta the meta
      *
      * @return the insert values step n
      */
-    public <M extends TableMetaProvider<T, ID, A>, T, ID, A> InsertValuesStepN<?>
-    batchInsertStep(@NotNull final List<T> entities, final M meta) {
+    public <T> InsertValuesStepN<?>
+    batchInsertStep(final TableMetaProvider<T, ?, ?> meta, @NotNull final List<T> entities) {
 
         final List<Field<?>> fields = new ArrayList<>(meta.saveColumnMetas().size() + 4);
         meta.idGenerator().ifPresent(it -> fields.add(it.getColumn()));
@@ -219,15 +214,15 @@ public class CrudStep {
      * 根据 id 动态更新实体.
      *
      * @param <T> the type parameter
-     * @param <M> the type parameter
      * @param entity the entity
      * @param meta the meta
      * @param include 是否持久化此值
      *
      * @return the update set more step
      */
-    public <M extends TableMetaProvider<T, ID, A>, T, ID, A> UpdateConditionStep<?>
-    dynamicUpdateStep(@NotNull final T entity, final M meta, final Predicate<Object> include) {
+    public <T, ID, A> UpdateConditionStep<?>
+    dynamicUpdateStep(final TableMetaProvider<T, ID, A> meta,
+                      @NotNull final T entity, final Predicate<Object> include) {
 
         final Map<Field<?>, Object> dynamic = new HashMap<>(10);
         for (final ColumnMeta<T, ?> cm : meta.saveColumnMetas()) {
@@ -249,17 +244,16 @@ public class CrudStep {
      * 根据 id 和创建者动态更新实体.
      *
      * @param <T> the type parameter
-     * @param <M> the type parameter
      * @param entity the entity
      * @param meta the meta
      * @param include 是否持久化此值
      *
      * @return the update set more step
      */
-    public <M extends TableMetaProvider<T, ID, A>, T, ID, A> UpdateConditionStep<?>
-    dynamicUpdateByCreatorStep(@NotNull final T entity, final M meta,
+    public <T, A> UpdateConditionStep<?>
+    dynamicUpdateByCreatorStep(final TableMetaProvider<T, ?, A> meta, @NotNull final T entity,
                                final Predicate<Object> include) {
-        final UpdateConditionStep<?> step = this.dynamicUpdateStep(entity, meta, include);
+        final UpdateConditionStep<?> step = this.dynamicUpdateStep(meta, entity, include);
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
         return step.and(meta.createdBy().getColumn().eq(auditor));

@@ -53,42 +53,42 @@ public class JdbcCrud {
         return this.crudStep.dsl();
     }
 
-    public <T, ID, M extends TableMetaProvider<T, ID, ?>>
-    Optional<T> findById(final M meta, final ID id) {
+    public <T, ID> Optional<T> findById(final TableMetaProvider<T, ID, ?> meta, final ID id) {
         Objects.requireNonNull(meta);
         return this.crudStep.findByIdStep(meta, id).fetchOptionalInto(meta.getEntityClass());
     }
 
-    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
-    Optional<T> findByIdAndCreator(final M meta, final ID id) {
+    public <T, ID> Optional<T>
+    findByIdAndCreator(final TableMetaProvider<T, ID, ?> meta, final ID id) {
         Objects.requireNonNull(meta);
         return this.crudStep.findByIdAndCreatorStep(meta, id)
             .fetchOptionalInto(meta.getEntityClass());
     }
 
-    public <T, ID, M extends TableMetaProvider<T, ID, ?>>
-    Optional<T> findOne(final M meta, final Condition condition) {
+    public <T> Optional<T>
+    findOne(final TableMetaProvider<T, ?, ?> meta, final Condition condition) {
         Objects.requireNonNull(meta);
         return this.crudStep.findOneStep(meta, condition)
             .fetchOptionalInto(meta.getEntityClass());
     }
 
-    public <T, M extends TableMetaProvider<T, ?, ?>>
-    List<T> findAll(final M meta) {
+    public <T> List<T>
+    findAll(final TableMetaProvider<T, ?, ?> meta) {
         Objects.requireNonNull(meta);
         return this.crudStep.findAllStep(meta).fetchInto(meta.getEntityClass());
     }
 
-    public <T, M extends TableMetaProvider<T, ?, ?>>
-    Page<T> findAll(final M meta, final PageParam pageParam) {
+    public <T> Page<T>
+    findAll(final TableMetaProvider<T, ?, ?> meta, final PageParam pageParam) {
         Objects.requireNonNull(meta);
         final List<T> content = this.crudStep.findAllStep(meta, pageParam)
             .fetchInto(meta.getEntityClass());
         return Page.of(content, this.crudStep.dsl().fetchCount(meta.getTable()));
     }
 
-    public <T, M extends TableMetaProvider<T, ?, ?>>
-    Page<T> findAll(final M meta, final Condition condition, final PageParam pageParam) {
+    public <T> Page<T>
+    findAll(final TableMetaProvider<T, ?, ?> meta,
+            final Condition condition, final PageParam pageParam) {
         Objects.requireNonNull(meta);
         final List<T> content = this.crudStep.findAllStep(meta, condition, pageParam)
             .fetchInto(meta.getEntityClass());
@@ -96,20 +96,20 @@ public class JdbcCrud {
         return Page.of(content, total);
     }
 
-    public <T, M extends TableMetaProvider<T, ?, ?>>
-    List<T> findAll(final M meta, final Condition condition) {
+    public <T> List<T>
+    findAll(final TableMetaProvider<T, ?, ?> meta, final Condition condition) {
         Objects.requireNonNull(meta);
         return this.crudStep.findAllStep(meta).where(condition).fetchInto(meta.getEntityClass());
     }
 
-    public <T, A, M extends TableMetaProvider<T, ?, A>>
-    List<T> findAllByCreator(final M meta) {
+    public <T> List<T>
+    findAllByCreator(final TableMetaProvider<T, ?, ?> meta) {
         Objects.requireNonNull(meta);
         return this.crudStep.findAllByCreatorStep(meta).fetchInto(meta.getEntityClass());
     }
 
-    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
-    Page<T> findAllByCreator(final M meta, final PageParam pageParam) {
+    public <T> Page<T>
+    findAllByCreator(final TableMetaProvider<T, ?, ?> meta, final PageParam pageParam) {
         Objects.requireNonNull(meta);
 
         final List<T> content = this.crudStep.findAllByCreatorStep(meta)
@@ -121,8 +121,9 @@ public class JdbcCrud {
         return Page.of(content, total);
     }
 
-    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
-    Page<T> findAllByCreator(final M meta, final Condition condition, final PageParam pageParam) {
+    public <T> Page<T>
+    findAllByCreator(final TableMetaProvider<T, ?, ?> meta,
+                     final Condition condition, final PageParam pageParam) {
         Objects.requireNonNull(meta);
 
         final List<T> content = this.crudStep.findAllByCreatorStep(meta)
@@ -135,8 +136,8 @@ public class JdbcCrud {
         return Page.of(content, total);
     }
 
-    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
-    ID insert(final M meta, final T entity) {
+    public <T, ID>
+    ID insert(final TableMetaProvider<T, ID, ?> meta, final T entity) {
         Objects.requireNonNull(meta);
         Objects.requireNonNull(entity);
         return Objects.requireNonNull(this.crudStep.insertStep(meta, entity)
@@ -144,40 +145,39 @@ public class JdbcCrud {
             .fetchOne()).value1();
     }
 
-    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
-    int batchInsert(final M meta, final List<T> entities) {
+    public <T> int
+    batchInsert(final TableMetaProvider<T, ?, ?> meta, final List<T> entities) {
         Objects.requireNonNull(meta);
         Validate.notEmpty(entities);
-        return this.crudStep.batchInsertStep(entities, meta).execute();
+        return this.crudStep.batchInsertStep(meta, entities).execute();
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
-    int update(final M meta, final T entity) {
+    public <T> int
+    update(final TableMetaProvider<T, ?, ?> meta, final T entity) {
         Objects.requireNonNull(meta);
         Objects.requireNonNull(entity);
-
-        return this.crudStep.dynamicUpdateStep(entity, meta, o -> true).execute();
+        return this.crudStep.dynamicUpdateStep(meta, entity, o -> true).execute();
     }
 
-    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
-    int dynamicUpdate(final M meta, final T entity) {
+    public <T> int
+    dynamicUpdate(final TableMetaProvider<T, ?, ?> meta, final T entity) {
         Objects.requireNonNull(meta);
         Objects.requireNonNull(entity);
-        return this.crudStep.dynamicUpdateStep(entity, meta, ObjectUtils::isNotEmpty).execute();
+        return this.crudStep.dynamicUpdateStep(meta, entity, ObjectUtils::isNotEmpty).execute();
     }
 
-    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
-    int dynamicUpdateByCreator(final M meta, final T entity) {
+    public <T> int
+    dynamicUpdateByCreator(final TableMetaProvider<T, ?, ?> meta, final T entity) {
         Objects.requireNonNull(meta);
         Objects.requireNonNull(entity);
 
-        return this.crudStep.dynamicUpdateByCreatorStep(entity, meta, ObjectUtils::isNotEmpty)
+        return this.crudStep.dynamicUpdateByCreatorStep(meta, entity, ObjectUtils::isNotEmpty)
             .execute();
     }
 
-    public <T, ID, A, M extends TableMetaProvider<T, ID, A>>
-    int deleteById(final M meta, final ID id) {
+    public <T, ID> int
+    deleteById(final TableMetaProvider<T, ID, ?> meta, final ID id) {
         Objects.requireNonNull(meta);
         return this.crudStep.dsl().deleteFrom(meta.getTable())
             .where(meta.id().getColumn().eq(id))
