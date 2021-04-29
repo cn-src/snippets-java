@@ -13,12 +13,12 @@ CREATE TABLE users
 CREATE TABLE permission
 (
     id            bigserial PRIMARY KEY,
-    name          varchar(50)  NOT NULL,
-    "group"       varchar(50)  NOT NULL,
-    authority     varchar(50)  NOT NULL,
-    description   varchar(500) NOT NULL,
-    created_by_id bigint       NOT NULL,
-    created_date  timestamp    NOT NULL
+    name          varchar(50)        NOT NULL,
+    "group"       varchar(50)        NOT NULL,
+    authority     varchar(50) UNIQUE NOT NULL,
+    description   varchar(500)       NOT NULL,
+    created_by_id bigint             NOT NULL,
+    created_date  timestamp          NOT NULL
 );
 CREATE TABLE user_permission
 (

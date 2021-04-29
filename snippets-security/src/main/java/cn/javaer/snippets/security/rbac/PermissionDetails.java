@@ -3,6 +3,7 @@ package cn.javaer.snippets.security.rbac;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 @Builder
 @Schema(name = "权限详情")
 @Table("permission")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PermissionDetails implements Serializable {
     private static final long serialVersionUID = -219244584579949608L;
     @Id
@@ -29,6 +31,7 @@ public class PermissionDetails implements Serializable {
     @Schema(name = "分组")
     private String group;
 
+    @EqualsAndHashCode.Include
     @Schema(name = "权限值")
     private String authority;
 
