@@ -26,17 +26,20 @@ public class PermissionDetails implements Serializable {
     @Schema(name = "名称")
     private String name;
 
+    @Schema(name = "分组")
+    private String group;
+
     @Schema(name = "权限值")
     private String authority;
 
     @Schema(name = "描述")
     private String description;
 
-    @CreatedDate
-    @Schema(name = "创建时间")
-    private LocalDateTime createdDate;
-
     @CreatedBy
     @Schema(name = "创建者 ID")
     private Long createdById;
+
+    @CreatedDate
+    @Schema(name = "创建时间")
+    private LocalDateTime createdDate;
 }
