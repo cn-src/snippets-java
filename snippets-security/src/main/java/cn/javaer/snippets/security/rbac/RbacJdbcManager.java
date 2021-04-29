@@ -61,7 +61,7 @@ public class RbacJdbcManager {
     }
 
     public List<PermissionDetails> findAllPermissionDetails() {
-        return this.crud.dsl().selectFrom(PERMISSION_DETAILS).fetchInto(PermissionDetails.class);
+        return this.crud.findAll(PERMISSION_DETAILS);
     }
 
     public List<RoleDetails> findAllRoleDetails() {
