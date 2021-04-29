@@ -20,6 +20,7 @@ dependencies {
     compileOnly 'org.springframework.data:spring-data-jdbc'
 
     compileOnly "org.springdoc:springdoc-openapi-webmvc-core:${springdocVersion}"
+    optionalApi 'org.springframework.boot:spring-boot-starter-web'
     optionalApi 'org.springframework.boot:spring-boot-starter-security'
 
     testImplementation 'org.postgresql:postgresql'
