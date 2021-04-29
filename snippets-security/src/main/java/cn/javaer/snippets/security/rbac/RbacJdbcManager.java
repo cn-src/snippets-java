@@ -8,6 +8,7 @@ import org.jooq.impl.DSL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static cn.javaer.snippets.security.rbac.gen.TPermission.PERMISSION;
 import static cn.javaer.snippets.security.rbac.gen.TPermission.PERMISSION_FIELDS;
@@ -57,7 +58,8 @@ public class RbacJdbcManager {
             .from(PERMISSION, USER_PERMISSION, ROLE_PERMISSION)
             .where(USER_PERMISSION.USER_ID.eq(user.getId()).and(USER_PERMISSION.PERMISSION_ID.eq(PERMISSION.ID)))
             .or(ROLE_PERMISSION.ROLE_ID.eq(user.getRoleId()).and(ROLE_PERMISSION.PERMISSION_ID.eq(PERMISSION.ID)))
-            .fetchInto(Permission.class);
+            .fetchInto(Permission.class)
+            .stream().distinct().collect(Collectors.toList());
     }
 
     public List<PermissionDetails> findAllPermissionDetails() {
