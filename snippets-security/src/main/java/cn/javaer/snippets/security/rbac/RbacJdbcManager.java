@@ -1,12 +1,17 @@
 package cn.javaer.snippets.security.rbac;
 
 import cn.javaer.snippets.jooq.JdbcCrud;
+import cn.javaer.snippets.jooq.TableMetaProvider;
+import cn.javaer.snippets.model.Page;
+import cn.javaer.snippets.model.PageParam;
 import org.apache.commons.collections4.CollectionUtils;
+import org.jooq.Condition;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -29,26 +34,25 @@ public class RbacJdbcManager {
         this.crud = crud;
     }
 
-    public <T extends PersistableUser> List<T> findAllUsers(final Class<T> clazz) {
-        return this.crud.dsl().selectFrom(this.t_user).fetchInto(clazz);
+    public <T extends PersistableUser, ID, A, M extends TableMetaProvider<T, ID, A>>
+    Page<T> findAllUsers(final M meta, final PageParam pageParam) {
+        return this.crud.findAll(meta, pageParam);
     }
 
-    public <T extends PersistableUser>
-    Optional<T> findUserByEmail(final Class<T> clazz, final String email) {
-        final T user = this.crud.dsl().selectFrom(this.t_user)
-            .where(DSL.field("email").eq(email))
-            .fetchOneInto(clazz);
-        final Optional<T> userOpt = Optional.ofNullable(user);
+    public <T extends PersistableUser, ID, A, M extends TableMetaProvider<T, ID, A>>
+    Optional<T> findUserByEmail(final M meta, final String email) {
+        final Condition condition = Objects.requireNonNull(
+            meta.getTable().field("email", String.class)).eq(email);
+        final Optional<T> userOpt = this.crud.findOne(meta, condition);
         userOpt.ifPresent(u -> u.setPermissions(this.findPermissionByUser(u)));
         return userOpt;
     }
 
-    public <T extends PersistableUser>
-    Optional<T> findUserByMobile(final Class<T> clazz, final String mobile) {
-        final T user = this.crud.dsl().selectFrom(this.t_user)
-            .where(DSL.field("mobile").eq(mobile))
-            .fetchOneInto(clazz);
-        final Optional<T> userOpt = Optional.ofNullable(user);
+    public <T extends PersistableUser, ID, A, M extends TableMetaProvider<T, ID, A>>
+    Optional<T> findUserByMobile(final M meta, final String mobile) {
+        final Condition condition = Objects.requireNonNull(
+            meta.getTable().field("mobile", String.class)).eq(mobile);
+        final Optional<T> userOpt = this.crud.findOne(meta, condition);
         userOpt.ifPresent(u -> u.setPermissions(this.findPermissionByUser(u)));
         return userOpt;
     }
