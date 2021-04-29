@@ -71,7 +71,7 @@ public class RbacJdbcManager {
     }
 
     public List<RoleDetails> findAllRoleDetails() {
-        return this.crud.dsl().selectFrom(ROLE_DETAILS).fetchInto(RoleDetails.class);
+        return this.crud.findAll(ROLE_DETAILS);
     }
 
     public void createRole(final RoleDetails roleDetails) {
