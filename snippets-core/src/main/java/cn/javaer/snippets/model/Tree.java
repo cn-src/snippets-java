@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+// TODO 以聚合根的思路重新组织 Tree 和 TreeNode，将 TreeNode 中的部分行为移到 Tree 中。
 
 /**
  * 树结构.
