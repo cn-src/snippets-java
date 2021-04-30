@@ -22,6 +22,7 @@ dependencies {
     compileOnly "org.springdoc:springdoc-openapi-webmvc-core:${springdocVersion}"
     optionalApi 'org.springframework.boot:spring-boot-starter-web'
     optionalApi 'org.springframework.boot:spring-boot-starter-security'
+    optionalApi 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
     testImplementation 'org.postgresql:postgresql'
     testImplementation 'com.playtika.testcontainers:embedded-postgresql'
