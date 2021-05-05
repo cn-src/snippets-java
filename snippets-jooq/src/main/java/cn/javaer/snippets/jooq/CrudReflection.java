@@ -56,7 +56,7 @@ public class CrudReflection {
         if (fields == null || fields.length == 0) {
             return null;
         }
-        final TableMetaImpl.TableMetaBuilder<T, ID, A> builder = TableMetaImpl.builder();
+        final TableMetaImpl.TableMetaImplBuilder<T, ID, A> builder = TableMetaImpl.builder();
         builder.table(getTable(entityClass))
             .entityClass(entityClass);
 
