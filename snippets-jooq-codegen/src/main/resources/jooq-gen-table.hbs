@@ -18,7 +18,7 @@ import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
-import cn.javaer.snippets.jooq.TableMetaProvider;
+import cn.javaer.snippets.jooq.TableMeta;
 import cn.javaer.snippets.jooq.ColumnMeta;
 import {{entityClassName}};
 
@@ -29,7 +29,7 @@ import {{entityClassName}};
 {{#if hasGeneratedAnnotation}}
 @Generated("cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool")
 {{~/if}}
-public class {{tableClassName}} extends TableImpl<Record> implements TableMetaProvider<{{entityName}}, {{#if idColumnMeta}}{{idColumnMeta.fieldType}}{{else}}Void{{/if}}, {{#if hasAuditor}}{{auditorType}}{{else}}Void{{/if}}> {
+public class {{tableClassName}} extends TableImpl<Record> implements TableMeta<{{entityName}}, {{#if idColumnMeta}}{{idColumnMeta.fieldType}}{{else}}Void{{/if}}, {{#if hasAuditor}}{{auditorType}}{{else}}Void{{/if}}> {
 
     public static final {{tableClassName}} {{staticFieldName}} = new {{tableClassName}}();
 
