@@ -45,7 +45,7 @@ public class CrudStep {
      * @return the select step
      */
     public <ID> SelectConditionStep<Record>
-    findByIdStep(final TableMetaProvider<?, ID, ?> meta, final @NotNull ID id) {
+    findByIdStep(final TableMeta<?, ID, ?> meta, final @NotNull ID id) {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
@@ -62,7 +62,7 @@ public class CrudStep {
      * @return the select step
      */
     public <ID, A> SelectConditionStep<Record>
-    findByIdAndCreatorStep(final TableMetaProvider<?, ID, A> meta, final @NotNull ID id) {
+    findByIdAndCreatorStep(final TableMeta<?, ID, A> meta, final @NotNull ID id) {
 
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
@@ -81,7 +81,7 @@ public class CrudStep {
      * @return the select step
      */
     public SelectConditionStep<Record>
-    findOneStep(final TableMetaProvider<?, ?, ?> meta, final Condition condition) {
+    findOneStep(final TableMeta<?, ?, ?> meta, final Condition condition) {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
@@ -89,14 +89,14 @@ public class CrudStep {
     }
 
     public @NotNull SelectJoinStep<Record>
-    findAllStep(final TableMetaProvider<?, ?, ?> meta) {
+    findAllStep(final TableMeta<?, ?, ?> meta) {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable());
     }
 
     public @NotNull SelectWithTiesAfterOffsetStep<Record>
-    findAllStep(final TableMetaProvider<?, ?, ?> meta, final PageParam pageParam) {
+    findAllStep(final TableMeta<?, ?, ?> meta, final PageParam pageParam) {
 
         return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
@@ -105,7 +105,7 @@ public class CrudStep {
     }
 
     public @NotNull SelectWithTiesAfterOffsetStep<Record>
-    findAllStep(final TableMetaProvider<?, ?, ?> meta,
+    findAllStep(final TableMeta<?, ?, ?> meta,
                 final Condition condition, final PageParam pageParam) {
 
         return this.dsl.select(meta.selectFields())
@@ -116,7 +116,7 @@ public class CrudStep {
     }
 
     public @NotNull <A> SelectConditionStep<Record>
-    findAllByCreatorStep(final TableMetaProvider<?, ?, A> meta) {
+    findAllByCreatorStep(final TableMeta<?, ?, A> meta) {
 
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
@@ -135,7 +135,7 @@ public class CrudStep {
      * @return the insert values step n
      */
     public <T> InsertValuesStepN<?>
-    insertStep(final TableMetaProvider<T, ?, ?> meta, final @NotNull T entity) {
+    insertStep(final TableMeta<T, ?, ?> meta, final @NotNull T entity) {
 
         final List<Object> values = new ArrayList<>();
         final List<Field<?>> fields = new ArrayList<>();
@@ -180,7 +180,7 @@ public class CrudStep {
      * @return the insert values step n
      */
     public <T> InsertValuesStepN<?>
-    batchInsertStep(final TableMetaProvider<T, ?, ?> meta, @NotNull final List<T> entities) {
+    batchInsertStep(final TableMeta<T, ?, ?> meta, @NotNull final List<T> entities) {
 
         final List<Field<?>> fields = new ArrayList<>(meta.saveColumnMetas().size() + 4);
         meta.idGenerator().ifPresent(it -> fields.add(it.getColumn()));
@@ -221,7 +221,7 @@ public class CrudStep {
      * @return the update set more step
      */
     public <T, ID, A> UpdateConditionStep<?>
-    dynamicUpdateStep(final TableMetaProvider<T, ID, A> meta,
+    dynamicUpdateStep(final TableMeta<T, ID, A> meta,
                       @NotNull final T entity, final Predicate<Object> include) {
 
         final Map<Field<?>, Object> dynamic = new HashMap<>(10);
@@ -251,7 +251,7 @@ public class CrudStep {
      * @return the update set more step
      */
     public <T, A> UpdateConditionStep<?>
-    dynamicUpdateByCreatorStep(final TableMetaProvider<T, ?, A> meta, @NotNull final T entity,
+    dynamicUpdateByCreatorStep(final TableMeta<T, ?, A> meta, @NotNull final T entity,
                                final Predicate<Object> include) {
         final UpdateConditionStep<?> step = this.dynamicUpdateStep(meta, entity, include);
         @SuppressWarnings("unchecked")
@@ -259,7 +259,7 @@ public class CrudStep {
         return step.and(meta.createdBy().getColumn().eq(auditor));
     }
 
-    public <M extends TableMetaProvider<T, ID, A>, T, ID, A> Condition creatorCondition(final M meta) {
+    public <M extends TableMeta<T, ID, A>, T, ID, A> Condition creatorCondition(final M meta) {
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
         return meta.createdBy().getColumn().eq(auditor);

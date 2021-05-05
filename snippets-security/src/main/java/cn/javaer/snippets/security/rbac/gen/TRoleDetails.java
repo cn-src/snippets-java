@@ -1,13 +1,9 @@
-
 // @formatter:off
 package cn.javaer.snippets.security.rbac.gen;
 
-import javax.annotation.Generated;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-
+import cn.javaer.snippets.jooq.ColumnMeta;
+import cn.javaer.snippets.jooq.TableMeta;
+import cn.javaer.snippets.security.rbac.RoleDetails;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Field;
 import org.jooq.Name;
@@ -18,9 +14,11 @@ import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
-import cn.javaer.snippets.jooq.TableMetaProvider;
-import cn.javaer.snippets.jooq.ColumnMeta;
-import cn.javaer.snippets.security.rbac.RoleDetails;
+import javax.annotation.Generated;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * This class is automatic generated.
@@ -28,7 +26,7 @@ import cn.javaer.snippets.security.rbac.RoleDetails;
 @SuppressWarnings({"ALL"})
 
 @Generated("cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool")
-public class TRoleDetails extends TableImpl<Record> implements TableMetaProvider<RoleDetails, java.lang.Long, java.lang.Long> {
+public class TRoleDetails extends TableImpl<Record> implements TableMeta<RoleDetails, Long, Long> {
 
     public static final TRoleDetails ROLE_DETAILS = new TRoleDetails();
 

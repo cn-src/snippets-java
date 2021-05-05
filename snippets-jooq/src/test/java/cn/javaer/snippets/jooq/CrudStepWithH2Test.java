@@ -40,7 +40,7 @@ class CrudStepWithH2Test {
 
     @Test
     void oneStep() {
-        final TableMetaProvider<Demo, Long, Void> meta = CrudReflection.getTableMeta(Demo.class);
+        final TableMeta<Demo, Long, Void> meta = CrudReflection.getTableMeta(Demo.class);
         this.crudStep.insertStep(meta, new Demo(1L, "name"))
             .execute();
         final Demo demo = this.crudStep.findByIdStep(meta, 1L).fetchOneInto(Demo.class);
@@ -50,7 +50,7 @@ class CrudStepWithH2Test {
 
     @Test
     void batchInsertStep() {
-        final TableMetaProvider<Demo, Long, Void> meta = CrudReflection.getTableMeta(Demo.class);
+        final TableMeta<Demo, Long, Void> meta = CrudReflection.getTableMeta(Demo.class);
         this.crudStep.batchInsertStep(Arrays.asList(new Demo(1L, "name1"), new Demo(2L, "name2")),
             meta).execute();
     }

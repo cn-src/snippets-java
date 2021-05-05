@@ -1,6 +1,6 @@
 package cn.javaer.snippets.security.rbac;
 
-import cn.javaer.snippets.jooq.TableMetaProvider;
+import cn.javaer.snippets.jooq.TableMeta;
 
 import java.util.Optional;
 
@@ -8,13 +8,13 @@ import java.util.Optional;
  * @author cn-src
  */
 public interface UserMetaProvider {
-    default <T extends PersistableUser> TableMetaProvider<T, ?, ?> meta() {
+    default <T extends PersistableUser> TableMeta<T, ?, ?> meta() {
         @SuppressWarnings({"UnnecessaryLocalVariable", "unchecked"})
-        final TableMetaProvider<T, ?, ?> metaProvider =
-            (TableMetaProvider<T, ?, ?>) this.getMeta().orElseThrow(UnsupportedOperationException::new);
+        final TableMeta<T, ?, ?> metaProvider =
+            (TableMeta<T, ?, ?>) this.getMeta().orElseThrow(UnsupportedOperationException::new);
         return metaProvider;
     }
 
     <E extends PersistableUser>
-    Optional<TableMetaProvider<E, ?, ?>> getMeta();
+    Optional<TableMeta<E, ?, ?>> getMeta();
 }

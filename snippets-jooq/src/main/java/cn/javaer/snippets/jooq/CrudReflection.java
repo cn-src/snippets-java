@@ -23,11 +23,11 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class CrudReflection {
     @SuppressWarnings("rawtypes")
-    private static final ConcurrentMap<Class, TableMetaProvider> META_CACHE =
+    private static final ConcurrentMap<Class, TableMeta> META_CACHE =
         new ConcurrentHashMap<>();
 
     @SuppressWarnings("unchecked")
-    public static <T, ID, A> TableMetaProvider<T, ID, A> getTableMeta(final Class<T> entityClass) {
+    public static <T, ID, A> TableMeta<T, ID, A> getTableMeta(final Class<T> entityClass) {
         return META_CACHE.computeIfAbsent(entityClass, it -> {
             try {
                 return initTableMeta(it);
@@ -49,14 +49,14 @@ public class CrudReflection {
 
     @SuppressWarnings({"unchecked", "AlibabaMethodTooLong"})
     @Nullable
-    private static <T, ID, A> TableMeta<T, ID, A> initTableMeta(final Class<T> entityClass)
+    private static <T, ID, A> TableMetaImpl<T, ID, A> initTableMeta(final Class<T> entityClass)
         throws NoSuchFieldException, IllegalAccessException {
 
         final Field[] fields = FieldUtils.getAllFields(entityClass);
         if (fields == null || fields.length == 0) {
             return null;
         }
-        final TableMeta.TableMetaBuilder<T, ID, A> builder = TableMeta.builder();
+        final TableMetaImpl.TableMetaBuilder<T, ID, A> builder = TableMetaImpl.builder();
         builder.table(getTable(entityClass))
             .entityClass(entityClass);
 

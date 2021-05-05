@@ -32,7 +32,7 @@ public class BatchConsumer<T> implements Consumer<T>, Runnable {
         this(value -> {
             @SuppressWarnings("unchecked")
             final Class<T> clazz = (Class<T>) value.get(0).getClass();
-            final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
+            final TableMeta<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
             return crud.batchInsert(meta, value);
         }, 100);
     }
@@ -41,7 +41,7 @@ public class BatchConsumer<T> implements Consumer<T>, Runnable {
         this(value -> {
             @SuppressWarnings("unchecked")
             final Class<T> clazz = (Class<T>) value.get(0).getClass();
-            final TableMetaProvider<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
+            final TableMeta<T, ?, ?> meta = CrudReflection.getTableMeta(clazz);
             return crud.batchInsert(meta, value);
         }, batchSize);
     }

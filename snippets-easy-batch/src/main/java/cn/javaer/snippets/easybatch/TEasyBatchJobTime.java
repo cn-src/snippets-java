@@ -2,7 +2,7 @@
 package cn.javaer.snippets.easybatch;
 
 import cn.javaer.snippets.jooq.ColumnMeta;
-import cn.javaer.snippets.jooq.TableMetaProvider;
+import cn.javaer.snippets.jooq.TableMeta;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Field;
 import org.jooq.Name;
@@ -21,7 +21,7 @@ import java.util.function.Function;
  * This class is automatic generated form {@link cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool}.
  */
 @SuppressWarnings({"ALL"})
-public class TEasyBatchJobTime extends TableImpl<Record> implements TableMetaProvider<EasyBatchJobTime, Void, Void> {
+public class TEasyBatchJobTime extends TableImpl<Record> implements TableMeta<EasyBatchJobTime, Void, Void> {
 
     public static final TEasyBatchJobTime EASY_BATCH_JOB_TIME = new TEasyBatchJobTime();
 
