@@ -8,7 +8,6 @@ import org.jooq.Condition;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -37,16 +36,14 @@ public class RbacJdbcManager {
     }
 
     public <T extends UserEntity> Optional<T> findUserByEmail(final String email) {
-        final Condition condition = Objects.requireNonNull(
-            this.userMeta.meta().getTable().field("email", String.class)).eq(email);
+        final Condition condition = this.userMeta.meta().emailField().eq(email);
         final Optional<T> userOpt = this.crud.findOne(this.userMeta.meta(), condition);
         userOpt.ifPresent(u -> u.setPermissions(this.findPermissionByUser(u)));
         return userOpt;
     }
 
     public <T extends UserEntity> Optional<T> findUserByMobile(final String mobile) {
-        final Condition condition = Objects.requireNonNull(
-            this.userMeta.meta().getTable().field("mobile", String.class)).eq(mobile);
+        final Condition condition = this.userMeta.meta().mobileField().eq(mobile);
         final Optional<T> userOpt = this.crud.findOne(this.userMeta.meta(), condition);
         userOpt.ifPresent(u -> u.setPermissions(this.findPermissionByUser(u)));
         return userOpt;
