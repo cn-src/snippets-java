@@ -19,7 +19,7 @@ public class RbacController {
     }
 
     @GetMapping("")
-    public Page<PersistableUser> get(final PageParam pageParam) {
+    public Page<UserEntity> get(final PageParam pageParam) {
         return this.rbacJdbcManager.findAllUsers(pageParam);
     }
 }

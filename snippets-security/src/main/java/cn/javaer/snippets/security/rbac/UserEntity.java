@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author cn-src
  */
-public interface PersistableUser extends Serializable {
+public interface UserEntity extends Serializable {
 
     /**
      * 获取用户 ID.

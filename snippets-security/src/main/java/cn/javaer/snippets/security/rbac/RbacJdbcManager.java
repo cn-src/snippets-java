@@ -25,18 +25,18 @@ import static cn.javaer.snippets.security.rbac.gen.TUserPermission.USER_PERMISSI
  */
 public class RbacJdbcManager {
     private final JdbcCrud crud;
-    private final UserMetaProvider userMeta;
+    private final UserTableMetaProvider userMeta;
 
-    public RbacJdbcManager(final JdbcCrud crud, final UserMetaProvider userMeta) {
+    public RbacJdbcManager(final JdbcCrud crud, final UserTableMetaProvider userMeta) {
         this.crud = crud;
         this.userMeta = userMeta;
     }
 
-    public <T extends PersistableUser> Page<T> findAllUsers(final PageParam pageParam) {
+    public <T extends UserEntity> Page<T> findAllUsers(final PageParam pageParam) {
         return this.crud.findAll(this.userMeta.meta(), pageParam);
     }
 
-    public <T extends PersistableUser> Optional<T> findUserByEmail(final String email) {
+    public <T extends UserEntity> Optional<T> findUserByEmail(final String email) {
         final Condition condition = Objects.requireNonNull(
             this.userMeta.meta().getTable().field("email", String.class)).eq(email);
         final Optional<T> userOpt = this.crud.findOne(this.userMeta.meta(), condition);
@@ -44,7 +44,7 @@ public class RbacJdbcManager {
         return userOpt;
     }
 
-    public <T extends PersistableUser> Optional<T> findUserByMobile(final String mobile) {
+    public <T extends UserEntity> Optional<T> findUserByMobile(final String mobile) {
         final Condition condition = Objects.requireNonNull(
             this.userMeta.meta().getTable().field("mobile", String.class)).eq(mobile);
         final Optional<T> userOpt = this.crud.findOne(this.userMeta.meta(), condition);
@@ -52,7 +52,7 @@ public class RbacJdbcManager {
         return userOpt;
     }
 
-    public List<Permission> findPermissionByUser(final PersistableUser user) {
+    public List<Permission> findPermissionByUser(final UserEntity user) {
         return this.crud.dsl().select(PERMISSION_FIELDS)
             .from(PERMISSION, USER_PERMISSION, ROLE_PERMISSION)
             .where(USER_PERMISSION.USER_ID.eq(user.getId()).and(USER_PERMISSION.PERMISSION_ID.eq(PERMISSION.ID)))
