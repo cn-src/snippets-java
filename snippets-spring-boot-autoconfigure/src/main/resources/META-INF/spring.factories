@@ -13,6 +13,10 @@ cn.javaer.snippets.spring.autoconfigure.minio.MinioAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.task.SchedulersAutoConfiguration,\
 cn.javaer.snippets.spring.autoconfigure.task.ExecutorsAutoConfiguration
 
+# Failure Analysis Reporters
+org.springframework.boot.diagnostics.FailureAnalysisReporter=\
+cn.javaer.snippets.spring.boot.diagnostics.analyzer.ZhLoggingFailureAnalysisReporter
+
 # Failure Analyzers
 org.springframework.boot.diagnostics.FailureAnalyzer=\
 cn.javaer.snippets.spring.boot.diagnostics.analyzer.ZhPortInUseFailureAnalyzer
