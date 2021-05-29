@@ -3,6 +3,6 @@ plugins {
 }
 val simpleflatmapperVersion: String by project
 dependencies {
-    api("org.simpleflatmapper:sfm-jooq:${simpleflatmapperVersion}")
+    api("org.simpleflatmapper:sfm-jooq:$simpleflatmapperVersion")
 }
 
