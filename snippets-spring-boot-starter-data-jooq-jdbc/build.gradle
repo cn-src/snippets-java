@@ -1,8 +1,0 @@
-plugins {
-    id 'snippets-starter'
-}
-dependencies {
-    api project(':snippets-spring-boot-starter')
-    api "org.springframework.boot:spring-boot-starter-data-jdbc:${springBootVersion}"
-    api "org.springframework.boot:spring-boot-starter-jooq:${springBootVersion}"
-}
