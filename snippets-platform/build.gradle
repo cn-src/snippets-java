@@ -115,6 +115,11 @@ dependencies {
         api "org.simpleflatmapper:sfm-jooq:${simpleflatmapperVersion}"
         api "org.simpleflatmapper:sfm-springjdbc:${simpleflatmapperVersion}"
 
+        api "io.vavr:vavr:${vavrVersion}"
+        api "io.vavr:vavr-jackson:${vavrVersion}"
+        api "io.vavr:vavr-test:${vavrVersion}"
+        api "io.vavr:vavr-match:${vavrVersion}"
+
         api "de.codecentric:spring-boot-admin-server:${springBootAdminVersion}"
         api "de.codecentric:spring-boot-admin-server-ui:${springBootAdminVersion}"
         api "de.codecentric:spring-boot-admin-client:${springBootAdminVersion}"
