@@ -120,7 +120,7 @@ public class GlobalErrorAttributes implements ErrorAttributes, HandlerExceptionR
         return errorAttributes;
     }
 
-    @Override
+    // TODO
     @Deprecated
     public Map<String, Object> getErrorAttributes(final WebRequest webRequest,
                                                   final boolean includeStackTrace) {
