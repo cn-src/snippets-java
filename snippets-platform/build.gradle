@@ -242,6 +242,25 @@ dependencies {
         api "com.playtika.testcontainers:embedded-clickhouse:${playtikaVersion}"
         api "com.playtika.testcontainers:embedded-cassandra:${playtikaVersion}"
         api "com.playtika.testcontainers:embedded-selenium:${playtikaVersion}"
+
+        api "io.zonky.test.postgres:embedded-postgres-binaries-darwin-amd64:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-amd64:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-amd64-alpine:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-amd64-alpine-lite:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-windows-amd64:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-i386:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-i386-alpine:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-i386-alpine-lite:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-arm32v6:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-arm32v6-alpine:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-arm32v6-alpine-lite:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-arm32v7:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-arm64v8:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-arm64v8-alpine:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-arm64v8-alpine-lite:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-ppc64le:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-ppc64le-alpine:$zonkyVersion"
+        api "io.zonky.test.postgres:embedded-postgres-binaries-linux-ppc64le-alpine-lite:$zonkyVersion"
     }
 }
 
