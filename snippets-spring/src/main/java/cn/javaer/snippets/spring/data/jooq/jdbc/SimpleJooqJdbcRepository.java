@@ -161,6 +161,12 @@ public class SimpleJooqJdbcRepository<T, ID> implements JooqJdbcRepository<T, ID
         this.entityOperations.delete(instance, this.entityClass);
     }
 
+    @Transactional
+    @Override
+    public void deleteAllById(final Iterable<? extends ID> ids) {
+        this.entityOperations.deleteAll(this.entityClass);
+    }
+
     /**
      * {@inheritDoc}
      */
