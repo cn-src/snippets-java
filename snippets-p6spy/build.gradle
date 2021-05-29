@@ -1,6 +1,0 @@
-plugins {
-    id 'snippets-conventions'
-}
-dependencies {
-    api "p6spy:p6spy:${p6spyVersion}"
-}
