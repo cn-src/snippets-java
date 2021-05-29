@@ -57,7 +57,7 @@ public class GlobalExceptionAdvice {
             runtimeErrorInfo.setException(clazz);
         }
 
-        if (this.errorProperties.getIncludeStacktrace() == ErrorProperties.IncludeStacktrace.ALWAYS) {
+        if (ErrorProperties.IncludeAttribute.ALWAYS.equals(this.errorProperties.getIncludeStacktrace())) {
             runtimeErrorInfo.setTraceMessage(e.getMessage());
             final StringWriter stackTrace = new StringWriter();
             e.printStackTrace(new PrintWriter(stackTrace));
