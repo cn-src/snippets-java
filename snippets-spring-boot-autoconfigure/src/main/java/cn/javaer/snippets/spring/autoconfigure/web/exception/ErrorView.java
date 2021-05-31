@@ -45,7 +45,7 @@ class ErrorView implements View {
             .append(this.htmlEscape(model.get("status"))).append(' ')
             .append(this.htmlEscape(message))
             .append("</title><style> ul li {line-height: 30px;}</style></head>" +
-                "<body style=\"padding-left: 10px\"><h1>")
+                "<body style=\"padding-left: 10px\"><h1>错误页面 ")
             .append(this.htmlEscape(model.get("status"))).append(' ')
             .append(this.htmlEscape(message))
             .append("</h1><ul style=\"list-style: none;padding: 0;\"><li>请求路径：")
