@@ -20,7 +20,13 @@ class RbacJdbcManagerTest {
             .asCompatibleSubstituteFor("postgres"))
             .withInitScript("rbac.ddl")
             .withDatabaseName(RbacJdbcManagerTest.class.getSimpleName());
-    RbacJdbcManager rbacJdbcManager = new RbacJdbcManager(new JdbcCrud(this.dataSource()));
+    RbacJdbcManager rbacJdbcManager = new RbacJdbcManager(new JdbcCrud(this.dataSource()),
+        new UserTableMetaProvider() {
+        @Override
+        public <T extends UserEntity> UserTableMeta<T, ?, ?> meta() {
+            return null;
+        }
+    });
 
     @Test
     void findAllPermissionDetails() {
