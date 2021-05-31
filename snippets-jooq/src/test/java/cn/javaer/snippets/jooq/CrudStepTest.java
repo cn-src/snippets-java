@@ -36,8 +36,8 @@ class CrudStepTest {
     @Test
     void batchInsertStep() {
         final InsertValuesStepN<?> step = this.crudStep.batchInsertStep(
-            Arrays.asList(new Demo(1L, "name1", 996L), new Demo(2L, "name2", null)),
-            CrudReflection.getTableMeta(Demo.class));
+            CrudReflection.getTableMeta(Demo.class),
+            Arrays.asList(new Demo(1L, "name1", 996L), new Demo(2L, "name2", null)));
         assertThat(this.dsl.renderInlined(step))
             .isEqualTo("insert into demo (id, name, created_by_id) " +
                 "values (1, 'name1', 999), (2, 'name2', 999)");
@@ -46,7 +46,7 @@ class CrudStepTest {
     @Test
     void dynamicUpdateStep() {
         final UpdateConditionStep<?> step = this.crudStep.dynamicUpdateStep(
-            new Demo(3L, "name", null), CrudReflection.getTableMeta(Demo.class),
+            CrudReflection.getTableMeta(Demo.class), new Demo(3L, "name", null),
             ObjectUtils::isNotEmpty);
         assertThat(this.dsl.renderInlined(step))
             .isEqualTo("update demo set name = 'name' where id = 3");
