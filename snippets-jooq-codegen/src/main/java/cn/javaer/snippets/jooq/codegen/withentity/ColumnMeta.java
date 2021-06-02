@@ -1,9 +1,12 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
+import cn.javaer.snippets.jooq.field.ArrayField;
+import cn.javaer.snippets.jooq.field.JsonbField;
 import cn.javaer.snippets.util.ReflectionUtils;
 import cn.javaer.snippets.util.StrUtils;
 import io.github.classgraph.FieldInfo;
 import lombok.Value;
+import org.jooq.JSONB;
 
 /**
  * @author cn-src
@@ -83,10 +86,10 @@ public class ColumnMeta {
 
     static String customFieldType(final String fieldType) {
         if (fieldType.endsWith("[]") && !"byte[]".equals(fieldType)) {
-            return "cn.javaer.snippets.jooq.field.ArrayField";
+            return ArrayField.class.getName();
         }
-        if ("org.jooq.JSONB".equals(fieldType)) {
-            return "cn.javaer.snippets.jooq.field.JsonbField";
+        if (JSONB.class.getName().equals(fieldType)) {
+            return JsonbField.class.getName();
         }
         return "";
     }
