@@ -42,6 +42,9 @@ public class TypeMapping {
 
     @SuppressWarnings("AlibabaUndefineMagicConstant")
     public static String get(final String name) {
+        if (CodeGenTool.enums.containsName(name)) {
+            return "org.jooq.impl.SQLDataType.VARCHAR";
+        }
         if (name.endsWith("[]")) {
             final String arrayName = name.substring(0, name.length() - 2);
             if ("byte".equals(arrayName)) {

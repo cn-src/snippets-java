@@ -8,6 +8,8 @@ import io.github.classgraph.FieldInfo;
 import lombok.Value;
 import org.jooq.JSONB;
 
+import java.time.Duration;
+
 /**
  * @author cn-src
  */
@@ -18,14 +20,13 @@ public class ColumnMeta {
     String getterName;
     String fieldType;
     boolean readOnly;
-    boolean enumType;
     boolean customField;
     boolean id;
     boolean updatedBy;
     boolean updatedDate;
     boolean createdBy;
     boolean createdDate;
-    String enumConverter;
+    String converter;
     String sqlType;
     String columnName;
 
@@ -38,10 +39,8 @@ public class ColumnMeta {
         this.fieldName = fieldName;
         this.getterName = ReflectionUtils.toGetterName(fieldName, fieldType);
         this.fieldType = type(fieldType);
-        this.enumType = CodeGenTool.enums.containsName(this.fieldType);
-        this.sqlType = this.enumType ? "org.jooq.impl.SQLDataType.VARCHAR" :
-            TypeMapping.get(this.fieldType);
-        this.enumConverter = this.enumType ? enumConverter(this.fieldType) : "";
+        this.sqlType = TypeMapping.get(this.fieldType);
+        this.converter = converter(this.fieldType);
         this.columnName = columnName;
         this.tableFieldName = StrUtils.toSnakeUpper(this.fieldName);
         this.customField = isCustomField(fieldType);
@@ -99,6 +98,16 @@ public class ColumnMeta {
             return true;
         }
         return "org.jooq.JSONB".equals(fieldType);
+    }
+
+    static String converter(final String fieldType) {
+        if (CodeGenTool.enums.containsName(fieldType)) {
+            return enumConverter(fieldType);
+        }
+        if (Duration.class.getName().equals(fieldType)) {
+            return "cn.javaer.snippets.jooq.DurationConverter.INSTANCE";
+        }
+        return null;
     }
 
     static String type(final String type) {

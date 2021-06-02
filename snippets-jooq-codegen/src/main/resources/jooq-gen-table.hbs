@@ -38,7 +38,7 @@ public class {{tableClassName}} extends TableImpl<Record> implements TableMeta<{
 {{#if customField}}
     public final {{customFieldType}}<Record, {{fieldType}}> {{tableFieldName}} = new {{customFieldType}}("{{columnName}}", {{sqlType}}, this);
 {{~else}}
-    public final TableField<Record, {{fieldType}}> {{tableFieldName}} = createField(DSL.name("{{columnName}}"), {{sqlType}}, this, ""{{#if enumType}}, {{{enumConverter}}}{{/if}});
+    public final TableField<Record, {{fieldType}}> {{tableFieldName}} = createField(DSL.name("{{columnName}}"), {{sqlType}}, this, ""{{#if converter}}, {{{converter}}}{{/if}});
 {{~/if~}}
 {{/each}}
 
