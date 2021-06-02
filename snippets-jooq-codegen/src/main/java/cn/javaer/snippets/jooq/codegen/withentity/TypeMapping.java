@@ -1,5 +1,6 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,7 @@ public class TypeMapping {
         mapping.put("java.time.OffsetTime", "org.jooq.impl.SQLDataType.OFFSETTIME");
         mapping.put("java.time.OffsetDateTime", "org.jooq.impl.SQLDataType.OFFSETDATETIME");
         mapping.put("java.time.Instant", "org.jooq.impl.SQLDataType.INSTANT");
+        mapping.put(Duration.class.getName(), "org.jooq.impl.SQLDataType.VARCHAR");
 
         mapping.put("java.util.UUID", "org.jooq.impl.SQLDataType.UUID");
 

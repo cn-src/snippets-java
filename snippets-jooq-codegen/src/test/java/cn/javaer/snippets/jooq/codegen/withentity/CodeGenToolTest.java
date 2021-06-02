@@ -12,6 +12,7 @@ class CodeGenToolTest {
         final String dir = CodeGenToolTest.class.getResource("/").getPath();
         final CodeGenConfig config = CodeGenConfig.builder()
             .generatedSrcRootDir(dir)
+            .classLoader(this.getClass().getClassLoader())
             .generatedSrcPackage("demo")
             .scanPackageName("cn.javaer.snippets.jooq.codegen.withentity")
             .build();

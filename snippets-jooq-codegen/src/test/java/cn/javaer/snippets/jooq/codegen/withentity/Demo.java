@@ -5,6 +5,7 @@ import org.jooq.JSONB;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 /**
@@ -20,6 +21,8 @@ public class Demo {
     String[] org;
 
     JSONB jsonb;
+    
+    Duration duration;
 
     @CreatedDate
     LocalDateTime createdDate;

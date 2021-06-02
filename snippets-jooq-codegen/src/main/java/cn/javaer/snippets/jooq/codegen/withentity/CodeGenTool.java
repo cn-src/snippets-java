@@ -67,9 +67,8 @@ public class CodeGenTool {
             .acceptPackages(config.scanPackageNames())
             .acceptClasses(config.scanClassNames())
             .scan()) {
-            final ClassInfoList tableClass =
-                scanResult.getClassesWithAnnotation(
-                    "org.springframework.data.relational.core.mapping.Table");
+            final ClassInfoList tableClass = scanResult.getClassesWithAnnotation(
+                "org.springframework.data.relational.core.mapping.Table");
             final ClassInfoList idClass =
                 scanResult.getClassesWithFieldAnnotation("org.springframework.data.annotation.Id");
             enums = scanResult.getAllEnums();
