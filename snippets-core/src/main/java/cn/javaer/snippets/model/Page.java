@@ -32,6 +32,10 @@ public class Page<T> {
     @Schema(description = "分页-总数")
     private long total;
 
+    public boolean isEmpty() {
+        return this.content == null || this.content.isEmpty();
+    }
+
     public static <T> Page<T> of(final List<T> content, final long total) {
         return new Page<>(content, total);
     }
