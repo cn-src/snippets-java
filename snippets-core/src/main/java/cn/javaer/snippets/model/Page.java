@@ -19,6 +19,9 @@ public class Page<T> {
     public final static Page EMPTY = new Page<>(Collections.emptyList(), 0);
 
     Page(final List<T> content, final long total) {
+        if (total < 0) {
+            throw new IllegalArgumentException("'total' must not less than 0");
+        }
         this.content = content;
         this.total = total;
     }
@@ -34,7 +37,7 @@ public class Page<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> Page<T> emptyList() {
+    public static <T> Page<T> empty() {
         return (Page<T>) EMPTY;
     }
 }
