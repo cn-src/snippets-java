@@ -10,12 +10,6 @@ public interface DefaultUserDetails extends UserDetails {
 
     @JsonIgnore
     @Override
-    default String getUsername() {
-        return null;
-    }
-
-    @JsonIgnore
-    @Override
     default boolean isAccountNonExpired() {
         return true;
     }
