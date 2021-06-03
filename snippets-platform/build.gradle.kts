@@ -14,6 +14,7 @@ dependencies {
         api(project(":snippets-kryo"))
         api(project(":snippets-p6spy"))
         api(project(":snippets-spring"))
+        api(project(":snippets-security"))
         api(project(":snippets-spring-boot-autoconfigure"))
         api(project(":snippets-spring-boot-starter"))
         api(project(":snippets-spring-boot-starter-data-jooq-jdbc"))
