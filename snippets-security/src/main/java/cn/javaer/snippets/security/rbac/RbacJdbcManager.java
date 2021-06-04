@@ -58,12 +58,12 @@ public class RbacJdbcManager {
             .stream().distinct().collect(Collectors.toList());
     }
 
-    public List<PermissionDetails> findAllPermissionDetails() {
-        return this.crud.findAll(PERMISSION_DETAILS);
+    public Page<PermissionDetails> findAllPermissionDetails(final PageParam pageParam) {
+        return this.crud.findAll(PERMISSION_DETAILS, pageParam);
     }
 
-    public List<RoleDetails> findAllRoleDetails() {
-        return this.crud.findAll(ROLE_DETAILS);
+    public Page<RoleDetails> findAllRoleDetails(final PageParam pageParam) {
+        return this.crud.findAll(ROLE_DETAILS, pageParam);
     }
 
     public void createRole(final RoleDetails roleDetails) {
