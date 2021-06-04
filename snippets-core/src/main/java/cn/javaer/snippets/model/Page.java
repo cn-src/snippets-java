@@ -32,6 +32,7 @@ public class Page<T> {
     @Schema(description = "分页-总数")
     private long total;
 
+    @Schema(description = "是否为空")
     public boolean isEmpty() {
         return this.content == null || this.content.isEmpty();
     }
