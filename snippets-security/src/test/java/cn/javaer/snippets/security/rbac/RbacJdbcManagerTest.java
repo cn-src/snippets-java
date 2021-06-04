@@ -1,6 +1,8 @@
 package cn.javaer.snippets.security.rbac;
 
 import cn.javaer.snippets.jooq.JdbcCrud;
+import cn.javaer.snippets.model.Page;
+import cn.javaer.snippets.model.PageParam;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -9,7 +11,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import javax.sql.DataSource;
-import java.util.List;
 
 /**
  * @author cn-src
@@ -22,16 +23,16 @@ class RbacJdbcManagerTest {
             .withDatabaseName(RbacJdbcManagerTest.class.getSimpleName());
     RbacJdbcManager rbacJdbcManager = new RbacJdbcManager(new JdbcCrud(this.dataSource()),
         new UserTableMetaProvider() {
-        @Override
-        public <T extends UserEntity> UserTableMeta<T, ?, ?> meta() {
-            return null;
-        }
-    });
+            @Override
+            public <T extends UserEntity> UserTableMeta<T, ?, ?> meta() {
+                return null;
+            }
+        });
 
     @Test
     void findAllPermissionDetails() {
-        final List<PermissionDetails> permissionDetails =
-            this.rbacJdbcManager.findAllPermissionDetails();
+        final Page<PermissionDetails> permissionDetails =
+            this.rbacJdbcManager.findAllPermissionDetails(new PageParam(1, 10));
         System.out.println(permissionDetails);
     }
 
