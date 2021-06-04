@@ -1,9 +1,12 @@
 package cn.javaer.snippets.security.rbac;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
@@ -15,6 +18,8 @@ import java.io.Serializable;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Schema(name = "角色")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Role implements Serializable {

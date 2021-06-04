@@ -1,9 +1,12 @@
 package cn.javaer.snippets.security.rbac;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -17,6 +20,8 @@ import java.time.LocalDateTime;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Schema(name = "权限详情")
 @Table("permission")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

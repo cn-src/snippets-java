@@ -1,9 +1,12 @@
 package cn.javaer.snippets.security.rbac;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.Singular;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -24,6 +27,8 @@ import java.util.List;
 @Builder
 @Schema(name = "角色详情")
 @Table("role")
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RoleDetails implements Serializable {
     private static final long serialVersionUID = -388063889316870772L;
