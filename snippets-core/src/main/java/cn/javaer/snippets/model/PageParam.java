@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author cn-src
@@ -15,12 +16,12 @@ import org.springdoc.api.annotations.ParameterObject;
 @Setter(AccessLevel.PACKAGE)
 public class PageParam {
 
-    public PageParam() {
+    PageParam() {
         this.page = 1;
         this.size = 20;
     }
 
-    public PageParam(final int page, final int size) {
+    PageParam(final int page, final int size) {
         this.page = Math.max(page, 1);
         this.size = Math.max(size, 1);
     }
@@ -30,6 +31,14 @@ public class PageParam {
 
     @Schema(name = "size", description = "分页-大小", minimum = "1", defaultValue = "20")
     int size;
+
+    public static PageParam of(final int page, final int size) {
+        return new PageParam(page, size);
+    }
+
+    public static PageParam of(final Pageable pageable) {
+        return new PageParam(pageable.getPageNumber(), pageable.getPageSize());
+    }
 
     @Hidden
     public long getOffset() {
