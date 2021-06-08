@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.impl.DSL;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +25,8 @@ import java.util.function.Supplier;
 public class ConditionBuilder {
 
     private final List<Condition> conditions = new ArrayList<>();
+
+    private Condition defaultCondition;
 
     public ConditionBuilder optional(final Condition condition) {
         if (null != condition) {
@@ -130,10 +133,20 @@ public class ConditionBuilder {
         return this;
     }
 
+    public ConditionBuilder trueConditionIfEmpty() {
+        this.defaultCondition = DSL.trueCondition();
+        return this;
+    }
+
+    public ConditionBuilder falseConditionIfEmpty() {
+        this.defaultCondition = DSL.falseCondition();
+        return this;
+    }
+
     @Nullable
     public Condition build() {
         if (this.conditions.isEmpty()) {
-            return null;
+            return this.defaultCondition;
         }
         Condition condition = this.conditions.get(0);
         for (int i = 1, size = this.conditions.size(); i < size; i++) {
