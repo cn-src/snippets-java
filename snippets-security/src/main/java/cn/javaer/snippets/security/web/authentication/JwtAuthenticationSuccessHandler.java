@@ -1,0 +1,47 @@
+package cn.javaer.snippets.security.web.authentication;
+
+import cn.javaer.snippets.security.util.SecureUtils;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
+/**
+ * @author cn-src
+ */
+public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
+    private Duration expirationDuration;
+
+    private String secret;
+
+    @Override
+    public void onAuthenticationSuccess(final HttpServletRequest request,
+                                        final HttpServletResponse response,
+                                        final Authentication authentication) throws IOException {
+        final UsernamePasswordAuthenticationToken upToken =
+            (UsernamePasswordAuthenticationToken) authentication;
+        final UserDetails principal = (UserDetails) upToken.getPrincipal();
+        final Date exp = Date.from(LocalDateTime.now().plus(this.expirationDuration)
+            .atZone(ZoneId.systemDefault()).toInstant());
+        final String jwtToken = SecureUtils.generateJwtToken(principal, exp, this.secret);
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().write("{\"token\":\"" + jwtToken + "\"}");
+    }
+
+    public void setExpirationDuration(final Duration expirationDuration) {
+        this.expirationDuration = expirationDuration;
+    }
+
+    public void setSecret(final String secret) {
+        this.secret = secret;
+    }
+}

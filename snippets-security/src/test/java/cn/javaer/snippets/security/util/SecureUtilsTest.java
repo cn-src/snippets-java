@@ -1,4 +1,4 @@
-package cn.javaer.snippets.security.rbac.util;
+package cn.javaer.snippets.security.util;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.junit.jupiter.api.Test;
