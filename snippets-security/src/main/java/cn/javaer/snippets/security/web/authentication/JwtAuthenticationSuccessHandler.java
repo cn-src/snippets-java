@@ -13,15 +13,21 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author cn-src
  */
 public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    private Duration expirationDuration;
+    private final String secret;
 
-    private String secret;
+    private final Duration expirationDuration;
+
+    public JwtAuthenticationSuccessHandler(final String secret, final Duration expirationDuration) {
+        this.secret = Objects.requireNonNull(secret);
+        this.expirationDuration = Objects.requireNonNull(expirationDuration);
+    }
 
     @Override
     public void onAuthenticationSuccess(final HttpServletRequest request,
@@ -35,13 +41,5 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
         final String jwtToken = SecureUtils.generateJwtToken(principal, exp, this.secret);
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().write("{\"token\":\"" + jwtToken + "\"}");
-    }
-
-    public void setExpirationDuration(final Duration expirationDuration) {
-        this.expirationDuration = expirationDuration;
-    }
-
-    public void setSecret(final String secret) {
-        this.secret = secret;
     }
 }
