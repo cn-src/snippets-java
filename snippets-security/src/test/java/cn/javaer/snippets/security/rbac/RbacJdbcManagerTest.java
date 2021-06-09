@@ -32,7 +32,7 @@ class RbacJdbcManagerTest {
     @Test
     void findAllPermissionDetails() {
         final Page<PermissionDetails> permissionDetails =
-            this.rbacJdbcManager.findAllPermissionDetails(new PageParam(1, 10));
+            this.rbacJdbcManager.findAllPermissionDetails(PageParam.of(1, 10));
         System.out.println(permissionDetails);
     }
 
