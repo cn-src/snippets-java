@@ -1,6 +1,7 @@
 package cn.javaer.snippets.security.web.authentication;
 
 import cn.javaer.snippets.security.util.SecureUtils;
+import com.nimbusds.jwt.JWTClaimsSet;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 /**
  * @author cn-src
@@ -24,9 +26,13 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
 
     private final Duration expirationDuration;
 
-    public JwtAuthenticationSuccessHandler(final String secret, final Duration expirationDuration) {
+    private final BiConsumer<UserDetails, JWTClaimsSet.Builder> handler;
+
+    public JwtAuthenticationSuccessHandler(final String secret, final Duration expirationDuration,
+                                           final BiConsumer<UserDetails, JWTClaimsSet.Builder> handler) {
         this.secret = Objects.requireNonNull(secret);
         this.expirationDuration = Objects.requireNonNull(expirationDuration);
+        this.handler = handler;
     }
 
     @Override
@@ -38,7 +44,7 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
         final UserDetails principal = (UserDetails) upToken.getPrincipal();
         final Date exp = Date.from(LocalDateTime.now().plus(this.expirationDuration)
             .atZone(ZoneId.systemDefault()).toInstant());
-        final String jwtToken = SecureUtils.generateJwtToken(principal, exp, this.secret);
+        final String jwtToken = SecureUtils.generateJwtToken(principal, exp, this.secret, this.handler);
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().write("{\"token\":\"" + jwtToken + "\"}");
     }

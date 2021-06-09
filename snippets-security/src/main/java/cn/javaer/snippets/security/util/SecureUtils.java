@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 /**
@@ -34,23 +35,28 @@ public interface SecureUtils {
      * @param userDetails userDetails
      * @param exp 到期时间
      * @param secret 密钥
+     * @param handler handler
      *
      * @return Jwt
      */
     static String generateJwtToken(final UserDetails userDetails, final Date exp,
-                                   final String secret) {
+                                   final String secret,
+                                   final BiConsumer<UserDetails, JWTClaimsSet.Builder> handler) {
         Collection<String> scp = Collections.emptyList();
         if (userDetails.getAuthorities() != null && !userDetails.getAuthorities().isEmpty()) {
             scp = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
         }
-        final JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+        final JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder()
             .claim("scp", scp)
             .subject(userDetails.getUsername())
             .issuer("local")
-            .expirationTime(exp)
-            .build();
-        final SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
+            .expirationTime(exp);
+        if (null != handler) {
+            handler.accept(userDetails, builder);
+        }
+        final SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256),
+            builder.build());
         try {
             signedJWT.sign(new MACSigner(secret));
             return signedJWT.serialize();
