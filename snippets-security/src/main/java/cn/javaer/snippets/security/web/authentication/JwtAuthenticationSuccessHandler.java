@@ -2,7 +2,6 @@ package cn.javaer.snippets.security.web.authentication;
 
 import cn.javaer.snippets.security.util.SecureUtils;
 import com.nimbusds.jwt.JWTClaimsSet;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,7 +46,7 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
             .atZone(ZoneId.systemDefault()).toInstant());
         final String jwtToken = SecureUtils.generateJwtToken(principal, exp, this.secret,
             this.handler);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().write("{\"token\":\"" + jwtToken + "\"}");
     }

@@ -6,7 +6,6 @@ import cn.javaer.snippets.spring.exception.ErrorMappings;
 import cn.javaer.snippets.spring.exception.ErrorMessageSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
@@ -27,7 +26,7 @@ public class RestAuthenticationFailureHandler implements AuthenticationFailureHa
                                         final AuthenticationException exception) throws IOException {
         this.logger.debug(exception.getMessage());
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType("application/json;charset=UTF-8");
         final DefinedErrorInfo errorInfo =
             ErrorMappings.getErrorInfo(exception.getClass().getName(),
                 DefinedErrorInfo.of("LOGIN_ERROR", HttpServletResponse.SC_UNAUTHORIZED));
