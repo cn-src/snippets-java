@@ -1,6 +1,6 @@
 package cn.javaer.snippets.spring.autoconfigure.web.exception;
 
-import cn.javaer.snippets.spring.web.exception.DefinedErrorInfo;
+import cn.javaer.snippets.exception.DefinedErrorInfo;
 import cn.javaer.snippets.spring.web.exception.ErrorInfoController;
 import cn.javaer.snippets.spring.web.exception.ErrorInfoExtractor;
 import cn.javaer.snippets.spring.web.exception.GlobalErrorAttributes;

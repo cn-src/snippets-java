@@ -1,5 +1,6 @@
 package cn.javaer.snippets.spring.web.exception;
 
+import cn.javaer.snippets.exception.RuntimeErrorInfo;
 import cn.javaer.snippets.spring.web.DefaultAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

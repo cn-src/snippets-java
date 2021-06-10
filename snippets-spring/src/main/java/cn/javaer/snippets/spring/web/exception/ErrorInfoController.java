@@ -1,5 +1,6 @@
 package cn.javaer.snippets.spring.web.exception;
 
+import cn.javaer.snippets.exception.DefinedErrorInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.BeansException;

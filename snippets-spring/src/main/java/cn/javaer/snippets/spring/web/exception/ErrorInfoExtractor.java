@@ -1,5 +1,8 @@
 package cn.javaer.snippets.spring.web.exception;
 
+import cn.javaer.snippets.exception.DefinedErrorInfo;
+import cn.javaer.snippets.exception.Error;
+import cn.javaer.snippets.exception.RuntimeErrorInfo;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -234,4 +237,3 @@ public class ErrorInfoExtractor {
         return Collections.unmodifiableMap(internalErrorMapping);
     }
 }
-
