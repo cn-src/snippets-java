@@ -4,6 +4,7 @@ import cn.javaer.snippets.security.util.SecureUtils;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -49,5 +50,6 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().write("{\"token\":\"" + jwtToken + "\"}");
+        SecurityContextHolder.clearContext();
     }
 }
