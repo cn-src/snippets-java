@@ -3,6 +3,7 @@ package cn.javaer.snippets.security.web.authentication;
 import cn.javaer.snippets.security.util.SecureUtils;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -35,6 +36,7 @@ public class SecurityConfigurator {
         this.http.formLogin().successHandler(
             new JwtAuthenticationSuccessHandler(secret, expirationDuration, handler));
         this.http.formLogin().failureHandler(new RestAuthenticationFailureHandler());
+        this.http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return this;
     }
 
