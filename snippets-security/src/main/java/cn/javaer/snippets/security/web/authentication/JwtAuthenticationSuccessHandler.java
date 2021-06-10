@@ -44,7 +44,9 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
         final UserDetails principal = (UserDetails) upToken.getPrincipal();
         final Date exp = Date.from(LocalDateTime.now().plus(this.expirationDuration)
             .atZone(ZoneId.systemDefault()).toInstant());
-        final String jwtToken = SecureUtils.generateJwtToken(principal, exp, this.secret, this.handler);
+        final String jwtToken = SecureUtils.generateJwtToken(principal, exp, this.secret,
+            this.handler);
+        response.setContentType("application/json; charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().write("{\"token\":\"" + jwtToken + "\"}");
     }
