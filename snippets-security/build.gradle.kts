@@ -15,6 +15,7 @@ val jooqVersion: String by project
 val springdocVersion: String by project
 dependencies {
     api(project(":snippets-jooq"))
+    api(project(":snippets-spring-exception"))
     api("org.jooq:jooq:$jooqVersion")
 
     compileOnly("com.fasterxml.jackson.core:jackson-annotations")

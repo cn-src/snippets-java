@@ -1,4 +1,4 @@
-package cn.javaer.snippets.exception;
+package cn.javaer.snippets.spring.exception;
 
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;

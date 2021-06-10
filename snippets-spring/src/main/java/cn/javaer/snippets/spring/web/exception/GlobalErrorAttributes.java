@@ -16,7 +16,8 @@
 
 package cn.javaer.snippets.spring.web.exception;
 
-import cn.javaer.snippets.exception.RuntimeErrorInfo;
+import cn.javaer.snippets.spring.exception.ErrorMessageSource;
+import cn.javaer.snippets.spring.exception.RuntimeErrorInfo;
 import cn.javaer.snippets.spring.web.DefaultAppContext;
 import cn.javaer.snippets.util.TimeUtils;
 import org.jetbrains.annotations.NotNull;
@@ -182,8 +183,8 @@ public class GlobalErrorAttributes implements ErrorAttributes, HandlerExceptionR
             return;
         }
 
-        final String message = this.errorInfoExtractor.getMessageSourceAccessor()
-            .getMessage((String) errorAttributes.get("error"), "No message available");
+        final String message = ErrorMessageSource.getMessage((String) errorAttributes.get("error"),
+            "No message available");
         errorAttributes.put("message", message);
     }
 

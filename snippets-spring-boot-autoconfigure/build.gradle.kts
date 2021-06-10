@@ -8,6 +8,7 @@ dependencies {
     optionalApi(project(":snippets-jooq"))
     optionalApi(project(":snippets-p6spy"))
     optionalApi(project(":snippets-springdoc"))
+    optionalApi(project(":snippets-spring-exception"))
 
     optionalApi("org.springframework.boot:spring-boot-starter-web")
     optionalApi("org.springframework.boot:spring-boot-starter-data-jdbc")

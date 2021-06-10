@@ -1,4 +1,4 @@
-package cn.javaer.snippets.exception;
+package cn.javaer.snippets.spring.exception;
 
 import lombok.Value;
 import lombok.With;

@@ -1,6 +1,6 @@
 package cn.javaer.snippets.spring.autoconfigure.web.exception;
 
-import cn.javaer.snippets.exception.DefinedErrorInfo;
+import cn.javaer.snippets.spring.exception.DefinedErrorInfo;
 import cn.javaer.snippets.spring.web.exception.ErrorInfoController;
 import cn.javaer.snippets.spring.web.exception.ErrorInfoExtractor;
 import cn.javaer.snippets.spring.web.exception.GlobalErrorAttributes;
@@ -17,14 +17,11 @@ import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.View;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 /**
  * @author cn-src
@@ -52,22 +49,8 @@ public class ExceptionAutoConfiguration implements InitializingBean {
     }
 
     @Bean
-    ResourceBundleMessageSource errorsMessageSource() {
-        final ResourceBundleMessageSource source = new ResourceBundleMessageSource();
-        source.setDefaultEncoding("UTF-8");
-        try {
-            ResourceBundle.getBundle("errors-messages");
-            source.setBasenames("errors-messages", "default-errors-messages");
-        }
-        catch (final MissingResourceException ignore) {
-            source.setBasenames("default-errors-messages");
-        }
-        return source;
-    }
-
-    @Bean
-    ErrorInfoExtractor errorInfoExtractor(final ResourceBundleMessageSource messageSource) {
-        return new ErrorInfoExtractor(this.useMapping, messageSource);
+    ErrorInfoExtractor errorInfoExtractor() {
+        return new ErrorInfoExtractor(this.useMapping);
     }
 
     @Bean

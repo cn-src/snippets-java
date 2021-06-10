@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     api(project(":snippets-core"))
+    optionalApi(project(":snippets-spring-exception"))
     optionalApi(project(":snippets-jackson"))
 
     optionalApi("org.springframework.boot:spring-boot-starter-web")
