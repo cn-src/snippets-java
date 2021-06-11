@@ -2,6 +2,7 @@ package cn.javaer.snippets.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
@@ -95,6 +96,7 @@ public class TreeNode implements Cloneable {
         return this;
     }
 
+    @JsonIgnore
     public boolean isEmptyChildren() {
         return this.children == null || this.children.isEmpty();
     }
