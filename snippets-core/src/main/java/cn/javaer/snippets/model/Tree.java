@@ -21,6 +21,26 @@ import java.util.function.Supplier;
 public interface Tree {
 
     /**
+     * 将 getters 转换成一个获取所有值的函数.
+     *
+     * @param getters getters
+     * @param <E> e
+     *
+     * @return Function
+     */
+    @SafeVarargs
+    static <E> Function<E, String[]> toConverter(final Function<E, String>... getters) {
+        Objects.requireNonNull(getters);
+        return e -> {
+            final String[] value = new String[getters.length];
+            for (int i = 0; i < getters.length; i++) {
+                value[i] = getters[i].apply(e);
+            }
+            return value;
+        };
+    }
+
+    /**
      * 模型列表转树结构列表.
      *
      * @param <E> 模型的范型
@@ -33,7 +53,7 @@ public interface Tree {
     @SafeVarargs
     static <E> List<TreeNode> of(final List<E> models,
                                  final Function<E, String>... getters) {
-        return of(models, TreeNodeHandler.EMPTY, false, getters);
+        return of(models, TreeNodeHandler.EMPTY, false, toConverter(getters));
     }
 
     /**
@@ -49,7 +69,7 @@ public interface Tree {
     @SafeVarargs
     static <E> List<TreeNode> ofIgnoreEmpty(final List<E> models,
                                             final Function<E, String>... getters) {
-        return of(models, TreeNodeHandler.EMPTY, true, getters);
+        return of(models, TreeNodeHandler.EMPTY, true, toConverter(getters));
     }
 
     /**
@@ -66,7 +86,7 @@ public interface Tree {
     static <E> List<TreeNode> of(final List<E> models,
                                  final TreeNodeHandler<E> handler,
                                  final Function<E, String>... getters) {
-        return of(models, handler, false, getters);
+        return of(models, handler, false, toConverter(getters));
     }
 
     /**
@@ -83,7 +103,73 @@ public interface Tree {
     static <E> List<TreeNode> ofIgnoreEmpty(final List<E> models,
                                             final TreeNodeHandler<E> handler,
                                             final Function<E, String>... getters) {
-        return of(models, handler, true, getters);
+        return of(models, handler, true, toConverter(getters));
+    }
+
+    /**
+     * 模型列表转树结构列表.
+     *
+     * @param <E> 模型的范型
+     * @param models 模型列表
+     * @param converter 要转换的数值
+     *
+     * @return TreeNode List
+     */
+    @SuppressWarnings("unchecked")
+    static <E> List<TreeNode> of(final List<E> models,
+                                 final Function<E, String[]> converter) {
+
+        return of(models, TreeNodeHandler.EMPTY, false, converter);
+    }
+
+    /**
+     * 模型列表转树结构列表.
+     *
+     * @param <E> 模型的范型
+     * @param models 模型列表
+     * @param converter 要转换的数值
+     * @param handler TreeNode 自定义处理器
+     *
+     * @return TreeNode List
+     */
+    static <E> List<TreeNode> of(final List<E> models,
+                                 final Function<E, String[]> converter,
+                                 final TreeNodeHandler<E> handler) {
+
+        return of(models, handler, false, converter);
+    }
+
+    /**
+     * 模型列表转树结构列表.
+     *
+     * @param <E> 模型的范型
+     * @param models 模型列表
+     * @param converter 要转换的数值
+     *
+     * @return TreeNode List
+     */
+    @SuppressWarnings("unchecked")
+    static <E> List<TreeNode> ofIgnoreEmpty(final List<E> models,
+                                            final Function<E, String[]> converter) {
+
+        return of(models, TreeNodeHandler.EMPTY, true, converter);
+    }
+
+    /**
+     * 模型列表转树结构列表.
+     *
+     * @param <E> 模型的范型
+     * @param models 模型列表
+     * @param converter 要转换的数值
+     * @param handler TreeNode 自定义处理器
+     *
+     * @return TreeNode List
+     */
+    static <E> List<TreeNode> ofIgnoreEmpty(final List<E> models,
+                                            final Function<E, String[]> converter,
+                                            final TreeNodeHandler<E> handler) {
+
+        return of(models, handler, true, converter);
     }
 
     /**
@@ -93,16 +179,15 @@ public interface Tree {
      * @param models 二维表结构的实体数据
      * @param handler 额外的附加处理，
      * @param ignoreEmpty 是否忽略空值
-     * @param getters 实体的哪些字段 getter 用于转换成树
+     * @param converter 获取用于 title 的转换器
      *
      * @return 根节点的所有子节点 list
      */
-    @SafeVarargs
     static <E> List<TreeNode> of(final List<E> models,
                                  final TreeNodeHandler<E> handler,
                                  final boolean ignoreEmpty,
-                                 final Function<E, String>... getters) {
-        Objects.requireNonNull(getters);
+                                 final Function<E, String[]> converter) {
+        Objects.requireNonNull(converter);
 
         if (models == null || models.isEmpty()) {
             return Collections.emptyList();
@@ -113,9 +198,8 @@ public interface Tree {
 
         for (final E row : models) {
             int depth = 1;
-            for (final Function<E, String> fn : getters) {
-                final String cell = fn.apply(row);
-
+            final String[] collect = converter.apply(row);
+            for (final String cell : collect) {
                 final Optional<TreeNode> first = Optional.ofNullable(current.getChildren())
                     .orElseGet(Collections::emptyList)
                     .stream()
