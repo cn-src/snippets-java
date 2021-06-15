@@ -13,5 +13,6 @@ dependencies {
     testImplementation("com.h2database:h2")
     testImplementation("org.springframework.data:spring-data-jdbc")
     testImplementation("org.testcontainers:postgresql")
+    testImplementation("io.zonky.test:embedded-postgres")
     testImplementation("org.testcontainers:junit-jupiter")
 }
