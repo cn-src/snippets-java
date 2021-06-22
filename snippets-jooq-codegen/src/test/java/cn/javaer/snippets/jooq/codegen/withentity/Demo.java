@@ -13,15 +13,19 @@ import java.time.LocalDateTime;
  */
 @Value
 public class Demo {
+    public enum Key {
+        DEMO
+    }
+
     @Id
     Long id;
-
+    Key key;
     String name;
 
     String[] org;
 
     JSONB jsonb;
-    
+
     Duration duration;
 
     @CreatedDate

@@ -58,7 +58,7 @@ public class ColumnMeta {
     }
 
     public ColumnMeta(final FieldInfo fieldInfo) {
-        this(fieldInfo.getName(), fieldInfo.getTypeDescriptor().toString(),
+        this(fieldInfo.getName(), fieldInfo.getClassName(),
             StrUtils.defaultIfEmpty(NameUtils.columnValue(fieldInfo),
                 StrUtils.toSnakeLower(fieldInfo.getName())),
             fieldInfo.hasAnnotation("org.springframework.data.annotation.Id"),
@@ -78,9 +78,10 @@ public class ColumnMeta {
     }
 
     static String enumConverter(final String fieldType) {
+        final String type = fieldType.replace('$', '.');
         return String.format("new org.jooq.impl.EnumConverter<java.lang.String, %s>(java.lang" +
                 ".String.class, %s.class)",
-            fieldType, fieldType);
+            type, type);
     }
 
     static String customFieldType(final String fieldType) {
