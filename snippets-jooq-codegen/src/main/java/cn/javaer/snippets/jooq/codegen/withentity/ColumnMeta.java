@@ -41,9 +41,9 @@ public class ColumnMeta {
                       final boolean createdBy, final boolean createdDate, final boolean readOnly) {
         this.fieldName = fieldName;
         this.getterName = ReflectionUtils.toGetterName(fieldName, fieldType);
-        this.fieldType = type(fieldType);
-        this.sqlType = TypeMapping.get(this.fieldType);
-        this.converter = converter(this.fieldType);
+        this.fieldType = type(fieldType).replace('$', '.');
+        this.sqlType = TypeMapping.get(type(fieldType));
+        this.converter = converter(type(fieldType));
         this.columnName = columnName;
         this.tableFieldName = StrUtils.toSnakeUpper(this.fieldName);
         this.customField = isCustomField(fieldType);
