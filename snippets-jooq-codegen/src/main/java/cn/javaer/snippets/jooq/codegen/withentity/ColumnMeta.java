@@ -5,9 +5,12 @@ import cn.javaer.snippets.jooq.field.JsonbField;
 import cn.javaer.snippets.util.ReflectionUtils;
 import cn.javaer.snippets.util.StrUtils;
 import io.github.classgraph.FieldInfo;
+import io.github.classgraph.TypeSignature;
 import lombok.Value;
 import org.jooq.JSONB;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.Duration;
 
 /**
@@ -58,7 +61,7 @@ public class ColumnMeta {
     }
 
     public ColumnMeta(final FieldInfo fieldInfo) {
-        this(fieldInfo.getName(), fieldInfo.getClassName(),
+        this(fieldInfo.getName(), className(fieldInfo),
             StrUtils.defaultIfEmpty(NameUtils.columnValue(fieldInfo),
                 StrUtils.toSnakeLower(fieldInfo.getName())),
             fieldInfo.hasAnnotation("org.springframework.data.annotation.Id"),
@@ -82,6 +85,18 @@ public class ColumnMeta {
         return String.format("new org.jooq.impl.EnumConverter<java.lang.String, %s>(java.lang" +
                 ".String.class, %s.class)",
             type, type);
+    }
+
+    static String className(final FieldInfo fieldInfo) {
+        final TypeSignature td = fieldInfo.getTypeDescriptor();
+        try {
+            final Method getClassName = td.getClass().getDeclaredMethod("getClassName");
+            getClassName.setAccessible(true);
+            return (String) getClassName.invoke(td);
+        }
+        catch (final NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     static String customFieldType(final String fieldType) {
