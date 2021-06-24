@@ -11,7 +11,7 @@ class PageParamTest {
 
     @Test
     void name() {
-        final PageParam pageParam = new PageParam(1, 20);
+        final PageParam pageParam = PageParam.of(1, 20);
         assertThat(pageParam.getOffset()).isEqualTo(0L);
     }
 }
