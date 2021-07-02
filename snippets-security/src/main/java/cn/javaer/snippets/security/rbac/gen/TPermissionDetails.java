@@ -85,11 +85,6 @@ public class TPermissionDetails extends TableImpl<Record> implements TableMeta<P
     }
 
     @Override
-    public Optional<ColumnMeta<PermissionDetails, java.lang.Long>> idGenerator() {
-        return Optional.of(this._idMeta);
-    }
-
-    @Override
     public Optional<ColumnMeta<PermissionDetails, java.lang.Long>> getId() {
         return Optional.of(this._idMeta);
     }

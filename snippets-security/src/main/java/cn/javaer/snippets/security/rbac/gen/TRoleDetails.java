@@ -83,11 +83,6 @@ public class TRoleDetails extends TableImpl<Record> implements TableMeta<RoleDet
     }
 
     @Override
-    public Optional<ColumnMeta<RoleDetails, java.lang.Long>> idGenerator() {
-        return Optional.of(this._idMeta);
-    }
-
-    @Override
     public Optional<ColumnMeta<RoleDetails, java.lang.Long>> getId() {
         return Optional.of(this._idMeta);
     }
