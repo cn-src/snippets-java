@@ -1,9 +1,13 @@
+
 // @formatter:off
 package cn.javaer.snippets.security.rbac.gen;
 
-import cn.javaer.snippets.jooq.ColumnMeta;
-import cn.javaer.snippets.jooq.TableMeta;
-import cn.javaer.snippets.security.rbac.RolePermission;
+import javax.annotation.Generated;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Field;
 import org.jooq.Name;
@@ -14,10 +18,9 @@ import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
-import javax.annotation.Generated;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Function;
+import cn.javaer.snippets.jooq.TableMeta;
+import cn.javaer.snippets.jooq.ColumnMeta;
+import cn.javaer.snippets.security.rbac.RolePermission;
 
 /**
  * This class is automatic generated.

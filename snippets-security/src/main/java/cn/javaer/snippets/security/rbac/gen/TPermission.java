@@ -1,9 +1,13 @@
+
 // @formatter:off
 package cn.javaer.snippets.security.rbac.gen;
 
-import cn.javaer.snippets.jooq.ColumnMeta;
-import cn.javaer.snippets.jooq.TableMeta;
-import cn.javaer.snippets.security.rbac.Permission;
+import javax.annotation.Generated;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Field;
 import org.jooq.Name;
@@ -14,11 +18,9 @@ import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
-import javax.annotation.Generated;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
+import cn.javaer.snippets.jooq.TableMeta;
+import cn.javaer.snippets.jooq.ColumnMeta;
+import cn.javaer.snippets.security.rbac.Permission;
 
 /**
  * This class is automatic generated.
@@ -26,24 +28,26 @@ import java.util.function.Function;
 @SuppressWarnings({"ALL"})
 
 @Generated("cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool")
-public class TPermission extends TableImpl<Record> implements TableMeta<Permission, Long, Void> {
+public class TPermission extends TableImpl<Record> implements TableMeta<Permission, java.lang.Long, Void> {
 
     public static final TPermission PERMISSION = new TPermission();
 
-    public static final Field<?>[] PERMISSION_FIELDS = new Field[]{ PERMISSION.ID,PERMISSION.NAME,PERMISSION.AUTHORITY };
+    public static final Field<?>[] PERMISSION_FIELDS = new Field[]{ PERMISSION.ID,PERMISSION.NAME,PERMISSION.GROUP,PERMISSION.AUTHORITY };
 
 
     public final TableField<Record, java.lang.Long> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.BIGINT, this, "");
 
     public final TableField<Record, java.lang.String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
 
+    public final TableField<Record, java.lang.String> GROUP = createField(DSL.name("group"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
+
     public final TableField<Record, java.lang.String> AUTHORITY = createField(DSL.name("authority"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
 
     private final Table<?> _table = DSL.table(getUnqualifiedName());
 
-    private final List<Field<?>> _selectFields = Arrays.asList(this.ID,this.NAME,this.AUTHORITY);
+    private final List<Field<?>> _selectFields = Arrays.asList(this.ID,this.NAME,this.GROUP,this.AUTHORITY);
 
-    private final List<ColumnMeta<Permission, ?>> _savedColumnMetas = Arrays.asList(new ColumnMeta((Function<Permission, java.lang.Long>) Permission::getId, this.ID),new ColumnMeta((Function<Permission, java.lang.String>) Permission::getName, this.NAME),new ColumnMeta((Function<Permission, java.lang.String>) Permission::getAuthority, this.AUTHORITY));
+    private final List<ColumnMeta<Permission, ?>> _savedColumnMetas = Arrays.asList(new ColumnMeta((Function<Permission, java.lang.String>) Permission::getName, this.NAME),new ColumnMeta((Function<Permission, java.lang.String>) Permission::getGroup, this.GROUP),new ColumnMeta((Function<Permission, java.lang.String>) Permission::getAuthority, this.AUTHORITY));
 
     private final ColumnMeta<Permission, java.lang.Long> _idMeta = new ColumnMeta<>(Permission::getId, this.ID);
 
@@ -72,11 +76,6 @@ public class TPermission extends TableImpl<Record> implements TableMeta<Permissi
     @Override
     public Class getEntityClass() {
         return Permission.class;
-    }
-
-    @Override
-    public Optional<ColumnMeta<Permission, java.lang.Long>> idGenerator() {
-        return Optional.of(this._idMeta);
     }
 
     @Override

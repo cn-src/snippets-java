@@ -1,9 +1,13 @@
+
 // @formatter:off
 package cn.javaer.snippets.security.rbac.gen;
 
-import cn.javaer.snippets.jooq.ColumnMeta;
-import cn.javaer.snippets.jooq.TableMeta;
-import cn.javaer.snippets.security.rbac.Role;
+import javax.annotation.Generated;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Field;
 import org.jooq.Name;
@@ -14,11 +18,9 @@ import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
-import javax.annotation.Generated;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
+import cn.javaer.snippets.jooq.TableMeta;
+import cn.javaer.snippets.jooq.ColumnMeta;
+import cn.javaer.snippets.security.rbac.Role;
 
 /**
  * This class is automatic generated.
@@ -26,7 +28,7 @@ import java.util.function.Function;
 @SuppressWarnings({"ALL"})
 
 @Generated("cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool")
-public class TRole extends TableImpl<Record> implements TableMeta<Role, Long, Void> {
+public class TRole extends TableImpl<Record> implements TableMeta<Role, java.lang.Long, Void> {
 
     public static final TRole ROLE = new TRole();
 
@@ -41,7 +43,7 @@ public class TRole extends TableImpl<Record> implements TableMeta<Role, Long, Vo
 
     private final List<Field<?>> _selectFields = Arrays.asList(this.ID,this.NAME);
 
-    private final List<ColumnMeta<Role, ?>> _savedColumnMetas = Arrays.asList(new ColumnMeta((Function<Role, java.lang.Long>) Role::getId, this.ID),new ColumnMeta((Function<Role, java.lang.String>) Role::getName, this.NAME));
+    private final List<ColumnMeta<Role, ?>> _savedColumnMetas = Arrays.asList(new ColumnMeta((Function<Role, java.lang.String>) Role::getName, this.NAME));
 
     private final ColumnMeta<Role, java.lang.Long> _idMeta = new ColumnMeta<>(Role::getId, this.ID);
 
@@ -70,11 +72,6 @@ public class TRole extends TableImpl<Record> implements TableMeta<Role, Long, Vo
     @Override
     public Class getEntityClass() {
         return Role.class;
-    }
-
-    @Override
-    public Optional<ColumnMeta<Role, java.lang.Long>> idGenerator() {
-        return Optional.of(this._idMeta);
     }
 
     @Override

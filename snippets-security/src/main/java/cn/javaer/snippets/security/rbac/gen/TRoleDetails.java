@@ -1,9 +1,13 @@
+
 // @formatter:off
 package cn.javaer.snippets.security.rbac.gen;
 
-import cn.javaer.snippets.jooq.ColumnMeta;
-import cn.javaer.snippets.jooq.TableMeta;
-import cn.javaer.snippets.security.rbac.RoleDetails;
+import javax.annotation.Generated;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Field;
 import org.jooq.Name;
@@ -14,11 +18,9 @@ import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
-import javax.annotation.Generated;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
+import cn.javaer.snippets.jooq.TableMeta;
+import cn.javaer.snippets.jooq.ColumnMeta;
+import cn.javaer.snippets.security.rbac.RoleDetails;
 
 /**
  * This class is automatic generated.
@@ -26,7 +28,7 @@ import java.util.function.Function;
 @SuppressWarnings({"ALL"})
 
 @Generated("cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool")
-public class TRoleDetails extends TableImpl<Record> implements TableMeta<RoleDetails, Long, Long> {
+public class TRoleDetails extends TableImpl<Record> implements TableMeta<RoleDetails, java.lang.Long, java.lang.Long> {
 
     public static final TRoleDetails ROLE_DETAILS = new TRoleDetails();
 
@@ -47,7 +49,7 @@ public class TRoleDetails extends TableImpl<Record> implements TableMeta<RoleDet
 
     private final List<Field<?>> _selectFields = Arrays.asList(this.ID,this.NAME,this.DESCRIPTION,this.CREATED_DATE,this.CREATED_BY_ID);
 
-    private final List<ColumnMeta<RoleDetails, ?>> _savedColumnMetas = Arrays.asList(new ColumnMeta((Function<RoleDetails, java.lang.Long>) RoleDetails::getId, this.ID),new ColumnMeta((Function<RoleDetails, java.lang.String>) RoleDetails::getName, this.NAME),new ColumnMeta((Function<RoleDetails, java.lang.String>) RoleDetails::getDescription, this.DESCRIPTION));
+    private final List<ColumnMeta<RoleDetails, ?>> _savedColumnMetas = Arrays.asList(new ColumnMeta((Function<RoleDetails, java.lang.String>) RoleDetails::getName, this.NAME),new ColumnMeta((Function<RoleDetails, java.lang.String>) RoleDetails::getDescription, this.DESCRIPTION));
 
     private final ColumnMeta<RoleDetails, java.lang.Long> _idMeta = new ColumnMeta<>(RoleDetails::getId, this.ID);
 

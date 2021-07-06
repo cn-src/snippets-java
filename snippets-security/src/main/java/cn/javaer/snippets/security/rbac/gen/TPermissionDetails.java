@@ -1,9 +1,13 @@
+
 // @formatter:off
 package cn.javaer.snippets.security.rbac.gen;
 
-import cn.javaer.snippets.jooq.ColumnMeta;
-import cn.javaer.snippets.jooq.TableMeta;
-import cn.javaer.snippets.security.rbac.PermissionDetails;
+import javax.annotation.Generated;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jooq.Field;
 import org.jooq.Name;
@@ -14,11 +18,9 @@ import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
-import javax.annotation.Generated;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
+import cn.javaer.snippets.jooq.TableMeta;
+import cn.javaer.snippets.jooq.ColumnMeta;
+import cn.javaer.snippets.security.rbac.PermissionDetails;
 
 /**
  * This class is automatic generated.
@@ -26,30 +28,32 @@ import java.util.function.Function;
 @SuppressWarnings({"ALL"})
 
 @Generated("cn.javaer.snippets.jooq.codegen.withentity.CodeGenTool")
-public class TPermissionDetails extends TableImpl<Record> implements TableMeta<PermissionDetails, Long, Long> {
+public class TPermissionDetails extends TableImpl<Record> implements TableMeta<PermissionDetails, java.lang.Long, java.lang.Long> {
 
     public static final TPermissionDetails PERMISSION_DETAILS = new TPermissionDetails();
 
-    public static final Field<?>[] PERMISSION_DETAILS_FIELDS = new Field[]{ PERMISSION_DETAILS.ID,PERMISSION_DETAILS.NAME,PERMISSION_DETAILS.AUTHORITY,PERMISSION_DETAILS.DESCRIPTION,PERMISSION_DETAILS.CREATED_DATE,PERMISSION_DETAILS.CREATED_BY_ID };
+    public static final Field<?>[] PERMISSION_DETAILS_FIELDS = new Field[]{ PERMISSION_DETAILS.ID,PERMISSION_DETAILS.NAME,PERMISSION_DETAILS.GROUP,PERMISSION_DETAILS.AUTHORITY,PERMISSION_DETAILS.DESCRIPTION,PERMISSION_DETAILS.CREATED_BY_ID,PERMISSION_DETAILS.CREATED_DATE };
 
 
     public final TableField<Record, java.lang.Long> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.BIGINT, this, "");
 
     public final TableField<Record, java.lang.String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
 
+    public final TableField<Record, java.lang.String> GROUP = createField(DSL.name("group"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
+
     public final TableField<Record, java.lang.String> AUTHORITY = createField(DSL.name("authority"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
 
     public final TableField<Record, java.lang.String> DESCRIPTION = createField(DSL.name("description"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
 
-    public final TableField<Record, java.time.LocalDateTime> CREATED_DATE = createField(DSL.name("created_date"), org.jooq.impl.SQLDataType.LOCALDATETIME, this, "");
-
     public final TableField<Record, java.lang.Long> CREATED_BY_ID = createField(DSL.name("created_by_id"), org.jooq.impl.SQLDataType.BIGINT, this, "");
+
+    public final TableField<Record, java.time.LocalDateTime> CREATED_DATE = createField(DSL.name("created_date"), org.jooq.impl.SQLDataType.LOCALDATETIME, this, "");
 
     private final Table<?> _table = DSL.table(getUnqualifiedName());
 
-    private final List<Field<?>> _selectFields = Arrays.asList(this.ID,this.NAME,this.AUTHORITY,this.DESCRIPTION,this.CREATED_DATE,this.CREATED_BY_ID);
+    private final List<Field<?>> _selectFields = Arrays.asList(this.ID,this.NAME,this.GROUP,this.AUTHORITY,this.DESCRIPTION,this.CREATED_BY_ID,this.CREATED_DATE);
 
-    private final List<ColumnMeta<PermissionDetails, ?>> _savedColumnMetas = Arrays.asList(new ColumnMeta((Function<PermissionDetails, java.lang.Long>) PermissionDetails::getId, this.ID),new ColumnMeta((Function<PermissionDetails, java.lang.String>) PermissionDetails::getName, this.NAME),new ColumnMeta((Function<PermissionDetails, java.lang.String>) PermissionDetails::getAuthority, this.AUTHORITY),new ColumnMeta((Function<PermissionDetails, java.lang.String>) PermissionDetails::getDescription, this.DESCRIPTION));
+    private final List<ColumnMeta<PermissionDetails, ?>> _savedColumnMetas = Arrays.asList(new ColumnMeta((Function<PermissionDetails, java.lang.String>) PermissionDetails::getName, this.NAME),new ColumnMeta((Function<PermissionDetails, java.lang.String>) PermissionDetails::getGroup, this.GROUP),new ColumnMeta((Function<PermissionDetails, java.lang.String>) PermissionDetails::getAuthority, this.AUTHORITY),new ColumnMeta((Function<PermissionDetails, java.lang.String>) PermissionDetails::getDescription, this.DESCRIPTION));
 
     private final ColumnMeta<PermissionDetails, java.lang.Long> _idMeta = new ColumnMeta<>(PermissionDetails::getId, this.ID);
 
