@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.io.Serializable;
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
 public class PermissionDetails implements Serializable {
     private static final long serialVersionUID = -219244584579949608L;
     @Id
+    @ReadOnlyProperty
     private Long id;
 
     @Schema(name = "名称")

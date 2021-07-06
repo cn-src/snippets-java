@@ -11,6 +11,7 @@ import lombok.Singular;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -34,6 +35,7 @@ public class RoleDetails implements Serializable {
     private static final long serialVersionUID = -388063889316870772L;
 
     @Id
+    @ReadOnlyProperty
     @EqualsAndHashCode.Include
     private Long id;
 

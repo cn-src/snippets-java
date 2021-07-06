@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 import java.io.Serializable;
 
@@ -25,6 +26,7 @@ import java.io.Serializable;
 public class Permission implements Serializable {
     private static final long serialVersionUID = 7277469717673633139L;
     @Id
+    @ReadOnlyProperty
     private Long id;
 
     @Schema(name = "名称")
