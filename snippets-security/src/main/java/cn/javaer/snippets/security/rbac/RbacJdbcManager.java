@@ -49,6 +49,7 @@ public class RbacJdbcManager {
         return userOpt;
     }
 
+    // TODO 无法查出数据
     public List<Permission> findPermissionByUser(final UserEntity user) {
         return this.crud.dsl().select(PERMISSION_FIELDS)
             .from(PERMISSION, USER_PERMISSION, ROLE_PERMISSION)
