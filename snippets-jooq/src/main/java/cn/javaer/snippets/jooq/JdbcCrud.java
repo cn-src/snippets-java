@@ -6,8 +6,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.SelectConditionStep;
 import org.jooq.impl.DSL;
 import org.jooq.tools.jdbc.JDBCUtils;
 
@@ -101,11 +99,7 @@ public class JdbcCrud {
     public <T> List<T>
     findAll(final TableMeta<T, ?, ?> meta, final Condition condition) {
         Objects.requireNonNull(meta);
-        final SelectConditionStep<Record> step = this.crudStep.dsl().select(meta.selectFields())
-            .from(meta.getTable())
-            .where(condition);
-
-        return this.crudStep.orderBy(meta, step).fetchInto(meta.getEntityClass());
+        return this.crudStep.findAllStep(meta, condition).fetchInto(meta.getEntityClass());
     }
 
     public <T> List<T>
@@ -132,8 +126,7 @@ public class JdbcCrud {
                      final Condition condition, final PageParam pageParam) {
         Objects.requireNonNull(meta);
 
-        final List<T> content = this.crudStep.findAllByCreatorStep(meta)
-            .and(condition)
+        final List<T> content = this.crudStep.findAllByCreatorStep(meta, condition)
             .offset(pageParam.getOffset()).limit(pageParam.getSize())
             .fetchInto(meta.getEntityClass());
         final int total = this.crudStep.dsl().fetchCount(meta.getTable(),

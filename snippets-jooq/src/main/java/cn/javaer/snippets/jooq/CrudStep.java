@@ -90,41 +90,53 @@ public class CrudStep {
             .where(condition);
     }
 
-    public @NotNull SelectLimitStep<Record>
+    public @NotNull SelectJoinStep<Record>
     findAllStep(final TableMeta<?, ?, ?> meta) {
 
-        final SelectJoinStep<Record> step = this.dsl.select(meta.selectFields())
+        return this.dsl.select(meta.selectFields())
             .from(meta.getTable());
-        return this.orderBy(meta, step);
+    }
+
+    public @NotNull SelectConditionStep<Record>
+    findAllStep(final TableMeta<?, ?, ?> meta, final Condition condition) {
+
+        return this.dsl.select(meta.selectFields())
+            .from(meta.getTable()).where(condition);
     }
 
     public @NotNull SelectWithTiesAfterOffsetStep<Record>
     findAllStep(final TableMeta<?, ?, ?> meta, final PageParam pageParam) {
-        final SelectJoinStep<Record> step = this.dsl.select(meta.selectFields())
-            .from(meta.getTable());
-        return this.orderBy(meta, step).offset(pageParam.getOffset())
+
+        return this.dsl.select(meta.selectFields())
+            .from(meta.getTable())
+            .offset(pageParam.getOffset())
             .limit(pageParam.getSize());
     }
 
     public @NotNull SelectWithTiesAfterOffsetStep<Record>
     findAllStep(final TableMeta<?, ?, ?> meta,
                 final Condition condition, final PageParam pageParam) {
-        final SelectConditionStep<Record> step = this.dsl.select(meta.selectFields())
+
+        return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
-            .where(condition);
-        return this.orderBy(meta, step).offset(pageParam.getOffset())
+            .where(condition)
+            .offset(pageParam.getOffset())
             .limit(pageParam.getSize());
     }
 
-    public @NotNull <A> SelectLimitStep<Record>
+    public @NotNull <A> SelectConditionStep<Record>
     findAllByCreatorStep(final TableMeta<?, ?, A> meta) {
 
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
-        final SelectConditionStep<Record> step = this.dsl.select(meta.selectFields())
+        return this.dsl.select(meta.selectFields())
             .from(meta.getTable())
             .where(meta.createdBy().getColumn().eq(auditor));
-        return this.orderBy(meta, step);
+    }
+
+    public @NotNull <A> SelectConditionStep<Record>
+    findAllByCreatorStep(final TableMeta<?, ?, A> meta, final Condition condition) {
+        return this.findAllByCreatorStep(meta).and(condition);
     }
 
     /**
