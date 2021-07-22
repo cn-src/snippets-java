@@ -267,8 +267,8 @@ public class CrudStep {
         return meta.createdBy().getColumn().eq(auditor);
     }
 
-    private SelectLimitStep<Record> orderBy(final TableMeta<?, ?, ?> meta,
-                                            final SelectOrderByStep<Record> step) {
+    public SelectLimitStep<Record> orderBy(final TableMeta<?, ?, ?> meta,
+                                           final SelectOrderByStep<Record> step) {
         if (meta.getUpdatedDate().isPresent()) {
             return step.orderBy(meta.updatedDate().getColumn());
         }
