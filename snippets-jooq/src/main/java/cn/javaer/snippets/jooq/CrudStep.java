@@ -58,20 +58,20 @@ public class CrudStep {
      * 根据 id 和创建者查询.
      *
      * @param <ID> id 泛型
-     * @param id the id
      * @param meta the meta
+     * @param id the id
      *
      * @return the select step
      */
-    public <ID, A> SelectConditionStep<Record>
+    public <ID, A> SelectLimitStep<Record>
     findByIdAndCreatorStep(final TableMeta<?, ID, A> meta, final @NotNull ID id) {
 
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
-        return this.dsl.select(meta.selectFields())
+        return this.orderBy(meta, this.dsl.select(meta.selectFields())
             .from(meta.getTable())
             .where(meta.id().getColumn().eq(id))
-            .and(meta.createdBy().getColumn().eq(auditor));
+            .and(meta.createdBy().getColumn().eq(auditor)));
     }
 
     /**
@@ -90,26 +90,26 @@ public class CrudStep {
             .where(condition);
     }
 
-    public @NotNull SelectJoinStep<Record>
+    public SelectLimitStep<Record>
     findAllStep(final TableMeta<?, ?, ?> meta) {
 
-        return this.dsl.select(meta.selectFields())
-            .from(meta.getTable());
+        return this.orderBy(meta, this.dsl.select(meta.selectFields())
+            .from(meta.getTable()));
     }
 
-    public @NotNull SelectConditionStep<Record>
+    public SelectLimitStep<Record>
     findAllStep(final TableMeta<?, ?, ?> meta, final Condition condition) {
 
-        return this.dsl.select(meta.selectFields())
-            .from(meta.getTable()).where(condition);
+        return this.orderBy(meta, this.dsl.select(meta.selectFields())
+            .from(meta.getTable()).where(condition));
     }
 
     public @NotNull SelectWithTiesAfterOffsetStep<Record>
     findAllStep(final TableMeta<?, ?, ?> meta, final PageParam pageParam) {
 
-        return this.dsl.select(meta.selectFields())
-            .from(meta.getTable())
-            .offset(pageParam.getOffset())
+        final SelectJoinStep<Record> step = this.dsl.select(meta.selectFields())
+            .from(meta.getTable());
+        return this.orderBy(meta, step).offset(pageParam.getOffset())
             .limit(pageParam.getSize());
     }
 
@@ -117,26 +117,33 @@ public class CrudStep {
     findAllStep(final TableMeta<?, ?, ?> meta,
                 final Condition condition, final PageParam pageParam) {
 
-        return this.dsl.select(meta.selectFields())
+        final SelectConditionStep<Record> step = this.dsl.select(meta.selectFields())
             .from(meta.getTable())
-            .where(condition)
-            .offset(pageParam.getOffset())
+            .where(condition);
+        return this.orderBy(meta, step).offset(pageParam.getOffset())
             .limit(pageParam.getSize());
     }
 
-    public @NotNull <A> SelectConditionStep<Record>
+    public <A> SelectLimitStep<Record>
     findAllByCreatorStep(final TableMeta<?, ?, A> meta) {
 
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
-        return this.dsl.select(meta.selectFields())
+        final SelectConditionStep<Record> step = this.dsl.select(meta.selectFields())
             .from(meta.getTable())
             .where(meta.createdBy().getColumn().eq(auditor));
+        return this.orderBy(meta, step);
     }
 
-    public @NotNull <A> SelectConditionStep<Record>
+    public <A> SelectLimitStep<Record>
     findAllByCreatorStep(final TableMeta<?, ?, A> meta, final Condition condition) {
-        return this.findAllByCreatorStep(meta).and(condition);
+        @SuppressWarnings("unchecked")
+        final A auditor = (A) this.auditorAware.requiredAuditor();
+        final SelectConditionStep<Record> step = this.dsl.select(meta.selectFields())
+            .from(meta.getTable())
+            .where(meta.createdBy().getColumn().eq(auditor))
+            .and(condition);
+        return this.orderBy(meta, step);
     }
 
     /**
