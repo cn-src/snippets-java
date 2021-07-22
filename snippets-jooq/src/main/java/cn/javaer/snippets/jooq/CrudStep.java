@@ -9,6 +9,8 @@ import org.jooq.InsertValuesStepN;
 import org.jooq.Record;
 import org.jooq.SelectConditionStep;
 import org.jooq.SelectJoinStep;
+import org.jooq.SelectLimitStep;
+import org.jooq.SelectOrderByStep;
 import org.jooq.SelectWithTiesAfterOffsetStep;
 import org.jooq.UpdateConditionStep;
 
@@ -88,41 +90,41 @@ public class CrudStep {
             .where(condition);
     }
 
-    public @NotNull SelectJoinStep<Record>
+    public @NotNull SelectLimitStep<Record>
     findAllStep(final TableMeta<?, ?, ?> meta) {
 
-        return this.dsl.select(meta.selectFields())
+        final SelectJoinStep<Record> step = this.dsl.select(meta.selectFields())
             .from(meta.getTable());
+        return this.orderBy(meta, step);
     }
 
     public @NotNull SelectWithTiesAfterOffsetStep<Record>
     findAllStep(final TableMeta<?, ?, ?> meta, final PageParam pageParam) {
-
-        return this.dsl.select(meta.selectFields())
-            .from(meta.getTable())
-            .offset(pageParam.getOffset())
+        final SelectJoinStep<Record> step = this.dsl.select(meta.selectFields())
+            .from(meta.getTable());
+        return this.orderBy(meta, step).offset(pageParam.getOffset())
             .limit(pageParam.getSize());
     }
 
     public @NotNull SelectWithTiesAfterOffsetStep<Record>
     findAllStep(final TableMeta<?, ?, ?> meta,
                 final Condition condition, final PageParam pageParam) {
-
-        return this.dsl.select(meta.selectFields())
+        final SelectConditionStep<Record> step = this.dsl.select(meta.selectFields())
             .from(meta.getTable())
-            .where(condition)
-            .offset(pageParam.getOffset())
+            .where(condition);
+        return this.orderBy(meta, step).offset(pageParam.getOffset())
             .limit(pageParam.getSize());
     }
 
-    public @NotNull <A> SelectConditionStep<Record>
+    public @NotNull <A> SelectLimitStep<Record>
     findAllByCreatorStep(final TableMeta<?, ?, A> meta) {
 
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
-        return this.dsl.select(meta.selectFields())
+        final SelectConditionStep<Record> step = this.dsl.select(meta.selectFields())
             .from(meta.getTable())
             .where(meta.createdBy().getColumn().eq(auditor));
+        return this.orderBy(meta, step);
     }
 
     /**
@@ -263,5 +265,16 @@ public class CrudStep {
         @SuppressWarnings("unchecked")
         final A auditor = (A) this.auditorAware.requiredAuditor();
         return meta.createdBy().getColumn().eq(auditor);
+    }
+
+    private SelectLimitStep<Record> orderBy(final TableMeta<?, ?, ?> meta,
+                                            final SelectOrderByStep<Record> step) {
+        if (meta.getUpdatedDate().isPresent()) {
+            return step.orderBy(meta.updatedDate().getColumn());
+        }
+        if (meta.getCreatedDate().isPresent()) {
+            return step.orderBy(meta.createdBy().getColumn());
+        }
+        return step;
     }
 }
