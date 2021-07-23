@@ -289,10 +289,10 @@ public class CrudStep {
     public SelectLimitStep<Record> orderBy(final TableMeta<?, ?, ?> meta,
                                            final SelectOrderByStep<Record> step) {
         if (meta.getUpdatedDate().isPresent()) {
-            return step.orderBy(meta.updatedDate().getColumn());
+            return step.orderBy(meta.updatedDate().getColumn().desc());
         }
         if (meta.getCreatedDate().isPresent()) {
-            return step.orderBy(meta.createdDate().getColumn());
+            return step.orderBy(meta.createdDate().getColumn().desc());
         }
         return step;
     }
