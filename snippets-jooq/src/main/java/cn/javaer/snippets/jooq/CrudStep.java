@@ -292,7 +292,7 @@ public class CrudStep {
             return step.orderBy(meta.updatedDate().getColumn());
         }
         if (meta.getCreatedDate().isPresent()) {
-            return step.orderBy(meta.createdBy().getColumn());
+            return step.orderBy(meta.createdDate().getColumn());
         }
         return step;
     }
