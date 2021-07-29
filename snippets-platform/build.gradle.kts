@@ -22,6 +22,7 @@ dependencies {
         api(project(":snippets-spring-boot-starter-eclipse-collections"))
         api(project(":snippets-spring-boot-starter-handlebars"))
         api(project(":snippets-spring-boot-starter-p6spy"))
+        api(project(":snippets-spring-boot-starter-minio"))
         api(project(":snippets-spring-boot-starter-sfm-jooq"))
         api(project(":snippets-spring-boot-starter-springdoc"))
         api(project(":snippets-springdoc"))
