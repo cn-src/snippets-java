@@ -121,7 +121,7 @@ dependencies {
         api("org.simpleflatmapper:sfm-springjdbc:${p["simpleflatmapperVersion"]}")
 
         api("io.vavr:vavr:${p["vavrVersion"]}")
-        api("io.vavr:vavr-jackson:${p["vavrVersion"]}")
+        api("io.vavr:vavr-jackson:${p["vavrJacksonVersion"]}")
         api("io.vavr:vavr-test:${p["vavrVersion"]}")
         api("io.vavr:vavr-match:${p["vavrVersion"]}")
 
