@@ -6,7 +6,7 @@ import org.jooq.DSLContext;
 import org.jooq.InsertValuesStepN;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
-import org.jooq.SelectConditionStep;
+import org.jooq.SelectLimitStep;
 import org.jooq.UpdateConditionStep;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ class CrudStepTest {
 
     @Test
     void findByIdAndCreatorStep() {
-        final SelectConditionStep<Record> step = this.crudStep.findByIdAndCreatorStep(
+        final SelectLimitStep<Record> step = this.crudStep.findByIdAndCreatorStep(
             CrudReflection.getTableMeta(Demo.class), 1L);
         assertThat(this.dsl.renderInlined(step))
             .isEqualTo("select id, name, created_by_id from demo " +
