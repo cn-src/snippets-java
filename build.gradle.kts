@@ -2,7 +2,7 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "com.github.cn-src.snippets-java"
-    version = "1.0-SNAPSHOT"
+    version = "0.0.1.rc3"
 
     repositories {
         mavenCentral()
@@ -19,4 +19,3 @@ subprojects {
         }
     }
 }
-
