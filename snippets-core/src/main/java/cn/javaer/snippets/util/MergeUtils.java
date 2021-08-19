@@ -1,9 +1,5 @@
 package cn.javaer.snippets.util;
 
-import cn.javaer.snippets.model.Assemblers;
-import cn.javaer.snippets.model.Auditor;
-import cn.javaer.snippets.model.Creator;
-import cn.javaer.snippets.model.DynamicAssembler;
 import cn.javaer.snippets.util.function.Consumer3;
 import cn.javaer.snippets.util.function.Function3;
 
@@ -335,89 +331,5 @@ public interface MergeUtils {
             result.add(resultFun.apply(used, s));
         }
         return result;
-    }
-
-    /**
-     * Merge to assembler list.
-     *
-     * @param <S> the type parameter
-     * @param <P> the type parameter
-     * @param propName the prop name
-     * @param sList the s list
-     * @param pList the p list
-     * @param mergePredicate the merge predicate
-     *
-     * @return the list
-     */
-    static <S, P> List<DynamicAssembler<S, P>> mergeToAssembler(
-        final String propName,
-        final List<S> sList, final List<P> pList,
-        final BiPredicate<S, P> mergePredicate) {
-
-        return merge(sList, pList, mergePredicate, (s, opt) -> {
-            return Assemblers.ofDynamic(s, propName, opt.orElse(null));
-        });
-    }
-
-    /**
-     * Merge list to assembler list.
-     *
-     * @param <S> the type parameter
-     * @param <P> the type parameter
-     * @param propName the prop name
-     * @param sList the s list
-     * @param pList the p list
-     * @param mergePredicate the merge predicate
-     *
-     * @return the list
-     */
-    static <S, P> List<DynamicAssembler<S, List<P>>> mergeListToAssembler(
-        final String propName,
-        final List<S> sList, final List<P> pList,
-        final BiPredicate<S, P> mergePredicate) {
-
-        return mergeList(sList, pList, mergePredicate,
-            (ps, s) -> Assemblers.ofDynamic(s, propName, ps));
-    }
-
-    /**
-     * Merge to creator list.
-     *
-     * @param <S> the type parameter
-     * @param <P> the type parameter
-     * @param sList the s list
-     * @param pList the p list
-     * @param mergePredicate the merge predicate
-     *
-     * @return the list
-     */
-    static <S, P> List<Creator<S, P>> mergeToCreator(
-        final List<S> sList, final List<P> pList,
-        final BiPredicate<S, P> mergePredicate) {
-        return merge(sList, pList, mergePredicate, (s, p) -> {
-            return Creator.of(s, p.orElse(null));
-        });
-    }
-
-    /**
-     * Merge to auditor list.
-     *
-     * @param <S> the type parameter
-     * @param <P> the type parameter
-     * @param sList the s list
-     * @param pList the p list
-     * @param mergePredicate1 the merge predicate 1
-     * @param mergePredicate2 the merge predicate 2
-     *
-     * @return the list
-     */
-    static <S, P> List<Auditor<S, P>> mergeToAuditor(
-        final List<S> sList, final List<P> pList,
-        final BiPredicate<S, P> mergePredicate1,
-        final BiPredicate<S, P> mergePredicate2) {
-        return merge(sList, pList, mergePredicate1, mergePredicate2,
-            (s, updatedOpt, createdOpt) -> {
-                return Auditor.of(s, updatedOpt.orElse(null), createdOpt.orElse(null));
-            });
     }
 }
