@@ -6,7 +6,6 @@ operator fun Project.get(prop: String) = project.property(prop)
 dependencies {
     constraints {
         api(project(":snippets-core"))
-        api(project(":snippets-easy-batch"))
         api(project(":snippets-jackson"))
         api(project(":snippets-jooq"))
         api(project(":snippets-jooq-codegen"))
