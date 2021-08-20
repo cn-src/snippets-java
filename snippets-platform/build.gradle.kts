@@ -12,6 +12,7 @@ dependencies {
         api(project(":snippets-jooq-codegen-maven-plugin"))
         api(project(":snippets-kryo"))
         api(project(":snippets-p6spy"))
+        api(project(":snippets-validation"))
         api(project(":snippets-security"))
         api(project(":snippets-springdoc"))
         api(project(":snippets-spring"))
