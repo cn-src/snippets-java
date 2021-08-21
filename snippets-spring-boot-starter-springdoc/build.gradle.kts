@@ -3,7 +3,6 @@ plugins {
 }
 val springdocVersion: String by project
 dependencies {
-    api(project(":snippets-spring-boot-autoconfigure"))
     api(project(":snippets-spring-boot-starter"))
     api("org.springdoc:springdoc-openapi-webmvc-core:$springdocVersion")
 

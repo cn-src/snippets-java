@@ -16,7 +16,6 @@ dependencies {
         api(project(":snippets-security"))
         api(project(":snippets-spring"))
         api(project(":snippets-spring-exception"))
-        api(project(":snippets-spring-boot-autoconfigure"))
         api(project(":snippets-spring-boot-starter"))
         api(project(":snippets-spring-boot-starter-handlebars"))
         api(project(":snippets-spring-boot-starter-minio"))
