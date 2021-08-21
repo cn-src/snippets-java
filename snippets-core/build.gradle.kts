@@ -8,8 +8,6 @@ dependencies {
     api("org.apache.commons:commons-lang3:$commonsLang3Version")
     api("org.apache.commons:commons-collections4:$commonsCollections4Version")
 
-    optionalApi("org.springframework.boot:spring-boot-starter-data-jdbc")
-
     compileOnly("com.fasterxml.jackson.core:jackson-annotations")
     compileOnly("org.springdoc:springdoc-openapi-webmvc-core:$springdocVersion")
 
