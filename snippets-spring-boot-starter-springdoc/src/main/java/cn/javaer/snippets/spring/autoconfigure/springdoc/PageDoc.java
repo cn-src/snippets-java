@@ -1,4 +1,4 @@
-package cn.javaer.snippets.springdoc;
+package cn.javaer.snippets.spring.autoconfigure.springdoc;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

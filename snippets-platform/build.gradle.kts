@@ -22,7 +22,6 @@ dependencies {
         api(project(":snippets-spring-boot-starter-minio"))
         api(project(":snippets-spring-boot-starter-p6spy"))
         api(project(":snippets-spring-boot-starter-springdoc"))
-        api(project(":snippets-springdoc"))
         api(project(":snippets-test"))
         api(project(":snippets-validation"))
 
