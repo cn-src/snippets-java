@@ -1,4 +1,4 @@
-package cn.javaer.snippets.test.archunit;
+package cn.javaer.snippets.archunit;
 
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaModifier;

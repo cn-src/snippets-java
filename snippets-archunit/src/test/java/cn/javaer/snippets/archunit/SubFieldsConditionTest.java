@@ -1,4 +1,4 @@
-package cn.javaer.snippets.test.archunit;
+package cn.javaer.snippets.archunit;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
@@ -18,8 +18,8 @@ class SubFieldsConditionTest {
     void testCheck() {
         final JavaClasses importedClasses = new ClassFileImporter()
             .importClasses(
-                cn.javaer.snippets.test.archunit.case1.Pojo.class,
-                cn.javaer.snippets.test.archunit.case1.SubPojo.class);
+                cn.javaer.snippets.archunit.case1.Pojo.class,
+                cn.javaer.snippets.archunit.case1.SubPojo.class);
         classes().should(new SubFieldsCondition("demo test"))
             .check(importedClasses);
     }
@@ -29,8 +29,8 @@ class SubFieldsConditionTest {
     void testCheck2() {
         final JavaClasses importedClasses = new ClassFileImporter()
             .importClasses(
-                cn.javaer.snippets.test.archunit.case2.Pojo.class,
-                cn.javaer.snippets.test.archunit.case2.SubPojo.class);
+                cn.javaer.snippets.archunit.case2.Pojo.class,
+                cn.javaer.snippets.archunit.case2.SubPojo.class);
         assertThatExceptionOfType(AssertionError.class)
             .isThrownBy(() ->
                 classes().should(new SubFieldsCondition("demo test")).check(importedClasses)
@@ -42,8 +42,8 @@ class SubFieldsConditionTest {
     void testCheck3() {
         final JavaClasses importedClasses = new ClassFileImporter()
             .importClasses(
-                cn.javaer.snippets.test.archunit.case3.Pojo.class,
-                cn.javaer.snippets.test.archunit.case3.SubPojo.class);
+                cn.javaer.snippets.archunit.case3.Pojo.class,
+                cn.javaer.snippets.archunit.case3.SubPojo.class);
         assertThatExceptionOfType(AssertionError.class)
             .isThrownBy(() ->
                 classes().should(new SubFieldsCondition("demo test")).check(importedClasses)

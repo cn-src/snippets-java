@@ -8,7 +8,6 @@ dependencies {
     api("org.apache.commons:commons-lang3:$commonsLang3Version")
     api("org.apache.commons:commons-collections4:$commonsCollections4Version")
 
-    optionalApi("com.tngtech.archunit:archunit-junit5")
     optionalApi("org.springframework.boot:spring-boot-starter-data-jdbc")
 
     compileOnly("com.fasterxml.jackson.core:jackson-annotations")

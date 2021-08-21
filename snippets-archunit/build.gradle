@@ -1,0 +1,7 @@
+plugins {
+    id("snippets-conventions")
+}
+
+dependencies {
+    api("com.tngtech.archunit:archunit-junit5")
+}

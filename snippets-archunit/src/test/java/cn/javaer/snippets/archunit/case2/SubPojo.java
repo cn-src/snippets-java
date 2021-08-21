@@ -1,6 +1,6 @@
-package cn.javaer.snippets.test.archunit.case2;
+package cn.javaer.snippets.archunit.case2;
 
-import cn.javaer.snippets.test.archunit.SubFields;
+import cn.javaer.snippets.archunit.SubFields;
 import lombok.Data;
 
 /**

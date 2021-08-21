@@ -1,4 +1,4 @@
-package cn.javaer.snippets.test.archunit;
+package cn.javaer.snippets.archunit;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

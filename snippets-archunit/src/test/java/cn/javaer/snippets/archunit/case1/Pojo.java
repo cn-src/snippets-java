@@ -1,4 +1,4 @@
-package cn.javaer.snippets.test.archunit.case1;
+package cn.javaer.snippets.archunit.case1;
 
 import lombok.Data;
 
