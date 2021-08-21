@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-
+    optionalApi("com.h2database:h2")
 }
