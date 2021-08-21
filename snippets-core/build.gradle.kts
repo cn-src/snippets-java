@@ -8,7 +8,7 @@ dependencies {
     api("org.apache.commons:commons-lang3:$commonsLang3Version")
     api("org.apache.commons:commons-collections4:$commonsCollections4Version")
 
-    optionalApi("org.springframework.data:org.springframework.data:spring-data-commons")
+    optionalApi("org.springframework.data:spring-data-commons")
     compileOnly("com.fasterxml.jackson.core:jackson-annotations")
     compileOnly("org.springdoc:springdoc-openapi-webmvc-core:$springdocVersion")
 
