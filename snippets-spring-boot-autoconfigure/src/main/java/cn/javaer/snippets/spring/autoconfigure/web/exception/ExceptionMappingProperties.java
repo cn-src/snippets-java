@@ -1,10 +1,9 @@
 package cn.javaer.snippets.spring.autoconfigure.web.exception;
 
 import lombok.Data;
+import lombok.NonNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 /**
@@ -18,9 +17,9 @@ public class ExceptionMappingProperties {
 
     @Data
     public static class Error {
-        @NotEmpty
+        @NonNull
         private String error;
-        @NotNull
+        @NonNull
         private Integer status;
     }
 }
