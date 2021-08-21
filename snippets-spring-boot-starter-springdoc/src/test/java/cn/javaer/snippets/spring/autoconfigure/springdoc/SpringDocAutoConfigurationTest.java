@@ -39,6 +39,7 @@ class SpringDocAutoConfigurationTest {
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
         .withConfiguration(
             AutoConfigurations.of(
+                SpringDocPlusConfiguration.class,
                 SpringDocAutoConfiguration.class,
                 ExceptionAutoConfiguration.class,
                 SpringDocConfigProperties.class, SpringDocConfiguration.class,
