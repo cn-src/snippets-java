@@ -5,8 +5,11 @@ subprojects {
     version = "0.0.1.rc7"
 
     repositories {
-        mavenCentral()
-        maven { url = uri("https://jitpack.io") }
+        repositories {
+            maven { url = uri("https://maven.aliyun.com/repository/public/") }
+            mavenLocal()
+            mavenCentral()
+        }
     }
     configure<PublishingExtension> {
         repositories {
