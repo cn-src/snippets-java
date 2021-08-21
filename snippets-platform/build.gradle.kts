@@ -5,6 +5,7 @@ val p = project
 operator fun Project.get(prop: String) = project.property(prop)
 dependencies {
     constraints {
+        api(project(":snippets-archunit"))
         api(project(":snippets-core"))
         api(project(":snippets-jackson"))
         api(project(":snippets-jooq"))
@@ -12,17 +13,18 @@ dependencies {
         api(project(":snippets-jooq-codegen-maven-plugin"))
         api(project(":snippets-kryo"))
         api(project(":snippets-p6spy"))
-        api(project(":snippets-validation"))
         api(project(":snippets-security"))
-        api(project(":snippets-springdoc"))
         api(project(":snippets-spring"))
         api(project(":snippets-spring-exception"))
         api(project(":snippets-spring-boot-autoconfigure"))
         api(project(":snippets-spring-boot-starter"))
         api(project(":snippets-spring-boot-starter-handlebars"))
-        api(project(":snippets-spring-boot-starter-p6spy"))
         api(project(":snippets-spring-boot-starter-minio"))
+        api(project(":snippets-spring-boot-starter-p6spy"))
         api(project(":snippets-spring-boot-starter-springdoc"))
+        api(project(":snippets-springdoc"))
+        api(project(":snippets-test"))
+        api(project(":snippets-validation"))
 
         // 工具库
         api("org.jodd:jodd-util:${p["joddUtilVersion"]}")
