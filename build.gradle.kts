@@ -2,11 +2,11 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "com.github.cn-src.snippets-java"
-    version = "0.0.1-SNAPSHOT"
+    version = "0.0.1-rc1"
 
     repositories {
-//        maven { url = uri("https://maven.aliyun.com/repository/public/") }
         mavenLocal()
+        maven { url = uri("https://maven.aliyun.com/repository/public/") }
         mavenCentral()
     }
     configure<PublishingExtension> {
@@ -19,11 +19,6 @@ subprojects {
                     password = project.findProperty("gpr.key") as String?
                         ?: System.getenv("TOKEN")
                 }
-            }
-        }
-        publications {
-            register<MavenPublication>("gpr") {
-                from(components["java"])
             }
         }
     }
