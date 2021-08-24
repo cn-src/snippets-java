@@ -8,7 +8,8 @@ dependencies {
 
     optionalApi("org.springframework.data:spring-data-commons")
     compileOnly("com.fasterxml.jackson.core:jackson-annotations")
-    compileOnly("org.springdoc:springdoc-openapi-webmvc-core:$springdocVersion")
+    // TODO
+    compileOnly("io.swagger.core.v3:swagger-annotations:2.1.10")
 
     testImplementation(project(":snippets-jackson"))
     testImplementation("com.h2database:h2")
