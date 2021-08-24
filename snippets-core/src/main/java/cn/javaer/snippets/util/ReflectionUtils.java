@@ -1,6 +1,7 @@
 package cn.javaer.snippets.util;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 
@@ -170,7 +171,7 @@ public interface ReflectionUtils {
     static boolean isPresent(final String className) {
         Validate.notEmpty(className);
         try {
-            Class.forName(className);
+            ClassUtils.getClass(className, false);
             return true;
         }
         catch (final ClassNotFoundException ex) {
@@ -188,7 +189,7 @@ public interface ReflectionUtils {
     static Optional<Class<?>> getClass(final String className) {
         Validate.notEmpty(className);
         try {
-            return Optional.of(Class.forName(className));
+            return Optional.of(ClassUtils.getClass(className));
         }
         catch (final ClassNotFoundException e) {
             return Optional.empty();
