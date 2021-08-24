@@ -1,9 +1,9 @@
 package cn.javaer.snippets.security.rbac;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.javaer.snippets.jooq.JdbcCrud;
 import cn.javaer.snippets.model.Page;
 import cn.javaer.snippets.model.PageParam;
-import org.apache.commons.collections4.CollectionUtils;
 import org.jooq.Condition;
 
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public class RbacJdbcManager {
 
     public void createRole(final RoleDetails roleDetails) {
         final Long id = this.crud.insert(ROLE_DETAILS, roleDetails);
-        if (CollectionUtils.isNotEmpty(roleDetails.getPermissions())) {
+        if (CollUtil.isNotEmpty(roleDetails.getPermissions())) {
             final List<RolePermission> rps = new ArrayList<>(roleDetails.getPermissions().size());
             for (final Permission permission : roleDetails.getPermissions()) {
                 rps.add(new RolePermission(id, permission.getId()));
@@ -100,7 +100,7 @@ public class RbacJdbcManager {
         this.crud.dsl().deleteFrom(ROLE_PERMISSION)
             .where(ROLE_PERMISSION.ROLE_ID.eq(roleDetails.getId()))
             .execute();
-        if (CollectionUtils.isNotEmpty(roleDetails.getPermissions())) {
+        if (CollUtil.isNotEmpty(roleDetails.getPermissions())) {
             final List<RolePermission> rps = new ArrayList<>(roleDetails.getPermissions().size());
             for (final Permission permission : roleDetails.getPermissions()) {
                 rps.add(new RolePermission(roleDetails.getId(), permission.getId()));

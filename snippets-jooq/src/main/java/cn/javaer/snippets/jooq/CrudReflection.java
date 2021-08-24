@@ -1,8 +1,8 @@
 package cn.javaer.snippets.jooq;
 
+import cn.hutool.core.util.ReflectUtil;
 import cn.javaer.snippets.util.ReflectionUtils;
 import cn.javaer.snippets.util.StrUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -52,7 +52,7 @@ public class CrudReflection {
     private static <T, ID, A> TableMetaImpl<T, ID, A> initTableMeta(final Class<T> entityClass)
         throws NoSuchFieldException, IllegalAccessException {
 
-        final Field[] fields = FieldUtils.getAllFields(entityClass);
+        final Field[] fields = ReflectUtil.getFields(entityClass);
         if (fields == null || fields.length == 0) {
             return null;
         }
@@ -75,10 +75,10 @@ public class CrudReflection {
             }
 
             final Optional<String> columnOpt = ReflectionUtils.getAnnotationAttributeValue(
-                field, "org.springframework.data.relational.core.mapping.Column", "value")
+                    field, "org.springframework.data.relational.core.mapping.Column", "value")
                 .map(String.class::cast);
             final Optional<String> columnSfmOpt = ReflectionUtils.getAnnotationAttributeValue(
-                field, "org.simpleflatmapper.map.annotation.Column", "value")
+                    field, "org.simpleflatmapper.map.annotation.Column", "value")
                 .map(String.class::cast);
             final String columnName =
                 columnOpt.orElseGet(() -> columnSfmOpt.orElse(StrUtils.toSnakeLower
