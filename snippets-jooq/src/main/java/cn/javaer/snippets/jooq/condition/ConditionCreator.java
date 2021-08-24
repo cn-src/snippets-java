@@ -1,12 +1,15 @@
 package cn.javaer.snippets.jooq.condition;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ReflectUtil;
 import cn.javaer.snippets.jooq.condition.annotation.BiCondition;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionIgnore;
 import cn.javaer.snippets.jooq.condition.annotation.ConditionTree;
 import cn.javaer.snippets.model.TreeNode;
 import lombok.Data;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Condition;
@@ -14,9 +17,7 @@ import org.jooq.Field;
 import org.jooq.JSONB;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
-import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
 import java.beans.PropertyDescriptor;
@@ -63,7 +64,7 @@ public class ConditionCreator {
     public static Condition create(final List<TreeNode> treeNodes,
                                    @NotNull final Field<String>... fields) {
         Objects.requireNonNull(fields);
-        if (CollectionUtils.isEmpty(treeNodes)) {
+        if (CollUtil.isEmpty(treeNodes)) {
             return null;
         }
         TreeNode current = TreeNode.of("", treeNodes);
@@ -72,7 +73,7 @@ public class ConditionCreator {
 
         Condition condition = null;
         while (null != current) {
-            if (stack.size() <= fields.length && !CollectionUtils.isEmpty(current.getChildren())) {
+            if (stack.size() <= fields.length && !CollUtil.isEmpty(current.getChildren())) {
                 current = current.getChildren().get(0);
                 stack.push(current.clone());
             }
@@ -119,13 +120,13 @@ public class ConditionCreator {
             return null;
         }
 
-        final PropertyDescriptor[] pds = BeanUtils.getPropertyDescriptors(query.getClass());
+        final PropertyDescriptor[] pds = BeanUtil.getPropertyDescriptors(query.getClass());
         final List<Condition> conditions = new ArrayList<>(pds.length);
 
         final Map<String, Pair> biMap = new HashMap<>(3);
         for (final PropertyDescriptor pd : pds) {
             final java.lang.reflect.Field fd =
-                ReflectionUtils.findField(query.getClass(), pd.getName());
+                ReflectUtil.getField(query.getClass(), pd.getName());
             if (fd == null || AnnotatedElementUtils.isAnnotated(fd, ConditionIgnore.class)) {
                 continue;
             }
@@ -143,7 +144,7 @@ public class ConditionCreator {
             }
 
             final Object value = ReflectionUtils.invokeMethod(pd.getReadMethod(), query);
-            if (!ObjectUtils.isEmpty(value)) {
+            if (!ObjectUtil.isEmpty(value)) {
                 if (conditionTree != null) {
                     final Field[] fields = Arrays.stream(conditionTree.value())
                         .map(DSL::field).toArray(Field[]::new);
@@ -156,7 +157,8 @@ public class ConditionCreator {
                 }
                 else if (null != biConditionAnn) {
                     final String column = biConditionAnn.column();
-                    Assert.hasLength(column, () -> "'column' must be not empty");
+                    Assert.notEmpty(column, () ->
+                        new IllegalArgumentException("'column' must be not empty"));
                     final Pair pair = biMap.computeIfAbsent(column, s -> new Pair());
                     if (pair.operator == null) {
                         pair.operator = biConditionAnn.operator();

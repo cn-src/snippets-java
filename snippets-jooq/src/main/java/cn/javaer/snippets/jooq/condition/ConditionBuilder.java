@@ -1,8 +1,8 @@
 package cn.javaer.snippets.jooq.condition;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.javaer.snippets.model.TreeNode;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Condition;
@@ -91,7 +91,7 @@ public class ConditionBuilder {
 
     @SafeVarargs
     public final ConditionBuilder optional(final TreeNode treeNode, final Field<String>... fields) {
-        if (null == treeNode || ObjectUtils.isEmpty(fields)) {
+        if (null == treeNode || ObjectUtil.isEmpty(fields)) {
             return this;
         }
         return this.optional(ConditionCreator.create(treeNode, fields));
@@ -100,14 +100,14 @@ public class ConditionBuilder {
     @SafeVarargs
     public final ConditionBuilder optional(final List<TreeNode> treeNodes,
                                            final Field<String>... fields) {
-        if (CollectionUtils.isEmpty(treeNodes) || ObjectUtils.isEmpty(fields)) {
+        if (CollUtil.isEmpty(treeNodes) || ObjectUtil.isEmpty(fields)) {
             return this;
         }
         return this.optional(ConditionCreator.create(treeNodes, fields));
     }
 
     public <T> ConditionBuilder optional(@NotNull final Function<T, Condition> fun, final T value) {
-        if (ObjectUtils.isEmpty(value)) {
+        if (ObjectUtil.isEmpty(value)) {
             return this;
         }
 
@@ -117,7 +117,7 @@ public class ConditionBuilder {
 
     public <T1, T2> ConditionBuilder optional(@NotNull final BiFunction<T1, T2, Condition> fun,
                                               final T1 t1, final T2 t2) {
-        if (ObjectUtils.isEmpty(t1) || ObjectUtils.isEmpty(t2)) {
+        if (ObjectUtil.isEmpty(t1) || ObjectUtil.isEmpty(t2)) {
             return this;
         }
         this.conditions.add(fun.apply(t1, t2));
@@ -126,7 +126,7 @@ public class ConditionBuilder {
 
     public <T1, T2, T3> ConditionBuilder optional(@NotNull final Function3<T1, T2, T3> fun,
                                                   final T1 t1, final T2 t2, final T3 t3) {
-        if (ObjectUtils.isEmpty(t1) || ObjectUtils.isEmpty(t2) || ObjectUtils.isEmpty(t3)) {
+        if (ObjectUtil.isEmpty(t1) || ObjectUtil.isEmpty(t2) || ObjectUtil.isEmpty(t3)) {
             return this;
         }
         this.conditions.add(fun.apply(t1, t2, t3));
