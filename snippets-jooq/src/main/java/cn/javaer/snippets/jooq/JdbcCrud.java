@@ -1,9 +1,9 @@
 package cn.javaer.snippets.jooq;
 
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
 import cn.javaer.snippets.model.Page;
 import cn.javaer.snippets.model.PageParam;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.Validate;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
@@ -147,7 +147,7 @@ public class JdbcCrud {
     public <T> int
     batchInsert(final TableMeta<T, ?, ?> meta, final List<T> entities) {
         Objects.requireNonNull(meta);
-        Validate.notEmpty(entities);
+        Assert.notEmpty(entities);
         return this.crudStep.batchInsertStep(meta, entities).execute();
     }
 
@@ -163,7 +163,7 @@ public class JdbcCrud {
     dynamicUpdate(final TableMeta<T, ?, ?> meta, final T entity) {
         Objects.requireNonNull(meta);
         Objects.requireNonNull(entity);
-        return this.crudStep.dynamicUpdateStep(meta, entity, ObjectUtils::isNotEmpty).execute();
+        return this.crudStep.dynamicUpdateStep(meta, entity, ObjectUtil::isNotEmpty).execute();
     }
 
     public <T> int
@@ -171,7 +171,7 @@ public class JdbcCrud {
         Objects.requireNonNull(meta);
         Objects.requireNonNull(entity);
 
-        return this.crudStep.dynamicUpdateByCreatorStep(meta, entity, ObjectUtils::isNotEmpty)
+        return this.crudStep.dynamicUpdateByCreatorStep(meta, entity, ObjectUtil::isNotEmpty)
             .execute();
     }
 

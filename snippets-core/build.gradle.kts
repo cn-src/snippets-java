@@ -1,12 +1,10 @@
 plugins {
     id("snippets-conventions")
 }
-val commonsLang3Version: String by project
-val commonsCollections4Version: String by project
+val hutoolVersion: String by project
 val springdocVersion: String by project
 dependencies {
-    api("org.apache.commons:commons-lang3:$commonsLang3Version")
-    api("org.apache.commons:commons-collections4:$commonsCollections4Version")
+    api("cn.hutool:hutool-core:$hutoolVersion")
 
     optionalApi("org.springframework.data:spring-data-commons")
     compileOnly("com.fasterxml.jackson.core:jackson-annotations")
