@@ -1,8 +1,8 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
+import cn.hutool.core.util.ClassLoaderUtil;
 import cn.javaer.snippets.jooq.ExcludeSaved;
 import cn.javaer.snippets.jooq.ExcludeSelect;
-import cn.javaer.snippets.util.ReflectionUtils;
 import cn.javaer.snippets.util.StrUtils;
 import io.github.classgraph.AnnotationClassRef;
 import io.github.classgraph.AnnotationInfo;
@@ -48,7 +48,7 @@ public class TableMeta {
     boolean hasGeneratedAnnotation;
 
     public TableMeta(final ClassInfo classInfo, final String generatedPackage) {
-        this.hasGeneratedAnnotation = ReflectionUtils.isPresent("javax.annotation.Generated");
+        this.hasGeneratedAnnotation = ClassLoaderUtil.isPresent("javax.annotation.Generated");
         this.generatedPackage = generatedPackage;
         this.entityName = classInfo.getSimpleName();
         this.entityClassName = classInfo.getName();
