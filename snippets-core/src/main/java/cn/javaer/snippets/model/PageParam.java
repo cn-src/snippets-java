@@ -6,9 +6,10 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 import org.springdoc.api.annotations.ParameterObject;
-import org.springframework.data.domain.Pageable;
 
 /**
+ * 分页参数.
+ *
  * @author cn-src
  */
 @Data
@@ -38,15 +39,5 @@ public class PageParam {
 
     public static PageParam of(final int page, final int size) {
         return new PageParam(page, size, (long) (page - 1) * (long) size);
-    }
-
-    public static PageParam of(final Pageable pageable) {
-        return new PageParam(pageable.getPageNumber() + 1, pageable.getPageSize(),
-            pageable.getOffset());
-    }
-
-    public static PageParam ofZeroIndexed(final Pageable pageable) {
-        return new PageParam(pageable.getPageNumber(), pageable.getPageSize(),
-            pageable.getOffset());
     }
 }

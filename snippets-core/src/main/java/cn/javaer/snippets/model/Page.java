@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 分页结果.
+ *
  * @author cn-src
  */
 @Data
