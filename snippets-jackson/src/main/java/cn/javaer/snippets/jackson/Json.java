@@ -14,6 +14,8 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import org.jooq.JSONB;
+import org.jooq.Record;
 
 import java.io.UncheckedIOException;
 import java.time.LocalDate;
@@ -31,7 +33,7 @@ import java.util.Objects;
  *
  * @author cn-src
  */
-@SuppressWarnings("ALL")
+//@SuppressWarnings("ALL")
 public class Json {
 
     /**
@@ -57,11 +59,15 @@ public class Json {
         // @formatter:on
 
         ReflectionUtils.getClass("org.jooq.JSONB").ifPresent(it -> {
-            module.addSerializer((Class) it, JooqJsonbSerializer.INSTANCE);
-            module.addDeserializer((Class) it, JooqJsonbDeserializer.INSTANCE);
+            @SuppressWarnings({"unchecked"})
+            final Class<JSONB> clazz = (Class<JSONB>) it;
+            module.addSerializer(clazz, JooqJsonbSerializer.INSTANCE);
+            module.addDeserializer(clazz, JooqJsonbDeserializer.INSTANCE);
         });
         ReflectionUtils.getClass("org.jooq.Record").ifPresent(it -> {
-            module.addSerializer((Class) it, JooqRecordSerializer.INSTANCE);
+            @SuppressWarnings({"unchecked"})
+            final Class<Record> clazz = (Class<Record>) it;
+            module.addSerializer(clazz, JooqRecordSerializer.INSTANCE);
         });
 
         final ObjectMapper aDefault = new ObjectMapper();
