@@ -7,6 +7,7 @@ import org.jooq.meta.jaxb.Generator;
 import org.jooq.meta.jaxb.Jdbc;
 import org.jooq.meta.jaxb.Target;
 import org.jooq.meta.postgres.PostgresDatabase;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -19,6 +20,7 @@ import java.sql.Connection;
 /**
  * @author cn-src
  */
+@Disabled
 @Testcontainers
 class TablesGeneratorTest {
     @Container
