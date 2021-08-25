@@ -25,7 +25,7 @@ public class PageParam {
     PageParam(final int page, final int size, final long offset) {
         this.page = Math.max(page, 1);
         this.size = Math.max(size, 1);
-        this.offset = offset;
+        this.offset = Math.max(offset, 0);
     }
 
     @Schema(name = "page", description = "分页-页码", minimum = "1", defaultValue = "1")
