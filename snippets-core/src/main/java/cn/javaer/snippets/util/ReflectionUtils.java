@@ -1,8 +1,9 @@
 package cn.javaer.snippets.util;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.Validate;
+import cn.hutool.core.exceptions.UtilException;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ClassLoaderUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
@@ -85,7 +86,7 @@ public interface ReflectionUtils {
     @SuppressWarnings("unchecked")
     static boolean isAnnotated(final AnnotatedElement element, final String annotation) {
         Objects.requireNonNull(element);
-        Validate.notEmpty(annotation);
+        Assert.notEmpty(annotation);
 
         return getClass(annotation).map(it -> element.getAnnotation((Class<Annotation>) it))
             .isPresent();
@@ -105,7 +106,7 @@ public interface ReflectionUtils {
     @Nullable
     static <T extends Annotation>
     T getAnnotation(final Class<T> clazz, final Annotation... annotations) {
-        if (ArrayUtils.isEmpty(annotations)) {
+        if (ArrayUtil.isEmpty(annotations)) {
             return null;
         }
         for (final Annotation annotation : annotations) {
@@ -147,8 +148,8 @@ public interface ReflectionUtils {
                                                         final String annotation,
                                                         final String attributeName) {
         Objects.requireNonNull(element);
-        Validate.notEmpty(annotation);
-        Validate.notEmpty(attributeName);
+        Assert.notEmpty(annotation);
+        Assert.notEmpty(attributeName);
         return getClass(annotation)
             .map(it -> element.getAnnotation((Class<Annotation>) it))
             .map(it -> {
@@ -162,24 +163,6 @@ public interface ReflectionUtils {
     }
 
     /**
-     * 判断 class 是否存在.
-     *
-     * @param className the class name
-     *
-     * @return 返回 true 如果存在
-     */
-    static boolean isPresent(final String className) {
-        Validate.notEmpty(className);
-        try {
-            ClassUtils.getClass(className, false);
-            return true;
-        }
-        catch (final ClassNotFoundException ex) {
-            return false;
-        }
-    }
-
-    /**
      * 获取 class.
      *
      * @param className the class name
@@ -187,11 +170,11 @@ public interface ReflectionUtils {
      * @return the class
      */
     static Optional<Class<?>> getClass(final String className) {
-        Validate.notEmpty(className);
+        Assert.notEmpty(className);
         try {
-            return Optional.of(ClassUtils.getClass(className));
+            return Optional.of(ClassLoaderUtil.loadClass(className));
         }
-        catch (final ClassNotFoundException e) {
+        catch (final UtilException e) {
             return Optional.empty();
         }
     }

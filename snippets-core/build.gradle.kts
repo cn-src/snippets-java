@@ -7,9 +7,8 @@ dependencies {
     api("cn.hutool:hutool-core:$hutoolVersion")
 
     optionalApi("org.springframework.data:spring-data-commons")
+    optionalImplementation("org.springdoc:springdoc-openapi-webmvc-core:$springdocVersion")
     compileOnly("com.fasterxml.jackson.core:jackson-annotations")
-    // TODO
-    compileOnly("io.swagger.core.v3:swagger-annotations:2.1.10")
 
     testImplementation(project(":snippets-jackson"))
     testImplementation("com.h2database:h2")
