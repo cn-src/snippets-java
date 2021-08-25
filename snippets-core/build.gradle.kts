@@ -11,8 +11,4 @@ dependencies {
     compileOnly("com.fasterxml.jackson.core:jackson-annotations")
 
     testImplementation(project(":snippets-jackson"))
-    testImplementation("com.h2database:h2")
-    testImplementation("org.testcontainers:postgresql")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
