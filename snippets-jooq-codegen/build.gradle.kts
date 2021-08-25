@@ -4,11 +4,14 @@ plugins {
 val jooqVersion: String by project
 val handlebarsVersion: String by project
 val classgraphVersion: String by project
+val hutoolVersion: String by project
+
 dependencies {
-    api(project(":snippets-jooq"))
-    api("org.jooq:jooq-codegen:$jooqVersion")
-    api("com.github.jknack:handlebars:$handlebarsVersion")
-    api("io.github.classgraph:classgraph:$classgraphVersion")
+    implementation(project(":snippets-jooq"))
+    implementation("org.jooq:jooq-codegen:$jooqVersion")
+    implementation("cn.hutool:hutool-core:$hutoolVersion")
+    implementation("com.github.jknack:handlebars:$handlebarsVersion")
+    implementation("io.github.classgraph:classgraph:$classgraphVersion")
 
     testImplementation("com.h2database:h2")
     testImplementation("org.postgresql:postgresql")

@@ -1,6 +1,6 @@
 package cn.javaer.snippets.jooq.codegen.withentity;
 
-import cn.javaer.snippets.util.IoUtils;
+import cn.hutool.core.io.FileUtil;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
@@ -43,7 +43,8 @@ public class CodeGenTool {
         final Handlebars handlebars = new Handlebars(loader);
         final Path generatedDir = config.generatedDir();
         try {
-            IoUtils.recreateDirectories(generatedDir);
+            FileUtil.del(generatedDir);
+            FileUtil.mkdir(generatedDir);
             final Template template = handlebars.compile("jooq-gen-table");
             final List<TableMeta> tableMetas = scan(config);
             logger.info("Scan entities total:" + tableMetas.size());
