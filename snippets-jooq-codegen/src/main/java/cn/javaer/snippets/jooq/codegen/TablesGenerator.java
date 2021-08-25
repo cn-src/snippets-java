@@ -3,7 +3,7 @@ package cn.javaer.snippets.jooq.codegen;
 /**
  * @author cn-src
  */
-public class TablesGenerator extends SnippetsGenerator {
+public class TablesGenerator extends OverrideGenerator {
     @Override
     public boolean generateUDTs() {
         return false;
