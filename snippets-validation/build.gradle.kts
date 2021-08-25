@@ -1,10 +1,10 @@
 plugins {
     id("snippets-conventions")
 }
-val commonsLang3Version: String by project
+val hutoolVersion: String by project
 dependencies {
-    api("org.apache.commons:commons-lang3:$commonsLang3Version")
-    optionalApi("org.springframework:spring-beans")
+    implementation("cn.hutool:hutool-core:$hutoolVersion")
+
     optionalApi("org.hibernate.validator:hibernate-validator")
     optionalApi("org.glassfish:jakarta.el")
 }

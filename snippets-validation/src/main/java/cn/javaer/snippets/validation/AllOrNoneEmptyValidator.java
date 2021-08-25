@@ -1,8 +1,8 @@
 package cn.javaer.snippets.validation;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.BeanWrapperImpl;
+import cn.hutool.core.bean.DynaBean;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ObjectUtil;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -22,14 +22,14 @@ public class AllOrNoneEmptyValidator implements ConstraintValidator<AllOrNoneEmp
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        if (ArrayUtils.isEmpty(fields)) {
+        if (ArrayUtil.isEmpty(fields)) {
             return true;
         }
-
-        final BeanWrapperImpl bw = new BeanWrapperImpl(value);
+        // TODO 性能？
+        DynaBean bean = DynaBean.create(value);
         int i = 0;
         for (String field : fields) {
-            if (ObjectUtils.isEmpty(bw.getPropertyValue(field))) {
+            if (ObjectUtil.isEmpty(bean.get(field))) {
                 i++;
             }
         }
