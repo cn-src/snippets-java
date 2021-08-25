@@ -1,14 +1,14 @@
 package cn.javaer.snippets.jooq.condition;
 
+import cn.javaer.snippets.jackson.Json;
 import cn.javaer.snippets.model.TreeNode;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.JSONB;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.type.TypeReference;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +24,6 @@ class ConditionCreatorTest {
     }
 
     DSLContext dsl = DSL.using(SQLDialect.POSTGRES);
-    ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void create() {
@@ -93,7 +92,7 @@ class ConditionCreatorTest {
     @Test
     void treeNodeListToCondition1() throws Exception {
         //language=JSON
-        final List<TreeNode> treeNodes = this.objectMapper.readValue("[\n" +
+        final List<TreeNode> treeNodes = Json.DEFAULT.read("[\n" +
             "  {\n" +
             "    \"title\": \"t1\"\n" +
             "  " +
@@ -107,7 +106,7 @@ class ConditionCreatorTest {
     @Test
     void treeNodeListToCondition2() throws Exception {
         //language=JSON
-        final List<TreeNode> treeNodes = this.objectMapper.readValue("[\n" +
+        final List<TreeNode> treeNodes = Json.DEFAULT.read("[\n" +
             "  {\n" +
             "    \"title\": \"t1-1\"\n" +
             "  " +
@@ -123,7 +122,7 @@ class ConditionCreatorTest {
     @Test
     void treeNodeListToCondition3() throws Exception {
         //language=JSON
-        final List<TreeNode> treeNodes = this.objectMapper.readValue("[\n" +
+        final List<TreeNode> treeNodes = Json.DEFAULT.read("[\n" +
             "  {\n" +
             "    \"title\": \"t1-1\",\n" +
             "    \"children\": [\n" +
@@ -151,7 +150,7 @@ class ConditionCreatorTest {
     void treeNodeListToCondition() throws Exception {
 
         //language=JSON
-        final List<TreeNode> treeNodes = this.objectMapper.readValue("[\n" +
+        final List<TreeNode> treeNodes = Json.DEFAULT.read("[\n" +
             "  {\n" +
             "    \"title\": \"1\",\n" +
             "    \"children\": [\n" +
