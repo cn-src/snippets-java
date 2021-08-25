@@ -19,11 +19,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author cn-src
  */
-class SnippetsJacksonIntrospectorTest {
+class DateTimeFormatIntrospectorTest {
     @Test
     void jacksonIntrospector() throws Exception {
         final ObjectMapper objectMapper = new ObjectMapper();
-        final SnippetsJacksonIntrospector jacksonIntrospector = new SnippetsJacksonIntrospector();
+        final DateTimeFormatIntrospector jacksonIntrospector = new DateTimeFormatIntrospector();
         objectMapper.setAnnotationIntrospector(jacksonIntrospector);
         //language=JSON
         final Demo demo = objectMapper.readValue("{\"dateTime\": \"2020-05-05\",\"dateMinTime\": " +
@@ -39,7 +39,7 @@ class SnippetsJacksonIntrospectorTest {
     @Test
     void jacksonIntrospectorValue() throws Exception {
         final ObjectMapper objectMapper = new ObjectMapper();
-        final SnippetsJacksonIntrospector jacksonIntrospector = new SnippetsJacksonIntrospector();
+        final DateTimeFormatIntrospector jacksonIntrospector = new DateTimeFormatIntrospector();
         objectMapper.setAnnotationIntrospector(jacksonIntrospector);
         //language=JSON
         final Demo1 demo = objectMapper.readValue("{\"dateTime\": \"2020-05-05\"}", Demo1.class);

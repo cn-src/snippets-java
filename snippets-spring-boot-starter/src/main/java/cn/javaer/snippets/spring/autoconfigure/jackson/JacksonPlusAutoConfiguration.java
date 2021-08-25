@@ -1,10 +1,10 @@
 package cn.javaer.snippets.spring.autoconfigure.jackson;
 
+import cn.javaer.snippets.jackson.DateTimeFormatIntrospector;
 import cn.javaer.snippets.jackson.JooqJsonbDeserializer;
 import cn.javaer.snippets.jackson.JooqJsonbSerializer;
 import cn.javaer.snippets.jackson.JooqRecordSerializer;
 import cn.javaer.snippets.jackson.Json;
-import cn.javaer.snippets.jackson.SnippetsJacksonIntrospector;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -45,7 +45,7 @@ public class JacksonPlusAutoConfiguration {
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer snippetsJacksonCustomizer(final JacksonPlusProperties jacksonPlusProperties) {
         return it -> {
-            it.annotationIntrospector(SnippetsJacksonIntrospector.INSTANCE);
+            it.annotationIntrospector(DateTimeFormatIntrospector.INSTANCE);
 
             final DateTimeFormatter dateTimeFormatter =
                 DateTimeFormatter.ofPattern(jacksonPlusProperties.getFormat().getDateTime());
