@@ -13,7 +13,7 @@ public interface DefaultUser extends UserDetails {
      *
      * @return 手机号
      */
-    String getPhoneNumber();
+    String getPhone();
 
     /**
      * 获取邮箱.
