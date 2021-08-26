@@ -33,9 +33,17 @@ public class Permission implements Serializable {
     @Column(length = 50, nullable = false)
     private String name;
 
-    @Schema(name = "分类")
+    @Schema(name = "一级分类")
     @Column(length = 50)
-    private String category;
+    private String category1;
+
+    @Schema(name = "二级分类")
+    @Column(length = 50)
+    private String category2;
+
+    @Schema(name = "三级分类")
+    @Column(length = 50)
+    private String category3;
 
     @Column(length = 100, nullable = false, unique = true)
     @Schema(name = "权限值")
@@ -44,4 +52,7 @@ public class Permission implements Serializable {
     @Schema(name = "描述")
     @Column(length = 500)
     private String description;
+
+    @Schema(name = "排序")
+    private Integer sort;
 }
