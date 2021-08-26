@@ -1,8 +1,11 @@
 package cn.javaer.snippets.security.rbac;
 
+import cn.javaer.snippets.model.Page;
+import cn.javaer.snippets.model.PageParam;
 import io.ebean.DB;
 import io.ebean.Database;
 import io.ebean.test.UserContext;
+import lombok.Data;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,9 +33,22 @@ class RbacServiceTest {
         db.rollbackTransaction();
     }
 
+    @Data
+    static class UserQuery {
+        private String name;
+    }
+
     @Test
-    @DisplayName("测试保存，包括及联保存")
-    void save() {
+    void testUser() {
+        db.saveAll(new UserLite("u1"), new UserLite("u2"), new UserLite("u3"), new UserLite("u4"));
+        final Page<UserLite> users = rbacService.findUsers(UserLite.class,
+            new UserQuery(), PageParam.of(2, 2));
+        System.out.println(users);
+    }
+
+    @Test
+    @DisplayName("测试角色，包括及联保存")
+    void testRole() {
         final UserLite user = new UserLite(1L, "user1");
         db.save(user);
         UserContext.setUserId(user);

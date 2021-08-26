@@ -22,7 +22,7 @@ public class PageParam {
         this.size = 20;
     }
 
-    PageParam(final int page, final int size, final long offset) {
+    PageParam(final int page, final int size, final int offset) {
         this.page = Math.max(page, 1);
         this.size = Math.max(size, 1);
         this.offset = Math.max(offset, 0);
@@ -35,9 +35,9 @@ public class PageParam {
     int size;
 
     @Hidden
-    long offset;
+    int offset;
 
     public static PageParam of(final int page, final int size) {
-        return new PageParam(page, size, (long) (page - 1) * (long) size);
+        return new PageParam(page, size, (page - 1) * size);
     }
 }

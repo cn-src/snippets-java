@@ -73,4 +73,6 @@ public class Role implements Serializable {
     @WhenCreated
     @Schema(name = "创建时间")
     private LocalDateTime createdDate;
+
+    private Long order;
 }

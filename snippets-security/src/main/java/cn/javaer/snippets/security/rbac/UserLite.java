@@ -23,6 +23,9 @@ public class UserLite {
 
     private String name;
 
+    public UserLite() {
+    }
+
     public UserLite(String name) {
         this.name = name;
     }

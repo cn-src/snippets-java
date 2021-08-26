@@ -5,14 +5,15 @@ plugins {
 val jooqVersion: String by project
 val springdocVersion: String by project
 dependencies {
-    api("io.ebean:ebean")
-    annotationProcessor("io.ebean:querybean-generator")
+    api(project(":snippets-core"))
     api(project(":snippets-jooq"))
     api(project(":snippets-spring-exception"))
+    api("io.ebean:ebean")
 
+    annotationProcessor("io.ebean:querybean-generator")
     compileOnly("com.fasterxml.jackson.core:jackson-annotations")
-
     compileOnly("org.springdoc:springdoc-openapi-webmvc-core:$springdocVersion")
+    
     optionalApi("org.springframework.boot:spring-boot-starter-web")
     optionalApi("org.springframework.boot:spring-boot-starter-security")
     optionalApi("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
