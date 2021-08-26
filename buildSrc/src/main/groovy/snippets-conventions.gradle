@@ -13,6 +13,8 @@ java {
 
 dependencies {
     api platform(project(':snippets-platform'))
+    annotationProcessor platform(project(':snippets-platform'))
+    testAnnotationProcessor platform(project(':snippets-platform'))
     api platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
     testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
