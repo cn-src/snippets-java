@@ -1,6 +1,6 @@
 package cn.javaer.snippets.spring.util;
 
-import cn.javaer.snippets.util.GzipUtils;
+import cn.hutool.core.util.ZipUtil;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -26,7 +26,7 @@ public interface ResponseUtils {
      */
     static ResponseEntity<byte[]> jsonGzipCompress(@NonNull final String body) {
 
-        return jsonGzip(GzipUtils.compress(body));
+        return jsonGzip(ZipUtil.gzip(body, "UTF-8"));
     }
 
     /**
