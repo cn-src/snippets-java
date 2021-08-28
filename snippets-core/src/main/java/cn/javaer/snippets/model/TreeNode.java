@@ -3,6 +3,7 @@ package cn.javaer.snippets.model;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.comparator.CompareUtil;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -28,7 +29,7 @@ public class TreeNode implements Comparable<TreeNode> {
 
     final Long sort;
 
-    final Map<String, Object> dynamic = new HashMap<>();
+    @JsonAnySetter final Map<String, Object> dynamic = new HashMap<>();
 
     private TreeNode(String name, List<TreeNode> children, Long sort) {
         this.name = name;
