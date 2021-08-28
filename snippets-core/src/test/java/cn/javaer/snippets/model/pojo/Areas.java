@@ -11,4 +11,5 @@ public class Areas {
     String area1;
     String area2;
     String area3;
+    Long sort;
 }

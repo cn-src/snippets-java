@@ -1,7 +1,6 @@
 package cn.javaer.snippets.model;
 
 import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.comparator.CompareUtil;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -13,9 +12,11 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Objects;
+import java.util.TreeSet;
 
 /**
  * @author cn-src
@@ -25,7 +26,7 @@ public class TreeNode implements Comparable<TreeNode> {
 
     final List<TreeNode> children;
 
-    TreeMap<String, TreeNode> childrenMap;
+    Map<String, TreeNode> childrenMap;
 
     final Long sort;
 
@@ -35,7 +36,7 @@ public class TreeNode implements Comparable<TreeNode> {
         this.name = name;
         this.children = children;
         this.sort = sort;
-        this.childrenMap = new TreeMap<>();
+        this.childrenMap = new LinkedHashMap<>();
     }
 
     public static TreeNode of(String name, TreeNode... children) {
@@ -64,13 +65,26 @@ public class TreeNode implements Comparable<TreeNode> {
     }
 
     void moveToChildren() {
-        this.children.addAll(childrenMap.values());
+        // TODO
+        this.children.addAll(new TreeSet<>(childrenMap.values()));
         this.childrenMap = null;
     }
 
     @Override
     public int compareTo(@NotNull TreeNode node) {
-        return CompareUtil.compare(this.sort, node.sort);
+        Long c1 = this.sort;
+        Long c2 = node.sort;
+        if (Objects.equals(c1, c2)) {
+            // Tree 解析时是反序的，反转保障原始顺序。
+            return 1;
+        }
+        if (c1 == null) {
+            return -1;
+        }
+        if (c2 == null) {
+            return 1;
+        }
+        return c1.compareTo(c2);
     }
 
     @UnmodifiableView

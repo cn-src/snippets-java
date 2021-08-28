@@ -3,8 +3,8 @@ package cn.javaer.snippets.model;
 import cn.hutool.core.collection.CollUtil;
 import cn.javaer.snippets.jackson.Json;
 import cn.javaer.snippets.model.pojo.Areas;
+import cn.javaer.snippets.test.JsonAssert;
 import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,44 +16,47 @@ import static org.assertj.core.api.Assertions.tuple;
  * @author cn-src
  */
 class TreeTest {
+    private final static List<Areas> TEST_DATA;
 
-    @Test
-    void of() throws Exception {
-        final Areas areas1 = new Areas("河北省", "石家庄市", "长安区");
-        final Areas areas2 = new Areas("河北省", "石家庄市", "新华区");
-        final Areas areas3 = new Areas("河北省", "唐山市", "开平区");
-        final Areas areas4 = new Areas("山东省", "太原市", "小店区");
-        final TreeConf<Areas> conf =
-            TreeConf.of(areas ->
-                new String[]{areas.getArea1(), areas.getArea2(), areas.getArea3()});
-        final List<TreeNode> treeNodes =
-            Tree.of(Arrays.asList(areas1, areas2, areas3, areas4),
-                conf);
-        System.out.println(Json.NON_EMPTY.write(treeNodes));
-        assertThat(treeNodes).hasSize(2);
-        //language=JSON
-        JSONAssert.assertEquals("[{\"title\":\"河北省\",\"children\":[{\"title\":\"石家庄市\"," +
-                "\"children\":[{\"title\":\"长安区\"},{\"title\":\"新华区\"}]},{\"title\":\"唐山市\"," +
-                "\"children\":[{\"title\":\"开平区\"}]}]},{\"title\":\"山东省\"," +
-                "\"children\":[{\"title\":\"太原市\",\"children\":[{\"title\":\"小店区\"}]}]}]",
-            Json.NON_EMPTY.write(treeNodes), false);
+    static {
+        Areas areas1 = new Areas("河北省", "石家庄市", "长安区", 4L);
+        Areas areas2 = new Areas("河北省", "石家庄市", "新华区", 1L);
+        Areas areas3 = new Areas("河北省", "唐山市", "开平区", 2L);
+        Areas areas4 = new Areas("山东省", "太原市", "小店区", 3L);
+        TEST_DATA = Arrays.asList(areas1, areas2, areas3, areas4);
     }
 
     @Test
-    void ofWith() throws Exception {
-//        final Areas areas1 = new Areas("河北省", "石家庄市", "长安区");
-//        final Areas areas2 = new Areas("河北省", "石家庄市", "新华区");
-//        final Areas areas3 = new Areas("河北省", "唐山市", "开平区");
-//        final Areas areas4 = new Areas("山东省", "太原市", "小店区");
-//
-//        final List<TreeNode> treeNodes = Tree.of(
-//            Arrays.asList(areas1, areas2, areas3, areas4),
-//            (treeNode, entity, depth, index) -> {
-//                treeNode.putDynamic("depth", depth);
-//                treeNode.putDynamic("index", index);
-//            },
-//            Areas::getArea1, Areas::getArea2, Areas::getArea3);
-//        assertThat(treeNodes).hasSize(2);
+    void of() {
+        final TreeConf<Areas> conf = TreeConf.of(areas ->
+            new String[]{areas.getArea1(), areas.getArea2(), areas.getArea3()});
+        final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.of.json", treeNodes);
+    }
+
+    @Test
+    void ofWithSort() {
+        final TreeConf<Areas> conf = TreeConf.<Areas>builder()
+            .nameFun(areas -> new String[]{areas.getArea1(), areas.getArea2(), areas.getArea3()})
+            .sortFun(Areas::getSort)
+            .build();
+        final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
+        System.out.println(Json.DEFAULT.write(treeNodes));
+//        JsonAssert.assertEqualsAndOrder("model/TreeTest.of.json", treeNodes);
+    }
+
+    @Test
+    void ofWithDynamic() {
+        final TreeConf<Areas> conf = TreeConf.<Areas>builder()
+            .nameFun(areas -> new String[]{areas.getArea1(), areas.getArea2(), areas.getArea3()})
+            .handler(treeInfo -> {
+                treeInfo.getDynamic().put("depth", treeInfo.getDepth());
+                treeInfo.getDynamic().put("index", treeInfo.getIndex());
+            })
+            .build();
+
+        final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithDynamic.json", treeNodes);
     }
 
     @Test

@@ -21,7 +21,7 @@ public class Tree {
 
         final TreeNode root = TreeNode.of("");
         TreeNode current = root;
-        List<TreeNode> call = new ArrayList<>(100);
+        List<TreeNode> call = new ArrayList<>(50);
         for (final E row : models) {
             int depth = 1;
             final String[] names = treeConf.getNameFun().apply(row);
@@ -31,8 +31,9 @@ public class Tree {
                 }
                 else if (!(treeConf.isIgnoreEmpty() && (StrUtil.isEmpty(name)))) {
                     final TreeNode treeNode = TreeNode.of(name, treeConf.getSortFun().apply(row));
+                    final int size = current.childrenMap.size();
                     final TreeInfo<E> TreeInfo = new TreeInfo<>(row, treeNode, depth,
-                        current.childrenMap.size(), treeNode.dynamic);
+                        size, size == names.length, treeNode.dynamic);
                     treeConf.getHandler().apply(TreeInfo);
                     current.childrenMap.put(name, treeNode);
                     call.add(treeNode);
@@ -45,6 +46,7 @@ public class Tree {
         for (TreeNode n : call) {
             n.moveToChildren();
         }
+        root.moveToChildren();
         return root.getChildren();
     }
 
