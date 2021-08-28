@@ -1,9 +1,9 @@
 package cn.javaer.snippets.model;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.javaer.snippets.jackson.Json;
 import cn.javaer.snippets.model.pojo.Areas;
 import cn.javaer.snippets.test.JsonAssert;
+import cn.javaer.snippets.test.Log;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -41,7 +41,7 @@ class TreeTest {
             .sortFun(Areas::getSort)
             .build();
         final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
-        System.out.println(Json.DEFAULT.write(treeNodes));
+        Log.json(treeNodes);
 //        JsonAssert.assertEqualsAndOrder("model/TreeTest.of.json", treeNodes);
     }
 
@@ -52,10 +52,11 @@ class TreeTest {
             .handler(treeInfo -> {
                 treeInfo.getDynamic().put("depth", treeInfo.getDepth());
                 treeInfo.getDynamic().put("index", treeInfo.getIndex());
+                treeInfo.getDynamic().put("leaf", treeInfo.isLeaf());
             })
             .build();
-
         final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
+        Log.json(treeNodes);
         JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithDynamic.json", treeNodes);
     }
 

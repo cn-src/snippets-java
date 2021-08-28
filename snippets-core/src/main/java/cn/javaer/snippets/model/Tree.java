@@ -33,7 +33,7 @@ public class Tree {
                     final TreeNode treeNode = TreeNode.of(name, treeConf.getSortFun().apply(row));
                     final int size = current.childrenMap.size();
                     final TreeInfo<E> TreeInfo = new TreeInfo<>(row, treeNode, depth,
-                        size, size == names.length, treeNode.dynamic);
+                        size, depth == names.length, treeNode.dynamic);
                     treeConf.getHandler().apply(TreeInfo);
                     current.childrenMap.put(name, treeNode);
                     call.add(treeNode);
