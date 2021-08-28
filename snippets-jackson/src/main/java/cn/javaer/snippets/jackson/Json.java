@@ -5,6 +5,7 @@ import cn.javaer.snippets.util.TimeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -33,16 +34,20 @@ import java.util.Objects;
  *
  * @author cn-src
  */
-//@SuppressWarnings("ALL")
 public class Json {
 
     /**
-     * 默认实例
+     * 默认实例.
      */
     public static final Json DEFAULT;
 
     /**
-     * 序列化时忽略空对象的实例
+     * 宽松模式，反序列化忽略未知字段.
+     */
+    public static final Json LOOSE;
+
+    /**
+     * 序列化时忽略空对象的实例.
      */
     public static final Json NON_EMPTY;
 
@@ -74,6 +79,12 @@ public class Json {
         aDefault.setAnnotationIntrospector(DateTimeFormatIntrospector.INSTANCE);
         aDefault.registerModule(module);
         DEFAULT = new Json(aDefault);
+
+        final ObjectMapper loose = new ObjectMapper();
+        loose.setAnnotationIntrospector(DateTimeFormatIntrospector.INSTANCE);
+        loose.registerModule(module);
+        loose.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        LOOSE = new Json(aDefault);
 
         final ObjectMapper nonEmpty = new ObjectMapper();
         nonEmpty.setAnnotationIntrospector(DateTimeFormatIntrospector.INSTANCE);
