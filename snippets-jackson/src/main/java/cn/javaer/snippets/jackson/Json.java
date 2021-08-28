@@ -44,7 +44,7 @@ public class Json {
     /**
      * 宽松模式，反序列化忽略未知字段.
      */
-    public static final Json LOOSE;
+    public static final Json LENIENT;
 
     /**
      * 序列化时忽略空对象的实例.
@@ -80,11 +80,11 @@ public class Json {
         aDefault.registerModule(module);
         DEFAULT = new Json(aDefault);
 
-        final ObjectMapper loose = new ObjectMapper();
-        loose.setAnnotationIntrospector(DateTimeFormatIntrospector.INSTANCE);
-        loose.registerModule(module);
-        loose.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        LOOSE = new Json(aDefault);
+        final ObjectMapper lenient = new ObjectMapper();
+        lenient.setAnnotationIntrospector(DateTimeFormatIntrospector.INSTANCE);
+        lenient.registerModule(module);
+        lenient.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        LENIENT = new Json(aDefault);
 
         final ObjectMapper nonEmpty = new ObjectMapper();
         nonEmpty.setAnnotationIntrospector(DateTimeFormatIntrospector.INSTANCE);
