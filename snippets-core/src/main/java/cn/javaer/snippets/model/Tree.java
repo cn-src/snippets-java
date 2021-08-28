@@ -33,22 +33,20 @@ public class Tree {
         for (final E row : es) {
             int depth = 1;
             final List<String> names = treeConf.getNamesFun().apply(row);
+            int li = -1;
+            final boolean isNl = TreeConf.EmptyMode.NAMED_LEAF.equals(treeConf.getBreakEmpty());
+            if (isNl) {
+                li = CollUtil.lastIndexOf(names, StrUtil::isNotEmpty);
+            }
             int i = -1;
-            int j = names.size() - 1;
             for (final String name : names) {
                 i++;
                 if (TreeConf.EmptyMode.BREAK_EMPTY.equals(treeConf.getBreakEmpty()) && StrUtil.isEmpty(name)) {
                     break;
                 }
-                if (TreeConf.EmptyMode.NAMED_LEAF.equals(treeConf.getBreakEmpty())) {
-                    if (StrUtil.isEmpty(names.get(j))) {
-                        j--;
-                    }
-                    if (i > j) {
-                        break;
-                    }
+                if (isNl && (li < 0 || i > li)) {
+                    break;
                 }
-
                 if (current.childrenMap.containsKey(name)) {
                     current = current.childrenMap.get(name);
                 }

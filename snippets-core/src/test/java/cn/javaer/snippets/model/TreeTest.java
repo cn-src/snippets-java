@@ -7,6 +7,7 @@ import cn.javaer.snippets.test.Log;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +33,25 @@ class TreeTest {
         Areas b4 = new Areas(null, "太原市", null);
         Areas b5 = new Areas("山东省", "", null);
         TEST_HAS_EMPTY_DATA = Arrays.asList(b1, b2, b3, b4, b5);
+    }
+
+    @Test
+    void ofOneAllPropsEmpty() {
+        final TreeConf<Areas> conf = TreeConf.of(areas ->
+            new String[]{areas.getArea1(), areas.getArea2(), areas.getArea3()});
+        final List<TreeNode> treeNodes = Tree.of(Collections.singletonList(new Areas()), conf);
+        Log.json(treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofOneAllPropsEmpty.json", treeNodes);
+    }
+
+    @Test
+    void ofOneAllPropsEmpty_namedLeaf() {
+        final TreeConf<Areas> conf = TreeConf.ofNamedLeaf(Areas::getArea1, Areas::getArea2,
+            Areas::getArea3);
+        final List<TreeNode> treeNodes = Tree.of(Collections.singletonList(new Areas()), conf);
+        Log.json(treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofOneAllPropsEmpty_namedLeaf.json",
+            treeNodes);
     }
 
     @Test
