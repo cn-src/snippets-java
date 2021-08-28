@@ -69,7 +69,7 @@ class TreeTest {
             .namesFun(Areas::getArea1, Areas::getArea2, Areas::getArea3)
             .sortFun(Areas::getSort)
             .handler(treeInfo -> {
-                if (treeInfo.isLeaf()) {
+                if (treeInfo.getTreeNode().isLeaf()) {
                     treeInfo.getDynamic().put("sort", treeInfo.getModel().getSort());
                 }
             })
@@ -86,12 +86,44 @@ class TreeTest {
             .handler(treeInfo -> {
                 treeInfo.getDynamic().put("depth", treeInfo.getDepth());
                 treeInfo.getDynamic().put("index", treeInfo.getIndex());
-                treeInfo.getDynamic().put("leaf", treeInfo.isLeaf());
+//                treeInfo.getDynamic().put("leaf", treeInfo.getTreeNode().isLeaf());
             })
             .build();
         final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
         Log.json(treeNodes);
         JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithDynamic.json", treeNodes);
+    }
+
+    @Test
+    void ofWithDynamic_NAMED_LEAF() {
+        final TreeConf<Areas> conf = TreeConf.<Areas>builder()
+            .namesFun(Areas::getArea1, Areas::getArea2, Areas::getArea3)
+            .handler(treeInfo -> {
+                treeInfo.getDynamic().put("depth", treeInfo.getDepth());
+                treeInfo.getDynamic().put("index", treeInfo.getIndex());
+//                treeInfo.getDynamic().put("leaf", treeInfo.getTreeNode().isLeaf());
+            })
+            .breakEmpty(TreeConf.EmptyMode.NAMED_LEAF)
+            .build();
+        final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
+        Log.json(treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithDynamic_NAMED_LEAF.json", treeNodes);
+    }
+
+    @Test
+    void ofWithDynamic_BREAK_EMPTY() {
+        final TreeConf<Areas> conf = TreeConf.<Areas>builder()
+            .namesFun(Areas::getArea1, Areas::getArea2, Areas::getArea3)
+            .handler(treeInfo -> {
+                treeInfo.getDynamic().put("depth", treeInfo.getDepth());
+                treeInfo.getDynamic().put("index", treeInfo.getIndex());
+//                treeInfo.getDynamic().put("leaf", treeInfo.getTreeNode().isLeaf());
+            })
+            .breakEmpty(TreeConf.EmptyMode.BREAK_EMPTY)
+            .build();
+        final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
+        Log.json(treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithDynamic_BREAK_EMPTY.json", treeNodes);
     }
 
     @Test

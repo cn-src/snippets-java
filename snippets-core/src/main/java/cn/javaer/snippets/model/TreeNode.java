@@ -54,6 +54,10 @@ public class TreeNode {
         this.childrenMap = null;
     }
 
+    public boolean isLeaf() {
+        return children.isEmpty();
+    }
+
     @UnmodifiableView
     public List<TreeNode> getChildren() {
         return Collections.unmodifiableList(children);
