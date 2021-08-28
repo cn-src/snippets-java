@@ -30,7 +30,8 @@ class TreeTest {
         Areas b2 = new Areas("河北省", null, "新华区");
         Areas b3 = new Areas("河北省", "唐山市", null);
         Areas b4 = new Areas(null, "太原市", null);
-        TEST_HAS_EMPTY_DATA = Arrays.asList(b1, b2, b3, b4);
+        Areas b5 = new Areas("山东省", "", null);
+        TEST_HAS_EMPTY_DATA = Arrays.asList(b1, b2, b3, b4, b5);
     }
 
     @Test
@@ -88,6 +89,15 @@ class TreeTest {
         final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
         Log.json(treeNodes);
         JsonAssert.assertEqualsAndOrder("model/TreeTest.ofBreakEmpty.json", treeNodes);
+    }
+
+    @Test
+    void ofNamedLeaf() {
+        final TreeConf<Areas> conf = TreeConf.ofNamedLeaf(Areas::getArea1, Areas::getArea2,
+            Areas::getArea3);
+        final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
+        Log.json(treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofNamedLeaf.json", treeNodes);
     }
 
     @Test

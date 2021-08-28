@@ -33,14 +33,26 @@ public class Tree {
         for (final E row : es) {
             int depth = 1;
             final List<String> names = treeConf.getNamesFun().apply(row);
+            int i = -1;
+            int j = names.size() - 1;
             for (final String name : names) {
+                i++;
+                if (TreeConf.EmptyMode.BREAK_EMPTY.equals(treeConf.getBreakEmpty()) && StrUtil.isEmpty(name)) {
+                    break;
+                }
+                if (TreeConf.EmptyMode.NAMED_LEAF.equals(treeConf.getBreakEmpty())) {
+                    if (StrUtil.isEmpty(names.get(j))) {
+                        j--;
+                    }
+                    if (i > j) {
+                        break;
+                    }
+                }
+
                 if (current.childrenMap.containsKey(name)) {
                     current = current.childrenMap.get(name);
                 }
                 else {
-                    if (StrUtil.isEmpty(name) && TreeConf.EmptyMode.BREAK.equals(treeConf.getBreakEmpty())) {
-                        break;
-                    }
                     final TreeNode treeNode = TreeNode.of(name);
                     final TreeInfo<E> TreeInfo = new TreeInfo<>(row, treeNode, depth,
                         current.childrenMap.size(), depth == names.size(), treeNode.dynamic);

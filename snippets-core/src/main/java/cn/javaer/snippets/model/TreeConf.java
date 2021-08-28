@@ -23,16 +23,16 @@ import java.util.function.Function;
 public class TreeConf<E> {
 
     public enum EmptyMode {
-        
-        /**
-         * 断开模式，如果当前节点 name 为空，则忽略当前节点以及其子节点。
-         */
-        BREAK,
 
         /**
-         * 忽略空叶子节点，即所有尾部为空的节点都会忽略。
+         * 断开空节点，如果当前 name 为空，则忽略当前节点以及其子节点。
          */
-        IGNORE_LEAF
+        BREAK_EMPTY,
+
+        /**
+         * 叶子节点 name 不为空，即：忽略所有为空的叶子节点。
+         */
+        NAMED_LEAF
     }
 
     private TreeConf(Function<E, List<String>> namesFun, Function<E, Long> sortFun,
@@ -56,20 +56,27 @@ public class TreeConf<E> {
 
     public static <E> TreeConf<E> of(Function<E, String[]> namesFun) {
         return new TreeConf<>(e -> Arrays.asList(namesFun.apply(e)), Empty.function(),
-            TreeHandler.empty(), false, EmptyMode.IGNORE_LEAF);
+            TreeHandler.empty(), false, null);
     }
 
     @SafeVarargs
     public static <E> TreeConf<E> of(Function<E, String> nameFun, Function<E, String>... namesFun) {
         return new TreeConf<>(toNamesFun(nameFun, namesFun),
-            Empty.function(), TreeHandler.empty(), false, EmptyMode.IGNORE_LEAF);
+            Empty.function(), TreeHandler.empty(), false, null);
     }
 
     @SafeVarargs
     public static <E> TreeConf<E> ofBreakEmpty(Function<E, String> nameFun,
                                                Function<E, String>... namesFun) {
         return new TreeConf<>(toNamesFun(nameFun, namesFun),
-            Empty.function(), TreeHandler.empty(), false, EmptyMode.BREAK);
+            Empty.function(), TreeHandler.empty(), false, EmptyMode.BREAK_EMPTY);
+    }
+
+    @SafeVarargs
+    public static <E> TreeConf<E> ofNamedLeaf(Function<E, String> nameFun,
+                                              Function<E, String>... namesFun) {
+        return new TreeConf<>(toNamesFun(nameFun, namesFun),
+            Empty.function(), TreeHandler.empty(), false, EmptyMode.NAMED_LEAF);
     }
 
     @SafeVarargs
