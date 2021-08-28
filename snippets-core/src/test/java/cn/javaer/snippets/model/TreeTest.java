@@ -31,6 +31,7 @@ class TreeTest {
         final TreeConf<Areas> conf = TreeConf.of(areas ->
             new String[]{areas.getArea1(), areas.getArea2(), areas.getArea3()});
         final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
+        Log.json(treeNodes);
         JsonAssert.assertEqualsAndOrder("model/TreeTest.of.json", treeNodes);
     }
 
@@ -39,6 +40,11 @@ class TreeTest {
         final TreeConf<Areas> conf = TreeConf.<Areas>builder()
             .nameFun(areas -> new String[]{areas.getArea1(), areas.getArea2(), areas.getArea3()})
             .sortFun(Areas::getSort)
+            .handler(treeInfo -> {
+                if (treeInfo.isLeaf()) {
+                    treeInfo.getDynamic().put("sort", treeInfo.getModel().getSort());
+                }
+            })
             .build();
         final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
         Log.json(treeNodes);

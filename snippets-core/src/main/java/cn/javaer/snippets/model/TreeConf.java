@@ -15,10 +15,11 @@ import java.util.function.Function;
 public class TreeConf<E> {
 
     private TreeConf(Function<E, String[]> nameFun, Function<E, Long> sortFun,
-                     TreeHandler<E> handler, boolean ignoreEmpty) {
+                     TreeHandler<E> handler, boolean showNonLeafSort, boolean ignoreEmpty) {
         this.nameFun = ObjectUtil.defaultIfNull(nameFun, Empty.function());
         this.sortFun = ObjectUtil.defaultIfNull(sortFun, Empty.function());
         this.handler = ObjectUtil.defaultIfNull(handler, TreeHandler.empty());
+        this.showNonLeafSort = showNonLeafSort;
         this.ignoreEmpty = ignoreEmpty;
     }
 
@@ -28,9 +29,11 @@ public class TreeConf<E> {
 
     TreeHandler<E> handler;
 
+    boolean showNonLeafSort;
+
     boolean ignoreEmpty;
 
     public static <E> TreeConf<E> of(Function<E, String[]> nameFun) {
-        return new TreeConf<>(nameFun, Empty.function(), TreeHandler.empty(), true);
+        return new TreeConf<>(nameFun, Empty.function(), TreeHandler.empty(), false, true);
     }
 }

@@ -1,8 +1,8 @@
 package cn.javaer.snippets.model;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.comparator.CompareUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.javaer.snippets.util.MathUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,23 +20,26 @@ public class Tree {
             return Collections.emptyList();
         }
 
+        models.sort((o1, o2) -> {
+            final Long t1 = treeConf.getSortFun().apply(o1);
+            final Long t2 = treeConf.getSortFun().apply(o2);
+            return CompareUtil.compare(t1, t2, true);
+        });
+
         final TreeNode root = TreeNode.of("");
         TreeNode current = root;
         List<TreeNode> call = new ArrayList<>(50);
         for (final E row : models) {
             int depth = 1;
             final String[] names = treeConf.getNameFun().apply(row);
-            final Long sort = treeConf.getSortFun().apply(row);
             for (final String name : names) {
                 if (current.childrenMap.containsKey(name)) {
                     current = current.childrenMap.get(name);
-                    current.sort = MathUtils.min(current.sort, sort);
                 }
                 else if (!(treeConf.isIgnoreEmpty() && (StrUtil.isEmpty(name)))) {
-                    final TreeNode treeNode = TreeNode.of(name, sort);
-                    final int size = current.childrenMap.size();
+                    final TreeNode treeNode = TreeNode.of(name);
                     final TreeInfo<E> TreeInfo = new TreeInfo<>(row, treeNode, depth,
-                        size, depth == names.length, treeNode.dynamic);
+                        current.childrenMap.size(), depth == names.length, treeNode.dynamic);
                     treeConf.getHandler().apply(TreeInfo);
                     current.childrenMap.put(name, treeNode);
                     call.add(treeNode);
