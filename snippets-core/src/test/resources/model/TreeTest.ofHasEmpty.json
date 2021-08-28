@@ -1,0 +1,37 @@
+[
+  {
+    "name": "河北省",
+    "children": [
+      {
+        "name": "",
+        "children": [
+          {
+            "name": "长安区",
+            "children": []
+          }
+        ]
+      }, {
+        "name": null,
+        "children": [
+          {
+            "name": "新华区",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }, {
+  "name": null,
+  "children": [
+    {
+      "name": "太原市",
+      "children": [
+        {
+          "name": null,
+          "children": []
+        }
+      ]
+    }
+  ]
+}
+]

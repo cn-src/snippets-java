@@ -38,7 +38,7 @@ class TreeTest {
     @Test
     void ofWithSort() {
         final TreeConf<Areas> conf = TreeConf.<Areas>builder()
-            .nameFun(areas -> new String[]{areas.getArea1(), areas.getArea2(), areas.getArea3()})
+            .namesFun(Areas::getArea1, Areas::getArea2, Areas::getArea3)
             .sortFun(Areas::getSort)
             .handler(treeInfo -> {
                 if (treeInfo.isLeaf()) {
@@ -54,7 +54,7 @@ class TreeTest {
     @Test
     void ofWithDynamic() {
         final TreeConf<Areas> conf = TreeConf.<Areas>builder()
-            .nameFun(areas -> new String[]{areas.getArea1(), areas.getArea2(), areas.getArea3()})
+            .namesFun(Areas::getArea1, Areas::getArea2, Areas::getArea3)
             .handler(treeInfo -> {
                 treeInfo.getDynamic().put("depth", treeInfo.getDepth());
                 treeInfo.getDynamic().put("index", treeInfo.getIndex());
@@ -64,6 +64,20 @@ class TreeTest {
         final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
         Log.json(treeNodes);
         JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithDynamic.json", treeNodes);
+    }
+
+    @Test
+    void ofHasEmpty() {
+        Areas areas1 = new Areas("河北省", "", "长安区");
+        Areas areas2 = new Areas("河北省", null, "新华区");
+        Areas areas3 = new Areas(null, "太原市", null);
+        final List<Areas> areas = Arrays.asList(areas1, areas2, areas3);
+        final TreeConf<Areas> conf = TreeConf.<Areas>builder()
+            .namesFun(Areas::getArea1, Areas::getArea2, Areas::getArea3)
+            .build();
+        final List<TreeNode> treeNodes = Tree.of(areas, conf);
+        Log.json(treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofHasEmpty.json", treeNodes);
     }
 
     @Test

@@ -26,21 +26,21 @@ public class Tree {
             final Long t2 = treeConf.getSortFun().apply(o2);
             return CompareUtil.compare(t1, t2, true);
         });
-        
+
         final TreeNode root = TreeNode.of("");
         TreeNode current = root;
         List<TreeNode> call = new ArrayList<>(50);
         for (final E row : es) {
             int depth = 1;
-            final String[] names = treeConf.getNameFun().apply(row);
+            final List<String> names = treeConf.getNamesFun().apply(row);
             for (final String name : names) {
                 if (current.childrenMap.containsKey(name)) {
                     current = current.childrenMap.get(name);
                 }
-                else if (!(treeConf.isIgnoreEmpty() && (StrUtil.isEmpty(name)))) {
+                else if (!(treeConf.isBreakEmpty() && (StrUtil.isEmpty(name)))) {
                     final TreeNode treeNode = TreeNode.of(name);
                     final TreeInfo<E> TreeInfo = new TreeInfo<>(row, treeNode, depth,
-                        current.childrenMap.size(), depth == names.length, treeNode.dynamic);
+                        current.childrenMap.size(), depth == names.size(), treeNode.dynamic);
                     treeConf.getHandler().apply(TreeInfo);
                     current.childrenMap.put(name, treeNode);
                     call.add(treeNode);
