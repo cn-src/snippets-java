@@ -20,16 +20,17 @@ public class Tree {
             return Collections.emptyList();
         }
 
-        models.sort((o1, o2) -> {
+        List<E> es = new ArrayList<>(models);
+        es.sort((o1, o2) -> {
             final Long t1 = treeConf.getSortFun().apply(o1);
             final Long t2 = treeConf.getSortFun().apply(o2);
             return CompareUtil.compare(t1, t2, true);
         });
-
+        
         final TreeNode root = TreeNode.of("");
         TreeNode current = root;
         List<TreeNode> call = new ArrayList<>(50);
-        for (final E row : models) {
+        for (final E row : es) {
             int depth = 1;
             final String[] names = treeConf.getNameFun().apply(row);
             for (final String name : names) {
