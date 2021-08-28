@@ -63,6 +63,7 @@ public class Tree {
         }
         for (TreeNode n : call) {
             n.moveToChildren();
+            //noinspection unchecked
             treeConf.getHandler().apply(n.treeInfo);
         }
         root.moveToChildren();

@@ -25,7 +25,7 @@ public class TreeNode {
 
     Map<String, TreeNode> childrenMap;
 
-    TreeInfo treeInfo;
+    @SuppressWarnings("rawtypes") TreeInfo treeInfo;
 
     @JsonAnySetter final Map<String, Object> dynamic = new HashMap<>();
 
