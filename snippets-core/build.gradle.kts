@@ -9,5 +9,5 @@ dependencies {
     optionalApi("org.springdoc:springdoc-openapi-webmvc-core:$springdocVersion")
     compileOnly("com.fasterxml.jackson.core:jackson-annotations")
 
-    testImplementation(project(":snippets-jackson"))
+    testImplementation(project(":snippets-test"))
 }

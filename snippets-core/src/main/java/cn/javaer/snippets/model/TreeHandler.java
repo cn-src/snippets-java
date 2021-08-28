@@ -4,10 +4,25 @@ package cn.javaer.snippets.model;
  * @author cn-src
  */
 public interface TreeHandler<E> {
+
+    @SuppressWarnings("rawtypes") TreeHandler EMPTY = (it) -> {};
+
+    /**
+     * Empty tree handler.
+     *
+     * @param <E> the type parameter
+     *
+     * @return the tree handler
+     */
+    @SuppressWarnings("unchecked")
+    static <E> TreeHandler<E> empty() {
+        return EMPTY;
+    }
+
     /**
      * TreeNode 自定义处理.
      *
-     * @param TreeInfo TreeNodeInfo
+     * @param treeInfo the tree info
      */
-    void apply(TreeInfo<E> TreeInfo);
+    void apply(TreeInfo<E> treeInfo);
 }

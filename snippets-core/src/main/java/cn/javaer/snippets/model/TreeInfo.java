@@ -13,5 +13,6 @@ public class TreeInfo<E> {
     TreeNode TreeNode;
     int depth;
     int index;
+    boolean leaf;
     Map<String, Object> dynamic;
 }
