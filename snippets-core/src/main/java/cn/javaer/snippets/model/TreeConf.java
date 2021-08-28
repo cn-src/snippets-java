@@ -22,8 +22,21 @@ import java.util.function.Function;
 @Builder
 public class TreeConf<E> {
 
+    public enum EmptyMode {
+        
+        /**
+         * 断开模式，如果当前节点 name 为空，则忽略当前节点以及其子节点。
+         */
+        BREAK,
+
+        /**
+         * 忽略空叶子节点，即所有尾部为空的节点都会忽略。
+         */
+        IGNORE_LEAF
+    }
+
     private TreeConf(Function<E, List<String>> namesFun, Function<E, Long> sortFun,
-                     TreeHandler<E> handler, boolean showNonLeafSort, boolean breakEmpty) {
+                     TreeHandler<E> handler, boolean showNonLeafSort, EmptyMode breakEmpty) {
         this.namesFun = ObjectUtil.defaultIfNull(namesFun, Empty.function());
         this.sortFun = ObjectUtil.defaultIfNull(sortFun, Empty.function());
         this.handler = ObjectUtil.defaultIfNull(handler, TreeHandler.empty());
@@ -39,17 +52,24 @@ public class TreeConf<E> {
 
     boolean showNonLeafSort;
 
-    boolean breakEmpty;
+    EmptyMode breakEmpty;
 
     public static <E> TreeConf<E> of(Function<E, String[]> namesFun) {
         return new TreeConf<>(e -> Arrays.asList(namesFun.apply(e)), Empty.function(),
-            TreeHandler.empty(), false, false);
+            TreeHandler.empty(), false, EmptyMode.IGNORE_LEAF);
     }
 
     @SafeVarargs
     public static <E> TreeConf<E> of(Function<E, String> nameFun, Function<E, String>... namesFun) {
         return new TreeConf<>(toNamesFun(nameFun, namesFun),
-            Empty.function(), TreeHandler.empty(), false, false);
+            Empty.function(), TreeHandler.empty(), false, EmptyMode.IGNORE_LEAF);
+    }
+
+    @SafeVarargs
+    public static <E> TreeConf<E> ofBreakEmpty(Function<E, String> nameFun,
+                                               Function<E, String>... namesFun) {
+        return new TreeConf<>(toNamesFun(nameFun, namesFun),
+            Empty.function(), TreeHandler.empty(), false, EmptyMode.BREAK);
     }
 
     @SafeVarargs
@@ -74,7 +94,7 @@ public class TreeConf<E> {
     }
 
     public static class TreeConfBuilder<E> {
-        
+
         @SafeVarargs
         public final TreeConfBuilder<E> namesFun(Function<E, String> nameFun,
                                                  Function<E, String>... namesFun) {

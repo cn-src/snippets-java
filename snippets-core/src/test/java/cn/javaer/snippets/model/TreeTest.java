@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.tuple;
  */
 class TreeTest {
     private final static List<Areas> TEST_DATA;
+    private final static List<Areas> TEST_HAS_EMPTY_DATA;
 
     static {
         Areas areas1 = new Areas("河北省", "石家庄市", "长安区", 4L);
@@ -24,6 +25,12 @@ class TreeTest {
         Areas areas3 = new Areas("河北省", "唐山市", "开平区", 2L);
         Areas areas4 = new Areas("山东省", "太原市", "小店区", 3L);
         TEST_DATA = Arrays.asList(areas1, areas2, areas3, areas4);
+
+        Areas b1 = new Areas("河北省", "", "长安区");
+        Areas b2 = new Areas("河北省", null, "新华区");
+        Areas b3 = new Areas("河北省", "唐山市", null);
+        Areas b4 = new Areas(null, "太原市", null);
+        TEST_HAS_EMPTY_DATA = Arrays.asList(b1, b2, b3, b4);
     }
 
     @Test
@@ -68,16 +75,19 @@ class TreeTest {
 
     @Test
     void ofHasEmpty() {
-        Areas areas1 = new Areas("河北省", "", "长安区");
-        Areas areas2 = new Areas("河北省", null, "新华区");
-        Areas areas3 = new Areas(null, "太原市", null);
-        final List<Areas> areas = Arrays.asList(areas1, areas2, areas3);
-        final TreeConf<Areas> conf = TreeConf.<Areas>builder()
-            .namesFun(Areas::getArea1, Areas::getArea2, Areas::getArea3)
-            .build();
-        final List<TreeNode> treeNodes = Tree.of(areas, conf);
+        final TreeConf<Areas> conf = TreeConf.of(Areas::getArea1, Areas::getArea2, Areas::getArea3);
+        final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
         Log.json(treeNodes);
         JsonAssert.assertEqualsAndOrder("model/TreeTest.ofHasEmpty.json", treeNodes);
+    }
+
+    @Test
+    void ofBreakEmpty() {
+        final TreeConf<Areas> conf = TreeConf.ofBreakEmpty(Areas::getArea1, Areas::getArea2,
+            Areas::getArea3);
+        final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
+        Log.json(treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofBreakEmpty.json", treeNodes);
     }
 
     @Test

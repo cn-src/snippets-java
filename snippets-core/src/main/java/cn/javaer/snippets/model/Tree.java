@@ -37,7 +37,10 @@ public class Tree {
                 if (current.childrenMap.containsKey(name)) {
                     current = current.childrenMap.get(name);
                 }
-                else if (!(treeConf.isBreakEmpty() && (StrUtil.isEmpty(name)))) {
+                else {
+                    if (StrUtil.isEmpty(name) && TreeConf.EmptyMode.BREAK.equals(treeConf.getBreakEmpty())) {
+                        break;
+                    }
                     final TreeNode treeNode = TreeNode.of(name);
                     final TreeInfo<E> TreeInfo = new TreeInfo<>(row, treeNode, depth,
                         current.childrenMap.size(), depth == names.size(), treeNode.dynamic);
