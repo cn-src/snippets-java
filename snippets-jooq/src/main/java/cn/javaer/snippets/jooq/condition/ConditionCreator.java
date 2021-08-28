@@ -90,7 +90,7 @@
 ////
 ////                // 迭代清理一条线的所有孤叶节点
 ////                while (peek != null && (peek.getChildren() == null || peek.getChildren()
-////                .isEmpty())) {
+////                    .isEmpty())) {
 ////                    final TreeNode pop = stack.pop();
 ////                    if (!stack.isEmpty()) {
 ////                        condition = condition.and(fields[stack.size() - 1].eq(pop.getName()));
