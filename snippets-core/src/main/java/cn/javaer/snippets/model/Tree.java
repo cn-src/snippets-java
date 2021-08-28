@@ -51,9 +51,8 @@ public class Tree {
                 }
                 else {
                     final TreeNode treeNode = TreeNode.of(name);
-                    final TreeInfo<E> TreeInfo = new TreeInfo<>(row, treeNode, depth,
-                        current.childrenMap.size(), treeNode.dynamic);
-                    treeConf.getHandler().apply(TreeInfo);
+                    treeNode.treeInfo = new TreeInfo<>(treeNode, row, depth,
+                        current.childrenMap.size());
                     current.childrenMap.put(name, treeNode);
                     call.add(treeNode);
                     current = treeNode;
@@ -64,6 +63,7 @@ public class Tree {
         }
         for (TreeNode n : call) {
             n.moveToChildren();
+            treeConf.getHandler().apply(n.treeInfo);
         }
         root.moveToChildren();
         return root.getChildren();

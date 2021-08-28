@@ -25,6 +25,8 @@ public class TreeNode {
 
     Map<String, TreeNode> childrenMap;
 
+    TreeInfo treeInfo;
+
     @JsonAnySetter final Map<String, Object> dynamic = new HashMap<>();
 
     private TreeNode(String name, List<TreeNode> children) {
@@ -52,10 +54,6 @@ public class TreeNode {
     void moveToChildren() {
         this.children.addAll(childrenMap.values());
         this.childrenMap = null;
-    }
-
-    public boolean isLeaf() {
-        return children.isEmpty();
     }
 
     @UnmodifiableView

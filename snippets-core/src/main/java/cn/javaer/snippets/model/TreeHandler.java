@@ -5,7 +5,7 @@ package cn.javaer.snippets.model;
  */
 public interface TreeHandler<E> {
 
-    @SuppressWarnings("rawtypes") TreeHandler EMPTY = (it) -> {};
+    @SuppressWarnings("rawtypes") TreeHandler EMPTY = (info) -> {};
 
     /**
      * Empty tree handler.

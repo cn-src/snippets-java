@@ -68,9 +68,9 @@ class TreeTest {
         final TreeConf<Areas> conf = TreeConf.<Areas>builder()
             .namesFun(Areas::getArea1, Areas::getArea2, Areas::getArea3)
             .sortFun(Areas::getSort)
-            .handler(treeInfo -> {
-                if (treeInfo.getTreeNode().isLeaf()) {
-                    treeInfo.getDynamic().put("sort", treeInfo.getModel().getSort());
+            .handler((info) -> {
+                if (info.isLeaf()) {
+                    info.put("sort", info.getModel().getSort());
                 }
             })
             .build();
@@ -83,10 +83,10 @@ class TreeTest {
     void ofWithDynamic() {
         final TreeConf<Areas> conf = TreeConf.<Areas>builder()
             .namesFun(Areas::getArea1, Areas::getArea2, Areas::getArea3)
-            .handler(treeInfo -> {
-                treeInfo.getDynamic().put("depth", treeInfo.getDepth());
-                treeInfo.getDynamic().put("index", treeInfo.getIndex());
-//                treeInfo.getDynamic().put("leaf", treeInfo.getTreeNode().isLeaf());
+            .handler(info -> {
+                info.put("depth", info.getDepth());
+                info.put("index", info.getIndex());
+                info.put("leaf", info.isLeaf());
             })
             .build();
         final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
@@ -98,10 +98,10 @@ class TreeTest {
     void ofWithDynamic_NAMED_LEAF() {
         final TreeConf<Areas> conf = TreeConf.<Areas>builder()
             .namesFun(Areas::getArea1, Areas::getArea2, Areas::getArea3)
-            .handler(treeInfo -> {
-                treeInfo.getDynamic().put("depth", treeInfo.getDepth());
-                treeInfo.getDynamic().put("index", treeInfo.getIndex());
-//                treeInfo.getDynamic().put("leaf", treeInfo.getTreeNode().isLeaf());
+            .handler(info -> {
+                info.put("depth", info.getDepth());
+                info.put("index", info.getIndex());
+                info.put("leaf", info.isLeaf());
             })
             .breakEmpty(TreeConf.EmptyMode.NAMED_LEAF)
             .build();
@@ -114,10 +114,10 @@ class TreeTest {
     void ofWithDynamic_BREAK_EMPTY() {
         final TreeConf<Areas> conf = TreeConf.<Areas>builder()
             .namesFun(Areas::getArea1, Areas::getArea2, Areas::getArea3)
-            .handler(treeInfo -> {
-                treeInfo.getDynamic().put("depth", treeInfo.getDepth());
-                treeInfo.getDynamic().put("index", treeInfo.getIndex());
-//                treeInfo.getDynamic().put("leaf", treeInfo.getTreeNode().isLeaf());
+            .handler(info -> {
+                info.put("depth", info.getDepth());
+                info.put("index", info.getIndex());
+                info.put("leaf", info.isLeaf());
             })
             .breakEmpty(TreeConf.EmptyMode.BREAK_EMPTY)
             .build();
