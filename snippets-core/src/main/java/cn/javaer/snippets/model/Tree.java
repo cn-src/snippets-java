@@ -1,313 +1,94 @@
 package cn.javaer.snippets.model;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
-// TODO 以聚合根的思路重新组织 Tree 和 TreeNode，将 TreeNode 中的部分行为移到 Tree 中。
 
 /**
- * 树结构.
- *
  * @author cn-src
  */
-public interface Tree {
+public class Tree {
+    public static <E> List<TreeNode> of(final List<E> models, TreeConf<E> treeConf) {
 
-    /**
-     * 将 getters 转换成一个获取所有值的函数.
-     *
-     * @param getters getters
-     * @param <E> e
-     *
-     * @return Function
-     */
-    @SafeVarargs
-    static <E> Function<E, String[]> toConverter(final Function<E, String>... getters) {
-        Objects.requireNonNull(getters);
-        return e -> {
-            final String[] value = new String[getters.length];
-            for (int i = 0; i < getters.length; i++) {
-                value[i] = getters[i].apply(e);
-            }
-            return value;
-        };
-    }
-
-    /**
-     * 模型列表转树结构列表.
-     *
-     * @param <E> 模型的范型
-     * @param models 模型列表
-     * @param getters 模型属性的 Getter
-     *
-     * @return TreeNode List
-     */
-    @SuppressWarnings("unchecked")
-    @SafeVarargs
-    static <E> List<TreeNode> of(final List<E> models,
-                                 final Function<E, String>... getters) {
-        return of(models, TreeNodeHandler.EMPTY, false, toConverter(getters));
-    }
-
-    /**
-     * 模型列表转树结构列表，忽略空值.
-     *
-     * @param <E> 模型的范型
-     * @param models 模型列表
-     * @param getters 模型属性的 Getter
-     *
-     * @return TreeNode List
-     */
-    @SuppressWarnings("unchecked")
-    @SafeVarargs
-    static <E> List<TreeNode> ofIgnoreEmpty(final List<E> models,
-                                            final Function<E, String>... getters) {
-        return of(models, TreeNodeHandler.EMPTY, true, toConverter(getters));
-    }
-
-    /**
-     * 模型列表转树结构列表.
-     *
-     * @param <E> 模型的范型
-     * @param models 模型列表
-     * @param handler TreeNode 自定义处理器
-     * @param getters 模型属性的 Getter
-     *
-     * @return TreeNode List
-     */
-    @SafeVarargs
-    static <E> List<TreeNode> of(final List<E> models,
-                                 final TreeNodeHandler<E> handler,
-                                 final Function<E, String>... getters) {
-        return of(models, handler, false, toConverter(getters));
-    }
-
-    /**
-     * 模型列表转树结构列表，忽略空值.
-     *
-     * @param <E> 模型的范型
-     * @param models 模型列表
-     * @param handler TreeNode 自定义处理器
-     * @param getters 模型属性的 Getter
-     *
-     * @return TreeNode List
-     */
-    @SafeVarargs
-    static <E> List<TreeNode> ofIgnoreEmpty(final List<E> models,
-                                            final TreeNodeHandler<E> handler,
-                                            final Function<E, String>... getters) {
-        return of(models, handler, true, toConverter(getters));
-    }
-
-    /**
-     * 模型列表转树结构列表.
-     *
-     * @param <E> 模型的范型
-     * @param models 模型列表
-     * @param converter 要转换的数值
-     *
-     * @return TreeNode List
-     */
-    @SuppressWarnings("unchecked")
-    static <E> List<TreeNode> of(final List<E> models,
-                                 final Function<E, String[]> converter) {
-
-        return of(models, TreeNodeHandler.EMPTY, false, converter);
-    }
-
-    /**
-     * 模型列表转树结构列表.
-     *
-     * @param <E> 模型的范型
-     * @param models 模型列表
-     * @param converter 要转换的数值
-     * @param handler TreeNode 自定义处理器
-     *
-     * @return TreeNode List
-     */
-    static <E> List<TreeNode> of(final List<E> models,
-                                 final Function<E, String[]> converter,
-                                 final TreeNodeHandler<E> handler) {
-
-        return of(models, handler, false, converter);
-    }
-
-    /**
-     * 模型列表转树结构列表.
-     *
-     * @param <E> 模型的范型
-     * @param models 模型列表
-     * @param converter 要转换的数值
-     *
-     * @return TreeNode List
-     */
-    @SuppressWarnings("unchecked")
-    static <E> List<TreeNode> ofIgnoreEmpty(final List<E> models,
-                                            final Function<E, String[]> converter) {
-
-        return of(models, TreeNodeHandler.EMPTY, true, converter);
-    }
-
-    /**
-     * 模型列表转树结构列表.
-     *
-     * @param <E> 模型的范型
-     * @param models 模型列表
-     * @param converter 要转换的数值
-     * @param handler TreeNode 自定义处理器
-     *
-     * @return TreeNode List
-     */
-    static <E> List<TreeNode> ofIgnoreEmpty(final List<E> models,
-                                            final Function<E, String[]> converter,
-                                            final TreeNodeHandler<E> handler) {
-
-        return of(models, handler, true, converter);
-    }
-
-    /**
-     * 将实体列表数据转换成树结构，比如多级区域数据转换成前端 UI 组件需要的 Tree 结构.
-     *
-     * @param <E> 实体类型
-     * @param models 二维表结构的实体数据
-     * @param handler 额外的附加处理，
-     * @param ignoreEmpty 是否忽略空值
-     * @param converter 获取用于 title 的转换器
-     *
-     * @return 根节点的所有子节点 list
-     */
-    static <E> List<TreeNode> of(final List<E> models,
-                                 final TreeNodeHandler<E> handler,
-                                 final boolean ignoreEmpty,
-                                 final Function<E, String[]> converter) {
-        Objects.requireNonNull(converter);
-
-        if (models == null || models.isEmpty()) {
+        if (CollUtil.isEmpty(models)) {
             return Collections.emptyList();
         }
 
         final TreeNode root = TreeNode.of("");
         TreeNode current = root;
-
+        List<TreeNode> call = new ArrayList<>(100);
         for (final E row : models) {
             int depth = 1;
-            final String[] collect = converter.apply(row);
-            for (final String cell : collect) {
-                final Optional<TreeNode> first = Optional.ofNullable(current.getChildren())
-                    .orElseGet(Collections::emptyList)
-                    .stream()
-                    .filter(it -> Objects.equals(cell, it.getTitle()))
-                    .findFirst();
-                if (first.isPresent()) {
-                    current = first.get();
+            final String[] names = treeConf.getNameFun().apply(row);
+            for (final String name : names) {
+                if (current.childrenMap.containsKey(name)) {
+                    current = current.childrenMap.get(name);
                 }
-                else //noinspection AlibabaAvoidComplexCondition
-                    if (!(ignoreEmpty && (cell == null || cell.isEmpty()))) {
-                        final TreeNode treeNode = TreeNode.of(cell);
-                        final int size = current.getChildren() == null ?
-                            0 : current.getChildren().size();
-                        handler.apply(treeNode, row, depth, size);
-                        current.addChildren(treeNode);
-                        current = treeNode;
-                    }
+                else if (!(treeConf.isIgnoreEmpty() && (StrUtil.isEmpty(name)))) {
+                    final TreeNode treeNode = TreeNode.of(name, treeConf.getSortFun().apply(row));
+                    final TreeInfo<E> TreeInfo = new TreeInfo<>(row, treeNode, depth,
+                        current.childrenMap.size(), treeNode.dynamic);
+                    treeConf.getHandler().apply(TreeInfo);
+                    current.childrenMap.put(name, treeNode);
+                    call.add(treeNode);
+                    current = treeNode;
+                }
                 depth++;
             }
             current = root;
         }
+        for (TreeNode n : call) {
+            n.moveToChildren();
+        }
         return root.getChildren();
     }
 
-    /**
-     * 将 Tree 节点数据转换成二维表结构.
-     *
-     * @param treeNodes Tree 节点数据
-     * @param resultFun 实体类创建函数
-     * @param <E> 实体类型
-     *
-     * @return 实体列表
-     */
-    static <E> List<E> toModel(final List<TreeNode> treeNodes,
-                               final Function<List<String>, E> resultFun) {
+    public static <E> List<E> toModel(final List<TreeNode> treeTreeNodes,
+                                      final Function<List<String>, E> resultFun) {
         Objects.requireNonNull(resultFun);
 
-        if (treeNodes == null || treeNodes.isEmpty()) {
+        if (CollUtil.isEmpty(treeTreeNodes)) {
             return Collections.emptyList();
         }
 
         final List<E> result = new ArrayList<>();
-        TreeNode current = TreeNode.of("", treeNodes);
-        final LinkedList<TreeNode> stack = new LinkedList<>();
-        stack.push(current);
+        TreeNode current = TreeNode.of("", treeTreeNodes);
+        ArrayList<TreeNode> stack = new ArrayList<>();
+        stack.add(current);
 
         // 遍历树结构，转换成二维表结构用于存库，深度优先遍历
         // 从根节点，遍历到叶子节点，为数据库一条记录，同时移除此叶子节点
         // 当前迭代的节点往根节点方向，以及同级的下级节点移动
         while (null != current) {
             if (CollUtil.isNotEmpty(current.getChildren())) {
-                current = current.getChildren().get(0);
-                stack.push(current.clone());
+                current = current.children.get(0);
+                stack.add(TreeNode.of(current.name, current.getChildren()));
             }
             else {
-                final int size = stack.size() - 1;
-                final List<String> titles = new ArrayList<>(size);
-                for (int i = 0; i < size; i++) {
-                    titles.add(stack.get(size - 1 - i).getTitle());
+                final int size = stack.size();
+                final List<String> names = new ArrayList<>(size - 1);
+                for (int i = 1; i < size; i++) {
+                    names.add(stack.get(i).getName());
                 }
-                result.add(resultFun.apply(titles));
-                stack.pop();
-
-                TreeNode peek = stack.peek();
-                if (peek != null) {
-                    peek.removeFirstChild();
-                }
-
-                // 迭代清理一条线的所有孤叶节点
-                while (peek != null && (peek.getChildren() == null || peek.getChildren().isEmpty())) {
-                    stack.pop();
-                    if (stack.isEmpty()) {
-                        peek = null;
-                        break;
-                    }
-                    peek = stack.peek();
-                    if (peek.getChildren() != null && !peek.getChildren().isEmpty()) {
+                result.add(resultFun.apply(names));
+                // 迭代清理一条线的所有孤叶节点（没有子节点的节点 ）
+                TreeNode peek;
+                do {
+                    // 移除当前已经使用的节点，以及当前节点在父节点的位置
+                    stack.remove(stack.size() - 1);
+                    peek = CollUtil.get(stack, stack.size() - 1);
+                    if (peek != null) {
                         peek.removeFirstChild();
                     }
-                }
+                } while (peek != null && (CollUtil.isEmpty(peek.getChildren())));
                 current = peek;
             }
         }
         return result;
-    }
-
-    /**
-     * 将 Tree 节点数据转换成二维表结构.
-     *
-     * @param treeNodes Tree 节点数据
-     * @param createFn 实体类创建函数
-     * @param setters 实体类 setter 函数
-     * @param <E> 实体类型
-     *
-     * @return 实体列表
-     */
-    @SafeVarargs
-    static <E> List<E> toModel(final List<TreeNode> treeNodes, final Supplier<E> createFn,
-                               final BiConsumer<E, String>... setters) {
-        Objects.requireNonNull(createFn);
-        Objects.requireNonNull(setters);
-
-        return toModel(treeNodes, titles -> {
-            final E e = createFn.get();
-            for (int i = 0, size = Math.min(titles.size(), setters.length); i < size; i++) {
-                setters[i].accept(e, titles.get(i));
-            }
-            return e;
-        });
     }
 }

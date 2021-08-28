@@ -1,133 +1,85 @@
 package cn.javaer.snippets.model;
 
+import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.comparator.CompareUtil;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
+import java.util.TreeMap;
 
 /**
- * 树节点.
- *
  * @author cn-src
  */
-@EqualsAndHashCode
-public class TreeNode implements Cloneable {
-    public static final TreeNode EMPTY = TreeNode.of("");
+public class TreeNode implements Comparable<TreeNode> {
+    @Getter final String name;
 
-    @Setter(AccessLevel.PROTECTED)
-    private @Nullable String title;
+    final List<TreeNode> children;
 
-    @Setter(AccessLevel.PROTECTED)
-    private @Nullable List<TreeNode> children;
+    TreeMap<String, TreeNode> childrenMap;
 
-    private @Nullable Map<String, Object> dynamic;
+    final Long sort;
 
-    @SuppressWarnings("unused")
-    TreeNode() {
-    }
+    final Map<String, Object> dynamic = new HashMap<>();
 
-    TreeNode(final @Nullable String title, final @Nullable List<TreeNode> children,
-             final @Nullable Map<String, Object> dynamic) {
-        this.title = title;
+    private TreeNode(String name, List<TreeNode> children, Long sort) {
+        this.name = name;
         this.children = children;
-        this.dynamic = dynamic;
+        this.sort = sort;
+        this.childrenMap = new TreeMap<>();
     }
 
-    public static TreeNode of(final String title) {
-        return new TreeNode(title, null, null);
+    public static TreeNode of(String name, TreeNode... children) {
+        return new TreeNode(name, ListUtil.toList(children), null);
     }
 
-    public static TreeNode of(final String title, final List<TreeNode> children) {
-        return new TreeNode(title, children == null ? null : new ArrayList<>(children), null);
+    public static TreeNode of(String name, Long sort) {
+        return new TreeNode(name, new ArrayList<>(), sort);
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public TreeNode addChildren(final TreeNode... children) {
-        if (children == null || children.length == 0) {
-            return this;
+    public static TreeNode of(String name, List<TreeNode> children) {
+        return new TreeNode(name, ListUtil.toList(children), null);
+    }
+
+    @JsonCreator
+    public static TreeNode of(@JsonProperty("name") String name,
+                              @JsonProperty("children") List<TreeNode> children,
+                              @JsonProperty("sort") Long sort) {
+        return new TreeNode(name, ListUtil.toList(children), sort);
+    }
+
+    void removeFirstChild() {
+        if (!this.children.isEmpty()) {
+            this.children.remove(0);
         }
-
-        if (this.children == null) {
-            this.children = new ArrayList<>();
-        }
-        this.children.addAll(Arrays.asList(children));
-        return this;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public TreeNode removeFirstChild() {
-        if (this.children == null || this.children.isEmpty()) {
-            return this;
-        }
-        this.children.remove(0);
-        return this;
+    void moveToChildren() {
+        this.children.addAll(childrenMap.values());
+        this.childrenMap = null;
     }
 
-    @JsonAnySetter
-    public TreeNode putDynamic(final String key, final Object value) {
-        if (this.dynamic == null) {
-            this.dynamic = new HashMap<>(5);
-        }
-        this.dynamic.put(key, value);
-        return this;
+    @Override
+    public int compareTo(@NotNull TreeNode node) {
+        return CompareUtil.compare(this.sort, node.sort);
     }
 
-    public TreeNode putAllDynamic(final Map<String, Object> dynamic) {
-        if (dynamic == null || dynamic.isEmpty()) {
-            return this;
-        }
-
-        if (this.dynamic == null) {
-            this.dynamic = new HashMap<>(dynamic.size());
-        }
-        this.dynamic.putAll(dynamic);
-        return this;
-    }
-
-    @JsonIgnore
-    public boolean isEmptyChildren() {
-        return this.children == null || this.children.isEmpty();
+    @UnmodifiableView
+    public List<TreeNode> getChildren() {
+        return Collections.unmodifiableList(children);
     }
 
     @JsonAnyGetter
     @UnmodifiableView
-    public @Nullable Map<String, Object> getDynamic() {
-        return this.dynamic == null ? null : Collections.unmodifiableMap(this.dynamic);
-    }
-
-    public @Nullable String getTitle() {
-        return this.title;
-    }
-
-    @UnmodifiableView
-    public @Nullable List<TreeNode> getChildren() {
-        return this.children == null ? null : Collections.unmodifiableList(this.children);
-    }
-
-    @SuppressWarnings({"MethodDoesntCallSuperMethod"})
-    @Override
-    public TreeNode clone() {
-        return new TreeNode(this.title, this.children, this.dynamic);
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", TreeNode.class.getSimpleName() + "[", "]")
-            .add("title=" + this.title)
-            .add("@children.size=" + (this.children == null ? 0 : this.children.size()))
-            .add("dynamic=" + this.dynamic)
-            .toString();
+    public Map<String, Object> getDynamic() {
+        return Collections.unmodifiableMap(this.dynamic);
     }
 }
