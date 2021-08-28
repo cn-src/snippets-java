@@ -28,7 +28,8 @@ public class TreeNode implements Comparable<TreeNode> {
 
     Map<String, TreeNode> childrenMap;
 
-    final Long sort;
+    @Getter
+    Long sort;
 
     @JsonAnySetter final Map<String, Object> dynamic = new HashMap<>();
 

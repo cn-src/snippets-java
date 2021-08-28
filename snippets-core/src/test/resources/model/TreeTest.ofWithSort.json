@@ -1,40 +1,49 @@
 [
   {
-    "name": "山东省",
+    "name": "河北省",
     "children": [
       {
-        "name": "太原市",
+        "name": "石家庄市",
         "children": [
           {
-            "name": "小店区",
-            "children": []
+            "name": "新华区",
+            "children": [],
+            "sort": 1
+          }, {
+            "name": "长安区",
+            "children": [],
+            "sort": 4
           }
-        ]
+        ],
+        "sort": 1
+      }, {
+        "name": "唐山市",
+        "children": [
+          {
+            "name": "开平区",
+            "children": [],
+            "sort": 2
+          }
+        ],
+        "sort": 2
       }
-    ]
+    ],
+    "sort": 1
   }, {
-  "name": "河北省",
+  "name": "山东省",
   "children": [
     {
-      "name": "唐山市",
+      "name": "太原市",
       "children": [
         {
-          "name": "开平区",
-          "children": []
+          "name": "小店区",
+          "children": [],
+          "sort": 3
         }
-      ]
-    }, {
-      "name": "石家庄市",
-      "children": [
-        {
-          "name": "新华区",
-          "children": []
-        }, {
-          "name": "长安区",
-          "children": []
-        }
-      ]
+      ],
+      "sort": 3
     }
-  ]
+  ],
+  "sort": 3
 }
 ]

@@ -42,7 +42,7 @@ class TreeTest {
             .build();
         final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
         Log.json(treeNodes);
-//        JsonAssert.assertEqualsAndOrder("model/TreeTest.of.json", treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithSort.json", treeNodes);
     }
 
     @Test

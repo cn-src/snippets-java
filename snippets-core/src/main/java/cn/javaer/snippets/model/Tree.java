@@ -2,6 +2,7 @@ package cn.javaer.snippets.model;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.javaer.snippets.util.MathUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,12 +26,14 @@ public class Tree {
         for (final E row : models) {
             int depth = 1;
             final String[] names = treeConf.getNameFun().apply(row);
+            final Long sort = treeConf.getSortFun().apply(row);
             for (final String name : names) {
                 if (current.childrenMap.containsKey(name)) {
                     current = current.childrenMap.get(name);
+                    current.sort = MathUtils.min(current.sort, sort);
                 }
                 else if (!(treeConf.isIgnoreEmpty() && (StrUtil.isEmpty(name)))) {
-                    final TreeNode treeNode = TreeNode.of(name, treeConf.getSortFun().apply(row));
+                    final TreeNode treeNode = TreeNode.of(name, sort);
                     final int size = current.childrenMap.size();
                     final TreeInfo<E> TreeInfo = new TreeInfo<>(row, treeNode, depth,
                         size, depth == names.length, treeNode.dynamic);
