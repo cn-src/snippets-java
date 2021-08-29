@@ -103,7 +103,7 @@ class TreeTest {
                 info.put("index", info.getIndex());
                 info.put("leaf", info.isLeaf());
             })
-            .breakEmpty(TreeConf.EmptyMode.NAMED_LEAF)
+            .emptyMode(TreeConf.EmptyMode.NAMED_LEAF)
             .build();
         final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
         Log.json(treeNodes);
@@ -119,7 +119,7 @@ class TreeTest {
                 info.put("index", info.getIndex());
                 info.put("leaf", info.isLeaf());
             })
-            .breakEmpty(TreeConf.EmptyMode.BREAK_EMPTY)
+            .emptyMode(TreeConf.EmptyMode.BREAK_EMPTY)
             .build();
         final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
         Log.json(treeNodes);

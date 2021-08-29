@@ -36,12 +36,12 @@ public class TreeConf<E> {
     }
 
     private TreeConf(Function<E, List<String>> namesFun, Function<E, Long> sortFun,
-                     TreeHandler<E> handler, boolean showNonLeafSort, EmptyMode breakEmpty) {
+                     TreeHandler<E> handler, boolean showNonLeafSort, EmptyMode emptyMode) {
         this.namesFun = ObjectUtil.defaultIfNull(namesFun, Empty.function());
         this.sortFun = ObjectUtil.defaultIfNull(sortFun, Empty.function());
         this.handler = ObjectUtil.defaultIfNull(handler, TreeHandler.empty());
         this.showNonLeafSort = showNonLeafSort;
-        this.breakEmpty = breakEmpty;
+        this.emptyMode = emptyMode;
     }
 
     Function<E, @UnmodifiableView List<@Nullable String>> namesFun;
@@ -52,7 +52,7 @@ public class TreeConf<E> {
 
     boolean showNonLeafSort;
 
-    EmptyMode breakEmpty;
+    EmptyMode emptyMode;
 
     public static <E> TreeConf<E> of(Function<E, String[]> namesFun) {
         return new TreeConf<>(e -> Arrays.asList(namesFun.apply(e)), Empty.function(),

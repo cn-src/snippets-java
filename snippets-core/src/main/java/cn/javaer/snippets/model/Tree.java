@@ -34,10 +34,10 @@ public class Tree {
             int depth = 1;
             final List<String> names = treeConf.getNamesFun().apply(row);
             int li = names.size() - 1;
-            if (TreeConf.EmptyMode.NAMED_LEAF.equals(treeConf.getBreakEmpty())) {
+            if (TreeConf.EmptyMode.NAMED_LEAF.equals(treeConf.getEmptyMode())) {
                 li = CollUtil.lastIndexOf(names, StrUtil::isNotEmpty);
             }
-            else if (TreeConf.EmptyMode.BREAK_EMPTY.equals(treeConf.getBreakEmpty())) {
+            else if (TreeConf.EmptyMode.BREAK_EMPTY.equals(treeConf.getEmptyMode())) {
                 li = CollUtil.indexOf(names, StrUtil::isEmpty) - 1;
             }
             int i = -1;
