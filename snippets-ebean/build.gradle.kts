@@ -1,6 +1,8 @@
 plugins {
     id("snippets-conventions")
 }
-dependencies {
 
+val ebeanVersion: String by project
+dependencies {
+    api("io.ebean:ebean:$ebeanVersion")
 }
