@@ -34,19 +34,25 @@ public class BaseFinder<I, T> extends Finder<I, T> {
         this.whenModifiedOpt = ReflectionUtils.fieldNameByAnnotation(type, WhenModified.class);
     }
 
-    @Override
-    public @NotNull List<T> all() {
+    public Query<T> sortQuery() {
         final Query<T> query = query();
         whenModifiedOpt.ifPresent(it -> query.orderBy().desc(it));
         whenCreatedOpt.ifPresent(it -> query.orderBy().desc(it));
-        return query.findList();
+        return query;
+    }
+
+    public @NotNull List<T> allSort() {
+        return sortQuery().findList();
     }
 
     public List<T> list(PageParam pageParam) {
-        final Query<T> query = query();
-        whenModifiedOpt.ifPresent(it -> query.orderBy().desc(it));
-        whenCreatedOpt.ifPresent(it -> query.orderBy().desc(it));
-        return query.setMaxRows(pageParam.getSize())
+        return query().setMaxRows(pageParam.getSize())
+            .setFirstRow(pageParam.getOffset())
+            .findList();
+    }
+
+    public List<T> listSort(PageParam pageParam) {
+        return sortQuery().setMaxRows(pageParam.getSize())
             .setFirstRow(pageParam.getOffset())
             .findList();
     }
@@ -56,10 +62,15 @@ public class BaseFinder<I, T> extends Finder<I, T> {
     }
 
     public Page<T> paged(PageParam pageParam) {
-        final Query<T> query = query();
-        whenModifiedOpt.ifPresent(it -> query.orderBy().desc(it));
-        whenCreatedOpt.ifPresent(it -> query.orderBy().desc(it));
-        final PagedList<T> pagedList = query
+        final PagedList<T> pagedList = query()
+            .setMaxRows(pageParam.getSize())
+            .setFirstRow(pageParam.getOffset())
+            .findPagedList();
+        return Page.of(pagedList.getList(), pagedList.getTotalCount());
+    }
+
+    public Page<T> pagedSort(PageParam pageParam) {
+        final PagedList<T> pagedList = sortQuery()
             .setMaxRows(pageParam.getSize())
             .setFirstRow(pageParam.getOffset())
             .findPagedList();

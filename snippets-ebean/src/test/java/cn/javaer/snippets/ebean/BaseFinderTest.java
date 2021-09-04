@@ -34,9 +34,9 @@ class BaseFinderTest {
     }
 
     @Test
-    void all() {
-        db.script().run("/BaseFinderTest.all.in.sql");
-        final List<Demo> demos = Demo.find.all();
+    void allSort() {
+        db.script().run("/BaseFinderTest.allSort.in.sql");
+        final List<Demo> demos = Demo.find.allSort();
         Log.json(demos);
     }
 
