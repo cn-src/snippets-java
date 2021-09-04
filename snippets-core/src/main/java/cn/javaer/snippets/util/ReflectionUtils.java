@@ -4,6 +4,7 @@ import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ClassLoaderUtil;
+import cn.hutool.core.util.ReflectUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
@@ -24,6 +25,13 @@ import java.util.Optional;
  * @author cn -src
  */
 public interface ReflectionUtils {
+
+    static Optional<String> fieldNameByAnnotation(Class<?> clazz,
+                                                  Class<? extends Annotation> annClazz) {
+        return Arrays.stream(ReflectUtil.getFields(clazz))
+            .filter(it -> it.isAnnotationPresent(annClazz))
+            .findFirst().map(Field::getName);
+    }
 
     /**
      * 获取字段对应的 Getter 方法名称.
