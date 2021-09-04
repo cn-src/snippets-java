@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -22,6 +23,7 @@ import java.io.UncheckedIOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -126,6 +128,17 @@ public class Json {
     public <T> T read(final String json, final TypeReference<T> valueTypeRef) {
         try {
             return this.objectMapper.readValue(json, valueTypeRef);
+        }
+        catch (final JsonProcessingException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public <T> List<T> readList(final String json, final Class<T> clazz) {
+        JavaType javaType =
+            objectMapper.getTypeFactory().constructParametricType(List.class, clazz);
+        try {
+            return this.objectMapper.readValue(json, javaType);
         }
         catch (final JsonProcessingException e) {
             throw new UncheckedIOException(e);
