@@ -18,6 +18,18 @@ public interface JsonAssert {
      * 断言 json, 非严格模式.
      *
      * @param jsonFile json file
+     * @param actualJson json
+     */
+    @SneakyThrows
+    static void assertEquals(File jsonFile, String actualJson) {
+        JSONAssert.assertEquals(FileUtil.readUtf8String(jsonFile), actualJson,
+            false);
+    }
+
+    /**
+     * 断言 json, 非严格模式.
+     *
+     * @param jsonFile json file
      * @param actual object to json string
      */
     @SneakyThrows
