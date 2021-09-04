@@ -1,5 +1,6 @@
 package cn.javaer.snippets.ebean;
 
+import cn.javaer.snippets.test.JsonAssert;
 import cn.javaer.snippets.test.Log;
 import io.ebean.DB;
 import io.ebean.Database;
@@ -38,6 +39,7 @@ class BaseFinderTest {
         db.script().run("/BaseFinderTest.allSort.in.sql");
         final List<Demo> demos = Demo.find.allSort();
         Log.json(demos);
+        JsonAssert.assertEqualsAndOrder("BaseFinderTest.allSort.out.json", demos);
     }
 
     @Data
