@@ -61,4 +61,16 @@ public interface JsonAssert {
         JSONAssert.assertEquals(ResourceUtil.readUtf8Str(resource), Json.DEFAULT.write(actual),
             JSONCompareMode.STRICT_ORDER);
     }
+
+    /**
+     * 断言 json, 非严格模式，但需要保证元素顺序.
+     *
+     * @param resource json file resource
+     * @param json object to json string
+     */
+    @SneakyThrows
+    static void assertEqualsAndOrder(String resource, String json) {
+        JSONAssert.assertEquals(ResourceUtil.readUtf8Str(resource), json,
+            JSONCompareMode.STRICT_ORDER);
+    }
 }

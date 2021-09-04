@@ -40,8 +40,8 @@ class TreeTest {
         final TreeConf<Areas> conf = TreeConf.of(areas ->
             new String[]{areas.getArea1(), areas.getArea2(), areas.getArea3()});
         final List<TreeNode> treeNodes = Tree.of(Collections.singletonList(new Areas()), conf);
-        Log.json(treeNodes);
-        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofOneAllPropsEmpty.json", treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofOneAllPropsEmpty.json",
+            Log.json(treeNodes));
     }
 
     @Test
@@ -49,9 +49,8 @@ class TreeTest {
         final TreeConf<Areas> conf = TreeConf.ofNamedLeaf(Areas::getArea1, Areas::getArea2,
             Areas::getArea3);
         final List<TreeNode> treeNodes = Tree.of(Collections.singletonList(new Areas()), conf);
-        Log.json(treeNodes);
         JsonAssert.assertEqualsAndOrder("model/TreeTest.ofOneAllPropsEmpty_namedLeaf.json",
-            treeNodes);
+            Log.json(treeNodes));
     }
 
     @Test
@@ -59,8 +58,7 @@ class TreeTest {
         final TreeConf<Areas> conf = TreeConf.of(areas ->
             new String[]{areas.getArea1(), areas.getArea2(), areas.getArea3()});
         final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
-        Log.json(treeNodes);
-        JsonAssert.assertEqualsAndOrder("model/TreeTest.of.json", treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.of.json", Log.json(treeNodes));
     }
 
     @Test
@@ -75,8 +73,7 @@ class TreeTest {
             })
             .build();
         final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
-        Log.json(treeNodes);
-        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithSort.json", treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithSort.json", Log.json(treeNodes));
     }
 
     @Test
@@ -90,8 +87,7 @@ class TreeTest {
             })
             .build();
         final List<TreeNode> treeNodes = Tree.of(TEST_DATA, conf);
-        Log.json(treeNodes);
-        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithDynamic.json", treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithDynamic.json", Log.json(treeNodes));
     }
 
     @Test
@@ -106,8 +102,8 @@ class TreeTest {
             .emptyMode(TreeConf.EmptyMode.NAMED_LEAF)
             .build();
         final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
-        Log.json(treeNodes);
-        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithDynamic_NAMED_LEAF.json", treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithDynamic_NAMED_LEAF.json",
+            Log.json(treeNodes));
     }
 
     @Test
@@ -122,16 +118,15 @@ class TreeTest {
             .emptyMode(TreeConf.EmptyMode.BREAK_EMPTY)
             .build();
         final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
-        Log.json(treeNodes);
-        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithDynamic_BREAK_EMPTY.json", treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofWithDynamic_BREAK_EMPTY.json",
+            Log.json(treeNodes));
     }
 
     @Test
     void ofHasEmpty() {
         final TreeConf<Areas> conf = TreeConf.of(Areas::getArea1, Areas::getArea2, Areas::getArea3);
         final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
-        Log.json(treeNodes);
-        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofHasEmpty.json", treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofHasEmpty.json", Log.json(treeNodes));
     }
 
     @Test
@@ -139,8 +134,7 @@ class TreeTest {
         final TreeConf<Areas> conf = TreeConf.ofBreakEmpty(Areas::getArea1, Areas::getArea2,
             Areas::getArea3);
         final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
-        Log.json(treeNodes);
-        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofBreakEmpty.json", treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofBreakEmpty.json", Log.json(treeNodes));
     }
 
     @Test
@@ -148,8 +142,7 @@ class TreeTest {
         final TreeConf<Areas> conf = TreeConf.ofNamedLeaf(Areas::getArea1, Areas::getArea2,
             Areas::getArea3);
         final List<TreeNode> treeNodes = Tree.of(TEST_HAS_EMPTY_DATA, conf);
-        Log.json(treeNodes);
-        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofNamedLeaf.json", treeNodes);
+        JsonAssert.assertEqualsAndOrder("model/TreeTest.ofNamedLeaf.json", Log.json(treeNodes));
     }
 
     @Test
