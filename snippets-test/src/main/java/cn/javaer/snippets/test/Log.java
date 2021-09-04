@@ -13,8 +13,12 @@ public interface Log {
      * logging json.
      *
      * @param obj the obj
+     *
+     * @return the json
      */
-    static void json(Object obj) {
-        System.out.println(Json.DEFAULT.write(obj));
+    static String json(Object obj) {
+        final String json = Json.DEFAULT.write(obj);
+        System.out.println(json);
+        return json;
     }
 }
