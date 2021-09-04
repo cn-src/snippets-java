@@ -1,5 +1,7 @@
 package cn.javaer.snippets.ebean;
 
+import cn.javaer.snippets.model.Page;
+import cn.javaer.snippets.model.PageParam;
 import cn.javaer.snippets.test.JsonAssert;
 import cn.javaer.snippets.test.Log;
 import io.ebean.DB;
@@ -40,6 +42,14 @@ class BaseFinderTest {
         final List<Demo> demos = Demo.find.allSort();
         Log.json(demos);
         JsonAssert.assertEqualsAndOrder("BaseFinderTest.allSort.out.json", demos);
+    }
+
+    @Test
+    void pagedSort() {
+        db.script().run("/BaseFinderTest.allSort.in.sql");
+        final Page<Demo> demos = Demo.find.pagedSort(PageParam.of(1, 2));
+        Log.json(demos);
+        JsonAssert.assertEqualsAndOrder("BaseFinderTest.pagedSort.out.json", demos);
     }
 
     @Data
