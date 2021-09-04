@@ -1,8 +1,7 @@
 package cn.javaer.snippets.spring.web;
 
+import cn.hutool.core.util.IdUtil;
 import org.slf4j.MDC;
-
-import java.util.UUID;
 
 /**
  * @author cn-src
@@ -14,7 +13,7 @@ public interface DefaultAppContext {
      * 设置请求 id.
      */
     static void setRequestId() {
-        MDC.put(REQUEST_ID_PARAM, UUID.randomUUID().toString().replaceAll("-", ""));
+        MDC.put(REQUEST_ID_PARAM, IdUtil.fastSimpleUUID());
     }
 
     /**
