@@ -108,6 +108,8 @@ dependencies {
         // Java 架构检测框架
         api("com.tngtech.archunit:archunit-junit5:${p["archunitVersion"]}")
 
+        api("com.yomahub:tlog-web-spring-boot-starter:${p["tlogVersion"]}")
+
         api("org.mybatis:mybatis:${p["mybatisVersion"]}")
         api("org.mybatis:mybatis-spring:${p["mybatisSpringVersion"]}")
         api("org.mybatis.dynamic-sql:mybatis-dynamic-sql:${p["mybatisDynamicSqlVersion"]}")
