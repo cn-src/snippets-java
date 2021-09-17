@@ -1,5 +1,6 @@
 plugins {
     id("snippets-conventions")
+    id("io.ebean") version "12.11.2"
 }
 
 val ebeanVersion: String by project
