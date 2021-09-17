@@ -108,6 +108,7 @@ dependencies {
         // Java 架构检测框架
         api("com.tngtech.archunit:archunit-junit5:${p["archunitVersion"]}")
 
+        api("com.yomahub:tlog-common:${p["tlogVersion"]}")
         api("com.yomahub:tlog-web-spring-boot-starter:${p["tlogVersion"]}")
 
         api("org.mybatis:mybatis:${p["mybatisVersion"]}")

@@ -1,7 +1,7 @@
 package cn.javaer.snippets.spring.autoconfigure.web;
 
 import cn.javaer.snippets.spring.format.DateTimeFormatter;
-import cn.javaer.snippets.spring.web.DefaultAppContext;
+import cn.javaer.snippets.spring.web.WebAppContext;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -38,13 +38,12 @@ public class WebAutoConfiguration {
         public void addInterceptors(final InterceptorRegistry registry) {
             registry.addInterceptor(new HandlerInterceptor() {
                 @Override
-                public boolean preHandle(final @NotNull HttpServletRequest request,
-                                         final @NotNull HttpServletResponse response,
-                                         final @NotNull Object handler) {
-                    DefaultAppContext.setRequestId();
-                    response.addHeader(DefaultAppContext.REQUEST_ID_PARAM,
-                        DefaultAppContext.getRequestId());
-                    return true;
+                public void afterCompletion(@NotNull HttpServletRequest request,
+                                            @NotNull HttpServletResponse response,
+                                            @NotNull Object handler,
+                                            Exception ex) {
+                    response.addHeader(WebAppContext.REQUEST_ID_PARAM,
+                        WebAppContext.getRequestId());
                 }
             });
         }

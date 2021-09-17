@@ -1,7 +1,7 @@
 package cn.javaer.snippets.spring.web.exception;
 
 import cn.javaer.snippets.spring.exception.RuntimeErrorInfo;
-import cn.javaer.snippets.spring.web.DefaultAppContext;
+import cn.javaer.snippets.spring.web.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
@@ -51,7 +51,7 @@ public class GlobalExceptionAdvice {
                           final Exception e) {
         runtimeErrorInfo.setPath(request.getServletPath());
         runtimeErrorInfo.setTimestamp(LocalDateTime.now());
-        runtimeErrorInfo.setRequestId(DefaultAppContext.getRequestId());
+        runtimeErrorInfo.setRequestId(WebAppContext.getRequestId());
         // exception
         final String clazz = e.getClass().getName();
         if (this.errorProperties.isIncludeException()) {

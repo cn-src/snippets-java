@@ -7,6 +7,7 @@ dependencies {
     optionalApi(project(":snippets-spring-exception"))
     optionalApi(project(":snippets-jackson"))
 
+    optionalApi("com.yomahub:tlog-common")
     optionalApi("org.springframework.boot:spring-boot-starter-web")
     optionalApi("org.springframework.boot:spring-boot-starter-data-jdbc")
     optionalApi("org.springframework.boot:spring-boot-starter-jooq")

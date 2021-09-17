@@ -18,7 +18,7 @@ package cn.javaer.snippets.spring.web.exception;
 
 import cn.javaer.snippets.spring.exception.ErrorMessageSource;
 import cn.javaer.snippets.spring.exception.RuntimeErrorInfo;
-import cn.javaer.snippets.spring.web.DefaultAppContext;
+import cn.javaer.snippets.spring.web.WebAppContext;
 import cn.javaer.snippets.util.TimeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -135,7 +135,7 @@ public class GlobalErrorAttributes implements ErrorAttributes, HandlerExceptionR
         this.addStatus(errorAttributes, webRequest, errorInfo);
         this.addErrorDetails(errorAttributes, webRequest, includeStackTrace, errorInfo);
         this.addPath(errorAttributes, webRequest);
-        errorAttributes.put(DefaultAppContext.REQUEST_ID_PARAM, DefaultAppContext.getRequestId());
+        errorAttributes.put(WebAppContext.REQUEST_ID_PARAM, WebAppContext.getRequestId());
         return errorAttributes;
     }
 
