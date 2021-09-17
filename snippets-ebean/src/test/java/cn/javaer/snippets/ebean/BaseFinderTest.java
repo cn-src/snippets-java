@@ -39,14 +39,14 @@ class BaseFinderTest {
     @Test
     void allSort() {
         db.script().run("/BaseFinderTest.allSort.in.sql");
-        final List<Demo> demos = Demo.find.allSort();
+        final List<Demo> demos = Demo.find.allSorted();
         JsonAssert.assertEqualsAndOrder("BaseFinderTest.allSort.out.json", Log.json(demos));
     }
 
     @Test
     void pagedSort() {
 //        db.script().run("/BaseFinderTest.allSort.in.sql");
-        final Page<Demo> demos = Demo.find.pagedSort(PageParam.of(1, 2));
+        final Page<Demo> demos = Demo.find.pagedSorted(PageParam.of(1, 2));
         JsonAssert.assertEqualsAndOrder("BaseFinderTest.pagedSort.out.json", Log.json(demos));
     }
 
