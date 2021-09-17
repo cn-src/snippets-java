@@ -45,7 +45,7 @@ class BaseFinderTest {
 
     @Test
     void pagedSort() {
-        db.script().run("/BaseFinderTest.allSort.in.sql");
+//        db.script().run("/BaseFinderTest.allSort.in.sql");
         final Page<Demo> demos = Demo.find.pagedSort(PageParam.of(1, 2));
         JsonAssert.assertEqualsAndOrder("BaseFinderTest.pagedSort.out.json", Log.json(demos));
     }
