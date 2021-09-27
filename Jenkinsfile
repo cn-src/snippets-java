@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('') {
       steps {
-        sh './gradlew build'
+        tool(name: 'Java8', type: 'jdk')
       }
     }
 
