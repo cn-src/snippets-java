@@ -12,7 +12,7 @@ public final class Geometry {
         this.data = data;
     }
 
-    public final String data() {
+    public String data() {
         return this.data;
     }
 
