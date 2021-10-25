@@ -1,8 +1,5 @@
 package cn.javaer.snippets.validation;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.experimental.FieldNameConstants;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,14 +53,47 @@ class AllOrNoneEmptyValidatorTest {
         assertEquals(0, vs.size());
     }
 
-    @Data
-    @FieldNameConstants
     @AllOrNoneEmpty({Demo.Fields.field1, Demo.Fields.field2,})
     @AllOrNoneEmpty({Demo.Fields.field1, Demo.Fields.field3})
-    @AllArgsConstructor
     static class Demo {
         private String field1;
         private Integer field2;
         private String[] field3;
+
+        public Demo(String field1, Integer field2, String[] field3) {
+            this.field1 = field1;
+            this.field2 = field2;
+            this.field3 = field3;
+        }
+
+        public String getField1() {
+            return this.field1;
+        }
+
+        public Integer getField2() {
+            return this.field2;
+        }
+
+        public String[] getField3() {
+            return this.field3;
+        }
+
+        public void setField1(String field1) {
+            this.field1 = field1;
+        }
+
+        public void setField2(Integer field2) {
+            this.field2 = field2;
+        }
+
+        public void setField3(String[] field3) {
+            this.field3 = field3;
+        }
+
+        public static final class Fields {
+            public static final String field1 = "field1";
+            public static final String field2 = "field2";
+            public static final String field3 = "field3";
+        }
     }
 }
