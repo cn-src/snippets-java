@@ -1,8 +1,7 @@
-group = "com.github.cn-src.snippets-java"
-version = "0.0.1-rc1"
 subprojects {
     apply(plugin = "maven-publish")
-
+    group = "com.github.cn-src.snippets-java"
+    version = "0.0.1-SNAPSHOT"
 
     repositories {
         mavenLocal()
