@@ -31,6 +31,7 @@ dependencies {
         api("org.apache.commons:commons-lang3:${p["commonsLang3Version"]}")
         api("com.esotericsoftware:reflectasm:${p["reflectasmVersion"]}")
 
+        api("cn.hutool:hutool-all:${p["hutoolVersion"]}")
         api("cn.hutool:hutool-core:${p["hutoolVersion"]}")
         api("cn.hutool:hutool-aop:${p["hutoolVersion"]}")
         api("cn.hutool:hutool-bloomFilter:${p["hutoolVersion"]}")
