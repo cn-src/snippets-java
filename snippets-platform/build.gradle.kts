@@ -78,9 +78,6 @@ dependencies {
         api("com.google.code.findbugs:jsr305:${p["jsr305Version"]}")
         api("org.jetbrains:annotations:${p["jetbrainsAnnotationsVersion"]}")
 
-        // 缓存库
-        api("org.ehcache:ehcache:${p["ehcacheVersion"]}")
-
         // 序列化
         api("com.fasterxml.jackson.datatype:jackson-datatype-eclipse-collections:${p["jacksonDatatypesCollectionsVersion"]}")
         api("com.esotericsoftware:kryo:${p["kryoVersion"]}")
@@ -122,7 +119,6 @@ dependencies {
 
         runtime("com.taobao.arthas:arthas-spring-boot-starter:${p["arthasSpringBootVersion"]}")
         api("com.baomidou:dynamic-datasource-spring-boot-starter:${p["dynamicDatasourceVersion"]}")
-        api("com.github.ethancommitpush:spring-boot-starter-openfeign:${p["springBootOpenfeignVersion"]}")
         api("com.github.lianjiatech:retrofit-spring-boot-starter:${p["retrofitSpringBootVersion"]}")
 
         api("org.apache.shardingsphere:shardingsphere-jdbc-core:${p["shardingsphereVersion"]}")
