@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![CI](https://github.com/cn-src/snippets-java/workflows/CI/badge.svg)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2544a8647cde45598ec7fe0dd1cf76c5)](https://www.codacy.com/manual/cn-src/snippets-java?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=cn-src/snippets-java&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/91008f90f9c24f7f985384a26fc74987)](https://www.codacy.com/gh/cn-src/snippets-java/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=cn-src/snippets-java&amp;utm_campaign=Badge_Grade)
 [![codecov](https://codecov.io/gh/cn-src/snippets-java/branch/master/graph/badge.svg)](https://codecov.io/gh/cn-src/snippets-java)
 [![](https://jitpack.io/v/cn-src/snippets-java.svg)](https://jitpack.io/#cn-src/snippets-java)
 ![Lines of code](https://img.shields.io/tokei/lines/github/cn-src/snippets-java)
