@@ -2,6 +2,7 @@ package cn.javaer.snippets.spring.autoconfigure.springdoc;
 
 import cn.javaer.snippets.spring.security.PrincipalId;
 import org.springdoc.core.SpringDocUtils;
+import org.springdoc.data.rest.SpringDocDataRestConfiguration;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -14,16 +15,17 @@ import org.springframework.data.domain.Page;
  * @author cn-src
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass({org.springframework.data.domain.Pageable.class})
-@AutoConfigureAfter(name = {"org.springdoc.data.rest.SpringDocDataRestConfiguration"})
+@ConditionalOnClass({org.springframework.data.domain.Pageable.class,
+    SpringDocDataRestConfiguration.class})
+@AutoConfigureAfter(SpringDocDataRestConfiguration.class)
 public class SpringDocPlusConfiguration implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        SpringDocUtils.getConfig().replaceWithClass(org.springframework.data.domain.Pageable.class,
-            PageableDoc.class);
-        SpringDocUtils.getConfig().replaceWithClass(org.springframework.data.domain.PageRequest.class,
-            PageableDoc.class);
+        SpringDocUtils.getConfig().replaceParameterObjectWithClass(
+            org.springframework.data.domain.Pageable.class, PageableDoc.class);
+        SpringDocUtils.getConfig().replaceParameterObjectWithClass(
+            org.springframework.data.domain.PageRequest.class, PageableDoc.class);
         SpringDocUtils.getConfig().replaceWithClass(Page.class, PageDoc.class);
         SpringDocUtils.getConfig().addAnnotationsToIgnore(PrincipalId.class);
     }

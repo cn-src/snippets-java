@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springdoc.core.Constants;
 import org.springdoc.core.SpringDocConfigProperties;
 import org.springdoc.core.SpringDocConfiguration;
+import org.springdoc.core.SpringDocHints;
+import org.springdoc.data.rest.SpringDocDataRestConfiguration;
 import org.springdoc.webmvc.core.MultipleOpenApiSupportConfiguration;
 import org.springdoc.webmvc.core.SpringDocWebMvcConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -42,10 +44,19 @@ class SpringDocAutoConfigurationTest {
                 SpringDocPlusConfiguration.class,
                 SpringDocAutoConfiguration.class,
                 ExceptionAutoConfiguration.class,
-                SpringDocConfigProperties.class, SpringDocConfiguration.class,
+
+                SpringDocConfiguration.class,
+                SpringDocConfigProperties.class,
+                SpringDocHints.class,
+
+                SpringDocWebMvcConfiguration.class,
                 MultipleOpenApiSupportConfiguration.class,
-                SpringDocWebMvcConfiguration.class, MockMvcAutoConfiguration.class,
-                WebMvcAutoConfiguration.class, DispatcherServletAutoConfiguration.class,
+
+                SpringDocDataRestConfiguration.class,
+
+                MockMvcAutoConfiguration.class,
+                WebMvcAutoConfiguration.class,
+                DispatcherServletAutoConfiguration.class,
                 HttpMessageConvertersAutoConfiguration.class))
         .withPropertyValues("server.error.include-message=always");
 
