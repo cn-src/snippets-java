@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5943b06512834058be5c57053d98ac63)](https://app.codacy.com/gh/cn-src/snippets-java?utm_source=github.com&utm_medium=referral&utm_content=cn-src/snippets-java&utm_campaign=Badge_Grade_Settings)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![CI](https://github.com/cn-src/snippets-java/workflows/CI/badge.svg)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/91008f90f9c24f7f985384a26fc74987)](https://www.codacy.com/gh/cn-src/snippets-java/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=cn-src/snippets-java&amp;utm_campaign=Badge_Grade)
